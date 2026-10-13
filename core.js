@@ -17,6 +17,13 @@ export function pitchLabel(midi, notation='international') {
   return `${noteName(midi, notation)}${Math.floor(midi/12)-1}`;
 }
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
+export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
+export function neckGeometry(strings,lastFret=4,scale=648){
+  const neckWidth=52+(strings-6)*7,height=neckWidth+24,nut=32;
+  const frets=Array.from({length:lastFret+3},(_,i)=>nut+fretDistance(i,scale));
+  const centers=Array.from({length:lastFret+1},(_,f)=>f===0?nut-15:(frets[f-1]+frets[f])/2);
+  return {width:frets.at(-1)+10,height,nut,frets,centers,ys:Array.from({length:strings},(_,s)=>12+8+(strings-1-s)*(neckWidth-16)/(strings-1)),fadeStart:frets[lastFret]+2};
+}
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
   const tokens=raw.trim().split(/\s+/);
@@ -55,6 +62,13 @@ export function lessons(profile) {
     if(string>0) list.push({id:`mix-${string}`,chapter:'Relier les cordes',string,strings:Array.from({length:string+1},(_,i)=>i),frets:[0,1,2,3,4],mode:'mixed',title:string===profile.tuning.length-1?'Toute votre zone':`${string+1} cordes ensemble`,count:24});
   }
   return list;
+}
+export function microCourse(profile,lesson,notation='international'){
+  const fret=lesson.frets.at(-1),open=profile.tuning[lesson.string],name=n=>noteName(n,notation),number=profile.tuning.length-lesson.string;
+  if(lesson.mode==='mixed')return {title:'Changer de corde, garder ses repères',principle:'Une même case ne donne pas forcément la même note sur deux cordes. Repérez d’abord la corde indiquée, puis sa case.',example:`${name(profile.tuning[lesson.strings[0]])} et ${name(profile.tuning[lesson.strings.at(-1)])} sont les notes à vide des deux cordes aux extrémités de ce groupe.`,goal:'Alternez reconnaissance et recherche sur les cordes déjà étudiées.'};
+  if(lesson.mode==='find')return {title:'Du nom à la position',principle:'Faites le chemin inverse : lisez le nom demandé, repérez la corde, puis retrouvez sa position dans cette zone.',example:`Sur la corde ${number}, ${name(open+fret)} se trouve en case ${fret}. Les boutons de cases sont une alternative au toucher du manche.`,goal:'Une seule position sur la corde demandée suffit. La vitesse viendra ensuite.'};
+  if(fret===1)return {title:'À vide, puis une case',principle:'La case 0 est la corde à vide : aucun doigt n’appuie sur le manche. Avancer d’une case fait monter la note d’un demi-ton.',example:`Corde ${number} : à vide = ${name(open)} ; case 1 = ${name(open+1)}. Écoutez les deux sons pour associer chaque position à sa note.`,goal:'Reconnaissez ces deux positions. Vous pouvez réfléchir sans perdre votre chance de valider.'};
+  return {title:'Un nouveau demi-ton',principle:`Chaque nouvelle case ajoute un demi-ton. ${name(4)}–${name(5)} et ${name(11)}–${name(0)} se suivent directement ; entre les autres notes naturelles, il existe une note intermédiaire.`,example:`Sur cette corde, la case ${fret-1} donne ${name(open+fret-1)} et la case ${fret} donne ${name(open+fret)}. Le signe ♯ signifie « un demi-ton plus haut ».`,goal:`Ajoutez la case ${fret} aux repères déjà connus, puis reconnaissez-les dans un ordre mélangé.`};
 }
 export function isUnlocked(list,index,records) { return index===0 || (records[list[index-1].id]?.stars||0)>=3; }
 export function nextLesson(list,records) { return list.findIndex((l,i)=>isUnlocked(list,i,records)&&(records[l.id]?.stars||0)<3); }
