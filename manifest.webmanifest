@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "ADH Reborn — Apprendre le manche",
+  "short_name": "ADH Reborn",
+  "lang": "fr",
+  "description": "Un jeu pour reconnaître les notes de votre manche, corde après corde.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f5f1",
+  "theme_color": "#f6f5f1",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
