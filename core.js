@@ -63,12 +63,86 @@ export function lessons(profile) {
   }
   return list;
 }
+const COURSE_PRINCIPLES = {
+ first:[
+  'Le diagramme est un dessin du manche vu de face. La corde la plus épaisse produit les sons graves, c’est-à-dire les plus bas : elle apparaît en bas en paysage, à droite en portrait.',
+  'Vous passez à la corde voisine. L’accordage désigne les hauteurs choisies pour les cordes à vide ; leurs noms vous serviront maintenant de points de départ.',
+  'Cette nouvelle ligne se reconnaît à sa place parmi les cordes. Gardez les deux premières positions comme repères avant de parcourir le reste.',
+  'Le geste de lecture reste le même, mais le point de départ change. Cherchez d’abord la ligne éclairée plutôt que de suivre la précédente par habitude.',
+  'Votre regard peut désormais retrouver une corde au milieu du dessin. Appuyez-vous sur ce repère visuel pour découvrir ses deux premières notes.',
+  'Les cordes plus fines se trouvent de l’autre côté du manche. Suivez la ligne indiquée sans laisser les notes voisines détourner votre attention.',
+  'Vous approchez du bord aigu du diagramme. Une corde fine donne généralement un son plus haut : sa position visuelle reste votre premier indice.',
+  'La dernière ligne complète votre lecture de l’instrument. Prenez le temps de distinguer ce bord de celui où vous avez commencé.'
+ ],
+ grow:[
+  'Une case de plus monte le son d’un demi-ton, le plus petit pas entre deux positions voisines. Le signe ♯ se lit « dièse » : il élève une note d’un demi-ton.',
+  'Sur cette deuxième corde, la troisième position rejoint les deux que vous connaissez. Écoutez son son, puis associez-le à sa place.',
+  'La nouvelle case prolonge vos repères sur cette ligne. Sa hauteur suit immédiatement celle de la case précédente, même si son nom comporte un signe.',
+  'Ajouter une position ne change pas les deux premières. Repérez ce qui vient d’apparaître plutôt que de réapprendre tout le groupe.',
+  'Trois positions offrent trois points d’appui visuels. Comparez leurs emplacements avant de laisser le nom demandé guider votre réponse.',
+  'La note qui arrive est voisine d’un repère déjà acquis. Servez-vous de cette proximité pendant la découverte, puis essayez de la reconnaître seule.',
+  'Le groupe s’agrandit sans changer de ligne. Reliez le nouvel emplacement au son entendu pour éviter de mémoriser seulement l’ordre des boutons.',
+  'Ce dernier groupe de trois notes reste local au bord du manche. Vous pouvez les observer ensemble avant de les retrouver séparément.'
+ ],
+ four:[
+  'Les noms naturels suivent C, D, E, F, G, A, B. E–F et B–C sont directement voisins ; les autres paires laissent une note intermédiaire.',
+  'La quatrième position se distingue des trois précédentes par son emplacement. Son nom n’est pas forcément la lettre qui suit dans l’alphabet.',
+  'Les cases avancent toujours d’un demi-ton, tandis que les lettres ne changent pas à chaque pas. Regardez le nom de cette nouvelle position sans sauter les altérations.',
+  'Une altération est le signe qui modifie une note, comme ♯. Sur ce groupe, reconnaître la position entière est plus utile que réciter les lettres.',
+  'Vous pouvez vous donner une image de chaque emplacement. La quatrième case étudiée ajoute une image au petit groupe déjà connu.',
+  'Les notes proches peuvent se confondre quand on répond trop tôt. Identifiez la case éclairée avant de sélectionner son nom complet.',
+  'Le dessin vous donne une coordonnée : une corde et une case. Réunissez ces deux indices pour différencier les notes de ce groupe.',
+  'À ce stade, une position supplémentaire suffit. Gardez votre attention sur cette seule ligne pour rendre chaque reconnaissance plus sûre.'
+ ],
+ whole:[
+  'La zone va de la corde à vide à la case 4. Les frettes sont les barres qui séparent les cases ; après la limite étudiée, le fondu rappelle que le manche continue.',
+  'Les cinq emplacements de cette corde sont maintenant disponibles. Le jeu les présentera dans un ordre mélangé, sans ajouter de nouvelle ligne.',
+  'Votre petit territoire est complet sur cette corde. Utilisez les repères déjà solides pour reconnaître aussi celui qui vient de s’ajouter.',
+  'L’extrémité de la zone rejoint les autres positions étudiées. Une fois le groupe connu, essayez de nommer la note sans compter depuis le début.',
+  'Vous avez cinq choix d’emplacement sur cette ligne. Les reconnaître isolément prépare le mélange avec les autres cordes.',
+  'La case 4 ferme cette étape du parcours. Le prolongement est dessiné mais ne contient aucune réponse supplémentaire à chercher.',
+  'Toute la zone est réunie sur cette nouvelle corde. Observez les différences de place avant de chercher à accélérer.',
+  'Ces cinq positions terminent la découverte de cette ligne. Leurs noms peuvent devenir des repères immédiats, indépendants de la séquence de jeu.'
+ ],
+ find:[
+  'Cette fois, le nom est donné et la position est à trouver. Touchez directement un repère sur la grosse corde éclairée ; une seule réponse suffit.',
+  'Le nom demandé doit maintenant vous ramener vers cette corde. Les points orangés sont des réponses tactiles, pas seulement des décorations.',
+  'Vous retrouvez une position à partir de son nom. Commencez par la ligne mise en valeur, puis choisissez un de ses emplacements.',
+  'Lire le nom et toucher le manche fait travailler le trajet inverse. Les cases voisines sont des choix distincts : visez celle que vous reconnaissez.',
+  'La question reste juste sous le diagramme pour accompagner votre recherche. Vous pouvez répondre sur le manche ou ouvrir les boutons de cases.',
+  'Chercher une note sur cette ligne consolide les positions apprises. Un toucher bref propose votre réponse ; un glissement déplace seulement la vue.',
+  'Les repères tactiles limitent la recherche à cette corde. Il n’est pas demandé de retrouver toutes les occurrences de la note sur l’instrument.',
+  'Vous achevez cette ligne avec une recherche volontaire. Le nom donné devient un point d’arrivée concret sur le dessin.'
+ ]
+};
+const MIX_PRINCIPLES=[
+ 'Deux cordes apparaissent ensemble pour la première fois. Vérifiez laquelle est indiquée avant de reconnaître ou de retrouver la note.',
+ 'Une troisième ligne rejoint le groupe familier. La question précise toujours la corde concernée : vous n’avez pas à deviner laquelle choisir.',
+ 'Quatre cordes partagent désormais votre zone. Une même case peut donner plusieurs notes selon la ligne : gardez ces deux coordonnées ensemble.',
+ 'Le groupe réunit cinq cordes connues. Le mélange sert à déplacer votre attention, sans ajouter de position nouvelle.',
+ 'Six cordes se rencontrent dans cet exercice. Le nom de note et la place sur le manche deviennent deux façons de retrouver le même repère.',
+ 'Le mélange gagne une septième ligne. Revenez à la corde éclairée chaque fois que votre regard hésite entre deux emplacements.',
+ 'Les huit cordes sont maintenant réunies. Votre recherche reste limitée à une seule position sur la corde demandée.'
+];
 export function microCourse(profile,lesson,notation='international'){
-  const fret=lesson.frets.at(-1),open=profile.tuning[lesson.string],name=n=>noteName(n,notation),number=profile.tuning.length-lesson.string;
-  if(lesson.mode==='mixed')return {title:'Changer de corde, garder ses repères',principle:'Une même case ne donne pas forcément la même note sur deux cordes. Repérez d’abord la corde indiquée, puis sa case.',example:`${name(profile.tuning[lesson.strings[0]])} et ${name(profile.tuning[lesson.strings.at(-1)])} sont les notes à vide des deux cordes aux extrémités de ce groupe.`,goal:'Alternez reconnaissance et recherche sur les cordes déjà étudiées.'};
-  if(lesson.mode==='find')return {title:'Du nom à la position',principle:'Faites le chemin inverse : lisez le nom demandé, repérez la corde, puis retrouvez sa position dans cette zone.',example:`Sur la corde ${number}, ${name(open+fret)} se trouve en case ${fret}. Les boutons de cases sont une alternative au toucher du manche.`,goal:'Une seule position sur la corde demandée suffit. La vitesse viendra ensuite.'};
-  if(fret===1)return {title:'À vide, puis une case',principle:'La case 0 est la corde à vide : aucun doigt n’appuie sur le manche. Avancer d’une case fait monter la note d’un demi-ton.',example:`Corde ${number} : à vide = ${name(open)} ; case 1 = ${name(open+1)}. Écoutez les deux sons pour associer chaque position à sa note.`,goal:'Reconnaissez ces deux positions. Vous pouvez réfléchir sans perdre votre chance de valider.'};
-  return {title:'Un nouveau demi-ton',principle:`Chaque nouvelle case ajoute un demi-ton. ${name(4)}–${name(5)} et ${name(11)}–${name(0)} se suivent directement ; entre les autres notes naturelles, il existe une note intermédiaire.`,example:`Sur cette corde, la case ${fret-1} donne ${name(open+fret-1)} et la case ${fret} donne ${name(open+fret)}. Le signe ♯ signifie « un demi-ton plus haut ».`,goal:`Ajoutez la case ${fret} aux repères déjà connus, puis reconnaissez-les dans un ordre mélangé.`};
+ const fret=lesson.frets.at(-1),open=profile.tuning[lesson.string],name=n=>noteName(n,notation),number=profile.tuning.length-lesson.string;
+ if(lesson.mode==='mixed')return {title:`Relier ${lesson.strings.length} cordes`,principle:MIX_PRINCIPLES[lesson.strings.length-2],example:`Dans ce groupe de ${lesson.strings.length} lignes, vous retrouverez notamment ${name(profile.tuning[0])} à vide sur la corde ${profile.tuning.length} et ${name(open)} sur la corde ${number}.`,goal:`Passez d’une ligne à l’autre dans ce groupe de ${lesson.strings.length} cordes, une question à la fois.`,diagram:false};
+ const stage=lesson.id.split('-')[1],kind=stage==='first'?'first':stage==='grow'?'grow':stage==='four'?'four':stage==='whole'?'whole':'find';
+ let example,goal,title;
+ if(stage==='first'&&lesson.string===0){title='Du manche au dessin';example='À vide signifie sans appuyer : c’est la case 0. La case 1 est le premier espace après la barre claire appelée sillet.';goal='Commencez sur la seule grosse corde mise en valeur dans les deux dessins.';}
+ else if(stage==='first'&&lesson.string===1){title='Une deuxième corde';example=`Votre accordage, du grave vers l’aigu : ${profile.tuning.map(n=>name(n)).join(' · ')}. La corde ${number} commence sur ${name(open)} ; sa case 1 donne ${name(open+1)}.`;goal=`Sur cette deuxième ligne apprise, différenciez ${name(open)} à vide et ${name(open+1)} en case 1.`;}
+ else if(stage==='first'){title=`Un nouveau départ : corde ${number}`;example=`Repère de la corde ${number} : ${name(open)} sans appuyer, puis ${name(open+1)} dans la première case.`;goal=`Construisez les deux premiers automatismes de la corde ${number} avant de l’étendre.`;}
+ else if(kind==='find'){title=`Retrouver une position · corde ${number}`;example=`Pour chercher ${name(open+fret)} sur la corde ${number}, choisissez sa case ${fret}.`;goal=`Faites correspondre chaque nom demandé à un emplacement sur la corde ${number}.`;}
+ else {title=`${name(open+fret)} rejoint vos repères`;example=`Corde ${number} : la case ${fret-1} donne ${name(open+fret-1)}, puis la case ${fret} donne ${name(open+fret)}.`;goal=`Reconnaissez la case ${fret} et les positions précédentes de la corde ${number}, dans un ordre imprévisible.`;}
+ const principle=kind==='four'&&lesson.string===0&&notation==='latin'?COURSE_PRINCIPLES.four[0].replace('C, D, E, F, G, A, B','Do, Ré, Mi, Fa, Sol, La, Si').replace('E–F et B–C','Mi–Fa et Si–Do'):COURSE_PRINCIPLES[kind][lesson.string];
+ return {title,principle,example,goal,diagram:stage==='first'&&lesson.string===0};
+}
+export function nextMilestone(answers){
+ const result=score(answers),total=answers.length;
+ if(result.stars<3)return {stars:3,required:Math.ceil(total*.9),total,label:`Au moins ${Math.ceil(total*.9)} bonnes réponses sur ${total} pour continuer.`};
+ if(result.stars===3)return {stars:4,required:Math.ceil(total*.95),total,label:`Visez ${Math.ceil(total*.95)}/${total} bonnes réponses, avec un temps médian de 2,5 s ou moins.`};
+ if(result.stars===4)return {stars:5,required:total,total,label:'Visez 100 % de bonnes réponses, avec un temps médian de 1,5 s ou moins.'};
+ return {stars:5,required:total,total,label:'100 % de bonnes réponses, avec un temps médian de 1,5 s ou moins : objectif atteint !',complete:true};
 }
 export function isUnlocked(list,index,records) { return index===0 || (records[list[index-1].id]?.stars||0)>=3; }
 export function nextLesson(list,records) { return list.findIndex((l,i)=>isUnlocked(list,i,records)&&(records[l.id]?.stars||0)<3); }

@@ -34,6 +34,6 @@ test('Plucked string has a decaying envelope, pitch periodicity, and bounded fin
 test('Every exercise has one short principle, a tuning-specific example and a clear objective',()=>{
  const profile=makeProfile('guitar6');
  for(const l of lessons(profile)){const course=microCourse(profile,l);for(const k of ['title','principle','example','goal'])assert.ok(course[k].length>8&&course[k].length<400);}
- assert.match(microCourse(profile,lessons(profile)[0]).example,/à vide = E ; case 1 = F/);
- assert.match(microCourse(profile,lessons(profile)[0],'latin').example,/à vide = Mi ; case 1 = Fa/);
+ assert.doesNotMatch(microCourse(profile,lessons(profile)[0]).principle,/E2|A2|accordage/);
+ assert.match(microCourse(profile,lessons(profile).find(l=>l.id==='s1-first')).example,/E · A · D · G · B · E/);
 });
