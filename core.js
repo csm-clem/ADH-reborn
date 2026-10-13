@@ -1,5 +1,6 @@
 /** Musical and learning rules. No browser dependencies; scientific pitch notation. */
 export const VERSION = 1;
+export const FIVE_STAR_MEDIAN_MS = 1000;
 export const PITCHES = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const LATIN = ['Do','Do♯','Ré','Ré♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
 export const INSTRUMENTS = [
@@ -65,7 +66,7 @@ export function lessons(profile) {
 }
 const COURSE_PRINCIPLES = {
  first:[
-  'Le diagramme est un dessin du manche vu de face. La corde la plus épaisse produit les sons graves, c’est-à-dire les plus bas : elle apparaît en bas en paysage, à droite en portrait.',
+  'Le diagramme est un dessin du manche vu de face. La corde la plus épaisse produit les sons graves, c’est-à-dire les plus bas : elle apparaît en bas du dessin, en paysage comme en portrait.',
   'Vous passez à la corde voisine. L’accordage désigne les hauteurs choisies pour les cordes à vide ; leurs noms vous serviront maintenant de points de départ.',
   'Cette nouvelle ligne se reconnaît à sa place parmi les cordes. Gardez les deux premières positions comme repères avant de parcourir le reste.',
   'Le geste de lecture reste le même, mais le point de départ change. Cherchez d’abord la ligne éclairée plutôt que de suivre la précédente par habitude.',
@@ -126,7 +127,7 @@ const MIX_PRINCIPLES=[
 ];
 export function microCourse(profile,lesson,notation='international'){
  const fret=lesson.frets.at(-1),open=profile.tuning[lesson.string],name=n=>noteName(n,notation),number=profile.tuning.length-lesson.string;
- if(lesson.mode==='mixed')return {title:`Relier ${lesson.strings.length} cordes`,principle:MIX_PRINCIPLES[lesson.strings.length-2],example:`Dans ce groupe de ${lesson.strings.length} lignes, vous retrouverez notamment ${name(profile.tuning[0])} à vide sur la corde ${profile.tuning.length} et ${name(open)} sur la corde ${number}.`,goal:`Passez d’une ligne à l’autre dans ce groupe de ${lesson.strings.length} cordes, une question à la fois.`,diagram:false};
+ if(lesson.mode==='mixed')return {title:`Relier ${lesson.strings.length} cordes`,principle:MIX_PRINCIPLES[lesson.strings.length-2],example:`Dans ce groupe de ${lesson.strings.length} lignes, vous retrouverez notamment ${name(profile.tuning[0])} à vide sur la corde ${profile.tuning.length} et ${name(open)} sur la corde ${number}.`,goal:`Passez d’une ligne à l’autre dans ce groupe de ${lesson.strings.length} cordes, une question à la fois.`,diagram:true};
  const stage=lesson.id.split('-')[1],kind=stage==='first'?'first':stage==='grow'?'grow':stage==='four'?'four':stage==='whole'?'whole':'find';
  let example,goal,title;
  if(stage==='first'&&lesson.string===0){title='Du manche au dessin';example='À vide signifie sans appuyer : c’est la case 0. La case 1 est le premier espace après la barre claire appelée sillet.';goal='Commencez sur la seule grosse corde mise en valeur dans les deux dessins.';}
@@ -135,14 +136,14 @@ export function microCourse(profile,lesson,notation='international'){
  else if(kind==='find'){title=`Retrouver une position · corde ${number}`;example=`Pour chercher ${name(open+fret)} sur la corde ${number}, choisissez sa case ${fret}.`;goal=`Faites correspondre chaque nom demandé à un emplacement sur la corde ${number}.`;}
  else {title=`${name(open+fret)} rejoint vos repères`;example=`Corde ${number} : la case ${fret-1} donne ${name(open+fret-1)}, puis la case ${fret} donne ${name(open+fret)}.`;goal=`Reconnaissez la case ${fret} et les positions précédentes de la corde ${number}, dans un ordre imprévisible.`;}
  const principle=kind==='four'&&lesson.string===0&&notation==='latin'?COURSE_PRINCIPLES.four[0].replace('C, D, E, F, G, A, B','Do, Ré, Mi, Fa, Sol, La, Si').replace('E–F et B–C','Mi–Fa et Si–Do'):COURSE_PRINCIPLES[kind][lesson.string];
- return {title,principle,example,goal,diagram:stage==='first'&&lesson.string===0};
+ return {title,principle,example,goal,diagram:true};
 }
 export function nextMilestone(answers){
  const result=score(answers),total=answers.length;
  if(result.stars<3)return {stars:3,required:Math.ceil(total*.9),total,label:`Au moins ${Math.ceil(total*.9)} bonnes réponses sur ${total} pour continuer.`};
  if(result.stars===3)return {stars:4,required:Math.ceil(total*.95),total,label:`Visez ${Math.ceil(total*.95)}/${total} bonnes réponses, avec un temps médian de 2,5 s ou moins.`};
- if(result.stars===4)return {stars:5,required:total,total,label:'Visez 100 % de bonnes réponses, avec un temps médian de 1,5 s ou moins.'};
- return {stars:5,required:total,total,label:'100 % de bonnes réponses, avec un temps médian de 1,5 s ou moins : objectif atteint !',complete:true};
+ if(result.stars===4)return {stars:5,required:total,total,label:'Visez 100 % de bonnes réponses, avec un temps médian de 1 s ou moins.'};
+ return {stars:5,required:total,total,label:'100 % de bonnes réponses, avec un temps médian de 1 s ou moins : objectif atteint !',complete:true};
 }
 export function isUnlocked(list,index,records) { return index===0 || (records[list[index-1].id]?.stars||0)>=3; }
 export function nextLesson(list,records) { return list.findIndex((l,i)=>isUnlocked(list,i,records)&&(records[l.id]?.stars||0)<3); }
@@ -154,7 +155,7 @@ export function score(answers) {
   const medianMs=times.length ? (times[Math.floor((times.length-1)/2)]+times[Math.floor(times.length/2)])/2 : null;
   let stars=accuracy>=.9?3:accuracy>=.75?2:accuracy>=.5?1:0;
   if(stars===3&&accuracy>=.95&&medianMs<=2500) stars=4;
-  if(accuracy===1&&medianMs<=1500) stars=5;
+  if(accuracy===1&&medianMs<=FIVE_STAR_MEDIAN_MS) stars=5;
   return {stars,accuracy,medianMs,correct:correctAnswers.length};
 }
 export function question(profile,lesson,history=[],random=Math.random) {

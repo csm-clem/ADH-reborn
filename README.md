@@ -45,7 +45,7 @@ Le moteur musical de ce MVP est une petite implémentation indépendante en Java
 
 ## Hébergement
 
-Tous les fichiers nécessaires sont statiques et leurs URLs sont relatives : le site peut être hébergé à la racine ou dans un sous-dossier. Exécuter `npm run package` et publier le contenu de `dist/` sur HTTPS. Le [ZIP prêt pour FTP](downloads/adh-pwa-v0.3.zip) permet aussi un dépôt sans Node.js. Voir [les changements et instructions v0.3](docs/CHANGES-v0.3.md). Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Tous les fichiers nécessaires sont statiques et leurs URLs sont relatives : le site peut être hébergé à la racine ou dans un sous-dossier. Exécuter `npm run package` et publier le contenu de `dist/` sur HTTPS. Le [ZIP prêt pour FTP](downloads/adh-pwa-v0.4.zip) permet aussi un dépôt sans Node.js. Voir [les changements et instructions v0.4](docs/CHANGES-v0.4.md). Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger en HTTPS, attendre l’activation du service worker, recharger une fois, fermer l’application, couper le réseau, rouvrir et terminer une séance. Ne pas supprimer les données du site : la progression locale disparaîtrait aussi. Une copie JSON permet de la restaurer.
 

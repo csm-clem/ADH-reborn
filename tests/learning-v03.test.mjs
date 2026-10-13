@@ -25,5 +25,5 @@ test('Next milestone uses the actual success threshold and distinguishes mastery
  let a=attempt(12,10,6000);assert.equal(score(a).stars,2);assert.equal(nextMilestone(a).required,11);
  a=attempt(12,11,6000);assert.equal(nextMilestone(a).stars,4);assert.equal(nextMilestone(a).required,12);
  a=attempt(20,19,2000);assert.equal(nextMilestone(a).stars,5);
- a=attempt(12,12,1400);assert.equal(nextMilestone(a).complete,true);
+ a=attempt(12,12,1000);assert.equal(nextMilestone(a).complete,true);
 });
