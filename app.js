@@ -1,7 +1,7 @@
 import {INSTRUMENTS,PITCHES,makeProfile,noteName,pitchLabel,frequency,lessons,isUnlocked,nextLesson,score,question,checkAnswer,initialState,validateState,validAnswers} from './core.js';
 
 const ROOT=document.querySelector('#app'),KEY='adh-reborn:state:v1';
-let state=initialState(),storageAvailable=true,screen='home',game=null,q=null,started=0,feedback=null,paused=false,pan=0,installPrompt=null,audio=null,autoTimer=null;
+let state=initialState(),storageAvailable=true,screen='home',game=null,q=null,started=0,elapsedMs=0,feedback=null,paused=false,pan=0,installPrompt=null,audio=null,autoTimer=null;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 try { const saved=localStorage.getItem(KEY);if(saved){const parsed=JSON.parse(saved);state=validateState(parsed);const session=parsed.session;if(session&&state.profile&&session.key===state.profile.key&&lessons(state.profile).some(l=>l.id===session.lesson)&&validAnswers(session.answers)&&Number.isFinite(session.startedAt))state.session=session;} }catch { storageAvailable=false; }
 const icons={home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',chart:'<path d="M4 19h17M7 15V9m6 6V5m6 10v-8"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',back:'<path d="m14 6-6 6 6 6"/>',play:'<path d="m9 5 11 7-11 7z"/>',check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',sound:'<path d="m11 5-6 4H2v6h3l6 4zM15 8a5 5 0 0 1 0 8m3-11a9 9 0 0 1 0 14"/>',pause:'<path d="M8 5v14M16 5v14"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>'};
@@ -56,7 +56,8 @@ function briefScreen(){
  const l=game.lesson,number=state.profile.tuning.length-l.string;
  return shell(`<section class="result-card briefing"><span class="eyebrow">AVANT DE JOUER · ${esc(l.chapter)}</span><h1>${l.mode==='mixed'?'Relions vos repères.':'Quelques repères, puis à vous.'}</h1><p>${l.mode==='mixed'?`Vous connaissez maintenant ${l.strings.length} cordes. Elles apparaîtront ensemble, avec une seule note à retrouver à chaque question.`:l.mode==='find'?'Cette fois, le nom est donné. Touchez la position correspondante sur la corde demandée.':`Voici les ${l.frets.length} positions de la corde ${number} à reconnaître. Touchez une carte pour écouter la note.`}</p>${l.mode==='mixed'?'':`<div class="discovery-notes">${l.frets.map(f=>`<button data-action="preview-note" data-midi="${state.profile.tuning[l.string]+f}"><small>${f===0?'À vide':`Case ${f}`}</small><strong>${esc(noteName(state.profile.tuning[l.string]+f,state.notation))}</strong>${icon('sound')}</button>`).join('')}</div>`}<p class="brief-hint">${l.mode==='name'?'Une position sera indiquée sur le manche. Choisissez son nom parmi les boutons.':'La corde demandée est précisée sous la question. Les autres positions ne sont pas des réponses à chercher.'}<br>Pas besoin d’aller vite : la précision suffit pour avancer.</p><button class="button primary" data-action="begin">À moi de jouer ${icon('play')}</button><br><button class="text-button" data-action="home">Retour au parcours</button></section>`);
 }
-function nextQuestion(){feedback=null;q=question(state.profile,game.lesson,game.answers);render();requestAnimationFrame(()=>{started=performance.now();});}
+function nextQuestion(){feedback=null;elapsedMs=0;q=question(state.profile,game.lesson,game.answers);render();requestAnimationFrame(()=>{started=performance.now();});}
+function pauseGame(){if(paused)return;clearTimeout(autoTimer);if(!feedback&&started)elapsedMs+=Math.max(0,performance.now()-started);paused=true;render();}
 function neckSVG(interactive=true){
  const count=state.profile.tuning.length,ys=Array.from({length:count},(_,s)=>42+(count-1-s)*216/(count-1));
  const xs=[75,218,372,526,680],isFind=q?.mode==='find';
@@ -91,7 +92,7 @@ function finish(){
 }
 function answer(value){
  if(feedback||paused||!q||!started)return;
- const correct=checkAnswer(q,value),ms=Math.max(0,performance.now()-started);
+ const correct=checkAnswer(q,value),ms=elapsedMs+Math.max(0,performance.now()-started);
  game.answers.push({target:{...q.target},mode:q.mode,correct,ms});
  state.session={key:state.profile.key,lesson:game.lesson.id,answers:game.answers,startedAt:game.startedAt};save();
  feedback={correct,selected:value};playNote(q.target.midi);render();
@@ -112,10 +113,10 @@ function layoutNeck(){
  inner.style.width=`${length}px`;inner.style.height=`${cross}px`;
  inner.style.transform=portrait?`translate(0,${long+pan}px) rotate(-90deg)`:`translate(${-pan}px,0)`;
  const previousViewport=viewport;let down=null,dragged=false;
- viewport.onpointerdown=e=>{if(e.button&&e.button!==0)return;down={x:e.clientX,y:e.clientY,pan};dragged=false;};
+ viewport.onpointerdown=e=>{if(e.button&&e.button!==0)return;down={x:e.clientX,y:e.clientY,pan,at:performance.now()};dragged=false;};
  viewport.onpointermove=e=>{if(!down||paused)return;const delta=portrait?e.clientY-down.y:down.x-e.clientX;if(Math.abs(delta)>8)dragged=true;if(dragged){pan=Math.max(0,Math.min(limit,down.pan+delta));inner.style.transform=portrait?`translate(0,${long+pan}px) rotate(-90deg)`:`translate(${-pan}px,0)`;}};
- viewport.onpointerup=e=>{if(down&&!dragged){const cell=e.target.closest('[data-string]');if(cell)answer({string:Number(cell.dataset.string),fret:Number(cell.dataset.fret)});}down=null;};
- viewport.onpointercancel=()=>{down=null;};
+ viewport.onpointerup=e=>{if(down&&dragged&&!paused&&!feedback)started+=performance.now()-down.at;if(down&&!dragged){const cell=e.target.closest('[data-string]');if(cell)answer({string:Number(cell.dataset.string),fret:Number(cell.dataset.fret)});}down=null;};
+ viewport.onpointercancel=()=>{if(down&&dragged&&!paused&&!feedback)started+=performance.now()-down.at;down=null;};
  // Timer starts only after the target is visible. Auto-frame the question, not the entire instrument.
  if(q&&!feedback){const targetX=[75,218,372,526,680][q.target.fret]/800*length;if(q.mode==='name'&&(targetX-pan<45||targetX-pan>long-45)){pan=Math.max(0,Math.min(limit,targetX-long/2));inner.style.transform=portrait?`translate(0,${long+pan}px) rotate(-90deg)`:`translate(${-pan}px,0)`;}}
  const hint=previousViewport.querySelector('.swipe-hint');if(hint)hint.hidden=limit===0;
@@ -133,7 +134,7 @@ ROOT.addEventListener('click',e=>{
  case 'resume':if(state.session?.key===state.profile.key)startLesson(state.session.lesson,true);else{state.session=null;save();render();}break;
  case 'answer-note':answer(Number(button.dataset.note));break;
  case 'next':advance();break;
- case 'pause':case 'exit-game':clearTimeout(autoTimer);paused=true;render();break;
+ case 'pause':case 'exit-game':pauseGame();break;
  case 'unpause':paused=false;render();requestAnimationFrame(()=>{started=performance.now();});break;
  case 'leave-paused':setScreen('home');break;
  case 'edit-profile':if(!state.stats.some(s=>s.key===state.profile.key)){state.profile=null;state.session=null;save();render();}break;
@@ -157,8 +158,8 @@ ROOT.addEventListener('change',async e=>{
 });
 ROOT.addEventListener('input',e=>{if(e.target.id==='tuning')document.querySelector('#tuning-preview').textContent=e.target.value;});
 ROOT.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-string]')){e.preventDefault();answer({string:Number(e.target.dataset.string),fret:Number(e.target.dataset.fret)});}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&screen==='game'&&!paused){clearTimeout(autoTimer);paused=true;render();}});
-window.addEventListener('resize',()=>{if(screen==='game'){clearTimeout(autoTimer);paused=true;render();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&screen==='game')pauseGame();});
+window.addEventListener('resize',()=>{if(screen==='game')pauseGame();});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;if(screen==='settings')render();});
 window.addEventListener('online',()=>{const el=document.querySelector('#offline-status');if(el)el.textContent='Prêt à jouer';});
 window.addEventListener('offline',()=>{const el=document.querySelector('#offline-status');if(el)el.textContent='Vous êtes hors ligne';});
