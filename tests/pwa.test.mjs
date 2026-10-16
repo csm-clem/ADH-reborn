@@ -15,5 +15,5 @@ test('Offline shell includes every runtime file and valid install icons',async()
   const sw=await readFile(resolve(root,'sw.js'),'utf8');
   const assets=sw.match(/const ASSETS=\[(.*?)\];/s)[1].match(/'([^']+)'/g).map(s=>s.slice(1,-1));
   for(const a of assets)await access(resolve(root,a==='./'?'index.html':a));
-  for(const required of ['./index.html','./app.js','./core.js','./style.css','./manifest.webmanifest'])assert.ok(assets.includes(required));
+  for(const required of ['./index.html','./app.js','./pilot.js','./pilot-ui.js','./pilot.css','./core.js','./style.css','./manifest.webmanifest'])assert.ok(assets.includes(required));
 });

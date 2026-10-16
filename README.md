@@ -16,14 +16,17 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, le service worker de
 
 ## Ce qui est disponible
 
-- Guitares 6/7/8 cordes, basses 4/5/6 cordes ; accordages standards ou personnalisés au premier lancement.
-- Progression par corde, découverte puis introduction de deux, trois, quatre et cinq positions, recherche inverse et consolidation cumulative.
-- Position → nom et nom → position, sans microphone. Les questions couvrent chaque position avant de répéter.
-- 3 étoiles à 90 % de premières réponses correctes ; 4 à 95 % et médiane ≤ 2,5 s ; 5 à 100 % et médiane ≤ 1,5 s. Seuils provisoires à calibrer avec des guitaristes.
-- Manche vectoriel horizontal en paysage, vertical en portrait, commandes lisibles et déplacement tactile. Les rotations recadrent silencieusement le manche ; le passage en arrière-plan met en pause.
-- Notation internationale/latine, thème clair/sombre, synthèse de corde pincée désactivable.
-- Progression locale par configuration, séance reprenable, statistiques, export/import validé.
-- Manifest, icônes d’installation et service worker mettant l’ensemble des ressources du jeu en cache.
+La v0.5 ouvre un **pilote pédagogique actif** sur les cordes à vide, les intervalles naturels et les transferts entre cordes équivalentes. Le plan dépend des hauteurs réelles de l’accordage. Sur six cordes standard, 11 activités permettent d’éprouver le format avant de produire tout le parcours.
+
+- Guitares 6/7/8 cordes, basses 4/5/6 cordes ; accordages standards ou personnalisés au premier lancement. Les configurations incompatibles avec une tonique naturelle sont signalées.
+- Roue de sept noms naturels, position → nom et nom → position ; nom à saisir dans les bilans. Exception explicitée pour nommer les cordes altérées d’un accordage.
+- Découverte active, diagramme et modèle sonore, réponses mélangées, motif tactile et essai sur guitare facultatif déclaré séparément.
+- Premières réponses conservées, reprises et aides identifiées, progrès distincts dans les deux sens. Aucune vitesse imposée pour avancer ; défi cinq étoiles à 100 % et médiane ≤ 1 seconde.
+- Manche horizontal dans les deux orientations ; panneaux côte à côte de même hauteur en paysage, empilés en portrait. Décompte, pause et commande muet.
+- Notation internationale/latine, charte Le Compositeur, synthèse de corde pincée, usage hors ligne.
+- Historique et parcours précédents conservés séparément. Séance reprenable, statistiques, export/import des deux historiques.
+
+Le reste de la carte naturelle, les ateliers d’altérations et la planification des révisions différées restent à produire. Voir le [rapport détaillé de phase 3](docs/CHANGES-v0.5.md) pour les choix, limites et vérifications.
 
 ## Périmètre commercial
 
@@ -32,8 +35,10 @@ Ce MVP gratuit n’encaisse aucun paiement. La configuration initiale peut être
 ## Architecture
 
 - `core.js` : notes MIDI scientifiques, accordages, parcours, questions, scores et validation des sauvegardes. Indépendant du navigateur.
-- `app.js` : interface et interactions, stockage local, synthèse audio.
-- `style.css` : affichage adaptatif et orientation du manche.
+- `app.js` : interface commune, ancien parcours, stockage local et audio.
+- `pilot.js` : plan dérivé de l’accordage, questions, corrections et validation du stockage du pilote.
+- `pilot-ui.js` et `pilot.css` : contrôleur et interface du pilote actif.
+- `style.css` : affichage adaptatif du manche.
 - `clock.js` : chronométrage actif, pauses et gestes exclus.
 - `sound.js` : synthèse de corde pincée Karplus–Strong.
 - `brand.css` et `fonts/` : charte Le Compositeur et polices locales.
@@ -45,7 +50,7 @@ Le moteur musical de ce MVP est une petite implémentation indépendante en Java
 
 ## Hébergement
 
-Tous les fichiers nécessaires sont statiques et leurs URLs sont relatives : le site peut être hébergé à la racine ou dans un sous-dossier. Exécuter `npm run package` et publier le contenu de `dist/` sur HTTPS. Le [ZIP prêt pour FTP](downloads/adh-pwa-v0.4.zip) permet aussi un dépôt sans Node.js. Voir [les changements et instructions v0.4](docs/CHANGES-v0.4.md). Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Tous les fichiers nécessaires sont statiques et leurs URLs sont relatives : le site peut être hébergé à la racine ou dans un sous-dossier. Exécuter `npm run package` et publier le contenu de `dist/` sur HTTPS. Le [ZIP prêt pour FTP](downloads/adh-pwa-v0.5.zip) permet aussi un dépôt sans Node.js. Voir [les changements et instructions v0.5](docs/CHANGES-v0.5.md). Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger en HTTPS, attendre l’activation du service worker, recharger une fois, fermer l’application, couper le réseau, rouvrir et terminer une séance. Ne pas supprimer les données du site : la progression locale disparaîtrait aussi. Une copie JSON permet de la restaurer.
 
