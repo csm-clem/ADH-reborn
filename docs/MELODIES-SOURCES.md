@@ -33,7 +33,7 @@ Un exercice limité à deux notes ne permet souvent qu’un appel de deux à qua
 
 Si aucun extrait vérifié ne convient, l’activité conserve une **« Suite d’entraînement »**, sans lui attribuer un titre de morceau. Aucun intervalle n’est déformé pour forcer une correspondance.
 
-La micro-leçon présente le titre, le passage, l’adaptation et le lien source. Le bouton d’écoute joue le modèle avec les durées relatives disponibles ; l’élève retrouve ensuite les notes, sans évaluation rythmique. Les questions restent silencieuses et seules les bonnes réponses sont sonorisées.
+La micro-leçon présente le titre, le passage et l’adaptation. Les liens documentaires restent dans ce dossier ; le jeu propose une écoute locale. Le bouton d’écoute joue le modèle avec les durées relatives disponibles ; l’élève retrouve ensuite les notes, sans évaluation rythmique. Les questions restent silencieuses et seules les bonnes réponses sont sonorisées.
 
 ## Limites avant commercialisation
 
