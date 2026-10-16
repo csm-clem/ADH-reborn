@@ -5,6 +5,8 @@ BASE=os.environ.get("ADH_BASE_URL","http://localhost:4173")
 OUT=Path(os.environ.get("ADH_QA_OUTPUT","/tmp/adh-pilot-qa"));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get("CHROMIUM_BIN","/usr/bin/chromium")
 KEY='adh-reborn:pilot:v1';LEGACY='adh-reborn:state:v1'
+def setup_standard(page):
+ page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()
 def snap(page):return page.evaluate('(key)=>{const v=JSON.parse(localStorage.getItem(key));return v.profiles[Object.keys(v.profiles)[0]]}',KEY)
 def tap(page,s,f):
  cell=page.locator(f'#pilot-neck [data-pilot-string="{s}"][data-pilot-fret="{f}"]');box=cell.bounding_box() if cell.count() else None;view=page.locator('#pilot-neck').bounding_box()

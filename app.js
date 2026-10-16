@@ -1,9 +1,10 @@
-import {INSTRUMENTS,PITCHES,makeProfile,noteName,pitchLabel,frequency,lessons,isUnlocked,nextLesson,score,question,checkAnswer,initialState,validateState,validAnswers,neckGeometry,microCourse,nextMilestone} from './core.js';
+import {PITCHES,makeProfile,noteName,pitchLabel,frequency,lessons,isUnlocked,nextLesson,score,question,checkAnswer,initialState,validateState,validAnswers,neckGeometry,microCourse,nextMilestone} from './core.js';
 
 import {ActiveClock} from './clock.js';
 import {pluckedString} from './sound.js';
 import {PilotController} from './pilot-ui.js';
 import {validatePilotStore} from './pilot.js';
+import {OnboardingController} from './onboarding.js';
 const responseClock=new ActiveClock(),countdownClock=new ActiveClock();
 const ROOT=document.querySelector('#app'),KEY='adh-reborn:state:v1';
 let state=initialState(),storageAvailable=true,screen='home',game=null,q=null,feedback=null,paused=false,pan=0,installPrompt=null,audio=null,autoTimer=null,fretAlternative=false,countdown=0,countdownTimer=null,countdownEpoch=0;
@@ -22,9 +23,7 @@ function shell(body){
  const instrument=state.profile?`${esc(state.profile.label)}<small>${state.profile.tuning.map(n=>esc(noteName(n,state.notation))).join(' · ')}</small>`:'';
  return `<div class="shell"><aside class="sidebar">${logo()}<p class="nav-label">VOTRE ESPACE</p><nav>${[['home','Mon parcours','home'],['stats','Mes progrès','chart'],['settings','Paramètres','settings']].map(([page,label,i])=>`<button data-action="${page}" class="nav-item ${screen===page?'active':''}">${icon(i)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-bottom"><div class="instrument-badge"><span class="status-dot"></span><div>${instrument}</div></div><p>Un peu chaque jour.<br>Un manche qui devient familier.</p></div></aside><div class="main-shell"><header class="topbar"><span class="crumb">${screen==='stats'?'Mes progrès':screen==='settings'?'Paramètres':'Mon parcours'} <span>/</span> ${screen==='home'?'Zone 01':'ADH Reborn'}</span><span class="top-tag">${icon('sound')} 5 min pour vous</span></header><main class="content" id="main-content" tabindex="-1">${!storageAvailable?'<p class="notice" role="alert">La sauvegarde locale est indisponible. Exportez vos progrès avant de fermer.</p>':''}${body}</main><footer class="footer"><span>À votre rythme, note après note.</span><span id="offline-status">${navigator.onLine?'Prêt à jouer':'Vous êtes hors ligne'}</span></footer></div><nav class="mobile-nav">${[['home','Parcours','home'],['stats','Progrès','chart'],['settings','Réglages','settings']].map(([page,label,i])=>`<button data-action="${page}" class="${screen===page?'active':''}">${icon(i)}${label}</button>`).join('')}</nav></div>`;
 }
-function setup(){
- return `<main id="main-content" tabindex="-1" class="welcome">${logo()}<div class="welcome-grid"><section><span class="eyebrow">VOTRE MANCHE. VOTRE TERRAIN DE JEU.</span><h1>Les notes,<br><em>au bout des doigts.</em></h1><p class="lead">Cinq minutes pour passer de « je cherche » à « je sais ». Commencez par les cordes à vide, puis reliez les notes avec des intervalles musicaux.</p><div class="welcome-art">${miniNeck(6)}</div><div class="feature-row"><span>✦ Progression douce</span><span>◉ Jouez hors ligne</span><span>↗ Vos progrès visibles</span></div></section><form id="setup-form" class="setup-card"><span class="eyebrow">01 / VOTRE INSTRUMENT</span><h2>Faisons connaissance.</h2><p>Choisissez votre configuration favorite. La première zone, cases 0 à 4, est gratuite.</p><label for="instrument">Instrument et nombre de cordes</label><select id="instrument" name="instrument">${INSTRUMENTS.map(i=>`<option value="${i.id}">${i.name} ${i.strings} cordes</option>`).join('')}</select><label for="tuning">Accordage, dans l’ordre physique des cordes</label><input id="tuning" name="tuning" value="${INSTRUMENTS[0].tuning}" autocomplete="off" spellcheck="false"><small>Du bord grave vers le bord aigu habituel, avec les octaves : E2 A2 D3 G3 B3 E4. Vous pouvez choisir un accordage personnalisé.</small><div id="tuning-preview" class="tuning-preview">${INSTRUMENTS[0].tuning}</div><label for="notation">Noms des notes</label><select id="notation" name="notation"><option value="international">C · D · E (international)</option><option value="latin">Do · Ré · Mi</option></select><p class="setup-disclosure">Votre premier instrument est gratuit. Ajouter une autre configuration et explorer les autres zones fera partie de la version complète, à venir.</p><p id="form-error" class="form-error" role="alert"></p><button class="button primary wide" type="submit">C’est parti ${icon('arrow')}</button><small>Sans compte, sans abonnement. Vous pourrez corriger votre choix avant le premier exercice.</small></form></div></main>`;
-}
+function setup(){return onboarding.render();}
 function miniNeck(strings=6){
  const g=neckGeometry(strings,4),profile=state.profile||makeProfile('guitar6'),markers=[{s:0,f:1},{s:strings-2,f:2}];
  return `<svg class="mini-neck" viewBox="0 0 ${g.width} ${g.height}" role="img" aria-label="Manche stylisé, frettes aux proportions réelles"><defs><linearGradient id="hero-fade"><stop offset="70%" stop-color="white"/><stop offset="100%" stop-color="black"/></linearGradient><mask id="hero-mask"><rect width="${g.width}" height="${g.height}" fill="url(#hero-fade)"/></mask></defs><g mask="url(#hero-mask)"><rect x="${g.nut}" y="12" width="${g.width-g.nut}" height="${g.height-24}" rx="2" fill="#e7cba4"/>${g.frets.map((x,f)=>`<path d="M${x} 12v${g.height-24}" stroke="${f===0?'#626b77':'#8a919b'}" stroke-width="${f===0?1.6:.65}"/>`).join('')}${g.ys.map((y,i)=>`<path d="M${g.nut-4} ${y}H${g.width}" stroke="#44516b" stroke-width="${.22+(strings-1-i)*.07}"/>`).join('')}<circle cx="${g.centers[3]}" cy="${g.height/2}" r="1.5" fill="#91837a"/></g>${markers.map(m=>`<circle cx="${g.centers[m.f]}" cy="${g.ys[m.s]}" r="4.5" fill="#b64024"/><text x="${g.centers[m.f]}" y="${g.ys[m.s]+1.3}" text-anchor="middle" font-size="3.5" font-family="Open Sans" font-weight="700" fill="#333c4e">${esc(noteName(profile.tuning[m.s]+m.f,state.notation))}</text>`).join('')}</svg>`;
@@ -188,7 +187,7 @@ function layoutNeck(){
  viewport.querySelector('.swipe-hint').hidden=limit===0;
  document.querySelectorAll('[data-action="pan-neck"]').forEach(b=>{b.disabled=limit===0;});
 }
-function render(){document.documentElement.dataset.theme=state.theme;if(screen==='pilot'){ROOT.innerHTML=pilot.render();requestAnimationFrame(()=>pilot.layout());return;}ROOT.innerHTML=!state.profile?setup():screen==='game'?gameScreen():screen==='brief'?briefScreen():screen==='result'?resultScreen():screen==='stats'?stats():screen==='settings'?settings():screen==='legacy'?legacyHome():screen==='legacy-stats'?legacyStats():home();if(screen==='game')requestAnimationFrame(layoutNeck);}
+function render(){document.documentElement.dataset.theme=state.theme;if(!state.profile){ROOT.innerHTML=setup();requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='pilot'){ROOT.innerHTML=pilot.render();requestAnimationFrame(()=>pilot.layout());return;}ROOT.innerHTML=screen==='game'?gameScreen():screen==='brief'?briefScreen():screen==='result'?resultScreen():screen==='stats'?stats():screen==='settings'?settings():screen==='legacy'?legacyHome():screen==='legacy-stats'?legacyStats():home();if(screen==='game')requestAnimationFrame(layoutNeck);}
 function rules(){const d=document.createElement('dialog');d.className='rules-dialog';d.innerHTML=`<button class="icon-button dialog-close" aria-label="Fermer">${icon('close')}</button><span class="eyebrow">APPRENDRE, PUIS AUTOMATISER</span><h2>Vos étoiles ont un sens.</h2><p>Les premières réponses comptent. Une erreur reste une erreur même après la correction.</p><ul><li><strong>3 étoiles</strong> : au moins 90 % de réponses correctes. Vous pouvez avancer.</li><li><strong>4 étoiles</strong> : au moins 95 %, avec un temps médian de 2,5 secondes ou moins.</li><li><strong>5 étoiles</strong> : aucune erreur, avec un temps médian de 1 seconde ou moins.</li></ul><p>Les seuils de vitesse sont des objectifs de jeu, pas une garantie de maîtrise sur une vraie guitare. Les pauses ne sont pas comptées.</p><p>Chaque corde commence par deux notes. Les suivantes arrivent progressivement, puis vous mélangez les cordes déjà étudiées.</p>`;document.body.append(d);d.querySelector('button').onclick=()=>d.close();d.addEventListener('close',()=>d.remove());d.showModal();}
 ROOT.addEventListener('click',e=>{
  const button=e.target.closest('[data-action]');if(!button)return;e.preventDefault();
@@ -213,18 +212,13 @@ ROOT.addEventListener('click',e=>{
  case 'pause':case 'exit-game':pauseGame();break;
  case 'unpause':paused=false;render();requestAnimationFrame(()=>responseClock.resume('pause'));if(countdown){countdownClock.resume('pause');countdownTimer=setTimeout(()=>tickCountdown(countdownEpoch),100);}break;
  case 'leave-paused':setScreen('home');break;
- case 'edit-profile':if(!state.stats.some(s=>s.key===state.profile.key)&&!pilot.data.attempts.length){pilot.leave();state.profile=null;state.session=null;save();render();}break;
+ case 'edit-profile':if(!state.stats.some(s=>s.key===state.profile.key)&&!pilot.data.attempts.length){onboarding.reset(state.profile,state.notation);pilot.leave();state.profile=null;state.session=null;save();render();}break;
  case 'choose-import':document.querySelector('#import-file').click();break;
  case 'export':{const data={...state,session:null,pilotBackup:pilot.exportData()};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`adh-reborn-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);break;}
  case 'install':if(installPrompt){installPrompt.prompt();installPrompt.userChoice.then(()=>{installPrompt=null;render();});}break;
  }
 });
-ROOT.addEventListener('submit',e=>{
- if(e.target.id!=='setup-form')return;e.preventDefault();const data=new FormData(e.target);
- try{state.profile=makeProfile(data.get('instrument'),data.get('tuning'));state.notation=data.get('notation');state.session=null;save();setScreen('home');}catch(error){document.querySelector('#form-error').textContent=error.message;}
-});
 ROOT.addEventListener('change',async e=>{
- if(e.target.id==='instrument'){const value=INSTRUMENTS.find(i=>i.id===e.target.value).tuning;document.querySelector('#tuning').value=value;document.querySelector('#tuning-preview').textContent=value;}
  if(e.target.id==='setting-notation'){state.notation=e.target.value;save();render();}
  if(e.target.id==='setting-sound'){setSound(e.target.checked);}
  if(e.target.id==='setting-theme'){state.theme=e.target.value;save();render();}
@@ -233,11 +227,10 @@ ROOT.addEventListener('change',async e=>{
  try{if(file.size>5_000_000)throw new Error('Le fichier est trop volumineux.');const raw=JSON.parse(await file.text()),imported=validateState(raw);if(raw.pilotBackup)validatePilotStore(raw.pilotBackup);if(!confirm('Remplacer les progrès de cet appareil par cette sauvegarde ?'))return;pilot.leave();state=imported;delete state.pilotBackup;if(raw.pilotBackup)pilot.importData(raw.pilotBackup);save();setScreen('home');toast('Vos progrès sont restaurés.');}catch(error){toast(error.message||'Impossible de lire la sauvegarde.');}
  }
 });
-ROOT.addEventListener('input',e=>{if(e.target.id==='tuning')document.querySelector('#tuning-preview').textContent=e.target.value;});
 ROOT.addEventListener('keydown',e=>{if(screen!=='game')return;if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-string], [data-action="listen-target"]')){e.preventDefault();if(e.target.dataset.action==='listen-target'){if(!paused&&!countdown)playNote(q.target.midi);}else answer({string:Number(e.target.dataset.string),fret:Number(e.target.dataset.fret)});}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&screen==='game')pauseGame();if(document.hidden&&screen==='pilot')pilot.pause();});
 let layoutTimer;
-window.addEventListener('resize',()=>{if(screen==='pilot'){pilot.clock.stop('layout');clearTimeout(layoutTimer);layoutTimer=setTimeout(()=>{pilot.layout();pilot.clock.resume('layout');},180);return;}if(screen!=='game')return;responseClock.stop('layout');clearTimeout(layoutTimer);layoutTimer=setTimeout(()=>{layoutNeck();responseClock.resume('layout');},180);});
+window.addEventListener('resize',()=>{if(!state.profile){requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='pilot'){pilot.clock.stop('layout');clearTimeout(layoutTimer);layoutTimer=setTimeout(()=>{pilot.layout();pilot.clock.resume('layout');},180);return;}if(screen!=='game')return;responseClock.stop('layout');clearTimeout(layoutTimer);layoutTimer=setTimeout(()=>{layoutNeck();responseClock.resume('layout');},180);});
 document.addEventListener('fullscreenchange',()=>{for(const b of document.querySelectorAll('[data-pilot-action="fullscreen"]'))b.setAttribute('aria-label',document.fullscreenElement?'Quitter le plein écran':'Passer en plein écran');});
 window.addEventListener('pagehide',()=>{if(screen==='pilot')pilot.pause();});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;if(screen==='settings')render();});
@@ -245,5 +238,8 @@ window.addEventListener('online',()=>{const el=document.querySelector('#offline-
 window.addEventListener('offline',()=>{const el=document.querySelector('#offline-status');if(el)el.textContent='Vous êtes hors ligne';});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(()=>navigator.serviceWorker.ready).then(()=>{const el=document.querySelector('#pwa-state');if(el)el.textContent='Les fichiers du jeu sont disponibles hors ligne.';}).catch(()=>{const el=document.querySelector('#pwa-state');if(el)el.textContent='Le mode hors ligne n’est pas disponible. Utilisez HTTPS ou localhost.';});}
 const pilot=new PilotController({getState:()=>state,showPilot:()=>{clearTimeout(autoTimer);cancelCountdown();screen='pilot';render();},home:()=>setScreen('home'),icon,playNote,playSequence,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const onboarding=new OnboardingController({getState:()=>state,render,icon,playNote,playSequence,stopAudio,setSound,complete:(profile,notation)=>{state.profile=profile;state.notation=notation;state.session=null;save();setScreen('home');}});
+document.fonts?.ready.then(()=>{if(!state.profile)onboarding.layout();});
+onboarding.bind(ROOT);
 pilot.bind(ROOT);
 render();

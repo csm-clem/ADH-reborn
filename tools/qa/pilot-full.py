@@ -1,7 +1,7 @@
 from pilot_support import *
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path=CHROMIUM,headless=True,args=['--no-sandbox']);c=b.new_context(viewport={'width':844,'height':390},reduced_motion='reduce');page=c.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
- page.goto(BASE);page.get_by_role('button',name='C’est parti').click()
+ page.goto(BASE);setup_standard(page)
  ids=page.locator('.lesson-row[data-module]').evaluate_all('els=>els.map(e=>e.dataset.module)')
  for ident in ids:
   page.locator('.lesson-row[data-module="'+ident+'"]').click();complete(page)

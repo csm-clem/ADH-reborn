@@ -4,7 +4,7 @@ import json
 LEGACY='adh-reborn:state:v1';KEY='adh-reborn:pilot:v1'
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path=CHROMIUM,headless=True,args=['--no-sandbox']);c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');c.add_init_script('''window.__audio=[];const original=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...args){window.__audio.push({state:this.context.state,when:args[0],samples:this.buffer?.length,max:Math.max(...this.buffer.getChannelData(0).slice(0,3000).map(Math.abs))});return original.apply(this,args)};''');page=c.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)));page.on('dialog',lambda d:d.accept())
- page.goto(BASE);page.get_by_role('button',name='C’est parti').click();page.locator('[data-action="settings"]:visible').first.click();page.locator('#import-file').set_input_files(str(OUT/'backup.json'))
+ page.goto(BASE);setup_standard(page);page.locator('[data-action="settings"]:visible').first.click();page.locator('#import-file').set_input_files(str(OUT/'backup.json'))
  page.wait_for_selector('.pilot-hero');legacy_before=page.evaluate('(k)=>JSON.parse(localStorage.getItem(k))',LEGACY);pilot_before=page.evaluate('(k)=>JSON.parse(localStorage.getItem(k))',KEY);assert len(next(iter(pilot_before['profiles'].values()))['attempts'])==2
  # An invalid pilot backup must leave both stores intact.
  bad=json.load(open(str(OUT/'backup.json')));next(iter(bad['pilotBackup']['profiles'].values()))['attempts'][0]['events'][0]['target']['midi']=99

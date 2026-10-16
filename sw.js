@@ -1,5 +1,5 @@
-const CACHE=`adh-reborn-v0.6:${self.registration.scope}`;
-const ASSETS=['./','./index.html','./style.css','./brand.css','./app.js','./pilot.js','./pilot-ui.js','./pilot.css','./core.js','./clock.js','./sound.js','./fonts/jost.ttf','./fonts/open-sans.ttf','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/maskable-512.png'];
+const CACHE=`adh-reborn-v0.7:${self.registration.scope}`;
+const ASSETS=['./','./index.html','./style.css','./brand.css','./app.js','./tuning.js','./onboarding.js','./onboarding.css','./pilot.js','./pilot-ui.js','./pilot.css','./core.js','./clock.js','./sound.js','./fonts/jost.ttf','./fonts/open-sans.ttf','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/maskable-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.endsWith(`:${self.registration.scope}`)&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

@@ -12,7 +12,7 @@ def correct(page):
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path=CHROMIUM,headless=True,args=['--no-sandbox'])
  c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
- page.goto(BASE);page.get_by_role('button',name='C’est parti').click();page.locator('.lesson-row[data-module="opens"]').click()
+ page.goto(BASE);setup_standard(page);page.locator('.lesson-row[data-module="opens"]').click()
  practice=page.locator('[data-pilot-action="practice"]');assert practice.is_disabled()
  gray=practice.evaluate('e=>getComputedStyle(e).backgroundColor');assert gray=='rgb(228, 231, 235)',gray
  for string in range(6):tap(page,string,0)

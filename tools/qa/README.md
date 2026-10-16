@@ -1,10 +1,11 @@
-# Recette navigateur du pilote v0.6
+# Recette navigateur du pilote v0.7
 
 Le site n’a aucune dépendance d’exécution. Ces contrôles complémentaires demandent Python, le paquet `playwright` et Chromium ; ils ne sont pas inclus dans le ZIP FTP.
 
 Démarrer le serveur avec `npm start`, puis depuis la racine du dépôt :
 
 ```sh
+python tools/qa/onboarding.py
 python tools/qa/pilot-browser.py
 python tools/qa/pilot-backup-audio.py
 python tools/qa/pilot-variants.py
@@ -19,3 +20,5 @@ Variables facultatives : `ADH_BASE_URL` (défaut `http://localhost:4173`), `CHRO
 Ces scripts saisissent automatiquement les bonnes réponses pour vérifier les transitions et les contrats de réponse. Ils ne constituent pas une étude de l’apprentissage. Les essais audio vérifient des buffers non silencieux et un contexte actif, sans juger la qualité perçue du timbre. Tester aussi sur un téléphone réel.
 
 `pilot-layout.py` vérifie la roue immobile, les dimensions des panneaux sur sept tailles, la temporisation, la pause et ses commandes, le plein écran, les boutons accessibles et l’ordre des cordes.
+
+`onboarding.py` vérifie les six instruments sur huit dimensions, la pagination complète, les boutons sans scroll, les modifications sonores, la notation, les brouillons et le profil enregistré.
