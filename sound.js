@@ -15,7 +15,7 @@ export function pluckedString(hz,sampleRate=44100,seconds=1.6,random=Math.random
   return samples;
 }
 
-export function instrumentVoice(instrumentId='guitar6'){return instrumentId.startsWith('bass')?'bass-electric':'guitar-clean';}
+export function instrumentVoice(instrumentId='guitar6',preference='auto'){if(['guitar-acoustic','guitar-clean','bass-electric'].includes(preference))return preference;return instrumentId.startsWith('bass')?'bass-electric':'guitar-clean';}
 /** Clean magnetic-pickup timbres: pluck attack, harmonic-dependent decay, no distortion. */
 export function electricString(hz,sampleRate=44100,seconds=1.8,voice='guitar-clean',random=Math.random){
  if(!Number.isFinite(hz)||hz<=0||hz>sampleRate/4)throw new Error('Pitch outside synthesis range');

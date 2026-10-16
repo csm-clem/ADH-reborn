@@ -16,7 +16,7 @@ export function pilotPlan(profile,{allowAlteredOpens=true,notation='internationa
  const compatible=isNatural(root.midi)&&(!altered.length||allowAlteredOpens);
  const reason=!isNatural(root.midi)?`La corde la plus grave est ${name(root.midi)}. Une tonique altérée demande une variante diatonique spécifique ; le pilote naturel ne la remplace pas par une autre note.`:altered.length&&!allowAlteredOpens?'Cet accordage comporte des altérations à vide ; le préambule d’accordage est nécessaire avant le pilote naturel.':'';
  const modules=[],unavailable=[];
- const add=(id,title,kind,pool,focus,description,extra={})=>{const m={id,title,kind,pool:unique(pool),focus:unique(focus),description,...extra};modules.push(m);return m;};
+ const add=(id,title,kind,pool,focus,description,extra={})=>{const subject=kind==='opens'?'Les cordes à vide':kind==='tuning'?'L’accordage':kind==='interval'?`La note ${name(extra.target.midi)}`:kind==='transfer'?`Les cordes en ${name(extra.pitchClass)}`:kind==='recall'?'Les notes graves':kind==='phrase'?'La phrase musicale':title;const m={id,title,subject,kind,pool:unique(pool),focus:unique(focus),description,...extra};modules.push(m);return m;};
  if(altered.length)add('tuning','Les noms de votre accordage','tuning',opens,opens,`Les cordes à vide ${[...new Set(altered.map(p=>name(p.midi)))].join(', ')} comportent une altération dans votre accordage. Ce préambule apprend seulement ces vrais départs ; ensuite la roue revient aux sept notes naturelles.`);
  add('opens','Reconnaître vos cordes à vide','opens',opens.filter(p=>isNatural(p.midi)),opens.filter(p=>isNatural(p.midi)),'Chaque ligne est une corde et les barres grises sont les frettes. La case 0 est avant la barre de départ, le sillet : on joue sans appuyer. Explorez les départs, puis nommez et retrouvez les cordes dans un ordre mélangé.');
  if(!compatible)return {root,opens,natural,all,modules,compatible,reason,altered};
@@ -42,7 +42,7 @@ export function pilotPlan(profile,{allowAlteredOpens=true,notation='internationa
   if(!focus.length)continue;
   const registers=[...new Set(strings.map(p=>p.midi))].sort((a,b)=>a-b),registerText=registers.length===1?'Ces départs ont la même hauteur : un unisson.':`${registers.map(n=>pitchLabel(n,notation)).join(' et ')} : ${registers.slice(1).map((n,i)=>(n-registers[i])/12).join(' puis ')} octave(s) d’écart.`;
   const numbers=strings.map(p=>profile.tuning.length-p.string),fretGroups=[...new Set(pool.map(p=>p.fret))].sort((a,b)=>a-b),transferPairs=fretGroups.map(fret=>strings.map(p=>pool.find(x=>x.string===p.string&&x.fret===fret)).filter(Boolean)).filter(p=>p.length>1);
-  add(`transfer-${pc}`,`La carte de ${name(pc)}, d’une corde à l’autre`,'transfer',pool,focus,`Les cordes ${numbers.join(' et ')} sont toutes accordées en ${name(pc)} à vide. ${registerText} À la même case, elles donnent donc le même nom de note. Après votre essai, des lignes relieront ces correspondances. Vous jouerez ensuite le même petit motif sur chacune de ces cordes.`,{equivalentStrings:strings.map(p=>p.string),transferPairs});
+  add(`transfer-${pc}`,`La carte de ${name(pc)}, d’une corde à l’autre`,'transfer',pool,focus,`Les cordes ${numbers.join(' et ')} sont toutes accordées en ${name(pc)} à vide. ${registerText} À la même case, elles donnent donc le même nom de note. Après votre essai, des lignes relieront ces correspondances. Vous jouerez ensuite le même petit motif sur chacune de ces cordes.`,{pitchClass:pc,equivalentStrings:strings.map(p=>p.string),transferPairs});
   learned=unique([...learned,...pool]);
  }
  const bass=unique(modules.filter(m=>m.kind==='interval').flatMap(m=>[m.anchor,m.target]));
@@ -57,7 +57,11 @@ export function intervalName(degree,semitones){
  return `${names[degree]} ${quality}`;
 }
 export function shuffled(list,random=Math.random){const out=[...list];for(let i=out.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
-export function practiceActivities(plan){return plan.modules.filter(m=>m.pool.length).flatMap(m=>['name','find'].map(mode=>({...m,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title:m.title+' · '+(mode==='name'?'Nommer':'Retrouver')})));}
+export function practiceActivities(plan){return plan.modules.filter(m=>m.pool.length).flatMap(m=>['name','find'].map(mode=>{
+ const title=m.subject||m.title;
+ const subtitle=(mode==='name'?'Nommer':'Retrouver')+(['opens','tuning'].includes(m.kind)?' les cordes':' les notes');
+ return {...m,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title,subtitle};
+}));}
 export function questionsFor(module,{diagnostic=false,random=Math.random,mode=module.mode||'name'}={}){
  const ordered=unique([...module.focus,...module.pool]);if(!ordered.length)return [];
  const count=Math.max(20,Math.min(module.kind==='recall'?30:24,ordered.length*3)),queue=[];let round=0;
@@ -97,7 +101,7 @@ export function firstSummary(events){
  const first=events.filter(e=>!e.retry);
  return Object.fromEntries(['name','find'].map(mode=>{const list=first.filter(e=>e.mode===mode);return [mode,{total:list.length,correct:list.filter(e=>e.correct).length,unaided:list.filter(e=>e.correct&&!e.aids.length).length}];}));
 }
-export function naturalDiagnostic(profile,mode='name'){const pool=pilotPlan(profile).natural;return {id:mode==='name'?'natural-diagnostic':'natural-diagnostic-find',mode,baseId:'natural-diagnostic',kind:'recall',title:'Vérifier la carte naturelle',pool,focus:pool,description:'Toutes les positions naturelles sont vérifiées dans les deux sens, sans son ni indice avant la réponse. Le test peut être interrompu et repris.'};}
+export function naturalDiagnostic(profile,mode='name'){const pool=pilotPlan(profile).natural;return {id:mode==='name'?'natural-diagnostic':'natural-diagnostic-find',mode,baseId:'natural-diagnostic',kind:'recall',title:'Les notes naturelles',subtitle:mode==='name'?'Nommer les notes':'Retrouver les notes',pool,focus:pool,description:'Toutes les positions naturelles sont vérifiées dans les deux sens, sans son ni indice avant la réponse. Le test peut être interrompu et repris.'};}
 export function initialPilotStore(){return {version:PILOT_VERSION,profiles:{}};}
 const finiteTime=x=>Number.isFinite(x)&&x>=0;
 const validPosition=(p,profile)=>p&&Number.isInteger(p.string)&&p.string>=0&&p.string<profile.tuning.length&&Number.isInteger(p.fret)&&p.fret>=0&&p.fret<=4&&p.midi===profile.tuning[p.string]+p.fret;
