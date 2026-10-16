@@ -85,3 +85,9 @@
 @media(prefers-reduced-motion:no-preference){.pilot-game.is-entering:not(.is-first-entry) .question-copy,.pilot-game.is-entering:not(.is-first-entry) .pilot-marker{animation:question-appear 120ms ease-out both}.pilot-game.feedback-correct .pilot-marker[fill="#267342"]{transform-box:fill-box;transform-origin:center;animation:correct-note 130ms ease-out}.pilot-game.feedback-wrong .pilot-marker{animation:wrong-note 100ms ease-out}.result-enter .result-overview,.result-enter .result-navigation{animation:result-appear 160ms ease-out both}.panel-enter{animation:result-appear 160ms ease-out both}.instruction-content{animation:question-appear 140ms ease-out both}}
 @media(prefers-reduced-motion:reduce){.launch-message{animation-name:launch-fade}.touch-ripple{animation:launch-fade 420ms ease-out both}.result-enter,.panel-enter,.instruction-content,.pilot-marker,.question-copy{animation:none!important}}
 .result-navigation{position:relative}.result-notice:not(.visually-hidden){position:absolute;bottom:calc(100% + 8px);left:0;right:0;padding:8px 10px;background:#44516b;color:white;border-radius:8px;font-size:12px;line-height:1.4;z-index:3}
+/* Continuous zoom: a single linear transform track, with independent opacity. */
+.launch-message{animation:launch-zoom 1500ms linear both,launch-opacity 1500ms ease-in-out both}
+@keyframes launch-zoom{from{transform:scale(.8)}to{transform:scale(1.2)}}
+@keyframes launch-opacity{0%{opacity:0}22%,70%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.launch-message{animation:launch-opacity 1500ms ease-in-out both}}
+.fret-inlay{pointer-events:none}.melody-caption{font-size:13px!important;line-height:1.4!important;color:#657187;margin:6px 0!important}.melody-attribution{font-size:13px!important;line-height:1.45!important}.melody-attribution a{color:#44516b;text-underline-offset:3px}

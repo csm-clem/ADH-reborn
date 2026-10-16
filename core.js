@@ -24,7 +24,8 @@ export function neckGeometry(strings,lastFret=4,scale=648){
   const frets=Array.from({length:lastFret+3},(_,i)=>nut+fretDistance(i,scale));
   const bounds=f=>f===0?[nut-36,nut]:[frets[f-1],frets[f]];
   const centers=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)*2/3;}),labelXs=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)/3;});
-  return {width:frets.at(-1),height,nut,frets,centers,labelXs,ys:Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),fadeStart:frets[lastFret]};
+  const ys=Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),inlays=[];for(let f=1;f<frets.length;f++){const pc=f%12;if(![0,3,5,7,9].includes(pc))continue;const x=(frets[f-1]+frets[f])/2;for(const t of pc===0?[.25,.75]:[.5])inlays.push({fret:f,x,y:Math.min(...ys)+(Math.max(...ys)-Math.min(...ys))*t});}
+  return {width:frets.at(-1),height,nut,frets,centers,labelXs,ys,inlays,fadeStart:frets[lastFret]};
 }
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};

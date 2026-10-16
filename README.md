@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.12.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.13.0**.
 
 ## Lancer et vérifier
 
@@ -29,11 +29,13 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - Préparation plein écran de 1,5 seconde (« À vous de jouer ! »), exclue du chronométrage, passage automatique après une bonne réponse en 500 ms et après une erreur en 1 seconde, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
+Les suites finales utilisent des extraits musicaux sourcés lorsque leurs hauteurs correspondent exactement aux notes étudiées ; sinon, une suite d’entraînement est annoncée comme telle. Voir [les sources musicales](docs/MELODIES-SOURCES.md).
+
 Les résultats présentent score, précision, médiane et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG.
 
 La carte naturelle complète, les ateliers d’altérations, les révisions différées et le microphone restent à produire. Une tonique altérée à vide limite actuellement le pilote aux cordes à vide ; l’application le signale et ne change jamais l’accordage pour contourner cette limite.
 
-Voir [le rapport v0.12](docs/CHANGES-v0.12.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.13](docs/CHANGES-v0.13.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -50,6 +52,8 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 - `core.js` : notes, accordages, fréquences, géométrie du manche et étoiles.
 - `pilot.js` : plan adapté à l’accordage, séries de questions, réponses et validation de la progression.
 - `results.js` / `result-ui.js` : métriques, records par exercice, diagrammes d’erreurs et export de la carte de résultat.
+- `melodies.js` : sélection d’extraits sourcés, transposés uniquement dans les hauteurs de l’exercice.
+- `result.css` : mise en page compacte et adaptative de la fiche de résultat.
 - `pilot-ui.js` / `pilot.css` : découverte, exercices, motifs, statistiques et résultats.
 - `app.js` : navigation commune, préférences, export/import et audio.
 - `release.js` / `state.js` : identité du produit, version et politique de stockage.
@@ -63,9 +67,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.12.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.13.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.12/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.13/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 

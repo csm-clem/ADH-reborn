@@ -42,3 +42,4 @@ h1,h2,h3,.brand,.button,.lesson-copy strong{font-family:Jost,Arial,Helvetica,san
 .sidebar>.brand{font-size:21px;line-height:1.15;letter-spacing:-.5px}.sidebar>.brand img{flex-shrink:0}
 .voice-controls{display:flex;align-items:center;gap:8px;min-width:0}.voice-controls select{max-width:230px;min-width:0;flex:1}.voice-controls .icon-button{flex:none;width:44px;height:44px}.voice-controls .icon-button:disabled{opacity:.45;cursor:default}
 @media(max-width:600px){.setting-row:has(.voice-controls){flex-direction:column;align-items:stretch;gap:10px}.voice-controls select{max-width:none}}
+.profile-card .profile-audio{width:44px;height:44px;flex:none;color:#d54527;border:1px solid #f1c8bc;border-radius:12px;background:#fff}.profile-card .profile-audio svg{width:21px;height:21px}.profile-card .profile-audio:disabled{opacity:.45;cursor:default}
