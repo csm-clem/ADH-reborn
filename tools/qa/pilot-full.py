@@ -7,7 +7,7 @@ with sync_playwright() as p:
   page.locator('.lesson-row[data-module="'+ident+'"]').click();complete(page)
   assert page.locator('.score-display').count()==1
   assert snap(page)['attempts'][-1]['passed'] is True
-  primary=page.locator('.result-card>.primary');assert primary.inner_text()==('Leçon suivante' if ident!=ids[-1] else 'Retour au parcours')
+  primary=page.locator('.result-actions>.primary');assert primary.inner_text()==('Exercice suivant' if ident!=ids[-1] else 'Réessayer')
   print(ident,'ok',flush=True)
   page.locator('[data-pilot-action="home"]').last.click()
  data=snap(page);assert len(data['attempts'])==len(ids);assert data['session']==None

@@ -7,8 +7,8 @@ for(const file of ['index.html','app.js','release.js','state.js','instrument-art
 for(const folder of ['icons','fonts','instruments'])await cp(resolve(root,folder),resolve(dest,folder),{recursive:true});
 await writeFile(resolve(dest,'LISEZ-MOI.txt'),`${APP_NAME} — ${RELEASE}
 
-Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.9/.
-Ouvrez https://media.lecompositeur.com/adh-pwa/v0.9/
+Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.10/.
+Ouvrez https://media.lecompositeur.com/adh-pwa/v0.10/
 
 Cette version de test supprime les anciennes progressions de cette application,
 mais conserve l’instrument et les préférences. Une réouverture de la même version

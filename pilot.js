@@ -46,7 +46,7 @@ export function pilotPlan(profile,{allowAlteredOpens=true,notation='internationa
   learned=unique([...learned,...pool]);
  }
  const bass=unique(modules.filter(m=>m.kind==='interval').flatMap(m=>[m.anchor,m.target]));
- if(bass.length>=3)add('recall','Retrouver vos repères sans indice','recall',bass,bass,'Les deux sens sont vérifiés séparément. Le son de la note cible et les aides sont retirés jusqu’à la première réponse. Ce bilan de pilote ne prouve pas encore une consolidation après délai.');
+ if(bass.length>=3)add('recall','Retrouver vos repères sans indice','recall',bass,bass,'Retrouvez vos notes, une question à la fois.');
  if(bass.length>=3)add('phrase','Une phrase depuis les noms','phrase',bass,bass,'Jouez une courte suite de noms, puis comparez avec le modèle. Le jeu vérifie les positions choisies sur le manche tactile. Vous pouvez aussi reprendre ce motif sur votre instrument, librement.');
  return {root,opens,natural,all,modules,compatible,reason,altered,learned,unavailable};
 }
@@ -57,12 +57,12 @@ export function intervalName(degree,semitones){
  return `${names[degree]} ${quality}`;
 }
 export function shuffled(list,random=Math.random){const out=[...list];for(let i=out.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
-export function questionsFor(module,{diagnostic=false,random=Math.random}={}){
+export function practiceActivities(plan){return plan.modules.filter(m=>m.pool.length).flatMap(m=>['name','find'].map(mode=>({...m,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title:m.title+' · '+(mode==='name'?'Nommer':'Retrouver')})));}
+export function questionsFor(module,{diagnostic=false,random=Math.random,mode=module.mode||'name'}={}){
  const ordered=unique([...module.focus,...module.pool]);if(!ordered.length)return [];
- const repeats=Math.max(3,Math.ceil(20/(ordered.length*2))),queue=[];
- for(const mode of ['name','find'])for(let round=0;round<repeats;round++){
-  const batch=shuffled(ordered,random);if(batch.length>2&&positionKey(queue.at(-1)?.target||{})===positionKey(batch[0]))[batch[0],batch[1]]=[batch[1],batch[0]];
-  queue.push(...batch.map(p=>({id:`${module.id}:${positionKey(p)}:${mode}:${round}`,mode,target:p,scope:mode==='find'&&['opens','tuning'].includes(module.kind)?'height':'string',allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false})));
+ const count=Math.max(20,Math.min(module.kind==='recall'?30:24,ordered.length*3)),queue=[];let round=0;
+ while(queue.length<count){const batch=shuffled(ordered,random);if(batch.length>2&&positionKey(queue.at(-1)?.target||{})===positionKey(batch[0]))[batch[0],batch[1]]=[batch[1],batch[0]];
+  for(const p of batch){if(queue.length===count)break;queue.push({id:`${module.id}:${positionKey(p)}:${mode}:${round}`,mode,target:p,scope:mode==='find'&&['opens','tuning'].includes(module.kind)?'height':'string',allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false});}round++;
  }
  return queue;
 }
@@ -97,7 +97,7 @@ export function firstSummary(events){
  const first=events.filter(e=>!e.retry);
  return Object.fromEntries(['name','find'].map(mode=>{const list=first.filter(e=>e.mode===mode);return [mode,{total:list.length,correct:list.filter(e=>e.correct).length,unaided:list.filter(e=>e.correct&&!e.aids.length).length}];}));
 }
-export function naturalDiagnostic(profile){const pool=pilotPlan(profile).natural;return {id:'natural-diagnostic',kind:'recall',title:'Vérifier la carte naturelle',pool,focus:pool,description:'Toutes les positions naturelles sont vérifiées dans les deux sens, sans son ni indice avant la réponse. Le test peut être interrompu et repris.'};}
+export function naturalDiagnostic(profile,mode='name'){const pool=pilotPlan(profile).natural;return {id:mode==='name'?'natural-diagnostic':'natural-diagnostic-find',mode,baseId:'natural-diagnostic',kind:'recall',title:'Vérifier la carte naturelle',pool,focus:pool,description:'Toutes les positions naturelles sont vérifiées dans les deux sens, sans son ni indice avant la réponse. Le test peut être interrompu et repris.'};}
 export function initialPilotStore(){return {version:PILOT_VERSION,profiles:{}};}
 const finiteTime=x=>Number.isFinite(x)&&x>=0;
 const validPosition=(p,profile)=>p&&Number.isInteger(p.string)&&p.string>=0&&p.string<profile.tuning.length&&Number.isInteger(p.fret)&&p.fret>=0&&p.fret<=4&&p.midi===profile.tuning[p.string]+p.fret;
@@ -109,15 +109,16 @@ export function validatePilotStore(value){
   const profile=makeProfile(data.profile.instrumentId,data.profile.tuning?.map(n=>{if(!Number.isInteger(n))throw new Error('Accordage invalide.');return `${['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][n%12]}${Math.floor(n/12)-1}`;}).join(' '));
   if(key!==profile.key||!Array.isArray(data.attempts)||data.attempts.length>1000||!Array.isArray(data.later)||data.later.length>200)throw new Error('Historique du pilote invalide.');
   if(data.seenInstructions!==undefined&&(!Array.isArray(data.seenInstructions)||data.seenInstructions.length>64||!data.seenInstructions.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Introductions enregistrées invalides.');
+  if(data.discoveredModules!==undefined&&(!Array.isArray(data.discoveredModules)||data.discoveredModules.length>100||!data.discoveredModules.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Découvertes enregistrées invalides.');
   const validAids=a=>Array.isArray(a)&&a.every(v=>['labels','listen','course'].includes(v));
   const validEvent=e=>e&&['name','find'].includes(e.mode)&&validPosition(e.target,profile)&&typeof e.correct==='boolean'&&validAids(e.aids)&&finiteTime(e.ms)&&finiteTime(e.at)&&typeof e.retry==='boolean';
-  for(const a of data.attempts)if(!a||typeof a.id!=='string'||!finiteTime(a.at)||!Array.isArray(a.events)||a.events.length>600||!a.events.every(validEvent))throw new Error('Tentative du pilote invalide.');
+  for(const a of data.attempts)if(!a||typeof a.id!=='string'||!finiteTime(a.at)||!Array.isArray(a.events)||a.events.length>30||!a.events.every(validEvent))throw new Error('Tentative du pilote invalide.');
   for(const q of data.later)if(!q||!['name','find'].includes(q.mode)||!validPosition(q.target,profile))throw new Error('Révision du pilote invalide.');
   if(data.session){
    const s=data.session;
    if(s.familyOrder!==undefined&&(!Array.isArray(s.familyOrder)||!s.familyOrder.length||s.familyOrder.length>7||new Set(s.familyOrder).size!==s.familyOrder.length||!s.familyOrder.every(pc=>NATURAL_PITCHES.includes(pc))))throw new Error('Ordre des familles invalide.');
    if(s.currentAids!==undefined&&!validAids(s.currentAids)||s.feedback!==undefined&&s.feedback!==null&&(typeof s.feedback.correct!=='boolean'||typeof s.feedback.text!=='string'||s.feedback.text.length>2000)||s.nameDraft!==undefined&&(typeof s.nameDraft!=='string'||s.nameDraft.length>40)||s.reviewPool!==undefined&&(!Array.isArray(s.reviewPool)||s.reviewPool.length>40||!s.reviewPool.every(p=>validPosition(p,profile))))throw new Error('État de reprise invalide.');
-   if(typeof s.id!=='string'||typeof s.activity!=='string'||!Array.isArray(s.queue)||s.queue.length>600||!s.queue.every(q=>q&&['name','find'].includes(q.mode)&&validPosition(q.target,profile)&&['string','any','height'].includes(q.scope)&&(!q.allowedFrets||Array.isArray(q.allowedFrets)&&q.allowedFrets.every(f=>Number.isInteger(f)&&f>=0&&f<=4)))||!Number.isInteger(s.index)||s.index<0||s.index>s.queue.length||!Array.isArray(s.events)||!s.events.every(validEvent)||s.events.length>600||!Number.isInteger(s.motifIndex)||s.motifIndex<0||s.motifIndex>100||s.activeMs!==undefined&&(!finiteTime(s.activeMs)||s.activeMs>86_400_000)||!['discovery','practice','motif','result'].includes(s.stage))throw new Error('Séance du pilote invalide.');
+   if(typeof s.id!=='string'||typeof s.activity!=='string'||!Array.isArray(s.queue)||s.queue.length>30||!s.queue.every(q=>q&&['name','find'].includes(q.mode)&&validPosition(q.target,profile)&&['string','any','height'].includes(q.scope)&&(!q.allowedFrets||Array.isArray(q.allowedFrets)&&q.allowedFrets.every(f=>Number.isInteger(f)&&f>=0&&f<=4)))||!Number.isInteger(s.index)||s.index<0||s.index>s.queue.length||!Array.isArray(s.events)||!s.events.every(validEvent)||s.events.length>30||!Number.isInteger(s.motifIndex)||s.motifIndex<0||s.motifIndex>100||s.activeMs!==undefined&&(!finiteTime(s.activeMs)||s.activeMs>86_400_000)||!['discovery','practice','motif','result'].includes(s.stage))throw new Error('Séance du pilote invalide.');
   }
   profiles[key]={...data,profile,attempts:data.attempts.slice(-1000),later:data.later.slice(-200)};
  }

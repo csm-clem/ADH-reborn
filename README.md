@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.9.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.10.0**.
 
 ## Lancer et vérifier
 
@@ -19,19 +19,19 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 
 - Guitares 6/7/8 cordes et basses 4/5/6 cordes, bibliothèque de 32 accordages et éditeur sonore par demi-ton. Configuration initiale contenue dans l’écran, avec pagination des cordes sur écran court.
 - Six images WebP fournies par le porteur du projet, intégrées localement et disponibles hors ligne.
-- Parcours calculé depuis les hauteurs réelles : cordes à vide, intervalles naturels, cordes de même nom, bilan et phrase musicale. Onze activités en guitare six cordes standard.
-- Au moins **20 questions par activité**, chaque position au moins trois fois dans chaque sens. Un bloc « nommer », puis un bloc « retrouver », chacun mélangé.
+- Parcours calculé depuis les hauteurs réelles : cordes à vide, intervalles naturels, cordes de même nom, bilan et phrase musicale. Vingt-deux exercices en guitare six cordes standard, organisés en paires « nommer » / « retrouver ».
+- **20 à 30 questions maximum**, un seul type de réponse par exercice. Séries mélangées et équilibrées ; les grandes listes répartissent leurs positions dans cette limite. Les exercices « retrouver » conservent une courte suite musicale finale, pour un maximum de 30 réponses en tout.
 - Roue de sept notes naturelles ; exception explicitée pour les noms altérés des cordes à vide de certains accordages.
 - Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et médiane ≤ 1 seconde.
 - Exemples graphiques à la première rencontre de chaque format et micro-leçons d’écoute des intervalles. Les instructions ne consomment pas le temps de réponse.
 - Corrections à hauteur exacte : E2 et E4 ne sont pas confondus. Démonstration distincte des essais de l’élève.
 - Manche horizontal, entièrement cadré sans glissement pour répondre. Deux panneaux de même hauteur en paysage, empilés en portrait. Réponses tactiles et boutons accessibles, corde 1 en haut.
-- Préparation par une roue de 1,5 seconde, passage automatique après une bonne réponse en 500 ms, pause floutée avec Muet accessible, plein écran.
-- Notes pincées, modèles joués en arpège, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
+- Préparation par une roue de 1,5 seconde, passage automatique après une bonne réponse en 500 ms et après une erreur en 1 seconde, pause floutée avec Muet accessible, plein écran.
+- Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
 La carte naturelle complète, les ateliers d’altérations, les révisions différées et le microphone restent à produire. Une tonique altérée à vide limite actuellement le pilote aux cordes à vide ; l’application le signale et ne change jamais l’accordage pour contourner cette limite.
 
-Voir [le rapport v0.9](docs/CHANGES-v0.9.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.10](docs/CHANGES-v0.10.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -60,9 +60,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.9.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.10.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.9/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.10/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 

@@ -1,7 +1,7 @@
 import {noteName,pitchLabel,frequency} from './core.js';
 import {initialState,loadState,validateState} from './state.js';
 import {APP_NAME,RELEASE,STATE_KEY as KEY} from './release.js';
-import {pluckedString} from './sound.js';
+import {electricString,instrumentVoice} from './sound.js';
 import {PilotController} from './pilot-ui.js';
 import {validatePilotStore} from './pilot.js';
 import {OnboardingController} from './onboarding.js';
@@ -26,21 +26,21 @@ function settings(){
 function unlockAudio(){if(!state.sound)return Promise.resolve();try{audio||=new (window.AudioContext||window.webkitAudioContext)();return audio.resume().catch(()=>{});}catch{return Promise.resolve();}}
 const soundCache=new Map(),activeSounds=new Set();let sequenceEpoch=0;
 function stopAudio(){sequenceEpoch++;for(const source of activeSounds){try{source.stop();}catch{}}activeSounds.clear();}
-async function playSequence(notes,{step=.42}={}){stopAudio();const epoch=sequenceEpoch;await unlockAudio();if(epoch!==sequenceEpoch||!state.sound||!audio||audio.state!=='running')return;const start=audio.currentTime+.025;notes.forEach((midi,i)=>createNote(midi,start+i*step,step-.025));}
+async function playSequence(notes,{step=.42,instrumentId=state.profile?.instrumentId||'guitar6'}={}){stopAudio();const epoch=sequenceEpoch;await unlockAudio();if(epoch!==sequenceEpoch||!state.sound||!audio||audio.state!=='running')return;const start=audio.currentTime+.025;notes.forEach((midi,i)=>createNote(midi,start+i*step,step-.025,instrumentVoice(instrumentId)));}
 function setSound(enabled){state.sound=enabled;if(!enabled)stopAudio();else unlockAudio();save();}
-async function playNote(midi){
- stopAudio();if(!state.sound)return;const epoch=sequenceEpoch;await unlockAudio();if(epoch!==sequenceEpoch||!state.sound||!audio||audio.state!=='running')return;createNote(midi,audio.currentTime);
+async function playNote(midi,{instrumentId=state.profile?.instrumentId||'guitar6'}={}){
+ stopAudio();if(!state.sound)return;const epoch=sequenceEpoch;await unlockAudio();if(epoch!==sequenceEpoch||!state.sound||!audio||audio.state!=='running')return;createNote(midi,audio.currentTime,undefined,instrumentVoice(instrumentId));
 }
-function createNote(midi,when,duration){
+function createNote(midi,when,duration,voice){
  const hz=frequency(midi);if(hz>audio.sampleRate/4)return;
- const key=`${midi}:${audio.sampleRate}`;
+ const key=`${voice}:${midi}:${audio.sampleRate}`;
  if(!soundCache.has(key)){
-   const samples=pluckedString(hz,audio.sampleRate),buffer=audio.createBuffer(1,samples.length,audio.sampleRate);
+   const samples=electricString(hz,audio.sampleRate,1.8,voice),buffer=audio.createBuffer(1,samples.length,audio.sampleRate);
    buffer.copyToChannel(samples,0);soundCache.set(key,buffer);
    if(soundCache.size>64)soundCache.delete(soundCache.keys().next().value);
  }
  const source=audio.createBufferSource(),gain=audio.createGain(),filter=audio.createBiquadFilter();
- source.buffer=soundCache.get(key);filter.type='lowpass';filter.frequency.value=Math.min(6500,hz*18);filter.Q.value=.5;gain.gain.value=.32;
+ source.buffer=soundCache.get(key);filter.type='lowpass';filter.frequency.value=Math.min(voice==='bass-electric'?4200:8500,hz*(voice==='bass-electric'?22:36));filter.Q.value=.5;gain.gain.value=.32;
  source.connect(filter);filter.connect(gain);gain.connect(audio.destination);source.start(when);if(duration){gain.gain.setValueAtTime(.32,when);gain.gain.setValueAtTime(.32,when+duration-.04);gain.gain.linearRampToValueAtTime(0,when+duration);source.stop(when+duration+.01);}
  activeSounds.add(source);source.onended=()=>{activeSounds.delete(source);source.disconnect();filter.disconnect();gain.disconnect();};
 }
@@ -75,6 +75,6 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installProm
 for(const event of ['online','offline'])window.addEventListener(event,()=>{const el=document.querySelector('#offline-status');if(el)el.textContent=navigator.onLine?'Prêt à jouer':'Vous êtes hors ligne';});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 const pilot=new PilotController({getState:()=>state,showPilot:()=>{screen='pilot';render();},home:()=>setScreen('home'),stats:()=>setScreen('stats'),icon,playNote,playSequence,stopAudio,unlockAudio,setSound,toggleFullscreen});
-const onboarding=new OnboardingController({getState:()=>state,render,icon,playNote,playSequence:notes=>playSequence(notes,{step:.23}),stopAudio,setSound,complete:(profile,notation)=>{state.profile=profile;state.notation=notation;save();setScreen('home');}});
+const onboarding=new OnboardingController({getState:()=>state,render,icon,playNote:midi=>playNote(midi,{instrumentId:onboarding.instrumentId}),playSequence:notes=>playSequence(notes,{step:.23,instrumentId:onboarding.instrumentId}),stopAudio,setSound,complete:(profile,notation)=>{state.profile=profile;state.notation=notation;save();setScreen('home');}});
 document.fonts?.ready.then(()=>{if(!state.profile)onboarding.layout();});
 onboarding.bind(ROOT);pilot.bind(ROOT);render();

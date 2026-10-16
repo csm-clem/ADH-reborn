@@ -20,10 +20,11 @@ export function pitchLabel(midi, notation='international') {
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
 export function neckGeometry(strings,lastFret=4,scale=648){
-  const neckWidth=52+(strings-6)*7,height=neckWidth+14,nut=32;
+  const neckWidth=52+(strings-6)*7,height=neckWidth+14,nut=44;
   const frets=Array.from({length:lastFret+3},(_,i)=>nut+fretDistance(i,scale));
-  const centers=Array.from({length:lastFret+1},(_,f)=>f===0?nut-15:(frets[f-1]+frets[f])/2);
-  return {width:frets.at(-1),height,nut,frets,centers,ys:Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),fadeStart:frets[lastFret]};
+  const bounds=f=>f===0?[nut-36,nut]:[frets[f-1],frets[f]];
+  const centers=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)*2/3;}),labelXs=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)/3;});
+  return {width:frets.at(-1),height,nut,frets,centers,labelXs,ys:Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),fadeStart:frets[lastFret]};
 }
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
