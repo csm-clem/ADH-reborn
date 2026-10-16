@@ -11,18 +11,20 @@ with sync_playwright() as p:
  Path(str(OUT/'invalid.json')).write_text(json.dumps(bad));page.locator('[data-action="settings"]:visible').first.click();page.locator('#import-file').set_input_files(str(OUT/'invalid.json'));page.wait_for_selector('.toast')
  assert page.evaluate('(k)=>JSON.parse(localStorage.getItem(k))',LEGACY)==legacy_before;assert page.evaluate('(k)=>JSON.parse(localStorage.getItem(k))',KEY)==pilot_before
  page.locator('[data-action="home"]:visible').first.click();page.locator('.lesson-row[data-module="degree-5"]').click();page.locator('[data-pilot-action="discovery-reveal"]').click();page.locator('[data-pilot-action="replay"]').click();page.wait_for_function('window.__audio.length>=2');assert all(v['state']=='running' and v['max']>0 for v in page.evaluate('window.__audio'))
- page.locator('[data-pilot-string="1"][data-pilot-fret="2"]').click();page.locator('[data-pilot-action="practice"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000);page.wait_for_function('window.__audio.length>=4')
+ tap(page,1,2);page.locator('[data-pilot-action="practice"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000);page.wait_for_function('window.__audio.length>=4')
  n=page.evaluate('window.__audio.length');page.locator('[data-pilot-action="mute"]').click();page.locator('#pilot-neck [role="button"]').first.click();page.wait_for_timeout(100);assert page.evaluate('window.__audio.length')==n
  page.locator('[data-pilot-action="mute"]').click()
  # Keyboard name selection can continue directly into the next task.
  value=page.evaluate('(k)=>{const d=Object.values(JSON.parse(localStorage.getItem(k)).profiles)[0];return d.session.queue[d.session.index].target.midi%12}',KEY)
- page.locator(f'[data-pilot-action="note"][data-note="{value}"]').focus();page.keyboard.press('Enter');assert page.locator('.feedback.correct').count()==1;page.keyboard.press('Enter');assert page.locator('.feedback.correct').count()==0
+ index=snap(page)['session']['index'];page.locator(f'[data-pilot-action="note"][data-note="{value}"]').focus();page.keyboard.press('Enter');assert page.locator('.feedback.correct').count()==1;wait_advance(page,index)
+ while snap(page)['session']['queue'][snap(page)['session']['index']]['mode']=='name':
+  s=snap(page)['session'];q=s['queue'][s['index']];page.locator(f'[data-note="{q["target"]["midi"]%12}"]').click();wait_advance(page,s['index'])
  # The coordinate-button alternative must keep native keyboard activation.
  q=page.evaluate('(k)=>{const d=Object.values(JSON.parse(localStorage.getItem(k)).profiles)[0];return d.session.queue[d.session.index]}',KEY)
  assert q['mode']=='find'
  page.locator('.pilot-position-buttons summary').click()
  cell=page.locator(f'[data-pilot-action="position"][data-string="{q["target"]["string"]}"][data-fret="{q["target"]["fret"]}"]');cell.focus();page.keyboard.press('Enter');assert page.locator('.feedback.correct').count()==1
- page.keyboard.press('Enter')
+ wait_advance(page,snap(page)['session']['index'])
  # Corrupt local pilot state is preserved, rather than overwritten by a fresh session.
  page.locator('[data-pilot-action="pause"]').last.click();page.locator('[data-pilot-action="home"]').click();page.evaluate('(k)=>localStorage.setItem(k,"{broken")',KEY);page.reload();assert page.locator('[role="alert"]').count()>=1;page.locator('.lesson-row[data-module="opens"]').click();page.locator('[data-pilot-string="0"][data-pilot-fret="0"]').click();assert page.evaluate('(k)=>localStorage.getItem(k)',KEY)=='{broken'
  page.locator('[data-pilot-action="pause"]').last.click();page.locator('[data-pilot-action="home"]').click();page.locator('[data-action="settings"]:visible').first.click()

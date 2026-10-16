@@ -23,7 +23,7 @@ export function neckGeometry(strings,lastFret=4,scale=648){
   const neckWidth=52+(strings-6)*7,height=neckWidth+24,nut=32;
   const frets=Array.from({length:lastFret+3},(_,i)=>nut+fretDistance(i,scale));
   const centers=Array.from({length:lastFret+1},(_,f)=>f===0?nut-15:(frets[f-1]+frets[f])/2);
-  return {width:frets.at(-1)+10,height,nut,frets,centers,ys:Array.from({length:strings},(_,s)=>12+8+(strings-1-s)*(neckWidth-16)/(strings-1)),fadeStart:frets[lastFret]+2};
+  return {width:frets.at(-1),height,nut,frets,centers,ys:Array.from({length:strings},(_,s)=>12+8+(strings-1-s)*(neckWidth-16)/(strings-1)),fadeStart:frets[lastFret]};
 }
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};

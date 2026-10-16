@@ -38,7 +38,7 @@ test('Pilot backups preserve separate legacy-independent evidence and reject mis
  const restored=validatePilotStore(JSON.parse(JSON.stringify(store)));assert.equal(restored.profiles[p.key].attempts.length,1);
  restored.profiles[p.key].attempts[0].events[0].target.midi=41;assert.throws(()=>validatePilotStore(restored));assert.throws(()=>validatePilotStore({version:99,profiles:{}}));
 });
-test('Natural route follows notation and name production accepts accents without reducing to a multiple choice',async()=>{
+test('Natural route follows notation and the note parser retains international and Latin aliases',async()=>{
  const {parseNoteAnswer}=await import('../pilot.js');
  assert.equal(parseNoteAnswer('Ré'),2);assert.equal(parseNoteAnswer(' re '),2);assert.equal(parseNoteAnswer('Mi'),4);assert.equal(parseNoteAnswer('B'),11);assert.equal(parseNoteAnswer('Si'),11);assert.equal(parseNoteAnswer('Fa♯'),6);assert.equal(parseNoteAnswer('F#'),6);assert.equal(parseNoteAnswer('Solb'),6);assert.equal(parseNoteAnswer('H'),null);assert.equal(parseNoteAnswer(''),null);
  const plan=pilotPlan(makeProfile('guitar6'),{notation:'latin'});assert.match(plan.modules.find(m=>m.degree===5).title,/Si/);assert.match(plan.modules.find(m=>m.degree===5).description,/Mi → Si/);
@@ -51,4 +51,12 @@ test('Unavailable degrees are reported and interval qualities follow the natural
  const limited=pilotPlan(makeProfile('guitar6','E2 E2 E2 E2 E2 E2'));assert.deepEqual(limited.unavailable.map(x=>x.note).sort(),['A','B','C','D','E']);assert.ok(limited.modules.filter(m=>m.kind==='interval').every(m=>[2,3].includes(m.degree)));
  const lydian=pilotPlan(makeProfile('guitar6','F2 A2 D3 G3 B3 E4'));assert.match(lydian.modules.find(m=>m.degree===4).title,/augmentée/);
  assert.match(pilotPlan(makeProfile('guitar6')).modules.find(m=>m.kind==='transfer').description,/2 octave/);
+});
+test('Questions form two shuffled blocks with matching positions and no per-question alternation',()=>{
+ const profile=makeProfile('guitar6'),module=naturalDiagnostic(profile);
+ const queue=questionsFor(module,{diagnostic:true,random:()=>.25}),n=module.pool.length;
+ assert.equal(queue.length,n*2);assert.ok(queue.slice(0,n).every(q=>q.mode==='name'));assert.ok(queue.slice(n).every(q=>q.mode==='find'));
+ assert.deepEqual(queue.slice(0,n).map(q=>positionKey(q.target)).sort(),queue.slice(n).map(q=>positionKey(q.target)).sort());
+ assert.notDeepEqual(queue.slice(0,n).map(q=>positionKey(q.target)),module.pool.map(positionKey));
+ assert.notDeepEqual(queue.map(q=>q.id),questionsFor(module,{diagnostic:true,random:()=>.75}).map(q=>q.id));
 });

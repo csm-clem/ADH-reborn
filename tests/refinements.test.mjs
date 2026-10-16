@@ -16,7 +16,7 @@ test('Fret positions follow equal temperament and case widths decrease geometric
  const widths=Array.from({length:4},(_,i)=>fretDistance(i+1)-fretDistance(i));
  assert.ok(Math.abs(widths[0]-648/17.817153745105756)<1e-8);
  for(let i=1;i<4;i++)assert.ok(Math.abs(widths[i]/widths[i-1]-2**(-1/12))<1e-12);
- const g=neckGeometry(6,1);assert.equal(g.centers.length,2);assert.ok(g.fadeStart>g.frets[1]);assert.ok(g.width>g.fadeStart);
+ const g=neckGeometry(6,1);assert.equal(g.centers.length,2);assert.equal(g.fadeStart,g.frets[1]);assert.equal(g.width,g.frets[3]);
  assert.equal(neckGeometry(8,4).ys.length,8);
 });
 test('Plucked string has a decaying envelope, pitch periodicity, and bounded finite samples',()=>{
