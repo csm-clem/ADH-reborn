@@ -4,10 +4,16 @@ from pathlib import Path
 BASE=os.environ.get("ADH_BASE_URL","http://localhost:4173")
 OUT=Path(os.environ.get("ADH_QA_OUTPUT","/tmp/adh-pilot-qa"));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get("CHROMIUM_BIN","/usr/bin/chromium")
-KEY='fretboard-trainer:pilot:0.8.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
+KEY='fretboard-trainer:pilot:0.9.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
 def setup_standard(page):
  page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()
 def snap(page):return page.evaluate('(key)=>{const v=JSON.parse(localStorage.getItem(key));return v.profiles[Object.keys(v.profiles)[0]]}',KEY)
+def dismiss_help(page):
+ for _ in range(4):
+  if not page.locator('[data-pilot-action="help-next"]').count():break
+  page.locator('[data-pilot-action="help-next"]').click()
+  if getattr(page,'fast_clock',False):page.clock.run_for(40)
+
 def tap(page,s,f):
  if getattr(page,'fast_clock',False):page.clock.run_for(40)
  cell=page.locator(f'#pilot-neck [data-pilot-string="{s}"][data-pilot-fret="{f}"]');box=cell.bounding_box() if cell.count() else None;view=page.locator('#pilot-neck').bounding_box()
@@ -20,18 +26,21 @@ def wait_advance(page,index):
  if getattr(page,'fast_clock',False):page.clock.run_for(550)
  page.wait_for_function('(p)=>{const s=Object.values(JSON.parse(localStorage.getItem(p.key)).profiles)[0].session;return !s||s.index!==p.index||s.stage!=="practice"}',arg={'key':KEY,'index':index},timeout=3000)
 def complete(page,wrong=False,hint=False):
+ dismiss_help(page)
  s=snap(page)['session']
  while s['stage']=='discovery' and not page.locator('[data-pilot-action="practice"]').is_enabled():
-  focus=page.evaluate('''async()=>{const {pilotPlan}=await import('./pilot.js');const s=JSON.parse(localStorage.getItem('fretboard-trainer:pilot:0.8.0'));const d=s.profiles[Object.keys(s.profiles)[0]];const m=pilotPlan(d.profile).modules.find(m=>m.id===d.session.activity);return ['opens','tuning'].includes(m.kind)?m.pool.find(p=>!(d.session.explored||[]).includes(p.string+':'+p.fret)):m.focus[0]}''')
+  focus=page.evaluate('''async()=>{const {pilotPlan}=await import('./pilot.js');const s=JSON.parse(localStorage.getItem('fretboard-trainer:pilot:0.9.0'));const d=s.profiles[Object.keys(s.profiles)[0]];const m=pilotPlan(d.profile).modules.find(m=>m.id===d.session.activity);return ['opens','tuning'].includes(m.kind)?m.pool.find(p=>!(d.session.explored||[]).includes(p.string+':'+p.fret)):m.focus[0]}''')
   before=s.get('explored',[]);tap(page,focus['string'],focus['fret']);s=snap(page)['session'];assert s.get('discoveryDone') or s.get('explored',[])!=before or s.get('discoveryTried'),s
  if page.locator('[data-pilot-action="practice"]').count():
-  page.locator('[data-pilot-action="practice"]').click();
+  page.locator('[data-pilot-action="practice"]').click();dismiss_help(page);
   if getattr(page,'fast_clock',False):page.clock.run_for(1600)
   page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
  failed=False;used_hint=False
  if getattr(page,'fast_clock',False) and page.locator('.pilot-count').count():page.clock.run_for(1600)
  page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
  while snap(page)['session'] and snap(page)['session']['stage']=='practice':
+  dismiss_help(page)
+  if getattr(page,'fast_clock',False) and page.locator('.pilot-count').count():page.clock.run_for(1600)
   s=snap(page)['session'];q=s['queue'][s['index']]
   if s.get('feedback'):
    if s['feedback']['correct']:wait_advance(page,s['index'])
@@ -54,6 +63,7 @@ def complete(page,wrong=False,hint=False):
   wait_advance(page,s['index'])
  if page.locator('.score-display').count():return
  while snap(page)['session'] and snap(page)['session']['stage']=='motif':
+  dismiss_help(page)
   current=page.locator('.pilot-motif .current')
   if not current.count():break
   content=current.inner_text().splitlines();name=content[0];number=int(re.search(r'\d+',content[-1]).group())

@@ -63,4 +63,4 @@ Parcours possibles :
 
 Définir les prérequis, la progression de difficulté, les règles du timer et des vies, les conditions des réussites et les paramètres du Mode Créatif. Préciser également la portée de « tout le manche » selon le nombre réel de cases de l’instrument.
 
-Le classement pédagogique, la priorité de réalisation et l’éventuel découpage gratuit/payant restent ouverts.
+Le classement pédagogique et la priorité de réalisation restent ouverts. Le modèle commercial retenu depuis cette note est un essai gratuit de sept jours donnant accès à tout, puis un accès payant global ; aucun découpage gratuit/payant par mode n’est prévu. Voir [la décision commerciale](MODELE-COMMERCIAL.md).

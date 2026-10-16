@@ -108,6 +108,7 @@ export function validatePilotStore(value){
   if(!data||!data.profile)throw new Error('Profil du pilote invalide.');
   const profile=makeProfile(data.profile.instrumentId,data.profile.tuning?.map(n=>{if(!Number.isInteger(n))throw new Error('Accordage invalide.');return `${['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][n%12]}${Math.floor(n/12)-1}`;}).join(' '));
   if(key!==profile.key||!Array.isArray(data.attempts)||data.attempts.length>1000||!Array.isArray(data.later)||data.later.length>200)throw new Error('Historique du pilote invalide.');
+  if(data.seenInstructions!==undefined&&(!Array.isArray(data.seenInstructions)||data.seenInstructions.length>64||!data.seenInstructions.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Introductions enregistrées invalides.');
   const validAids=a=>Array.isArray(a)&&a.every(v=>['labels','listen','course'].includes(v));
   const validEvent=e=>e&&['name','find'].includes(e.mode)&&validPosition(e.target,profile)&&typeof e.correct==='boolean'&&validAids(e.aids)&&finiteTime(e.ms)&&finiteTime(e.at)&&typeof e.retry==='boolean';
   for(const a of data.attempts)if(!a||typeof a.id!=='string'||!finiteTime(a.at)||!Array.isArray(a.events)||a.events.length>600||!a.events.every(validEvent))throw new Error('Tentative du pilote invalide.');

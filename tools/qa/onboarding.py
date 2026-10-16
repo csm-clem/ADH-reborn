@@ -20,7 +20,7 @@ with sync_playwright() as p:
  for instrument in INSTRUMENTS:
   c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));page.goto(BASE);page.select_option('#instrument',instrument)
   for w,h in SIZES:page.set_viewport_size({'width':w,'height':h});page.wait_for_timeout(100);fits(page)
-  page.set_viewport_size({'width':375,'height':812});page.get_by_role('button',name='Continuer',exact=True).click();assert page.locator('[data-art-string]').count()==int(instrument[-1]);assert page.locator('.setup-note-strip small').all_text_contents()==[str(i) for i in range(int(instrument[-1]),0,-1)];options=page.locator('#tuning-preset option').all_text_contents();assert 'Personnalisé…' in options and len(options)>=5
+  page.set_viewport_size({'width':375,'height':812});page.get_by_role('button',name='Continuer',exact=True).click();assert page.locator('img.setup-instrument-picture').count()==1;assert instrument[:-1]+instrument[-1]+'strings.webp' in page.locator('img.setup-instrument-picture').get_attribute('src');assert page.locator('.setup-note-strip small').all_text_contents()==[str(i) for i in range(int(instrument[-1]),0,-1)];options=page.locator('#tuning-preset option').all_text_contents();assert 'Personnalisé…' in options and len(options)>=5
   for w,h in SIZES:page.set_viewport_size({'width':w,'height':h});page.wait_for_timeout(100);fits(page)
   page.set_viewport_size({'width':375,'height':812});page.select_option('#tuning-preset','custom');page.wait_for_timeout(180)
   for w,h in SIZES:

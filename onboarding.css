@@ -46,3 +46,4 @@
 @media(max-width:280px){.setup-header .brand-sub{display:none}}
 
 .setup-header .brand{font-size:clamp(14px,4vw,21px);line-height:1.1;letter-spacing:-.4px;gap:8px}.setup-header .brand>span{min-width:0}.setup-header .brand img{flex-shrink:0}
+img.setup-instrument-picture{object-fit:contain;object-position:center;max-width:100%}

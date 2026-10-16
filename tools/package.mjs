@@ -3,12 +3,12 @@ import {mkdir,copyFile,cp,rm,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 const root=resolve(import.meta.dirname,'..'),dest=resolve(root,'dist');
 await rm(dest,{recursive:true,force:true});await mkdir(dest,{recursive:true});
-for(const file of ['index.html','app.js','release.js','state.js','instrument-art.js','tuning.js','onboarding.js','onboarding.css','pilot.js','pilot-ui.js','pilot.css','core.js','clock.js','sound.js','style.css','brand.css','sw.js','manifest.webmanifest'])await copyFile(resolve(root,file),resolve(dest,file));
-for(const folder of ['icons','fonts'])await cp(resolve(root,folder),resolve(dest,folder),{recursive:true});
+for(const file of ['index.html','app.js','release.js','state.js','instrument-art.js','learning-help.js','tuning.js','onboarding.js','onboarding.css','pilot.js','pilot-ui.js','pilot.css','core.js','clock.js','sound.js','style.css','brand.css','sw.js','manifest.webmanifest'])await copyFile(resolve(root,file),resolve(dest,file));
+for(const folder of ['icons','fonts','instruments'])await cp(resolve(root,folder),resolve(dest,folder),{recursive:true});
 await writeFile(resolve(dest,'LISEZ-MOI.txt'),`${APP_NAME} — ${RELEASE}
 
-Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.8/.
-Ouvrez https://media.lecompositeur.com/adh-pwa/v0.8/
+Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.9/.
+Ouvrez https://media.lecompositeur.com/adh-pwa/v0.9/
 
 Cette version de test supprime les anciennes progressions de cette application,
 mais conserve l’instrument et les préférences. Une réouverture de la même version
