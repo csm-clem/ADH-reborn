@@ -77,3 +77,7 @@ img.setup-instrument-picture{object-fit:contain;object-position:center;max-width
 @media(max-height:380px){.setup-configuration,.setup-configuration .setup-identity-fields{gap:4px}}
 
 @media(min-width:760px){.setup-landing-copy .landing-description{margin-left:0;margin-right:0;text-align:left}}
+@keyframes setup-forward{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes setup-back{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes instrument-appear{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:no-preference){.setup-wizard[data-motion="forward"] .setup-flow{animation:setup-forward 170ms ease-out both}.setup-wizard[data-motion="back"] .setup-flow{animation:setup-back 170ms ease-out both}.setup-wizard[data-motion="instrument"] .setup-preview,.setup-wizard[data-motion="instrument"] .setup-note-strip{animation:instrument-appear 150ms ease-out both}}

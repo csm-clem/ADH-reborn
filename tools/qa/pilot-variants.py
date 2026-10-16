@@ -6,7 +6,7 @@ with sync_playwright() as p:
   c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,instrument,activity,tuning);page.locator(f'.lesson-row[data-module="{activity}"]').click();dismiss_help(page);assert not page.locator('[data-module="workshop-fsharp"]').count()
   if activity=='tuning':
    for string in range(len(snap(page)['profile']['tuning'])):tap(page,string,0)
-   page.locator('[data-pilot-action="practice"]').click();dismiss_help(page);page.wait_for_selector('.startup-ring',state='detached');choices=page.locator('.pilot-wheel button').all_text_contents();assert 'F♯' in choices and 'C♯' in choices
+   page.locator('[data-pilot-action="practice"]').click();dismiss_help(page);page.wait_for_selector('.pilot-count',state='detached');choices=page.locator('.pilot-wheel button').all_text_contents();assert 'F♯' in choices and 'C♯' in choices
   c.close()
  # The transfer draws equal-fret pairs, and the motif repeats the same frets on the other string.
  c=b.new_context(viewport={'width':844,'height':390},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,'guitar6','transfer-4');enable_fast_clock(page);page.locator('.lesson-row[data-module="transfer-4"]').click();dismiss_help(page);page.clock.run_for(40)

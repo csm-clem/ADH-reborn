@@ -8,6 +8,7 @@ Après `npm start` :
 python tools/qa/onboarding.py
 python tools/qa/new-features.py
 python tools/qa/v011.py
+python tools/qa/v012.py
 python tools/qa/pilot-layout.py
 python tools/qa/pilot-browser.py
 python tools/qa/pilot-backup-audio.py
@@ -19,6 +20,7 @@ python tools/qa/package-offline.py
 
 Chaque script utilise des contextes neufs, indépendants des autres scripts. Variables : `ADH_BASE_URL` (défaut `http://localhost:4173`), `CHROMIUM_BIN` (défaut `/usr/bin/chromium`), `ADH_QA_OUTPUT` (défaut `/tmp/adh-pilot-qa`).
 
+- `v012.py` : préparation de 1,5 seconde et pause exclues du chrono, apparition des questions, résultats sur six formats, erreurs/révision ciblée, records, partage PNG et préécoute.
 - `v011.py` : texte de référence, image conservée lors du changement de notation, titres/sous-titres, timbres sauvegardés et capsules flottantes.
 - `new-features.py` : questions silencieuses, correction rouge/verte à hauteur exacte, passage automatique 500/1 000 ms, disque tactile, roue stable, pause/Muet/plein écran et résultats sur cinq formats.
 - `onboarding.py` : six images fournies, huit formats, commandes accessibles sans défilement de page, ordre des cordes, réglages et écoute.

@@ -36,7 +36,7 @@ test('Corrections distinguish a correct name on the wrong string, a neighbouring
  assert.deepEqual(firstSummary(e),{name:{total:1,correct:0,unaided:0},find:{total:1,correct:1,unaided:0}});
 });
 test('Pilot backups preserve separate legacy-independent evidence and reject mismatched positions',()=>{
- const p=makeProfile('guitar6'),store=initialPilotStore(),target={string:0,fret:0,midi:40};store.profiles[p.key]={profile:p,attempts:[{id:'attempt',at:1,events:[{mode:'name',target,correct:true,aids:[],ms:100,at:1,retry:false}]}],later:[],session:null};
+ const p=makeProfile('guitar6'),store=initialPilotStore(),target={string:0,fret:0,midi:40};store.profiles[p.key]={profile:p,attempts:[{id:'attempt',activity:'opens',at:1,events:[{mode:'name',target,correct:true,aids:[],ms:100,at:1,retry:false}]}],later:[],session:null};
  const restored=validatePilotStore(JSON.parse(JSON.stringify(store)));assert.equal(restored.profiles[p.key].attempts.length,1);
  restored.profiles[p.key].attempts[0].events[0].target.midi=41;assert.throws(()=>validatePilotStore(restored));assert.throws(()=>validatePilotStore({version:99,profiles:{}}));
 });

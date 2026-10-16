@@ -1,6 +1,6 @@
 # Propositions — résultats et transitions
 
-Document de discussion, 16 octobre 2026. Ces évolutions sont proposées, sans être activées dans la v0.11.
+Document de discussion du 16 octobre 2026, validé ensuite par le porteur du projet. Les résultats et transitions sont implémentés en v0.12, sauf le déplacement du repère de la suite musicale explicitement exclu. Le lancement est remplacé par la préparation plein écran de 1,5 seconde demandée. Les records sont strictement propres au même exercice. Les points et bonus restent une idée pour le futur mode Arcade.
 
 ## Une fiche de résultat inspirée de la capture
 

@@ -4,7 +4,7 @@ from pathlib import Path
 BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 OUT=Path(os.environ.get('ADH_QA_OUTPUT','/tmp/adh-pilot-qa'));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get('CHROMIUM_BIN','/usr/bin/chromium')
-KEY='fretboard-trainer:pilot:0.11.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
+KEY='fretboard-trainer:pilot:0.12.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
 
 def setup_standard(page):
  page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()
@@ -15,6 +15,10 @@ def dismiss_help(page):
  for _ in range(4):
   if not page.locator('[data-pilot-action="help-next"]').count():break
   page.locator('[data-pilot-action="help-next"]').click();tick(page)
+ if page.locator('.pilot-count').count():
+  if getattr(page,'fast_clock',False):tick(page,1600)
+  page.wait_for_selector('.pilot-count',state='detached')
+ tick(page,160)
 def tap(page,s,f):
  tick(page);cell=page.locator(f'#pilot-neck [data-pilot-string="{s}"][data-pilot-fret="{f}"]')
  if not page.locator('.pilot-position-buttons details[open]').count() and cell.count():cell.click()
@@ -23,7 +27,7 @@ def tap(page,s,f):
   page.locator(f'[data-pilot-action="position"][data-string="{s}"][data-fret="{f}"]').click()
  tick(page)
 def wait_advance(page,index):
- data=snap(page)['session'];tick(page,550 if data and (data.get('feedback') or {}).get('correct') else 1050)
+ data=snap(page)['session'];tick(page,720 if data and (data.get('feedback') or {}).get('correct') else 1220)
  page.wait_for_function('(p)=>{const s=Object.values(JSON.parse(localStorage.getItem(p.key)).profiles)[0].session;return !s||s.index!==p.index||s.stage!=="practice"}',arg={'key':KEY,'index':index},timeout=3000)
 def complete(page,wrong=False,hint=False):
  dismiss_help(page);s=snap(page)['session']
