@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeProfile,INSTRUMENTS} from '../core.js';
-import {pilotPlan,NATURAL_PITCHES,questionsFor,positionKey,pilotCorrect,admissiblePositions,correction,firstSummary,initialPilotStore,validatePilotStore,naturalDiagnostic} from '../pilot.js';
+import {pilotPlan,NATURAL_PITCHES,questionsFor,positionKey,pilotCorrect,admissiblePositions,correction,firstSummary,initialPilotStore,validatePilotStore,naturalDiagnostic,activityResult} from '../pilot.js';
 test('Standard pilot starts on all open strings and derives the requested intervals from actual pitches',()=>{
  const p=makeProfile('guitar6'),plan=pilotPlan(p);assert.equal(plan.root.midi,40);assert.equal(plan.modules[0].kind,'opens');assert.equal(plan.modules[0].pool.length,6);
  assert.deepEqual(plan.modules.filter(m=>m.kind==='interval').map(m=>[m.degree,m.target.string,m.target.fret,m.target.midi-m.anchor.midi]),[[5,1,2,7],[4,1,0,5],[3,0,3,3],[2,0,1,1],[8,2,2,12],[7,2,0,10],[6,1,3,8]]);
@@ -17,8 +17,8 @@ test('Reentrant tuning uses the real lowest pitch, and altered tonics are explic
  plan=pilotPlan(makeProfile('guitar8'));assert.equal(plan.compatible,false);assert.match(plan.reason,/tonique altérée/);assert.equal(plan.modules.some(m=>m.kind==='interval'),false);
 });
 test('Every teaching position is covered in both directions; natural wheel and diagnostic pools stay natural',()=>{
- for(const i of INSTRUMENTS){const profile=makeProfile(i.id),plan=pilotPlan(profile);for(const m of plan.modules){const queue=questionsFor(m);assert.equal(new Set(queue.map(q=>q.id)).size,queue.length);for(const p of m.pool)for(const mode of ['name','find'])assert.ok(queue.some(q=>positionKey(q.target)===positionKey(p)&&q.mode===mode));if(m.kind!=='tuning')assert.ok(m.pool.every(p=>NATURAL_PITCHES.includes(p.midi%12)));assert.equal(queue.every(q=>pilotCorrect(profile,q,q.mode==='name'?q.target.midi%12:q.target)),true);for(let n=1;n<queue.length;n++)if(m.pool.length>1)assert.notEqual(positionKey(queue[n-1].target),positionKey(queue[n].target));}
- const diagnostic=naturalDiagnostic(profile);assert.equal(questionsFor(diagnostic).length,plan.natural.length*2);assert.ok(questionsFor(diagnostic).every(q=>q.evaluation));}
+ for(const i of INSTRUMENTS){const profile=makeProfile(i.id),plan=pilotPlan(profile);for(const m of plan.modules){const queue=questionsFor(m);assert.equal(new Set(queue.map(q=>q.id)).size,queue.length);for(const p of m.pool)for(const mode of ['name','find'])assert.ok(queue.some(q=>positionKey(q.target)===positionKey(p)&&q.mode===mode));if(m.kind!=='tuning')assert.ok(m.pool.every(p=>NATURAL_PITCHES.includes(p.midi%12)));assert.equal(queue.every(q=>pilotCorrect(profile,q,q.mode==='name'?q.target.midi%12:q.target)),true);for(let n=1;n<queue.length;n++)if(m.pool.length>2)assert.notEqual(positionKey(queue[n-1].target),positionKey(queue[n].target));}
+ const diagnostic=naturalDiagnostic(profile);assert.equal(questionsFor(diagnostic).length,plan.natural.length*6);assert.ok(questionsFor(diagnostic).every(q=>q.evaluation));}
 });
 test('Find tasks accept every admissible occurrence, and distinguish string and height restrictions',()=>{
  const p=makeProfile('guitar6'),q={mode:'find',target:{string:0,fret:0,midi:40},scope:'any'};
@@ -41,11 +41,11 @@ test('Pilot backups preserve separate legacy-independent evidence and reject mis
 test('Natural route follows notation and the note parser retains international and Latin aliases',async()=>{
  const {parseNoteAnswer}=await import('../pilot.js');
  assert.equal(parseNoteAnswer('Ré'),2);assert.equal(parseNoteAnswer(' re '),2);assert.equal(parseNoteAnswer('Mi'),4);assert.equal(parseNoteAnswer('B'),11);assert.equal(parseNoteAnswer('Si'),11);assert.equal(parseNoteAnswer('Fa♯'),6);assert.equal(parseNoteAnswer('F#'),6);assert.equal(parseNoteAnswer('Solb'),6);assert.equal(parseNoteAnswer('H'),null);assert.equal(parseNoteAnswer(''),null);
- const plan=pilotPlan(makeProfile('guitar6'),{notation:'latin'});assert.match(plan.modules.find(m=>m.degree===5).title,/Si/);assert.match(plan.modules.find(m=>m.degree===5).description,/Mi → Si/);
+ const plan=pilotPlan(makeProfile('guitar6'),{notation:'latin'});assert.match(plan.modules.find(m=>m.degree===5).title,/Si/);assert.match(plan.modules.find(m=>m.degree===5).description,/Mi2.*Si2/);
 });
-test('Open-string free searches accept both E strings but exclude fretted E positions',()=>{
- const p=makeProfile('guitar6'),m=pilotPlan(p).modules[0],q=questionsFor(m).find(q=>q.scope==='any'&&q.target.midi%12===4);
- assert.ok(q);assert.equal(pilotCorrect(p,q,{string:5,fret:0}),true);assert.equal(pilotCorrect(p,q,{string:2,fret:2}),false);
+test('Open-string searches name an exact register and exclude the other octave and fretted E',()=>{
+ const p=makeProfile('guitar6'),m=pilotPlan(p).modules[0],q=questionsFor(m).find(q=>q.scope==='height'&&q.target.midi===40);
+ assert.ok(q);assert.equal(pilotCorrect(p,q,{string:0,fret:0}),true);assert.equal(pilotCorrect(p,q,{string:5,fret:0}),false);assert.equal(pilotCorrect(p,q,{string:2,fret:2}),false);
 });
 test('Unavailable degrees are reported and interval qualities follow the natural tonic, not a standard pattern',()=>{
  const limited=pilotPlan(makeProfile('guitar6','E2 E2 E2 E2 E2 E2'));assert.deepEqual(limited.unavailable.map(x=>x.note).sort(),['A','B','C','D','E']);assert.ok(limited.modules.filter(m=>m.kind==='interval').every(m=>[2,3].includes(m.degree)));
@@ -54,9 +54,34 @@ test('Unavailable degrees are reported and interval qualities follow the natural
 });
 test('Questions form two shuffled blocks with matching positions and no per-question alternation',()=>{
  const profile=makeProfile('guitar6'),module=naturalDiagnostic(profile);
- const queue=questionsFor(module,{diagnostic:true,random:()=>.25}),n=module.pool.length;
+ const queue=questionsFor(module,{diagnostic:true,random:()=>.25}),n=module.pool.length*3;
  assert.equal(queue.length,n*2);assert.ok(queue.slice(0,n).every(q=>q.mode==='name'));assert.ok(queue.slice(n).every(q=>q.mode==='find'));
  assert.deepEqual(queue.slice(0,n).map(q=>positionKey(q.target)).sort(),queue.slice(n).map(q=>positionKey(q.target)).sort());
  assert.notDeepEqual(queue.slice(0,n).map(q=>positionKey(q.target)),module.pool.map(positionKey));
  assert.notDeepEqual(queue.map(q=>q.id),questionsFor(module,{diagnostic:true,random:()=>.75}).map(q=>q.id));
+});
+
+test('Every activity has at least twenty questions and three appearances of each position per direction',()=>{
+ for(const instrument of INSTRUMENTS){const profile=makeProfile(instrument.id);for(const module of [...pilotPlan(profile).modules,naturalDiagnostic(profile)]){
+  const queue=questionsFor(module);assert.ok(queue.length>=20);let find=false;
+  for(const q of queue){if(q.mode==='find')find=true;else assert.equal(find,false);}
+  for(const position of module.pool)for(const mode of ['name','find'])assert.ok(queue.filter(q=>q.mode===mode&&positionKey(q.target)===positionKey(position)).length>=3);
+ }}
+});
+test('An interval lesson contains only its two actual pitches and E transfer explicitly maps both strings',()=>{
+ const profile=makeProfile('guitar6'),plan=pilotPlan(profile),fifth=plan.modules.find(m=>m.degree===5),transfer=plan.modules.find(m=>m.kind==='transfer');
+ assert.deepEqual(fifth.pool.map(p=>p.midi),[40,47]);assert.ok(questionsFor(fifth).every(q=>[40,47].includes(q.target.midi)));
+ assert.match(transfer.description,/cordes 6 et 1/);assert.equal(transfer.transferPairs.length,3);
+ for(const pair of transfer.transferPairs){assert.equal(pair[0].fret,pair[1].fret);assert.equal(pair[1].midi-pair[0].midi,24);}
+});
+test('Passing needs the entire first-response sample and ninety percent; corrections cannot replace errors',()=>{
+ const event=correct=>({correct,retry:false}),first=Array.from({length:20},(_,i)=>event(i<18));
+ assert.equal(activityResult(first,20).passed,true);assert.equal(activityResult(first.slice(0,19),20).passed,false);
+ first[17].correct=false;assert.equal(activityResult([...first,{correct:true,retry:true}],20).passed,false);assert.equal(activityResult(first,20).required,18);
+});
+
+test('Two-position lessons allow occasional repeats instead of becoming a predictable ABAB pattern',()=>{
+ const module=pilotPlan(makeProfile('guitar6')).modules.find(m=>m.degree===5);let n=0;const queue=questionsFor(module,{random:()=>n++%2?.9:.1}),names=queue.filter(q=>q.mode==='name');
+ assert.ok(names.some((q,i)=>i&&positionKey(q.target)===positionKey(names[i-1].target)));
+ for(let i=2;i<names.length;i++)assert.ok(new Set(names.slice(i-2,i+1).map(q=>positionKey(q.target))).size>1);
 });

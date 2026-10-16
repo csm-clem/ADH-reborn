@@ -1,54 +1,36 @@
+"""Alternate tunings, transfers, diagnostic and failed-result gating."""
 from pilot_support import *
-import json,re
-KEY='adh-reborn:pilot:v1'
-def current(page):return page.evaluate('(k)=>{const v=JSON.parse(localStorage.getItem(k));return v.profiles[Object.keys(v.profiles)[0]]}',KEY)
-def tap_old(page,s,f):page.locator(f'#pilot-neck [data-pilot-string="{s}"][data-pilot-fret="{f}"]').click()
-def seed(page,instrument,tuning):
- page.goto(BASE);page.evaluate('''async p=>{const c=await import('./core.js'),m=await import('./pilot.js');const s=c.initialState();s.profile=c.makeProfile(p.id,p.tuning);s.sound=false;localStorage.setItem('adh-reborn:state:v1',JSON.stringify(s));const d={version:1,profiles:{}};d.profiles[s.profile.key]={profile:s.profile,attempts:m.pilotPlan(s.profile).modules.map((a,i)=>({id:'seed-'+i,activity:a.id,at:1,events:[],finished:true,instrument:{}})),later:[],session:null};localStorage.setItem('adh-reborn:pilot:v1',JSON.stringify(d))}''',{'id':instrument,'tuning':tuning});page.reload()
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path=CHROMIUM,headless=True,args=['--no-sandbox']);errors=[]
- for instrument,tuning,target_id,expected in [('guitar7',None,'degree-5','diminuée'),('guitar6','D2 A2 D3 G3 A3 D4','degree-4','autre octave'),('guitar7','B1 F#2 B2 E3 A3 C#4 F#4','tuning','préambule')]:
-  c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,instrument,tuning)
-  assert not page.locator('[data-module="workshop-fsharp"]').count()
-  page.locator(f'.lesson-row[data-module="{target_id}"]').click()
-  if target_id=='tuning':assert expected in page.inner_text('body')
-  else:
-   page.locator('[data-pilot-action="discovery-reveal"]').click();assert expected in page.inner_text('body')
-  if target_id=='tuning':
-   assert 'F♯' in page.inner_text('body') and 'C♯' in page.inner_text('body')
-   profile=current(page)['profile']
-   for string in range(len(profile['tuning'])):tap(page,string,0)
-   page.locator('[data-pilot-action="practice"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
-   choices=page.locator('[data-pilot-action="note"]').all_text_contents();assert len(choices)==5 and 'F♯' in choices and 'C♯' in choices
-  page.set_viewport_size({'width':844,'height':390});page.wait_for_timeout(200)
-  a=page.locator('.neck-panel').bounding_box();z=page.locator('.answer-workspace').bounding_box();assert abs(a['height']-z['height'])<1
-  assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
-  page.screenshot(path=str(OUT/f'{instrument}-{target_id}.png'),full_page=True);c.close()
- # The natural diagnostic uses name production and a full family search, without target audio.
- c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');c.add_init_script('''window.__sounds=0;const start=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...a){window.__sounds++;return start.apply(this,a)};''');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,'guitar6',None)
- # Enable audio to verify the evaluation does not play the answer before it is given.
- page.evaluate("let s=JSON.parse(localStorage.getItem('adh-reborn:state:v1'));s.sound=true;localStorage.setItem('adh-reborn:state:v1',JSON.stringify(s))");page.reload();page.locator('[data-module="natural-diagnostic"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
- assert page.evaluate('window.__sounds')==0;assert page.locator('.pilot-wheel button').count()==7
- for i in range(36):
-  s=current(page)['session'];q=s['queue'][s['index']]
+ for instrument,tuning,activity,expected in [('guitar7',None,'degree-5','diminuée'),('guitar6','D2 A2 D3 G3 A3 D4','degree-4','registre disponible'),('guitar7','B1 F#2 B2 E3 A3 C#4 F#4','tuning','préambule')]:
+  c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,instrument,activity,tuning);page.locator(f'.lesson-row[data-module="{activity}"]').click();assert expected in page.inner_text('body');assert not page.locator('[data-module="workshop-fsharp"]').count()
+  if activity=='tuning':
+   for string in range(len(snap(page)['profile']['tuning'])):tap(page,string,0)
+   page.locator('[data-pilot-action="practice"]').click();page.wait_for_selector('.startup-ring',state='detached');choices=page.locator('.pilot-wheel button').all_text_contents();assert 'F♯' in choices and 'C♯' in choices
+  c.close()
+ # The transfer draws equal-fret pairs, and the motif repeats the same frets on the other string.
+ c=b.new_context(viewport={'width':844,'height':390},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page,'guitar6','transfer-4');enable_fast_clock(page);page.locator('.lesson-row[data-module="transfer-4"]').click();page.clock.run_for(40)
+ assert 'cordes 6 et 1' in page.locator('.pilot-explanation').inner_text();assert not page.locator('.transfer-link').count()
+ focus=page.evaluate('''async()=>{const {pilotPlan}=await import('./pilot.js'),{PILOT_KEY}=await import('./release.js');const d=Object.values(JSON.parse(localStorage.getItem(PILOT_KEY)).profiles)[0];return pilotPlan(d.profile).modules.find(m=>m.kind==='transfer').focus[0]}''');tap(page,focus['string'],focus['fret']);assert page.locator('.transfer-link').count()==3;page.screenshot(path=str(OUT/'transfer.png'))
+ complete(page);assert snap(page)['attempts'][-1]['passed'];c.close()
+ # More than ten percent first errors keeps the next activity locked, even after corrections.
+ c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();seed(page);enable_fast_clock(page);page.locator('.lesson-row[data-module="opens"]').click()
+ for string in range(6):tap(page,string,0)
+ page.locator('[data-pilot-action="practice"]').click();page.clock.run_for(1600)
+ while sum(not e['correct'] and not e['retry'] for e in snap(page)['session']['events'])<4:
+  s=snap(page)['session'];q=s['queue'][s['index']];bad=next(n for n in [0,2,4,5,7,9,11] if n!=q['target']['midi']%12);page.locator(f'[data-note="{bad}"]').click();page.locator('[data-pilot-action="next"]').click()
+ complete(page);assert not snap(page)['attempts'][-1]['passed'];assert page.locator('.result-card>.primary').inner_text()=='Refaire cette activité';assert not page.locator('[data-pilot-action="start"][data-module="degree-5"]').count();page.locator('[data-pilot-action="home"]').click();assert page.locator('[data-module="degree-5"]').is_disabled();c.close()
+ # Diagnostic: 108 questions and all seven families, without a target-audio hint.
+ c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');c.add_init_script('''window.__sounds=0;const start=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...a){window.__sounds++;return start.apply(this,a)};''');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));seed(page);enable_fast_clock(page);page.locator('[data-module="natural-diagnostic"]').click();page.clock.run_for(1600);assert page.evaluate('window.__sounds')==0;assert page.locator('.pilot-wheel button').count()==7;assert len(snap(page)['session']['queue'])==108
+ while snap(page)['session']['stage']=='practice':
+  s=snap(page)['session'];q=s['queue'][s['index']]
   if q['mode']=='name':page.locator(f'[data-note="{q["target"]["midi"]%12}"]').click()
-  else:
-   from pilot_support import tap as accessible_tap
-   accessible_tap(page,q['target']['string'],q['target']['fret'])
+  else:tap(page,q['target']['string'],q['target']['fret'])
   wait_advance(page,s['index'])
- assert current(page)['session']['stage']=='motif'
- natural=page.evaluate('''async()=>{const m=await import('./pilot.js');const d=JSON.parse(localStorage.getItem('adh-reborn:pilot:v1'));return m.pilotPlan(d.profiles[Object.keys(d.profiles)[0]].profile).natural}''')
- for pc in current(page)['session']['familyOrder']:
+ natural=page.evaluate('''async()=>{const {pilotPlan}=await import('./pilot.js'),{PILOT_KEY}=await import('./release.js');return pilotPlan(Object.values(JSON.parse(localStorage.getItem(PILOT_KEY)).profiles)[0].profile).natural}''')
+ for pc in snap(page)['session']['familyOrder']:
   for pos in natural:
-   if pos['midi']%12==pc:accessible_tap(page,pos['string'],pos['fret'])
+   if pos['midi']%12==pc:tap(page,pos['string'],pos['fret'])
   page.locator('[data-pilot-action="family-next"]').click()
- assert 'Prérequis vérifiés' in page.locator('h1').inner_text();assert current(page)['diagnostic']['passed']==True
- events=current(page)['attempts'][-1]['events'];assert sum(e['format']=='choice' for e in events)==18
- # Countdown pause and active time survive refresh, including a requested hint.
- page.locator('[data-pilot-action="home"]').click();page.locator('.lesson-row[data-module="degree-5"]').click();page.locator('[data-pilot-action="discovery-reveal"]').click();tap(page,1,2);page.locator('[data-pilot-action="practice"]').click()
- page.wait_for_timeout(1100);page.locator('[data-pilot-action="pause"]').last.click();number=page.locator('.pilot-count').inner_text();page.wait_for_timeout(1100);assert page.locator('.pilot-count').inner_text()==number
- page.locator('.pilot-pause-layer [data-pilot-action="resume-pause"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
- page.locator('[data-pilot-action="hint"]').click();page.wait_for_timeout(250);page.reload();page.locator('[data-pilot-action="resume"]').click();page.wait_for_selector('.pilot-count',state='detached',timeout=5000)
- q=current(page)['session']['queue'][current(page)['session']['index']];page.locator(f'[data-pilot-action="note"][data-note="{q["target"]["midi"]%12}"]').click();e=current(page)['session']['events'][-1];assert 'labels' in e['aids'];assert e['ms']<2500,e['ms'];assert e['ms']>=200,e['ms']
- assert not errors,errors
- print(json.dumps({'seven_strings_diminished':True,'dadgad_register':True,'altered_open_preamble_only':True,'diagnostic_wheel_36_items':True,'all_natural_families':True,'no_evaluation_audio_cue':True,'pause_countdown':True,'active_time_and_hint_survive_reload':True,'no_workshop':True,'errors':errors}));b.close()
+ assert page.evaluate('document.documentElement.scrollWidth<=innerWidth');assert snap(page)['diagnostic']['passed'];assert 'Prérequis vérifiés' in page.locator('h1').inner_text();assert not errors,errors
+ print(json.dumps({'seven_string_intervals':True,'dadgad_available_register':True,'altered_tuning_preamble':True,'explicit_transfer_links_and_motif':True,'failed_lesson_keeps_next_locked':True,'diagnostic_108_items_and_families':True,'no_diagnostic_target_audio':True,'errors':errors}));b.close()

@@ -1,17 +1,32 @@
 {
   "id": "./",
-  "name": "ADH Reborn — Apprendre le manche",
-  "short_name": "ADH Reborn",
+  "name": "Daily Fretboard Trainer",
+  "short_name": "Daily Fretboard",
   "lang": "fr",
-  "description": "Un jeu pour reconnaître les notes de votre manche, corde après corde.",
+  "description": "Un jeu de notes et de liens musicaux pour apprendre votre manche.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#faf9f8",
-  "theme_color": "#faf9f8",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
-    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

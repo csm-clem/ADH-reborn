@@ -1,4 +1,4 @@
-"""Onboarding v0.7: every configuration fits, and audible semitone edits persist."""
+"""Onboarding current release: every configuration fits, and audible semitone edits persist."""
 from pilot_support import *
 
 SIZES=[(375,812),(320,568),(320,480),(844,390),(568,320),(768,1024),(1280,720),(240,320)]
@@ -20,7 +20,7 @@ with sync_playwright() as p:
  for instrument in INSTRUMENTS:
   c=b.new_context(viewport={'width':375,'height':812},reduced_motion='reduce');page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));page.goto(BASE);page.select_option('#instrument',instrument)
   for w,h in SIZES:page.set_viewport_size({'width':w,'height':h});page.wait_for_timeout(100);fits(page)
-  page.set_viewport_size({'width':375,'height':812});page.get_by_role('button',name='Continuer',exact=True).click();options=page.locator('#tuning-preset option').all_text_contents();assert 'Personnalisé…' in options and len(options)>=5
+  page.set_viewport_size({'width':375,'height':812});page.get_by_role('button',name='Continuer',exact=True).click();assert page.locator('[data-art-string]').count()==int(instrument[-1]);assert page.locator('.setup-note-strip small').all_text_contents()==[str(i) for i in range(int(instrument[-1]),0,-1)];options=page.locator('#tuning-preset option').all_text_contents();assert 'Personnalisé…' in options and len(options)>=5
   for w,h in SIZES:page.set_viewport_size({'width':w,'height':h});page.wait_for_timeout(100);fits(page)
   page.set_viewport_size({'width':375,'height':812});page.select_option('#tuning-preset','custom');page.wait_for_timeout(180)
   for w,h in SIZES:
@@ -42,7 +42,7 @@ with sync_playwright() as p:
  page.locator('[data-setup-action="adjust"][data-delta="1"]:not([data-string])').click();page.wait_for_function('window.__sounds.length===7');assert [r['label'] for r in draft(page)]==['E4','A♯3','G♯3','D♯3','A♯2','D♯2']
  page.locator('[data-setup-action="mute"]').click();before=page.evaluate('window.__sounds.length');page.locator('[data-setup-action="adjust"][data-string="5"][data-delta="-1"]').click();page.wait_for_timeout(80);assert page.evaluate('window.__sounds.length')==before;assert page.evaluate('window.__stops')>=6
  page.locator('[data-setup-action="back"]').click();assert page.locator('#tuning-preset').input_value()=='custom';page.locator('[data-setup-action="back"]').click();page.select_option('#notation','latin');page.get_by_role('button',name='Continuer',exact=True).click();page.locator('[data-setup-action="edit"]').click();assert draft(page)[0]['label']=='Ré♯4'
- page.screenshot(path=str(OUT/'v07-custom.png'));page.get_by_role('button',name='C’est parti').click();assert page.locator('.pilot-hero').count()==1
+ page.screenshot(path=str(OUT/'custom.png'));page.get_by_role('button',name='C’est parti').click();assert page.locator('.pilot-hero').count()==1
  saved=page.evaluate('(k)=>JSON.parse(localStorage.getItem(k))',LEGACY);assert saved['profile']['tuning']==[39,46,51,56,58,63];assert saved['notation']=='latin'
  page.locator('[data-action="settings"]:visible').first.click();page.locator('[data-action="edit-profile"]').click();assert page.locator('#instrument').input_value()=='guitar6';page.get_by_role('button',name='Continuer',exact=True).click();assert page.locator('#tuning-preset').input_value()=='custom';page.locator('[data-setup-action="edit"]').click();assert draft(page)[0]['label']=='Ré♯4'
  # Individual drafts survive instrument changes; each instrument gets its own list.

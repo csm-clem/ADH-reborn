@@ -15,5 +15,9 @@ test('Offline shell includes every runtime file and valid install icons',async()
   const sw=await readFile(resolve(root,'sw.js'),'utf8');
   const assets=sw.match(/const ASSETS=\[(.*?)\];/s)[1].match(/'([^']+)'/g).map(s=>s.slice(1,-1));
   for(const a of assets)await access(resolve(root,a==='./'?'index.html':a));
-  for(const required of ['./index.html','./app.js','./tuning.js','./onboarding.js','./onboarding.css','./pilot.js','./pilot-ui.js','./pilot.css','./core.js','./style.css','./manifest.webmanifest'])assert.ok(assets.includes(required));
+  for(const required of ['./index.html','./app.js','./release.js','./state.js','./instrument-art.js','./tuning.js','./onboarding.js','./onboarding.css','./pilot.js','./pilot-ui.js','./pilot.css','./core.js','./style.css','./manifest.webmanifest'])assert.ok(assets.includes(required));
+});
+test('Browser and installed app consistently use the product name',async()=>{
+ const {APP_NAME,RELEASE}=await import('../release.js'),html=await readFile(resolve(root,'index.html'),'utf8'),manifest=JSON.parse(await readFile(resolve(root,'manifest.webmanifest'),'utf8'));
+ assert.ok((await readFile(resolve(root,'sw.js'),'utf8')).includes(`fretboard-trainer-v${RELEASE}:`));assert.equal(JSON.parse(await readFile(resolve(root,'package.json'),'utf8')).version,RELEASE);assert.equal(APP_NAME,'Daily Fretboard Trainer');assert.equal(manifest.name,APP_NAME);assert.ok(html.includes(`<title>${APP_NAME}`));assert.equal(manifest.background_color,'#ffffff');
 });

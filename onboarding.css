@@ -44,3 +44,5 @@
 @media(max-width:280px){.setup-navigation .button{flex:1;min-width:0;padding:8px;gap:5px;font-size:12px}.setup-promise{font-size:10px}.setup-tuner{padding:5px}}
 .setup-tuner,.setup-custom .tuner-strings{background:var(--surface)}
 @media(max-width:280px){.setup-header .brand-sub{display:none}}
+
+.setup-header .brand{font-size:clamp(14px,4vw,21px);line-height:1.1;letter-spacing:-.4px;gap:8px}.setup-header .brand>span{min-width:0}.setup-header .brand img{flex-shrink:0}

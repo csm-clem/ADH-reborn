@@ -1,3 +1,4 @@
+import {APP_NAME} from '../release.js';
 import http from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
@@ -10,4 +11,4 @@ http.createServer(async(req,res)=>{
     if(!path.startsWith(root+sep)||pathname.includes('/.')||pathname.startsWith('/tests/')||pathname.startsWith('/tools/')){res.writeHead(404).end();return;}
     const bytes=await readFile(path);res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream','Cache-Control':'no-cache'}).end(bytes);
   }catch{res.writeHead(404).end('Not found');}
-}).listen(port,'0.0.0.0',()=>console.log(`ADH Reborn: http://localhost:${port}`));
+}).listen(port,'0.0.0.0',()=>console.log(`${APP_NAME}: http://localhost:${port}`));

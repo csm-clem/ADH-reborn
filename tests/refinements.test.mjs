@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ActiveClock} from '../clock.js';
 import {pluckedString} from '../sound.js';
-import {fretDistance,neckGeometry,microCourse,lessons,makeProfile} from '../core.js';
+import {fretDistance,neckGeometry,fitNeck} from '../core.js';
 test('Paused and nested orientation/gesture intervals never count as thinking time',()=>{
  let now=0;const clock=new ActiveClock(()=>now);
  now=200;clock.stop('pause');now=1200;assert.equal(clock.elapsed(),200);
@@ -31,9 +31,10 @@ test('Plucked string has a decaying envelope, pitch periodicity, and bounded fin
  assert.ok(Math.abs(best-period)<=2,`period ${best}, expected ${period}`);
  assert.throws(()=>pluckedString(0));
 });
-test('Every exercise has one short principle, a tuning-specific example and a clear objective',()=>{
- const profile=makeProfile('guitar6');
- for(const l of lessons(profile)){const course=microCourse(profile,l);for(const k of ['title','principle','example','goal'])assert.ok(course[k].length>8&&course[k].length<400);}
- assert.doesNotMatch(microCourse(profile,lessons(profile)[0]).principle,/E2|A2|accordage/);
- assert.match(microCourse(profile,lessons(profile).find(l=>l.id==='s1-first')).example,/E · A · D · G · B · E/);
+test('All positions fit without horizontal panning and outer string margins stay narrow',()=>{
+ for(const strings of [4,5,6,7,8])for(const last of [0,1,2,3,4])for(const [w,h] of [[140,180],[320,140],[410,220],[900,700]]){
+  const g=neckGeometry(strings,last),f=fitNeck(g,w,h);assert.ok(f.width<=w&&f.height<=h);
+  assert.equal(g.width,g.frets[last+2]);assert.ok(Math.min(...g.ys)<=5);assert.ok(g.height-Math.max(...g.ys)<=12);
+  for(const x of g.centers)for(const y of g.ys){assert.ok(x*f.scale>=0&&x*f.scale<f.width);assert.ok(y*f.scale>=0&&y*f.scale<f.height);}
+ }
 });
