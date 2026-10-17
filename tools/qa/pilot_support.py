@@ -4,7 +4,7 @@ from pathlib import Path
 BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 OUT=Path(os.environ.get('ADH_QA_OUTPUT','/tmp/adh-pilot-qa'));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get('CHROMIUM_BIN','/usr/bin/chromium')
-KEY='fretboard-trainer:pilot:0.18.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
+KEY='fretboard-trainer:pilot:0.19.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
 
 def setup_standard(page):
  page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()
@@ -43,7 +43,7 @@ def complete(page,wrong=False,hint=False):
   s=snap(page)['session'];q=s['queue'][s['index']]
   if s.get('feedback'):wait_advance(page,s['index']);continue
   if q['mode']=='name':
-   note=q['target']['midi']%12
+   note=q['target']['midi'] if q.get('answerKind')=='pitch' else q['target']['midi']%12
    if wrong and not failed:note=next(n for n in [0,2,4,5,7,9,11] if n!=note);failed=True
    page.locator(f'[data-note="{note}"]').click()
   else:tap(page,q['target']['string'],q['target']['fret'])
@@ -59,4 +59,4 @@ def complete(page,wrong=False,hint=False):
 def seed(page,instrument='guitar6',activity=None,tuning=None):
  page.goto(BASE);page.evaluate('''async({instrument,activity,tuning})=>{const {makeProfile}=await import('./core.js'),{initialState}=await import('./state.js'),{STATE_KEY,PILOT_KEY}=await import('./release.js'),{pilotPlan,practiceActivities,questionsFor,initialPilotStore}=await import('./pilot.js');const profile=makeProfile(instrument,tuning),state={...initialState(),profile},store=initialPilotStore(),plan=practiceActivities(pilotPlan(profile)),index=activity?plan.findIndex(m=>m.id===activity):0,previous=plan.slice(0,Math.max(0,index)),attempts=previous.map((m,i)=>({id:'seed-'+i,activity:m.id,at:1,finished:true,passed:true,events:questionsFor(m).map(q=>({mode:q.mode,target:q.target,correct:true,aids:[],ms:2000,at:1,retry:false}))}));store.profiles[profile.key]={profile,attempts,later:[],session:null,diagnostic:null,discoveredModules:[...new Set(previous.map(m=>m.baseId))]};localStorage.setItem(STATE_KEY,JSON.stringify(state));localStorage.setItem(PILOT_KEY,JSON.stringify(store))}''',{'instrument':instrument,'activity':activity,'tuning':tuning});page.reload()
 def enable_fast_clock(page):
- page.clock.install();page.clock.pause_at(page.evaluate('Date.now()'));page.fast_clock=True
+ page.clock.install();page.clock.pause_at(page.evaluate('new Date().toISOString()'));page.fast_clock=True

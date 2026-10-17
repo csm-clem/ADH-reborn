@@ -24,13 +24,14 @@ export function pitchLabel(midi, notation='international') {
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
 export const NECK_STYLE={openWidth:18,margin:8,fadeFraction:.5,inlayRadius:2.8,nutWidth:2.8,fretWidth:1.1};
-export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false}={}){
-  const neckWidth=(52+(strings-6)*7)*(gameplay?1.65:1),height=neckWidth+14,nut=NECK_STYLE.margin+NECK_STYLE.openWidth;
+export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false,lesson=false}={}){
+  const openWidth=lesson?38:NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
+  const neckWidth=(52+(strings-6)*7)*(gameplay?1.65:1),height=neckWidth+14,nut=margin+openWidth;
   const frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale));
-  const bounds=f=>f===0?[nut-NECK_STYLE.openWidth,nut]:[frets[f-1],frets[f]];
+  const bounds=f=>f===0?[nut-openWidth,nut]:[frets[f-1],frets[f]];
   const centers=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)*2/3;}),labelXs=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)/3;});
   const ys=Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),inlays=[];for(let f=1;f<frets.length;f++){const pc=f%12;if(![0,3,5,7,9].includes(pc))continue;const x=(frets[f-1]+frets[f])/2;for(const t of pc===0?[.25,.75]:[.5])inlays.push({fret:f,x,y:Math.min(...ys)+(Math.max(...ys)-Math.min(...ys))*t});}
-  const width=frets[lastFret]+(frets[lastFret+1]-frets[lastFret])*NECK_STYLE.fadeFraction;return {width,height,nut,openStart:nut-NECK_STYLE.openWidth,openWidth:NECK_STYLE.openWidth,frets,centers,labelXs,ys,inlays:inlays.filter(p=>p.x<width),fadeStart:frets[lastFret]};
+  const width=frets[lastFret]+(frets[lastFret+1]-frets[lastFret])*NECK_STYLE.fadeFraction;return {width,height,nut,openStart:nut-openWidth,openWidth,frets,centers,labelXs,ys,inlays:inlays.filter(p=>p.x<width),fadeStart:frets[lastFret]};
 }
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};

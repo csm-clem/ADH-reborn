@@ -34,3 +34,8 @@
 @media(orientation:landscape) and (max-height:550px){.instruction-page{grid-template-columns:minmax(0,940px);padding-top:70px;align-content:center}.instruction-content{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:28px;row-gap:10px}.instruction-heading{grid-column:2;grid-row:1}.instruction-visual{grid-column:1;grid-row:1/3;align-self:center}.instruction-summary{grid-column:2;grid-row:2;align-self:start}.instruction-summary p{font-size:14px;line-height:1.45}.instruction-heading p{margin-bottom:8px}.instruction-page .lesson-actions{width:calc(46.5% - 12px);justify-self:end;flex-wrap:nowrap}.instruction-content .shared-neck{max-height:160px}.instruction-visual .discovery-direction{font-size:12px}.instruction-heading h1{font-size:25px;line-height:1.15}}
 @media(orientation:portrait) and (max-height:550px){.instruction-page{padding:68px 14px 14px;align-content:center;gap:12px}.instruction-content{gap:12px}.instruction-heading p{margin-bottom:8px}.instruction-content .shared-neck{max-height:120px}.instruction-heading h1{font-size:25px}.instruction-summary p{font-size:14px;line-height:1.4}.instruction-visual .discovery-direction{display:none}}
 @media(orientation:landscape) and (max-height:550px){.instruction-page .lesson-actions{width:min(100%,420px);justify-self:end;flex-wrap:nowrap}}
+:root[data-theme=paper] .feedback-symbol{display:block}
+:root[data-theme=paper] .wheel-echo::after{content:"✓";position:absolute;right:-4px;top:-5px;background:var(--surface);color:var(--ink);border:1px solid currentColor;border-radius:4px;font-size:14px;padding:1px 3px}
+:root[data-theme=paper] .wheel-echo.wrong::after{content:"×"}
+
+.melody-passage{display:block;font-size:12px;line-height:1.4;color:var(--muted);margin-top:5px}

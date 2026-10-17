@@ -1,6 +1,6 @@
 import {initialState,validateState} from '../state.js';
 import {storageService} from './storage-service.js';
-const snapshot=value=>Object.freeze({...value,profile:value.profile?Object.freeze({...value.profile,tuning:Object.freeze([...value.profile.tuning])}):null});
+const snapshot=value=>Object.freeze({...value,collection:Object.freeze({...value.collection}),profile:value.profile?Object.freeze({...value.profile,tuning:Object.freeze([...value.profile.tuning])}):null});
 /** Sole source for shared preferences; immutable snapshots, explicit subscriptions. */
 export function createAppStore({storage=storageService}={}){
  let state=snapshot(initialState());const listeners=new Set();

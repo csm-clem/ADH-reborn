@@ -29,4 +29,4 @@ test('Lesson search is unlimited, never reveals the target after a wrong try and
 });
 
 test('The naming example explicitly includes the target in its answer choices',()=>{
- const m=pilotPlan(profile).modules.find(m=>m.id==='note-4'),q={mode:'name',target:m.pool[0]},help=introductionFor(m,'practice',q);assert.match(helpGraphic(help,{...m,demoQuestion:q},profile),/example-correct[^>]*>E</);});
+ const m=pilotPlan(profile).modules.find(m=>m.id==='note-4'),q={mode:'name',target:m.pool[0]},help=introductionFor(m,'practice',q);assert.match(helpGraphic(help,{...m,demoQuestion:q},profile),/example-correct[^>]*>E2</);});

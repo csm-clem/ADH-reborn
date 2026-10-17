@@ -1,3 +1,4 @@
+import {validateAchievements} from './achievement-data.js';
 /** Phase-3 pilot: configuration-derived activities and first-response evidence. */
 import {CURRICULUM_RULES} from './curriculum-rules.js';
 import {positions,noteName,pitchLabel,makeProfile} from './core.js';
@@ -33,14 +34,14 @@ export function questionsFor(module,{diagnostic=false,random=Math.random,mode=mo
  // Guarantee coverage before shuffling; a probabilistic weight alone cannot guarantee 20% in one session.
  const freshCount=fresh.length&&old.length?Math.min(count,Math.max(fresh.length,Math.ceil(count*CURRICULUM_RULES.newFamilyShare)+Math.floor(random()*(Math.floor(count*.4)-Math.ceil(count*CURRICULUM_RULES.newFamilyShare)+1)))):fresh.length?count:0;
  const targets=shuffled([...take(fresh,freshCount),...take(old.length?old:ordered,count-freshCount)],random);
- return targets.map((p,i)=>({id:`${module.id}:${positionKey(p)}:${mode}:${i}`,mode,target:p,scope:mode==='find'&&module.kind==='opens'?'height':'string',zone:module.zone||{start:0,end:4},allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false}));
+ return targets.map((p,i)=>({id:`${module.id}:${positionKey(p)}:${mode}:${i}`,mode,answerKind:mode==='name'&&module.kind==='family'?'pitch':'class',target:p,scope:mode==='find'&&module.kind==='opens'?'height':'string',zone:module.zone||{start:0,end:4},allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false}));
 }
 export function admissiblePositions(profile,question){
  const zone=question.zone||{start:0,end:4},all=positions(profile,profile.tuning.map((_,s)=>s),Array.from({length:zone.end-zone.start+1},(_,i)=>zone.start+i));
  return all.filter(p=>(!question.allowedFrets||question.allowedFrets.includes(p.fret))&&p.midi%12===question.target.midi%12&&(question.scope!=='string'||p.string===question.target.string)&&(question.scope!=='height'||p.midi===question.target.midi));
 }
 export function pilotCorrect(profile,q,value){
- if(q.mode==='name')return Number.isInteger(value)&&value===q.target.midi%12;
+ if(q.mode==='name')return Number.isInteger(value)&&value===(q.answerKind==='pitch'?q.target.midi:q.target.midi%12);
  return value&&admissiblePositions(profile,q).some(p=>p.string===value.string&&p.fret===value.fret);
 }
 export function correction(profile,q,value,notation='international'){
@@ -67,7 +68,7 @@ export function firstSummary(events){
  return Object.fromEntries(['name','find'].map(mode=>{const list=first.filter(e=>e.mode===mode);return [mode,{total:list.length,correct:list.filter(e=>e.correct).length,unaided:list.filter(e=>e.correct&&!e.aids.length).length}];}));
 }
 export function naturalDiagnostic(profile,mode='name'){const pool=pilotPlan(profile).natural;return {id:mode==='name'?'natural-diagnostic':'natural-diagnostic-find',mode,baseId:'natural-diagnostic',kind:'recall',title:'Les notes naturelles',subtitle:mode==='name'?'Nommer les notes':'Retrouver les notes',pool,focus:pool,description:'Toutes les positions naturelles sont vérifiées dans les deux sens, sans son ni indice avant la réponse. Le test peut être interrompu et repris.'};}
-export function initialPilotStore(){return {version:PILOT_VERSION,profiles:{}};}
+export function initialPilotStore(){return {version:PILOT_VERSION,profiles:{},achievements:[]};}
 const finiteTime=x=>Number.isFinite(x)&&x>=0;
 const validPosition=(p,profile)=>p&&Number.isInteger(p.string)&&p.string>=0&&p.string<profile.tuning.length&&Number.isInteger(p.fret)&&p.fret>=0&&p.fret<=4&&p.midi===profile.tuning[p.string]+p.fret;
 export function validatePilotStore(value){
@@ -92,5 +93,5 @@ export function validatePilotStore(value){
   }
   profiles[key]={...data,profile,attempts:data.attempts.slice(-1000),later:data.later.slice(-200)};
  }
- return {version:PILOT_VERSION,profiles};
+ return {version:PILOT_VERSION,profiles,achievements:validateAchievements(value.achievements)};
 }

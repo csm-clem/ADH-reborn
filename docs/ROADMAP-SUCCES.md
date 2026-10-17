@@ -75,3 +75,7 @@ Les pochettes sont globales par passage pour ne pas multiplier artificiellement 
 ## État dans la v0.18
 
 La chaîne qui repart après une erreur et la lecture automatique de la phrase accompagnée sont implémentées. La tentative conserve `motifCompleted` et `melodyId` pour préparer une preuve future. **La page Succès, ses badges et ses déblocages persistants ne sont pas encore implémentés** : ils suivent la présente roadmap. Les exports v0 restent propres à chaque version, comme convenu ; la conservation durable est prévue pour la v1.
+
+## État v0.19
+
+S1 à S6 sont implémentées : catalogue, évaluateur, preuves persistantes, pochettes écoutables, page Succès et notification groupée accessible. Voir [le rapport de livraison](CHANGES-v0.19.md). S7 reste la validation auprès de vrais joueurs ; S8 reste rattachée au compte et à la synchronisation de la phase 8. Les favoris sont une extension ultérieure.

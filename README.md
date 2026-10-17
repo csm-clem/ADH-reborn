@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.18.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.19.0**.
 
 ## Lancer et vérifier
 
@@ -21,22 +21,22 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - Six images WebP fournies par le porteur du projet, intégrées localement et disponibles hors ligne.
 - Parcours par familles calculé depuis les hauteurs réelles : accordage, chaque famille isolée, puis son mélange avec les positions déjà apprises. Cinquante activités en guitare six cordes standard, organisées en paires « nommer » / « retrouver ».
 - **20 à 30 questions maximum**, un seul type de réponse par exercice. Séries mélangées et équilibrées ; les grandes listes répartissent leurs positions dans cette limite. Les exercices « retrouver » conservent une courte suite musicale finale, pour un maximum de 30 réponses en tout.
-- Roue de sept notes naturelles ; altérations utiles dans un second anneau intérieur. Choix dièses/bémols dans les Paramètres et pendant le jeu.
+- Roue de hauteurs (E2/E3/E4…) pour les familles isolées ; roue de sept notes naturelles pour les mélanges ; altérations utiles dans un second anneau intérieur. Choix dièses/bémols dans les Paramètres et pendant le jeu.
 - Révisions cumulatives : au moins 20 % de questions sur la nouvelle famille dans ses mélanges ; exercices isolés réellement limités à leur famille.
 - Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et moyenne ≤ 1 seconde.
 - Exemples graphiques à la première rencontre de chaque format et micro-leçons sur les noms et positions des notes. Les instructions ne consomment pas le temps de réponse.
 - Corrections à hauteur exacte : E2 et E4 ne sont pas confondus. Démonstration distincte des essais de l’élève.
 - Manche horizontal, entièrement cadré sans glissement pour répondre. Deux panneaux de même hauteur en paysage, empilés en portrait. Réponses tactiles et boutons accessibles, corde 1 en haut.
-- Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections rouge/verte indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
+- Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
-Les suites finales utilisent des extraits musicaux sourcés lorsque leurs hauteurs correspondent exactement aux notes étudiées ; sinon, une suite d’entraînement est annoncée comme telle. Voir [les sources musicales](docs/MELODIES-SOURCES.md).
+Le parcours six cordes standard propose 25 œuvres distinctes pour ses 25 finales musicales, avec des départs en octaves pour ses 12 familles. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [les sources musicales](docs/MELODIES-SOURCES.md).
 
-Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG.
+Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Quatre palettes coordonnées sont proposées dans les Paramètres.
 
-La carte naturelle complète, les ateliers d’altérations, les révisions différées et le microphone restent à produire. Une tonique altérée à vide limite actuellement le pilote aux cordes à vide ; l’application le signale et ne change jamais l’accordage pour contourner cette limite.
+Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
 
-Voir [le rapport v0.16](docs/CHANGES-v0.16.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.19](docs/CHANGES-v0.19.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -53,6 +53,8 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 ## Architecture
 
 - `ui.css`, `tokens.css`, `components.css` : couches CSS, fondations et composants communs ; contrat dans [DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md).
+- `achievement-rules.js`, `achievement-data.js`, `achievements-ui.js` : catalogue, preuves et collection des succès.
+- `themes.js` : choix et descriptions des quatre palettes.
 - `progress.js` / `progress.css` : carte visuelle des positions et résultats par compétence.
 - `neck-view.js` / `neck.css` : rendu commun du manche pour les exercices et les petits schémas ; géométrie dans `core.js`.
 - `answer-wheel.css` : composant de roue à un ou deux anneaux.

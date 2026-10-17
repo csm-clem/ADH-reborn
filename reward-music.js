@@ -1,8 +1,11 @@
+import {OCTAVE_MUSIC,DANCE_MUSIC,EXTRA_RIFFS} from './octave-music.js';
 /** Finished listening phrases, distinct from the deliberately tiny exercise excerpts.
  * Harmony is a pedagogical arrangement, not a reproduction of a source accompaniment.
  * Reference passages and exceptions are documented in docs/RECOMPENSES-MUSICALES.md.
  */
-const PHRASES={
+const PHRASES={...Object.fromEntries([...OCTAVE_MUSIC,DANCE_MUSIC,...EXTRA_RIFFS].map(m=>[m.id,{notes:m.notes.map((n,i)=>[n,m.beats[i]]),chords:m.chords,bar:m.bar,step:m.step,section:m.section,accompanimentShift:-12}])),
+ 'seven-nation':{notes:[[52,1.5],[52,.5],[55,.75],[52,.75],[50,.5],[48,1],[47,3],[52,1.5],[52,.5],[55,.75],[52,.75],[50,.5],[48,.5],[50,.5],[48,.5],[47,2.5]],chords:[[40,47,52],[40,47,52],[40,47,52],[40,47,52]],bar:4,step:.484,section:'Deux tours du riff, arrangement pédagogique'},
+ 'come-as-you-are':{notes:[[38,.5],[38,.5],[39,.5],[40,.5],[43,.5],[40,.5],[43,.5],[40,.5],[40,.5],[39,.5],[38,.5],[45,.5],[38,.5],[38,.5],[45,1]],chords:[[38,45,50],[40,47,52]],bar:4,step:.5,section:'Un tour complet du riff, arrangement pédagogique'},
  twinkle:{notes:[[67,1],[67,1],[74,1],[74,1],[76,1],[76,1],[74,2],[72,1],[72,1],[71,1],[71,1],[69,1],[69,1],[67,2]],chords:[[55,59,62],[60,64,67],[55,59,62],[62,66,69],[55,59,62],[60,64,67],[62,66,69],[55,59,62]],bar:2,step:.4,section:'Première phrase complète'},
  cuckoo:{notes:[[67,1],[64,1,1],[67,1],[64,1,1],[62,1],[60,1],[62,1],[60,2,1]],chords:[[48,52,55],[48,52,55],[43,47,50],[48,52,55]],bar:3,step:.42,section:'Première phrase complète'},
  bride:{notes:[[65,2],[70,1.5],[70,.5],[70,3,1],[65,2],[72,1.5],[69,.5],[70,3,1]],chords:[[46,50,53],[46,50,53],[53,57,60],[46,50,53]],bar:4,step:.35,section:'Première phrase complète'},
@@ -20,6 +23,6 @@ export function rewardFor(melody){
  if(!melody||!PHRASES[melody.id])return null;const p=PHRASES[melody.id];let shift=melody.shift||0;
  while(p.notes[0][0]+shift<55)shift+=12;while(p.notes[0][0]+shift>76)shift-=12;
  let beat=0;const events=p.notes.map(([midi,beats,restAfter=0])=>{const e={midi:midi+shift,start:beat,beats,velocity:1};beat+=beats+restAfter;return e;});
- for(let i=0;i<p.chords.length&&i*p.bar<beat;i++){const chord=p.chords[i],start=i*p.bar,duration=Math.min(p.bar,beat-start);events.push({midi:chord[0]+shift,start,beats:Math.min(1,duration),velocity:.42,voice:'bass-electric'});for(let j=0;j<duration;j++)events.push({midi:chord[1+j%(chord.length-1)]+shift,start:start+j+.08,beats:.8,velocity:.25,voice:'guitar-clean'});}
+ for(let i=0;i<p.chords.length&&i*p.bar<beat;i++){const chord=p.chords[i],start=i*p.bar,duration=Math.min(p.bar,beat-start);events.push({midi:chord[0]+shift+(p.accompanimentShift||0),start,beats:Math.min(1,duration),velocity:.42,voice:'bass-electric'});for(let j=0;j<duration;j++)events.push({midi:chord[1+j%(chord.length-1)]+shift+(p.accompanimentShift||0),start:start+j+.08,beats:.8,velocity:.25,voice:'guitar-clean'});}
  return {title:melody.title,section:p.section,events,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony:true,completePhrase:isCompletePhrase(melody.id)};
 }

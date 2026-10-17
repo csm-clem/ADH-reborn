@@ -8,3 +8,4 @@
 @media(orientation:landscape){.answer-wheel{width:min(340px,100%,var(--wheel-size,340px))}.answer-wheel button,.wheel-echo{width:46px;height:46px;font-size:18px}.dual-wheel button,.dual-wheel .wheel-echo{width:44px;height:44px;font-size:16px}}
 @media(max-width:330px){.answer-wheel button,.wheel-echo{width:48px;height:48px;font-size:18px}.dual-wheel button,.dual-wheel .wheel-echo{width:44px;height:44px;font-size:16px}}
 @media(prefers-reduced-motion:reduce){.wheel-echo{animation-duration:180ms}}
+.wheel-echo{border-color:var(--note-correct);background:var(--surface);color:var(--success)}.wheel-echo.wrong{border-color:var(--note-wrong);background:var(--surface);color:var(--danger)}

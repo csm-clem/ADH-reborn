@@ -1,0 +1,8 @@
+/** Four coordinated palettes; system follows Atelier/Studio without changing results. */
+export const THEMES=Object.freeze([
+ {id:'light',title:'Atelier · Érable miel',description:'Un manche chaleureux et des repères colorés bien visibles. Pour les séances quotidiennes en lumière normale.',swatches:['#F6D59C','#3D3023','#168552','#D34242']},
+ {id:'dark',title:'Studio nuit',description:'Une interface sombre et des repères lumineux pour jouer confortablement dans une pièce peu éclairée.',swatches:['#4B3B2B','#F1E1C9','#85DFC0','#FFB4B9']},
+ {id:'accessible',title:'Inclusif-contrasté',description:'Texte renforcé, contraste élevé, bleu/orange et symboles distincts : utile avec une perception des couleurs réduite ou une lumière difficile.',swatches:['#F5EBCB','#111827','#005A9C','#9F4200']},
+ {id:'paper',title:'Papier',description:'Une présentation sobre en niveaux de gris, avec des symboles pour distinguer les réponses. Pour réduire les distractions visuelles.',swatches:['#ECECEC','#222222','#1E1E1E','#535353']}
+].map(Object.freeze));
+export function themeChoices(current){return `<fieldset class="theme-choices"><legend>Apparence</legend>${THEMES.map(t=>`<label class="theme-choice"><input type="radio" name="theme" value="${t.id}" ${current===t.id?'checked':''}><span><strong>${t.title}</strong><small>${t.description}</small><span class="theme-swatches" aria-hidden="true">${t.swatches.map(c=>`<i style="background:${c}"></i>`).join('')}</span></span></label>`).join('')}<label class="theme-choice system-theme"><input type="radio" name="theme" value="system" ${current==='system'?'checked':''}><span><strong>Selon l’appareil</strong><small>Atelier le jour, Studio nuit lorsque l’appareil utilise son apparence sombre.</small></span></label></fieldset>`;}

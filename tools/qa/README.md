@@ -40,3 +40,9 @@ Les autres scripts de ce dossier conservent des scénarios historiques, notammen
 - `reward.py` : chaîne remise à zéro sur erreur et phrase complète accompagnée lancée automatiquement après réussite.
 
 - `last-correction-v018.py` : dernière erreur lisible avant le résultat, centre du zoom stable et aucune réponse finale dupliquée.
+
+### v0.19
+
+`v019.py` vérifie les corrections, les octaves, les indices partagés, les succès et les thèmes. `result-fit-v019.py` vérifie les 300 ms après la dernière note et six formats de résultats. `pilot-full.py` parcourt les 50 activités ; `onboarding.py`, `pilot-layout.py`, `lessons-v018.py` et `package-offline.py` restent applicables à la version courante. Les captures de test ne représentent pas des résultats réels d’élèves.
+
+`music-v019.py` joue les 25 passages différents et vérifie leurs obtentions. `music-lessons-v019.py` vérifie 15 présentations de passages musicaux sur petits écrans.

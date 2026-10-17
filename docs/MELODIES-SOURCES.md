@@ -38,3 +38,7 @@ La micro-leçon présente le titre, le passage et l’adaptation. Les liens docu
 ## Limites avant commercialisation
 
 Ce catalogue est un pilote pédagogique de courts incipits, avec des œuvres traditionnelles et quelques repères modernes. La publication d’une partition sur GitHub ne constitue pas une licence commerciale. Avant une diffusion payante, vérifier les droits applicables aux extraits modernes ou les remplacer par un répertoire autorisé ; aucun droit sur une œuvre moderne n’est déduit de sa seule présence dans ce document.
+
+## Actualisation v0.19
+
+Attribution unique par œuvre et par parcours : `melodiesForPlan` remplace la sélection indépendante pour les activités jouées. Répertoire étendu à la funk, au disco, à la house et au rock électronique ; 25 œuvres différentes pour les 25 finales du parcours six cordes standard. Sources et adaptations dans [le rapport v0.19](CHANGES-v0.19.md). Les suites sans correspondance unique restent explicitement des suites d’entraînement.
