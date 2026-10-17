@@ -81,9 +81,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.18.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.19.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.18/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.19/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 
@@ -103,6 +103,6 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 [Rapport v0.17](docs/CHANGES-v0.17.md) · [Manches et thèmes proposés](docs/v0.17/CHOIX-VISUELS.md) · [Six manches](docs/v0.17/manches.png) · [Six thèmes](docs/v0.17/themes.png). Les services audio, stockage, préférences et événements navigateur sont désormais partagés et injectés ; les séances et les horloges restent indépendantes.
 
-## Livraison v0.18
+## Livraison v0.19
 
-[Rapport v0.18](docs/CHANGES-v0.18.md) · [Parcours et micro-leçons](docs/v0.18/PARCOURS.md) · [Roadmap des succès](docs/ROADMAP-SUCCES.md). Règles de parcours partagées, démonstrations corrigées, chaîne musicale remise à zéro après erreur et récompense accompagnée automatique.
+[Rapport v0.19](docs/CHANGES-v0.19.md) · [Répertoire musical](docs/v0.19/repertoire.md) · [Validation](docs/v0.19/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Collection des succès, quatre palettes coordonnées et 25 passages musicaux différents pour le parcours six cordes standard.
