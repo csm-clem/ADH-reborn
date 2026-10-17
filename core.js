@@ -11,8 +11,12 @@ export const INSTRUMENTS = [
   { id:'bass5', name:'Basse', strings:5, tuning:'B0 E1 A1 D2 G2' },
   { id:'bass6', name:'Basse', strings:6, tuning:'B0 E1 A1 D2 G2 C3' }
 ];
-export function noteName(midi, notation='international') {
-  return (notation === 'latin' ? LATIN : PITCHES)[((midi % 12)+12)%12];
+const FLATS=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+const LATIN_FLATS=['Do','Ré♭','Ré','Mi♭','Mi','Fa','Sol♭','Sol','La♭','La','Si♭','Si'];
+export function notationFor(state){return {system:state.notation||'international',accidentals:state.accidentals||'sharp'};}
+export function noteName(midi, notation='international',accidentals='sharp') {
+ const system=typeof notation==='object'?notation.system:notation,flat=(typeof notation==='object'?notation.accidentals:accidentals)==='flat';
+ return (system==='latin'?(flat?LATIN_FLATS:LATIN):(flat?FLATS:PITCHES))[((midi%12)+12)%12];
 }
 export function pitchLabel(midi, notation='international') {
   return `${noteName(midi, notation)}${Math.floor(midi/12)-1}`;

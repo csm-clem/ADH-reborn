@@ -9,10 +9,10 @@ import {searchFeedback} from '../discovery-feedback.js';
 import {miniatureNeck} from '../neck-view.js';
 test('Every cumulative series guarantees 20% new positions and retains earlier lessons across tunings',()=>{
  for(const profile of [makeProfile('guitar6'),makeProfile('guitar7'),makeProfile('bass5'),makeProfile('guitar6','D2 A2 D3 G3 A3 D4')]){
-  let previous=[];for(const m of practiceActivities(pilotPlan(profile)).filter(m=>m.mode==='name')){
+  let previous=[];for(const m of practiceActivities(pilotPlan(profile)).filter(m=>m.mode==='name'&&(m.kind==='mix'||m.kind==='opens'))){
    assert.ok(previous.every(p=>m.practicePool.some(q=>positionKey(p)===positionKey(q))));
    for(let seed=1;seed<=50;seed++){let n=seed;const random=()=>((n=n*16807%2147483647)-1)/2147483646,qs=questionsFor(m,{random});assert.ok(qs.length>=20&&qs.length<=30);assert.ok(qs.filter(q=>m.newPositions.some(p=>positionKey(p)===positionKey(q.target))).length>=Math.ceil(qs.length*.2));assert.ok(qs.every(q=>m.practicePool.some(p=>positionKey(p)===positionKey(q.target))));}
-   previous=m.practicePool.filter(p=>[0,2,4,5,7,9,11].includes(p.midi%12));
+   previous=m.practicePool;
   }
  }
 });

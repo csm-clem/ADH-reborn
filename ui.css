@@ -14,3 +14,5 @@
 
 @import url('./position-buttons.css') layer(components);
 @import url('./refinement.css') layer(pages);
+
+@import url('./interaction.css') layer(pages);

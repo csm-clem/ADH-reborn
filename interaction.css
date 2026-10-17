@@ -1,0 +1,36 @@
+/* Feedback is local to each point. Labels never change its scaling origin. */
+.answer-echo{pointer-events:none;animation:none;transform:none}
+.pilot-marker{transform-box:fill-box;transform-origin:center;animation:dot-enter 240ms cubic-bezier(.18,.8,.3,1) both}
+.echo-dot{transform-box:fill-box;transform-origin:center;animation:dot-leave 560ms cubic-bezier(.18,.6,.3,1) both}
+.echo-label,.echo-symbol{animation:label-leave 560ms ease-out both}
+.wheel-echo{transform-origin:center;animation:wheel-leave 560ms cubic-bezier(.18,.6,.3,1) both}
+@keyframes dot-enter{0%{opacity:0;transform:scale(.18)}60%{opacity:1;transform:scale(1.28)}82%{transform:scale(.94)}100%{opacity:1;transform:scale(1)}}
+@keyframes dot-leave{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.65)}}
+@keyframes label-leave{0%,25%{opacity:1}100%{opacity:0}}
+@keyframes wheel-leave{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-50%) scale(1.45)}}
+@media(prefers-reduced-motion:reduce){.pilot-marker{animation:none}.echo-dot,.wheel-echo,.echo-label,.echo-symbol{animation-name:label-leave;animation-duration:560ms}.echo-dot{transform:none}}
+/* A stationary toggle outside the scrolling position grid. */
+.pilot-game .pilot-position-buttons{position:static;grid-column:2;grid-row:2;min-width:0;width:100%;margin:0}
+.pilot-game .neck-panel{grid-template-columns:65px minmax(0,1fr)}
+.position-toggle-slot{height:44px;display:grid;place-items:center;width:100%}
+.position-toggle-slot .text-button{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin:0;padding:0 4px;text-align:center}
+.position-grid-panel{position:absolute;inset:4px 4px 50px;z-index:4;overflow:auto;background:var(--surface);border-radius:12px;padding:4px;scroll-padding:8px}
+.position-grid-panel[hidden]{display:none}
+.pilot-game .game-header{display:grid;grid-template-columns:44px minmax(0,1fr) repeat(4,44px);gap:4px}
+.pilot-game .game-header{align-items:center}.pilot-game .game-header small{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;white-space:nowrap;min-width:0}.game-subtitle{overflow:hidden;text-overflow:ellipsis;min-width:0}.game-counter{flex-shrink:0}
+.pilot-game .game-header .game-counter{white-space:nowrap}
+.help-name-example{display:grid;grid-template-columns:minmax(0,1fr) 24px 130px;gap:12px;align-items:center;width:100%}
+.help-arrow{color:var(--muted);font-size:26px}
+.help-note-options{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.help-note{display:grid;place-items:center;min-width:34px;min-height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-weight:650;color:var(--ink);font-size:14px}
+.help-note.example-correct{background:var(--success-soft);border-color:var(--success);color:var(--success)}
+.instruction-content .lesson-target{font-size:15px}.instruction-content .melody-attribution{max-width:46ch}
+@media(max-width:420px){.help-name-example{grid-template-columns:1fr;gap:8px}.help-arrow{display:none}.help-note-options{max-width:300px;justify-self:center}.instruction-content{gap:12px}.instruction-page{padding-inline:16px}.instruction-content>p{line-height:1.5}}
+@media(max-height:500px) and (orientation:landscape){.instruction-page{padding:66px 18px 16px;gap:10px;align-content:center}.instruction-content{gap:8px}.instruction-content h1{font-size:25px}.instruction-content .shared-neck{max-height:115px}.instruction-page footer{padding:0}.instruction-content .melody-attribution{font-size:11px}.new-exercise-label{font-size:11px}}
+:root[data-theme=accessible] .echo-dot{stroke:#111827;stroke-width:.7}
+
+/* Shared lesson composition: visual and explanation are semantic groups. */
+.instruction-heading,.instruction-visual,.instruction-summary{width:100%;min-width:0}.instruction-heading p{margin:0 0 12px}.instruction-summary p{margin:0;font-size:16px;line-height:1.5}.instruction-summary .lesson-target{margin-bottom:10px}.instruction-visual .discovery-direction{margin:12px 0 0}.instruction-visual .shared-neck{margin:0}.instruction-summary .melody-attribution{margin:0 auto 8px}.lesson-actions{gap:12px;flex-wrap:wrap}.instruction-content{grid-template-columns:minmax(0,1fr)}
+@media(orientation:landscape) and (max-height:550px){.instruction-page{grid-template-columns:minmax(0,940px);padding-top:70px;align-content:center}.instruction-content{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:28px;row-gap:10px}.instruction-heading{grid-column:2;grid-row:1}.instruction-visual{grid-column:1;grid-row:1/3;align-self:center}.instruction-summary{grid-column:2;grid-row:2;align-self:start}.instruction-summary p{font-size:14px;line-height:1.45}.instruction-heading p{margin-bottom:8px}.instruction-page .lesson-actions{width:calc(46.5% - 12px);justify-self:end;flex-wrap:nowrap}.instruction-content .shared-neck{max-height:160px}.instruction-visual .discovery-direction{font-size:12px}.instruction-heading h1{font-size:25px;line-height:1.15}}
+@media(orientation:portrait) and (max-height:550px){.instruction-page{padding:68px 14px 14px;align-content:center;gap:12px}.instruction-content{gap:12px}.instruction-heading p{margin-bottom:8px}.instruction-content .shared-neck{max-height:120px}.instruction-heading h1{font-size:25px}.instruction-summary p{font-size:14px;line-height:1.4}.instruction-visual .discovery-direction{display:none}}
+@media(orientation:landscape) and (max-height:550px){.instruction-page .lesson-actions{width:min(100%,420px);justify-self:end;flex-wrap:nowrap}}

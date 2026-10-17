@@ -15,10 +15,11 @@ const PHRASES={
  bonnie:{notes:[[60,1],[69,1.5],[69,.5],[67,1],[69,1],[72,1],[71,1],[69,3],[67,3],[64,3]],chords:[[48,52,55],[53,57,60],[48,52,55],[43,47,50],[48,52,55]],bar:3,step:.4,section:'Premier appel, rythme arrangé'},
  saints:{notes:[[60,1],[64,1],[65,1],[67,3],[60,1],[64,1],[65,1],[67,3]],chords:[[48,52,55],[48,52,55],[53,57,60],[48,52,55]],bar:3,step:.36,section:'Appel complet, rythme arrangé'}
 };
+export function isCompletePhrase(id){return Boolean(PHRASES[id])&&!['jaws','maria','bonnie','saints'].includes(id);}
 export function rewardFor(melody){
  if(!melody||!PHRASES[melody.id])return null;const p=PHRASES[melody.id];let shift=melody.shift||0;
  while(p.notes[0][0]+shift<55)shift+=12;while(p.notes[0][0]+shift>76)shift-=12;
  let beat=0;const events=p.notes.map(([midi,beats,restAfter=0])=>{const e={midi:midi+shift,start:beat,beats,velocity:1};beat+=beats+restAfter;return e;});
  for(let i=0;i<p.chords.length&&i*p.bar<beat;i++){const chord=p.chords[i],start=i*p.bar,duration=Math.min(p.bar,beat-start);events.push({midi:chord[0]+shift,start,beats:Math.min(1,duration),velocity:.42,voice:'bass-electric'});for(let j=0;j<duration;j++)events.push({midi:chord[1+j%(chord.length-1)]+shift,start:start+j+.08,beats:.8,velocity:.25,voice:'guitar-clean'});}
- return {title:melody.title,section:p.section,events,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony:true};
+ return {title:melody.title,section:p.section,events,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony:true,completePhrase:isCompletePhrase(melody.id)};
 }

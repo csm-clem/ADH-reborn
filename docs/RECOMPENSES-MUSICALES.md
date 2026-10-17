@@ -1,3 +1,5 @@
+> Mise à jour v0.18 : la sélection active écarte les quatre cellules incomplètes (Jaws, Maria, Bonnie, Saints). Seuls les passages à phrase complète vérifiée sont retenus. L’écoute se déclenche automatiquement après une chaîne sans erreur ; la commande sur la fiche permet de l’arrêter ou de la relancer.
+
 # Phrases musicales et récompenses d’écoute
 
 Les exercices gardent leurs petits extraits contraints aux notes étudiées. Sur la fiche des exercices « retrouver » associés à un extrait connu, **Écouter** joue une phrase développée avec un accompagnement arpégé discret et une basse. L’élève n’a pas à reproduire ces notes supplémentaires. L’écoute est volontaire, interrompable et respecte Muet.

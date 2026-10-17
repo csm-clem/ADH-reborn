@@ -5,10 +5,15 @@ export function neckBase(profile,{g=neckGeometry(profile.tuning.length,4),id='ne
 }
 export function miniatureNeck(profile,{id='mini',points=[],interactive=false,label='Manche',lastFret=4,showNames=false,notation='international'}={}){
  const g=neckGeometry(profile.tuning.length,lastFret);
- return `<svg class="shared-neck ${interactive?'lesson-neck':''}" viewBox="0 0 ${g.width} ${g.height}" role="${interactive?'group':'img'}" aria-label="${label}">${neckBase(profile,{g,id})}${points.map(p=>`<circle class="neck-point" cx="${g.centers[p.fret]}" cy="${g.ys[p.string]}" r="3.5" fill="${p.color||'#267342'}"/>${showNames?noteTagSVG(p,g,notation):''}`).join('')}${interactive?g.ys.flatMap((y,string)=>g.centers.map((x,fret)=>{const left=fret?g.frets[fret-1]:g.openStart,right=fret?g.frets[fret]:g.nut;return `<g role="button" tabindex="0" data-lesson-string="${string}" data-lesson-fret="${fret}" aria-label="Corde ${profile.tuning.length-string}, case ${fret}"><rect x="${left}" y="${y-5}" width="${right-left}" height="10" fill="transparent"/></g>`;})).join(''):''}</svg>`;
+ return `<svg class="shared-neck ${interactive?'lesson-neck':''}" viewBox="0 0 ${g.width} ${g.height}" role="${interactive?'group':'img'}" aria-label="${label}">${neckBase(profile,{g,id})}${points.map(p=>`<circle class="neck-point" cx="${g.centers[p.fret]}" cy="${g.ys[p.string]}" r="3.8" fill="${p.color||'#267342'}"/>${showNames?noteTagSVG(p,g,notation):''}`).join('')}${interactive?g.ys.flatMap((y,string)=>g.centers.map((x,fret)=>{const left=fret?g.frets[fret-1]:g.openStart,right=fret?g.frets[fret]:g.nut;return `<g role="button" tabindex="0" data-lesson-string="${string}" data-lesson-fret="${fret}" aria-label="Corde ${profile.tuning.length-string}, case ${fret}"><rect x="${left}" y="${y-5}" width="${right-left}" height="10" fill="transparent"/></g>`;})).join(''):''}</svg>`;
 }
 
 export function noteTagSVG(p,g,notation='international',color='#44516b'){
  const text=pitchLabel(p.midi,notation),left=g.centers[p.fret]-12,x=left-7<1?g.centers[p.fret]+12:left;
  return `<g class="note-tag" data-view-key="label-${p.string}-${p.fret}" data-length="${text.length}" data-string="${p.string}" data-fret="${p.fret}" transform="translate(${x} ${g.ys[p.string]})"><rect x="-7" y="-3" width="14" height="6" rx="2" fill="white" fill-opacity=".96"/><text text-anchor="middle" dominant-baseline="central" font-size="4" font-weight="650" fill="${color}">${text}</text></g>`;
+}
+
+export function layoutNoteTags(svg,g){
+ if(!svg)return;const rect=svg.getBoundingClientRect(),scale=Math.min(rect.width/g.width,rect.height/g.height);if(!scale)return;
+ svg.querySelectorAll('.note-tag').forEach(tag=>{const chars=Number(tag.dataset.length),fret=Number(tag.dataset.fret),row=Math.abs(g.ys[0]-g.ys[1]),f=Math.min(14/scale,row*.72),w=(chars*.6+.6)*f,offset=3.8+6/scale+w/2,left=g.centers[fret]-offset,x=left-w/2<1/scale?g.centers[fret]+offset:left;tag.setAttribute('transform',`translate(${x} ${g.ys[Number(tag.dataset.string)]})`);tag.querySelector('text').style.fontSize=`${f}px`;const box=tag.querySelector('rect');box.setAttribute('width',w);box.setAttribute('x',-w/2);box.setAttribute('height',f*1.2);box.setAttribute('y',-f*.6);});
 }

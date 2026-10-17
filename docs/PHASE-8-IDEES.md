@@ -72,3 +72,7 @@ Ajout du 17 octobre 2026 : prévoir un système de connexion permettant de retro
 À concevoir en phase 8 : création et récupération du compte, sauvegarde et restauration côté serveur, synchronisation des tentatives par instrument/accordage/exercice, gestion des conflits après des séances hors ligne et suppression/export des données. Le jeu doit rester utilisable hors connexion, puis se synchroniser au retour du réseau. L’identification et les droits d’accès payants devront être articulés sans confondre connexion et validation pédagogique.
 
 Cette note réserve le sujet pour la phase 8 ; aucun système de compte ni serveur de synchronisation n’est implémenté dans le pilote actuel.
+
+## Collection des succès — précisions v0.18
+
+Voir [la roadmap des succès](ROADMAP-SUCCES.md) : albums Repères, Fluidité et Musiques, critères explicites, pochettes de phrases musicales rejouables et notifications non bloquantes. La connexion prévue en phase 8 devra conserver la collection entre appareils, sans doubler une pochette lors d’un changement de notation ou de transposition. Les preuves de réussite restent attachées à l’instrument et à la zone. La chaîne sans erreur et sa récompense audio automatique sont déjà présentes ; la page de collection et les déblocages persistants restent à implémenter.

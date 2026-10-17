@@ -4,7 +4,7 @@ const compatible=(a,b)=>a&&a.nodeType===b.nodeType&&(a.nodeType!==1||a.tagName==
 function sync(a,b){
  if(a.nodeType!==1){if(a.nodeValue!==b.nodeValue)a.nodeValue=b.nodeValue;return;}
  const layoutOwned=a.hasAttribute('data-layout-owned'),labelOwned=a.closest?.('.note-tag');
- const preserve=name=>(layoutOwned&&name==='style')||(labelOwned&&['transform','style','x','y','width','height'].includes(name));
+ const preserve=name=>((layoutOwned||a.hasAttribute('data-animation-owned'))&&name==='style')||(labelOwned&&['transform','style','x','y','width','height'].includes(name));
  for(const attr of [...a.attributes])if(!b.hasAttribute(attr.name)&&!preserve(attr.name))a.removeAttribute(attr.name);
  for(const attr of b.attributes)if(!preserve(attr.name)&&a.getAttribute(attr.name)!==attr.value)a.setAttribute(attr.name,attr.value);
  patchChildren(a,b);

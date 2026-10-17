@@ -1,80 +1,42 @@
 /** Phase-3 pilot: configuration-derived activities and first-response evidence. */
+import {CURRICULUM_RULES} from './curriculum-rules.js';
 import {positions,noteName,pitchLabel,makeProfile} from './core.js';
-export const PILOT_VERSION=2;
+export const PILOT_VERSION=3;
 export const PASS_ACCURACY=.9;
 export function activityResult(events,expected){const first=events.filter(e=>!e.retry),correct=first.filter(e=>e.correct).length,required=Math.ceil(expected*PASS_ACCURACY);return {correct,total:first.length,required,passed:first.length>=expected&&correct>=required};}
-export const NATURAL_PITCHES=[0,2,4,5,7,9,11];
+export const NATURAL_PITCHES=CURRICULUM_RULES.naturals;
 export const positionKey=p=>`${p.string}:${p.fret}`;
 export const isNatural=midi=>NATURAL_PITCHES.includes(midi%12);
 const unique=list=>[...new Map(list.map(p=>[positionKey(p),p])).values()];
 const at=(profile,string,fret)=>({string,fret,midi:profile.tuning[string]+fret});
-export function pilotPlan(profile,{allowAlteredOpens=true,notation='international'}={}){
- const name=n=>noteName(n,notation);
- const all=positions(profile,profile.tuning.map((_,s)=>s)),natural=all.filter(p=>isNatural(p.midi));
- const opens=profile.tuning.map((_,s)=>at(profile,s,0)),lowest=opens.reduce((a,b)=>b.midi<a.midi?b:a),root=isNatural(lowest.midi)?lowest:at(profile,lowest.string,1),rootPC=root.midi%12;
- const altered=opens.filter(p=>!isNatural(p.midi));
- const compatible=(!altered.length||allowAlteredOpens);
- const reason=altered.length&&!allowAlteredOpens?'Cet accordage comporte des altérations à vide ; le préambule d’accordage est nécessaire avant le pilote naturel.':'';
- const modules=[],unavailable=[];
- const add=(id,title,kind,pool,focus,description,extra={})=>{const subject=kind==='opens'?'Les cordes à vide':kind==='tuning'?'L’accordage':kind==='interval'?`La note ${name(extra.target.midi)}`:kind==='transfer'?`Les cordes en ${name(extra.pitchClass)}`:kind==='recall'?'Les notes graves':kind==='phrase'?'La phrase musicale':title;const m={id,title,subject,kind,pool:unique(pool),focus:unique(focus),description,...extra};modules.push(m);return m;};
- if(altered.length)add('tuning','Les noms de votre accordage','tuning',opens,opens,`Les cordes à vide ${[...new Set(altered.map(p=>name(p.midi)))].join(', ')} comportent une altération dans votre accordage. Ce préambule apprend seulement ces vrais départs ; ensuite la roue revient aux sept notes naturelles.`);
- add('opens','Reconnaître vos cordes à vide','opens',opens.filter(p=>isNatural(p.midi)),opens.filter(p=>isNatural(p.midi)),'Chaque ligne est une corde et les barres grises sont les frettes. La case 0 est avant la barre de départ, le sillet : on joue sans appuyer. Explorez les départs, puis nommez et retrouvez les cordes dans un ordre mélangé.');
- if(!compatible)return {root,opens,natural,all,modules,compatible,reason,altered};
- const rootIndex=NATURAL_PITCHES.indexOf(rootPC);let learned=unique(opens.filter(p=>isNatural(p.midi)));
- for(const degree of [5,4,3,2,8,7,6]){
-  const pc=NATURAL_PITCHES[(rootIndex+degree-1)%7],delta=degree===8?12:(pc-rootPC+12)%12,desired=root.midi+delta;
-  let options=natural.filter(p=>p.midi===desired);
-  if(!options.length){const candidates=natural.filter(p=>p.midi%12===pc&&p.midi>root.midi);const min=Math.min(...candidates.map(p=>p.midi));options=candidates.filter(p=>p.midi===min);}
-  if(!options.length){unavailable.push({degree,note:name(pc),interval:intervalName(degree,delta)});continue;}
-  options.sort((a,b)=>a.fret-b.fret||Math.abs(a.string-root.string)-Math.abs(b.string-root.string)||a.string-b.string);
-  const target=options[0],tonics=natural.filter(p=>p.midi%12===rootPC);
-  const anchor=tonics.find(p=>p.midi===target.midi-delta)||root;
-  const quality=intervalName(degree,delta);
-  const pool=unique([anchor,target]);
-  const moved=target.midi!==desired;
-  const explanation=`${degree===5?'Deux notes forment un intervalle : c’est leur écart en hauteur. ':''}Reliez ${pitchLabel(anchor.midi,notation)} (corde ${profile.tuning.length-anchor.string}) à ${pitchLabel(target.midi,notation)} (corde ${profile.tuning.length-target.string}). Vous entendrez une ${quality.toLowerCase()}. ${degree===5&&delta===6?'Avec cette tonique et les notes naturelles, la quinte est diminuée : six demi-tons. ':''}${degree===8?'Les deux notes portent le même nom, mais la seconde sonne une octave plus haut. ':''}${moved?'Ce lien utilise le registre disponible sur cette position. ':''}Essayez la nouvelle note ; nous afficherons ensuite les deux repères.`;
-  add(`degree-${degree}`,`${quality} · ${name(target.midi)}`,'interval',pool,[target],explanation,{degree,delta,target,anchor,moved});
-  learned=unique([...learned,anchor,target]);
+export function pilotPlan(profile,{notation='international',zone={start:0,end:4}}={}){
+ zone=CURRICULUM_RULES.zone(zone);const frets=Array.from({length:zone.end-zone.start+1},(_,i)=>i+zone.start),all=positions(profile,profile.tuning.map((_,s)=>s),frets),natural=all.filter(p=>isNatural(p.midi)),opens=profile.tuning.map((_,s)=>at(profile,s,0)),altered=opens.filter(p=>!isNatural(p.midi)),root=opens.reduce((a,b)=>b.midi<a.midi?b:a),modules=[];
+ const choices=pool=>[...new Set([...NATURAL_PITCHES,...pool.map(p=>p.midi%12)])].sort((a,b)=>a-b);
+ let learned=zone.start===0?[...opens]:[];
+ if(zone.start===0)modules.push({id:'opens',kind:'opens',subject:'Les cordes à vide',title:'Les cordes à vide',pool:opens,focus:opens,newPositions:opens,choices:choices(opens),description:'Touchez les cordes avant le sillet : ce sont les cordes à vide.',zone});
+ const order=CURRICULUM_RULES.familyOrder(profile,all);
+ for(const pc of order){
+  const family=all.filter(p=>p.midi%12===pc),name=noteName(pc,notation),id='note-'+pc;
+  modules.push({id,kind:'family',pitchClass:pc,subject:'La note '+name,title:'La note '+name,pool:family,focus:family,newPositions:family,choices:choices(family),zone,description:`Repérez tous les ${name} dans cette zone. Le chiffre indique la hauteur de la note.`});
+  learned=unique([...learned,...family]);
+  modules.push({id:'mix-'+pc,kind:'mix',pitchClass:pc,subject:name+' et vos repères',title:name+' et vos repères',pool:[...learned],focus:family,newPositions:family,choices:choices(learned),zone,skipDiscovery:true,description:`Mélangez les ${name} avec les notes déjà rencontrées.`});
  }
- const groups=new Map();opens.forEach(p=>{const pc=p.midi%12;if(!groups.has(pc))groups.set(pc,[]);groups.get(pc).push(p);});
- for(const [pc,strings] of [...groups].filter(([,s])=>s.length>1).sort((a,b)=>Math.max(...b[1].map(p=>p.midi))-Math.max(...a[1].map(p=>p.midi)))){
-  const pool=natural.filter(p=>strings.some(s=>s.string===p.string)),focus=pool.filter(p=>!learned.some(k=>positionKey(k)===positionKey(p)));
-  if(!focus.length)continue;
-  const registers=[...new Set(strings.map(p=>p.midi))].sort((a,b)=>a-b),registerText=registers.length===1?'Ces départs ont la même hauteur : un unisson.':`${registers.map(n=>pitchLabel(n,notation)).join(' et ')} : ${registers.slice(1).map((n,i)=>(n-registers[i])/12).join(' puis ')} octave(s) d’écart.`;
-  const numbers=strings.map(p=>profile.tuning.length-p.string),fretGroups=[...new Set(pool.map(p=>p.fret))].sort((a,b)=>a-b),transferPairs=fretGroups.map(fret=>strings.map(p=>pool.find(x=>x.string===p.string&&x.fret===fret)).filter(Boolean)).filter(p=>p.length>1);
-  add(`transfer-${pc}`,`La carte de ${name(pc)}, d’une corde à l’autre`,'transfer',pool,focus,`Les cordes ${numbers.join(' et ')} sont toutes accordées en ${name(pc)} à vide. ${registerText} À la même case, elles donnent donc le même nom de note. Après votre essai, des lignes relieront ces correspondances. Vous jouerez ensuite le même petit motif sur chacune de ces cordes.`,{pitchClass:pc,equivalentStrings:strings.map(p=>p.string),transferPairs});
-  learned=unique([...learned,...pool]);
- }
- const bass=unique(modules.filter(m=>m.kind==='interval').flatMap(m=>[m.anchor,m.target]));
- if(bass.length>=3)add('recall','Retrouver vos repères sans indice','recall',bass,bass,'Retrouvez vos notes, une question à la fois.');
- if(bass.length>=3)add('phrase','Une phrase depuis les noms','phrase',bass,bass,'Jouez une courte suite de noms, puis comparez avec le modèle. Le jeu vérifie les positions choisies sur le manche tactile. Vous pouvez aussi reprendre ce motif sur votre instrument, librement.');
- return {root,opens,natural,all,modules,compatible,reason,altered,learned,unavailable};
-}
-export function intervalName(degree,semitones){
- if(degree===8)return 'Octave';
- const names={2:'Seconde',3:'Tierce',4:'Quarte',5:'Quinte',6:'Sixte',7:'Septième'},ordinary={2:2,3:4,4:5,5:7,6:9,7:11};
- const quality=[4,5].includes(degree)?semitones===ordinary[degree]?'juste':semitones<ordinary[degree]?'diminuée':'augmentée':semitones===ordinary[degree]?'majeure':'mineure';
- return `${names[degree]} ${quality}`;
+ return {root,opens,natural,all,modules,compatible:true,reason:'',altered,learned,unavailable:[],order,zone};
 }
 export function shuffled(list,random=Math.random){const out=[...list];for(let i=out.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
-export function practiceActivities(plan){let learned=[];return plan.modules.filter(m=>m.pool.length).flatMap(m=>{
- const introduced=unique(m.pool.filter(p=>!learned.some(q=>positionKey(p)===positionKey(q))));
- const practicePool=unique([...learned,...m.pool]),newPositions=m.kind==='interval'?[m.target]:introduced.length?introduced:m.focus;
- learned=unique([...learned,...m.pool.filter(p=>isNatural(p.midi))]);
- return ['name','find'].map(mode=>({...m,practicePool,newPositions,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title:m.subject||m.title,subtitle:(mode==='name'?'Nommer':'Retrouver')+(['opens','tuning'].includes(m.kind)?' les cordes':' les notes')}));
-});}
+export function practiceActivities(plan){return plan.modules.filter(m=>m.pool.length).flatMap(m=>['name','find'].map(mode=>({...m,practicePool:m.pool,newPositions:m.newPositions||m.focus,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title:m.subject||m.title,subtitle:(mode==='name'?'Nommer':'Retrouver')+(m.kind==='opens'?' les cordes':m.kind==='mix'?' les notes mélangées':' les positions')})));}
 export function questionsFor(module,{diagnostic=false,random=Math.random,mode=module.mode||'name'}={}){
  const ordered=unique(module.practicePool||[...module.focus,...module.pool]);if(!ordered.length)return [];
- const count=Math.max(20,Math.min(module.kind==='recall'?30:24,ordered.length*3));
+ const count=Math.max(CURRICULUM_RULES.minQuestions,Math.min(module.kind==='recall'?30:CURRICULUM_RULES.maxQuestions,ordered.length*3));
  const fresh=unique(module.newPositions||module.focus).filter(p=>ordered.some(q=>positionKey(p)===positionKey(q))),old=ordered.filter(p=>!fresh.some(q=>positionKey(p)===positionKey(q)));
  const take=(pool,n)=>{const out=[];while(out.length<n)out.push(...shuffled(pool,random).slice(0,n-out.length));return out;};
  // Guarantee coverage before shuffling; a probabilistic weight alone cannot guarantee 20% in one session.
- const freshCount=fresh.length&&old.length?Math.min(count,Math.max(fresh.length,Math.ceil(count*.2)+Math.floor(random()*(Math.floor(count*.4)-Math.ceil(count*.2)+1)))):fresh.length?count:0;
+ const freshCount=fresh.length&&old.length?Math.min(count,Math.max(fresh.length,Math.ceil(count*CURRICULUM_RULES.newFamilyShare)+Math.floor(random()*(Math.floor(count*.4)-Math.ceil(count*CURRICULUM_RULES.newFamilyShare)+1)))):fresh.length?count:0;
  const targets=shuffled([...take(fresh,freshCount),...take(old.length?old:ordered,count-freshCount)],random);
- return targets.map((p,i)=>({id:`${module.id}:${positionKey(p)}:${mode}:${i}`,mode,target:p,scope:mode==='find'&&['opens','tuning'].includes(module.kind)?'height':'string',allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false}));
+ return targets.map((p,i)=>({id:`${module.id}:${positionKey(p)}:${mode}:${i}`,mode,target:p,scope:mode==='find'&&module.kind==='opens'?'height':'string',zone:module.zone||{start:0,end:4},allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false}));
 }
 export function admissiblePositions(profile,question){
- const all=positions(profile,profile.tuning.map((_,s)=>s));
+ const zone=question.zone||{start:0,end:4},all=positions(profile,profile.tuning.map((_,s)=>s),Array.from({length:zone.end-zone.start+1},(_,i)=>zone.start+i));
  return all.filter(p=>(!question.allowedFrets||question.allowedFrets.includes(p.fret))&&p.midi%12===question.target.midi%12&&(question.scope!=='string'||p.string===question.target.string)&&(question.scope!=='height'||p.midi===question.target.midi));
 }
 export function pilotCorrect(profile,q,value){
@@ -88,10 +50,10 @@ export function correction(profile,q,value,notation='international'){
   if(midi%12===target.midi%12&&q.allowedFrets&&!q.allowedFrets.includes(value.fret))return `Le nom est juste, mais cette consigne demande une corde à vide, donc la case 0.`;
   if(midi%12===target.midi%12)return `C’est bien ${name}, mais la consigne précise ${spot}. Le même nom peut se retrouver ailleurs.`;
   if(value.string!==target.string)return `La corde change le point de départ. Ici ${name} se trouve ${spot} ; votre toucher donne ${noteName(midi,notation)}.`;
-  if(Math.abs(value.fret-target.fret)===1)return `Vous êtes à une case de ${name}. Une case fait un demi-ton ; le repère correct est ${spot}.`;
+  if(Math.abs(value.fret-target.fret)===1)return `${name} se trouve juste à côté, ${spot}.`;
  }
  const pc=Number.isInteger(value)?value:null;
- if(pc!==null&&[1,11].includes((pc-target.midi%12+12)%12))return `${name} est voisin d’un demi-ton de votre réponse. Retrouvez le repère ${spot}, puis réessayez après d’autres notes.`;
+ if(pc!==null&&[1,11].includes((pc-target.midi%12+12)%12))return `${name} se trouve ${spot}. Retrouvez ce repère après d’autres notes.`;
  return `La réponse est ${name}, ${spot}. La corde à vide donne ${noteName(profile.tuning[target.string],notation)} : utilisez ce départ pour reconstruire le repère, puis essayez sans compter.`;
 }
 export function parseNoteAnswer(text){
@@ -115,7 +77,7 @@ export function validatePilotStore(value){
   if(!data||!data.profile)throw new Error('Profil du pilote invalide.');
   const profile=makeProfile(data.profile.instrumentId,data.profile.tuning?.map(n=>{if(!Number.isInteger(n))throw new Error('Accordage invalide.');return `${['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][n%12]}${Math.floor(n/12)-1}`;}).join(' '));
   if(key!==profile.key||!Array.isArray(data.attempts)||data.attempts.length>1000||!Array.isArray(data.later)||data.later.length>200)throw new Error('Historique du pilote invalide.');
-  if(data.seenInstructions!==undefined&&(!Array.isArray(data.seenInstructions)||data.seenInstructions.length>64||!data.seenInstructions.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Introductions enregistrées invalides.');
+  if(data.seenInstructions!==undefined&&(!Array.isArray(data.seenInstructions)||data.seenInstructions.length>300||!data.seenInstructions.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Introductions enregistrées invalides.');
   if(data.discoveredModules!==undefined&&(!Array.isArray(data.discoveredModules)||data.discoveredModules.length>100||!data.discoveredModules.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Découvertes enregistrées invalides.');
   const validAids=a=>Array.isArray(a)&&a.every(v=>['labels','listen','course','open-names'].includes(v));
   const validEvent=e=>e&&['name','find'].includes(e.mode)&&validPosition(e.target,profile)&&typeof e.correct==='boolean'&&validAids(e.aids)&&finiteTime(e.ms)&&finiteTime(e.at)&&typeof e.retry==='boolean';

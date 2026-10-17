@@ -1,3 +1,4 @@
+import {isCompletePhrase} from './reward-music.js';
 /** Short verified excerpts. Sources and exact reference pitches are documented in docs/MELODIES-SOURCES.md. */
 const sources={
  twinkle:'https://github.com/cuthbertLab/music21/blob/master/music21/corpus/airdsAirs/book2.abc',
@@ -23,11 +24,6 @@ export const MELODIES=[
 ];
 function candidates(pool,maxNotes=6){const pitches=[...new Set(pool.map(p=>p.midi))],out=[];for(const melody of MELODIES)for(let length=Math.min(maxNotes,melody.notes.length);length>=2;length--){const notes=melody.notes.slice(0,length);if(new Set(notes).size<2)continue;for(const start of pitches){const shift=start-notes[0],sequence=notes.map(n=>pool.find(p=>p.midi===n+shift));if(sequence.every(Boolean))out.push({...melody,sequence,shift,length,events:sequence.map((p,i)=>({midi:p.midi,beats:melody.beats[i],restAfter:melody.rests?.[i]||0}))});}}return out.sort((a,b)=>b.length-a.length);}
 export function melodyFor(module){
- if(module.kind==='transfer'){
-  const strings=[...module.equivalentStrings].sort((a,b)=>Math.min(...module.pool.filter(p=>p.string===a).map(p=>p.midi))-Math.min(...module.pool.filter(p=>p.string===b).map(p=>p.midi))),lower=module.pool.filter(p=>p.string===strings[0]),upper=module.pool.filter(p=>p.string===strings.at(-1));
-  for(const c of candidates(lower,2)){const second=c.sequence.map(p=>upper.find(q=>q.fret===p.fret));if(second.every(Boolean)){const sequence=[...c.sequence,...second];return {...c,sequence,events:sequence.map((p,i)=>({midi:p.midi,beats:c.events[i%c.length].beats,restAfter:c.events[i%c.length].restAfter})),adaptation:'Même extrait repris sur les deux cordes.'};}}
-  return null;
- }
- const found=candidates(module.pool).find(c=>module.kind!=='interval'||[module.anchor,module.target].every(p=>c.sequence.some(q=>q.midi===p.midi)));
+ const possible=candidates(module.pool).filter(c=>isCompletePhrase(c.id)),found=possible.find(c=>module.pitchClass===undefined||c.sequence.some(p=>p.midi%12===module.pitchClass))||possible[0];
  return found?{...found,adaptation:found.shift?'Extrait transposé pour les notes de cet exercice.':'Extrait dans les hauteurs de cet exercice.'}:null;
 }
