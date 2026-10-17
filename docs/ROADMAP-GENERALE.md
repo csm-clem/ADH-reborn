@@ -14,18 +14,20 @@ Aucune nouvelle fonctionnalité n’est implémentée par cette mise à jour doc
 
 ## V1.0 — Une application simple, amusante et payable
 
-### Promesse limitée et explicite
+### Promesse et couverture
 
-« S’entraîner quelques minutes pour retrouver plus vite les notes dans la première position du manche, sur son instrument et son accordage. »
+« S’entraîner quelques minutes pour retrouver plus vite les notes sur tout le manche, sur son instrument et son accordage. »
 
-La zone commercialisée est **0–4**. Ne pas annoncer que la V1 enseigne déjà tout le manche. Les activités restent librement accessibles ; les réussites recommandent une suite mais ne verrouillent pas les exercices.
+**Correction de périmètre du 17 octobre : tout le parcours d’apprentissage des notes appuyées passe en V1.** La zone 0–4 reste le point de départ ; les autres zones, les cordes, les duos, les mélanges et les repères d’octaves font partie de la même V1. La couverture va jusqu’à la case 24 pour les instruments concernés, en respectant le nombre de cases réellement proposé. Les activités restent librement accessibles ; les réussites recommandent une suite mais ne verrouillent pas les exercices.
+
+Les parcours de gammes, les arpèges avancés et les harmoniques restent en V3. La correction déplace le parcours complet des notes appuyées, sans ajouter les autres modes avancés à la V1.
 
 ### Périmètre retenu
 
 | Élément | Travail V1 |
 |---|---|
 | Configuration | Stabiliser les instruments, accordages et réglages déjà disponibles. Aucun nouvel instrument à ajouter pour lancer la V1. |
-| Apprentissage 0–4 | Accordage, familles naturelles puis altérées, familles isolées et mélanges cumulatifs ; nommer et retrouver dans des activités distinctes. |
+| Parcours d’apprentissage complet | Accordage, familles naturelles puis altérées, familles isolées et mélanges cumulatifs ; nommer et retrouver dans des activités distinctes. Toutes les zones du manche retenues, travail par corde, duos, mélanges et octaves ; adaptation à l’instrument et à l’accordage. |
 | Compréhension | Finaliser les textes, exemples et démonstrations nécessaires pour jouer sans explication extérieure. Supprimer les formulations répétitives ou ambiguës. |
 | Plaisir de jeu | Stabiliser les réponses immédiates, les corrections lisibles, la difficulté, la longueur des séances et les finales musicales existantes. Le plaisir sera vérifié avec des joueurs après la V1. |
 | Résultats et progrès | Garder les scores, temps moyens, records du même exercice, carte par position et révisions manuelles ciblées. Ne pas annoncer une mémorisation durable à partir d’une séance réussie. |
@@ -34,7 +36,9 @@ La zone commercialisée est **0–4**. Ne pas annoncer que la V1 enseigne déjà
 | Progression | Conservation durable à partir de la V1, migrations testées entre mises à jour, export/import de secours. Les remises à zéro restent propres aux versions v0. |
 | Accès commercial | Essai complet de sept jours, paiement et vérification des droits, activation et restauration de l’achat. |
 
-La V1 ne nécessite pas de refaire les fonctionnalités déjà présentes. Elle nécessite surtout de les figer, de les corriger et de terminer l’accès commercial.
+La V1 réutilise les fonctionnalités déjà présentes. Elle exige désormais de **produire le parcours complet au-delà de 0–4**, puis de stabiliser le jeu et de terminer l’accès commercial. Les règles de génération sont réutilisées ; les contenus, la couverture et la progression de difficulté doivent être vérifiés pour chaque zone.
+
+Le parcours inclut les zones 0–4, 4–8, 7–11 et 12–16 déjà envisagées, puis la couverture restante jusqu’à la dernière case retenue. Il comprend aussi le travail par corde sur 0–12 et 0–24, les duos de cordes voisines et les cordes mélangées. Les nombres de cordes et de duos suivent l’instrument. Ce découpage doit couvrir le manche sans lacunes ni répétitions pédagogiquement inutiles.
 
 ### Essai et paiement sans compte de jeu obligatoire
 
@@ -48,16 +52,19 @@ Cela demande tout de même un petit service serveur : début et fin d’essai de
 
 ### Ordre de réalisation jusqu’à la V1
 
-1. **Figer le périmètre** : inventorier les écrans conservés, les corrections indispensables et les textes à terminer. Tout nouveau mode rejoint V2/V3.
-2. **Finaliser le jeu** : résoudre les bugs restants, fluidifier les séquences existantes et vérifier que les exercices et extraits correspondent aux notes autorisées. Vérifier les droits d’utilisation des extraits retenus pour une diffusion commerciale, ou les remplacer par un répertoire autorisé.
-3. **Finaliser les écrans et les textes** : configuration, parcours, consignes, pause, résultats, progrès, paramètres et explications commerciales. Textes clairs et corrects pour la V1 ; perfectionnement éditorial complet en V2.
-4. **Mettre en place l’essai et le paiement** : dates d’essai, paiement confirmé côté serveur, activation, expiration, achat restauré, annulation/remboursement et messages compréhensibles. Vérifier les droits sans synchroniser les progrès en ligne.
-5. **Passer à une progression durable** : supprimer la politique de remise à zéro pour les versions stables, tester les migrations et les sauvegardes, conserver les données après expiration de l’essai.
-6. **Recetter et livrer la V1.0** : vérifier les parcours complets et les paiements sur l’hébergement cible et sur de vrais téléphones. Préparer la distribution restreinte des tests utilisateurs.
+1. **Figer la carte du parcours complet** : zones, étendue réelle des instruments, cordes, duos, mélanges, prérequis et critères de validation. Garder une liste fermée des écrans et corrections indispensables ; tout nouveau mode rejoint V2/V3.
+2. **Produire le parcours complet** : réutiliser le moteur par familles, écrire les micro-leçons et démonstrations adaptées, préparer les exercices et applications musicales. Vérifier les hauteurs et la couverture dans les deux sens, puis la continuité de difficulté entre zones.
+3. **Finaliser le jeu** : résoudre les bugs, fluidifier les séquences et vérifier que les exercices et extraits correspondent aux notes autorisées. Vérifier les droits d’utilisation des extraits retenus pour une diffusion commerciale, ou les remplacer par un répertoire autorisé.
+4. **Finaliser les écrans et les textes** : configuration, parcours complet, consignes, pause, résultats, progrès, paramètres et explications commerciales. Textes clairs et corrects pour la V1 ; perfectionnement éditorial complet en V2.
+5. **Mettre en place l’essai et le paiement** : dates d’essai, paiement confirmé côté serveur, activation, expiration, achat restauré, annulation/remboursement et messages compréhensibles. Vérifier les droits sans synchroniser les progrès en ligne.
+6. **Passer à une progression durable** : supprimer la politique de remise à zéro pour les versions stables, tester les migrations et les sauvegardes, conserver les données après expiration de l’essai.
+7. **Recetter et livrer la V1.0** : vérifier le parcours entier et les paiements sur l’hébergement cible et sur de vrais téléphones. Préparer la distribution restreinte des tests utilisateurs.
 
 ### Critères de sortie V1.0
 
 - Configuration → première activité → résultat → activité suivante fonctionne sans blocage.
+- Le parcours couvre toute l’étendue annoncée pour chaque instrument, avec les notes naturelles et altérées dans les deux sens de réponse.
+- Les passages entre zones et les exercices par corde/duo/mélange restent cohérents avec les notes déjà rencontrées ; aucune partie annoncée comme incluse n’est réservée à une version ultérieure.
 - Aucun bouton essentiel coupé, réponse ambiguë ou perte de session connue sur les appareils ciblés.
 - Textes de jeu utilisables sans accompagnement du créateur.
 - Le prix, la durée d’essai et ce qui est acheté sont explicités avant paiement.
@@ -99,20 +106,19 @@ Déclenchement conditionné au bilan de la V1 ; pas de développement en parall�
 | Chantier | Contenu |
 |---|---|
 | Compte et synchronisation | Création/récupération du compte, rattachement de l’achat et des progrès V1, synchronisation après jeu hors ligne, conflits, export et suppression. Aucune progression V1 perdue à l’activation du compte. |
-| Parcours d’apprentissage complet | Proposition de périmètre : toutes les **notes appuyées**, naturelles et altérées, sur l’étendue du manche retenue pour chaque instrument. Nouvelles zones, cordes, duos, mélanges et octaves, avec progression cumulative. Le nombre de cases couvertes doit être explicite ; il ne se déduit pas du seul nombre de cordes. |
 | Révisions personnalisées | Prochaine séance recommandée, rappels espacés, difficultés locales, vérifications sans aide et reprise raisonnable après une absence. |
 | Mode Arcade initial | Partie sans fin à trois vies sur l’étendue apprise/choisie, difficulté et délai progressifs ; variantes notes naturelles et chromatiques. Arpèges avancés en V3. |
 | Mode Explorer initial | Atlas interactif des notes, adapté à l’instrument et à l’accordage. Atlas des harmoniques en V3. |
 | Suivi des progrès | Distinguer pratique récente, précision, fluidité et rappel confirmé après délai. Bilans et recommandations compréhensibles. |
 | Textes finalisés | Révision pédagogique et commerciale complète à partir des observations et des ventes. Les textes seront stabilisés, puis corrigés si de nouveaux faits montrent un problème. |
 
-Le sens proposé de « tout le parcours » concerne ici la connaissance des **notes appuyées**. Les gammes spécialisées, les arpèges avancés et les harmoniques constituent l’extension V3. Cette limite rend la V2 définissable et vérifiable.
+Le parcours complet des notes appuyées est déjà un prérequis livré en V1. La V2 améliore son suivi et ses révisions ; elle n’en conditionne pas l’accès ni l’achèvement. Les gammes spécialisées, les arpèges avancés et les harmoniques restent en V3.
 
-Ordre recommandé : compte et reprise des données → parcours complet et révisions → Explorer → Arcade → validation éditoriale et recette globale. Livrer ces chantiers par lots vérifiables plutôt que multiplier les changements simultanés.
+Ordre recommandé : compte et reprise des données → révisions personnalisées et suivi → Explorer → Arcade → validation éditoriale et recette globale. Livrer ces chantiers par lots vérifiables plutôt que multiplier les changements simultanés.
 
 ### Critères de sortie V2.0
 
-- La couverture annoncée du manche est réelle, dans les deux sens de réponse, et adaptée à l’accordage.
+- Les nouveaux modes et les révisions exploitent le parcours complet V1 et respectent la configuration de l’instrument.
 - Le parcours conserve une progression compréhensible et des révisions utiles.
 - Deux appareils retrouvent les mêmes progrès ; les séances hors ligne ne perdent ni ne doublonnent les résultats.
 - Arcade et Explorer apportent chacun un usage identifiable et restent compréhensibles sans tutoriel externe.
@@ -127,7 +133,6 @@ Le périmètre des fonctionnalités avancées connu aujourd’hui est celui-ci ;
 - **Explorer des harmoniques** : atlas des positions, hauteurs et possibilités sonores.
 - **Apprentissage des harmoniques naturelles et artificielles**, avec positions de main gauche quand nécessaire.
 - **Parcours de gammes** : par zone, par corde et en diagonale ; choix de tonique et modalités théoriques à définir.
-- **Parcours spécialisés** : travail étendu de cordes, combinaisons et applications musicales au-delà du socle V2.
 - **Succès avancés et collections enrichies**, attachés à des compétences ou usages utiles.
 - **Enregistrement et détection sonore sur l’instrument** : étude de faisabilité, puis intégration si les essais confirment une fiabilité suffisante. Cette capacité ne sera pas promise commercialement avant ces essais.
 
@@ -137,20 +142,20 @@ Chaque lot a son propre prototype, ses critères et sa recette. « Toutes les fo
 
 | Ancienne phase | Nouvelle destination |
 |---|---|
-| 1 — Cadrage | Réalisé ; actualiser la promesse limitée de V1. |
-| 2 — Progression | Socle par familles en V1 ; extension du parcours en V2. |
+| 1 — Cadrage | Réalisé ; actualiser la promesse de V1 sur l’ensemble du manche. |
+| 2 — Progression | Parcours complet par familles, zones, cordes, duos, mélanges et octaves en V1. |
 | 3 — Pilote | Déjà implémenté ; stabilisation et recette V1. |
 | 4 — Révisions | Statistiques et reprise manuelle existantes en V1 ; personnalisation et espacement en V2. |
-| 5 — Tests et extension | Tests utilisateurs après V1, corrections en V1.x ; parcours complet en V2. |
+| 5 — Tests et extension | Production du parcours complet avant V1 ; tests utilisateurs après V1 et corrections en V1.x. |
 | 6 — Instruments et données | Instruments existants et sauvegarde durable en V1 ; transferts/continuité entre appareils en V2. |
 | 7 — Fiabilité PWA | Indispensable avant V1, puis entretenue à chaque livraison. |
-| 8 — Extensions | Succès déjà présents conservés ; Arcade/Explorer notes/compte en V2 ; reste en V3. |
+| 8 — Extensions | Zones et travail des notes appuyées en V1 ; succès existants conservés ; Arcade/Explorer notes/compte en V2 ; autres fonctions avancées en V3. |
 
 ## Décisions nécessaires pour préparer le prochain lot V1
 
 1. Prix, formule d’achat et droits sur les futures versions majeures.
 2. Définition d’un « client » bénéficiant de l’accès : achat de l’application et éventuels clients Le Compositeur concernés.
 3. Déclenchement de l’essai et solution de paiement/vérification/restauration des droits.
-4. Liste finale des corrections et textes indispensables au périmètre 0–4.
+4. Carte détaillée du parcours complet et liste finale des corrections/textes indispensables pour toutes les zones.
 
 Ces décisions précèdent leur implémentation ; elles n’empêchent pas de formaliser dès maintenant cette roadmap.

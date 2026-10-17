@@ -2,7 +2,7 @@
 
 Décision du 16 octobre 2026, planification actualisée le 17 octobre 2026.
 
-Référence de livraison : [roadmap générale V1 / V2 / V3](ROADMAP-GENERALE.md). L’essai, le paiement, la restauration des droits et la conservation des progrès entre mises à jour stables sont requis en V1. Les comptes de jeu et la synchronisation des progrès arrivent en V2, si le bilan de la V1 est concluant.
+Référence de livraison : [roadmap générale V1 / V2 / V3](ROADMAP-GENERALE.md). Le parcours complet des notes appuyées est inclus dans la V1. L’essai, le paiement, la restauration des droits et la conservation des progrès entre mises à jour stables sont requis en V1. Les comptes de jeu et la synchronisation des progrès arrivent en V2, si le bilan de la V1 est concluant.
 
 ## Modèle retenu
 
