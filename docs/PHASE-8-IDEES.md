@@ -2,6 +2,8 @@
 
 Note du 16 octobre 2026 pour **Daily Fretboard Trainer**.
 
+**Actualisation du 17 octobre :** cette liste est désormais répartie par la [roadmap V1 / V2 / V3](ROADMAP-GENERALE.md), qui fait foi pour les priorités. Les succès sont déjà implémentés en v0.19 et restent sans extension en V1. Arcade initial, Explorer des notes, comptes et synchronisation sont prévus en V2 ; les autres fonctions avancées en V3. Les paragraphes datés ci-dessous conservent leur valeur historique.
+
 Ces idées sont conservées pour une conception ultérieure. Elles ne déclenchent aucune implémentation et ne constituent pas encore un ordre de priorité ni un périmètre validé.
 
 ## Mode Arcade

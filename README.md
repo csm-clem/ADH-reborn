@@ -2,6 +2,10 @@
 
 PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.19.0**.
 
+## Priorités de développement
+
+La [roadmap V1 / V2 / V3](docs/ROADMAP-GENERALE.md) est la référence actuelle : V1 simple et payable, puis tests utilisateurs et ajustements, marketing et publicité ; V2 conditionnée aux premiers résultats commerciaux ; V3 pour compléter les fonctions avancées. Les huit anciennes phases restent des documents de conception historiques.
+
 ## Lancer et vérifier
 
 Node.js 20 ou supérieur, aucune dépendance d’exécution :

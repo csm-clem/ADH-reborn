@@ -1,5 +1,7 @@
 # Collection des succès — proposition et roadmap
 
+**Priorité actualisée au 17 octobre 2026 :** la [roadmap générale V1 / V2 / V3](ROADMAP-GENERALE.md) prévaut. Stabiliser les succès existants en V1, les évaluer avec les utilisateurs après V1, raccorder leur synchronisation aux comptes en V2. Les enrichissements de collection sont réservés à V3.
+
 ## Collectionneur ou accomplisseur ?
 
 **Les deux motivations se recoupent.** « Collectionneur » décrit ici le plaisir de réunir une série cohérente et de combler ses cases manquantes. « Accomplisseur » décrit plutôt le plaisir d’atteindre un objectif, de relever un défi et de constater sa compétence. Une même personne peut vouloir collectionner les phrases musicales sans rechercher un record de vitesse, ou rechercher la fluidité sans vouloir tout collectionner.
