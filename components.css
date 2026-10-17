@@ -24,7 +24,7 @@
 .button:focus-visible,.icon-button:focus-visible,.text-button:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 .button:disabled,.icon-button:disabled,.text-button:disabled{background:var(--disabled-fill);color:var(--disabled-ink);border-color:var(--line);opacity:1;cursor:not-allowed}
 /* Drill responses are intentionally distinct from navigation actions. */
-.answer-wheel button{border-radius:50%}
+
 /* Shared containers and controls. */
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:var(--space-5);margin-bottom:20px}
 .panel h2{font-family:var(--font-heading)}

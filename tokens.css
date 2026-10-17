@@ -1,7 +1,7 @@
 /* Shared foundations. Product appearance is defined here, never in a page. */
 :root {
   --bg:#fff;--surface:#fff;--surface-soft:#f8fafc;--ink:#44516b;--muted:#657187;--line:#e0e5ed;
-  --brand:#d54527;--on-brand:#fff;--purple:#b54424;--purple-soft:#fff0e9;--lime:#ffd0a3;--wood:#e7cba4;--neck-ink:#44516b;
+  --brand:#d54527;--on-brand:#fff;--purple:#b54424;--purple-soft:#fff0e9;--lime:#ffd0a3;--wood:#e7cba4;--neck-ink:#44516b;--neck-string:#59647a;--neck-fret:#8a919b;--neck-nut:#626b77;--neck-inlay:#8e816f;
   --action-fill:linear-gradient(110deg,#c4511d,#bd3928);--action-secondary:#44516b;
   --quiet-fill:#f1f4f8;--quiet-border:#cbd2dc;--success:#21653b;--success-soft:#e7f2eb;--danger:#b82d32;--danger-soft:#fff0f0;
   --disabled-fill:#e4e7eb;--disabled-ink:#727c8a;

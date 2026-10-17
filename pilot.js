@@ -57,18 +57,21 @@ export function intervalName(degree,semitones){
  return `${names[degree]} ${quality}`;
 }
 export function shuffled(list,random=Math.random){const out=[...list];for(let i=out.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
-export function practiceActivities(plan){return plan.modules.filter(m=>m.pool.length).flatMap(m=>['name','find'].map(mode=>{
- const title=m.subject||m.title;
- const subtitle=(mode==='name'?'Nommer':'Retrouver')+(['opens','tuning'].includes(m.kind)?' les cordes':' les notes');
- return {...m,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title,subtitle};
-}));}
+export function practiceActivities(plan){let learned=[];return plan.modules.filter(m=>m.pool.length).flatMap(m=>{
+ const introduced=unique(m.pool.filter(p=>!learned.some(q=>positionKey(p)===positionKey(q))));
+ const practicePool=unique([...learned,...m.pool]),newPositions=m.kind==='interval'?[m.target]:introduced.length?introduced:m.focus;
+ learned=unique([...learned,...m.pool.filter(p=>isNatural(p.midi))]);
+ return ['name','find'].map(mode=>({...m,practicePool,newPositions,baseId:m.id,id:mode==='name'?m.id:m.id+'-find',mode,title:m.subject||m.title,subtitle:(mode==='name'?'Nommer':'Retrouver')+(['opens','tuning'].includes(m.kind)?' les cordes':' les notes')}));
+});}
 export function questionsFor(module,{diagnostic=false,random=Math.random,mode=module.mode||'name'}={}){
- const ordered=unique([...module.focus,...module.pool]);if(!ordered.length)return [];
- const count=Math.max(20,Math.min(module.kind==='recall'?30:24,ordered.length*3)),queue=[];let round=0;
- while(queue.length<count){const batch=shuffled(ordered,random);if(batch.length>2&&positionKey(queue.at(-1)?.target||{})===positionKey(batch[0]))[batch[0],batch[1]]=[batch[1],batch[0]];
-  for(const p of batch){if(queue.length===count)break;queue.push({id:`${module.id}:${positionKey(p)}:${mode}:${round}`,mode,target:p,scope:mode==='find'&&['opens','tuning'].includes(module.kind)?'height':'string',allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false});}round++;
- }
- return queue;
+ const ordered=unique(module.practicePool||[...module.focus,...module.pool]);if(!ordered.length)return [];
+ const count=Math.max(20,Math.min(module.kind==='recall'?30:24,ordered.length*3));
+ const fresh=unique(module.newPositions||module.focus).filter(p=>ordered.some(q=>positionKey(p)===positionKey(q))),old=ordered.filter(p=>!fresh.some(q=>positionKey(p)===positionKey(q)));
+ const take=(pool,n)=>{const out=[];while(out.length<n)out.push(...shuffled(pool,random).slice(0,n-out.length));return out;};
+ // Guarantee coverage before shuffling; a probabilistic weight alone cannot guarantee 20% in one session.
+ const freshCount=fresh.length&&old.length?Math.min(count,Math.max(fresh.length,Math.ceil(count*.2)+Math.floor(random()*(Math.floor(count*.4)-Math.ceil(count*.2)+1)))):fresh.length?count:0;
+ const targets=shuffled([...take(fresh,freshCount),...take(old.length?old:ordered,count-freshCount)],random);
+ return targets.map((p,i)=>({id:`${module.id}:${positionKey(p)}:${mode}:${i}`,mode,target:p,scope:mode==='find'&&['opens','tuning'].includes(module.kind)?'height':'string',allowedFrets:mode==='find'&&['opens','tuning'].includes(module.kind)?[0]:undefined,evaluation:diagnostic||module.kind==='recall',retry:false}));
 }
 export function admissiblePositions(profile,question){
  const all=positions(profile,profile.tuning.map((_,s)=>s));
@@ -114,7 +117,7 @@ export function validatePilotStore(value){
   if(key!==profile.key||!Array.isArray(data.attempts)||data.attempts.length>1000||!Array.isArray(data.later)||data.later.length>200)throw new Error('Historique du pilote invalide.');
   if(data.seenInstructions!==undefined&&(!Array.isArray(data.seenInstructions)||data.seenInstructions.length>64||!data.seenInstructions.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Introductions enregistrées invalides.');
   if(data.discoveredModules!==undefined&&(!Array.isArray(data.discoveredModules)||data.discoveredModules.length>100||!data.discoveredModules.every(k=>typeof k==='string'&&/^[a-z0-9-]{1,60}$/.test(k))))throw new Error('Découvertes enregistrées invalides.');
-  const validAids=a=>Array.isArray(a)&&a.every(v=>['labels','listen','course'].includes(v));
+  const validAids=a=>Array.isArray(a)&&a.every(v=>['labels','listen','course','open-names'].includes(v));
   const validEvent=e=>e&&['name','find'].includes(e.mode)&&validPosition(e.target,profile)&&typeof e.correct==='boolean'&&validAids(e.aids)&&finiteTime(e.ms)&&finiteTime(e.at)&&typeof e.retry==='boolean';
   for(const a of data.attempts)if(!a||typeof a.id!=='string'||typeof a.activity!=='string'||!/^[a-z0-9-]{1,100}$/.test(a.activity)||a.comparisonKey!==undefined&&(typeof a.comparisonKey!=='string'||a.comparisonKey.length>2000)||!finiteTime(a.at)||!Array.isArray(a.events)||a.events.length>30||!a.events.every(validEvent))throw new Error('Tentative du pilote invalide.');
   for(const q of data.later)if(!q||!['name','find'].includes(q.mode)||!validPosition(q.target,profile))throw new Error('Révision du pilote invalide.');

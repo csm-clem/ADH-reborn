@@ -22,9 +22,9 @@ test('Every interaction format has an explicit example and respects muted recall
 test('Every lesson is available from the home page even without any passed activity',()=>{
  const c=controller(),html=c.home();assert.doesNotMatch(html,/data-module="degree-5" disabled/);assert.match(html,/Toutes les activités sont accessibles/);assert.doesNotMatch(html,/90 % de premières réponses correctes pour la suite/);
 });
-test('A demonstration toggles without awarding explored notes or completing the activity',()=>{
- const c=controller();c.data.seenInstructions=['explore'];c.host.stopAudio=()=>{};c.host.playNote=()=>{};c.host.showPilot=()=>{};
- c.action('discovery-reveal',{});assert.equal(c.session.revealed,true);assert.deepEqual(c.session.explored,[]);assert.notEqual(c.session.discoveryDone,true);c.action('discovery-reveal',{});assert.equal(c.session.revealed,false);
+test('Lesson search is unlimited, never reveals the target after a wrong try and remains unscored',()=>{
+ const c=controller('degree-5');c.host.playNote=()=>{};c.host.showPilot=()=>{};
+ c.lessonTap(0,0);assert.equal(c.lessonTrial.correct,false);assert.equal(c.session.discoveryDone,undefined);assert.ok(c.lessonTrial.text.length);const target=c.module.focus[0];c.lessonTap(target.string,target.fret);assert.equal(c.lessonTrial.correct,true);assert.equal(c.session.discoveryDone,undefined);
 });
 
 test('The six-semitone listening cue fits both augmented fourths and diminished fifths',()=>{

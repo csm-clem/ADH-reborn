@@ -64,3 +64,11 @@ Parcours possibles :
 Définir les prérequis, la progression de difficulté, les règles du timer et des vies, les conditions des réussites et les paramètres du Mode Créatif. Préciser également la portée de « tout le manche » selon le nombre réel de cases de l’instrument.
 
 Le classement pédagogique et la priorité de réalisation restent ouverts. Le modèle commercial retenu depuis cette note est un essai gratuit de sept jours donnant accès à tout, puis un accès payant global ; aucun découpage gratuit/payant par mode n’est prévu. Voir [la décision commerciale](MODELE-COMMERCIAL.md).
+
+## Compte et synchronisation entre appareils
+
+Ajout du 17 octobre 2026 : prévoir un système de connexion permettant de retrouver sa progression lorsqu’on change de téléphone, de navigateur ou d’ordinateur.
+
+À concevoir en phase 8 : création et récupération du compte, sauvegarde et restauration côté serveur, synchronisation des tentatives par instrument/accordage/exercice, gestion des conflits après des séances hors ligne et suppression/export des données. Le jeu doit rester utilisable hors connexion, puis se synchroniser au retour du réseau. L’identification et les droits d’accès payants devront être articulés sans confondre connexion et validation pédagogique.
+
+Cette note réserve le sujet pour la phase 8 ; aucun système de compte ni serveur de synchronisation n’est implémenté dans le pilote actuel.

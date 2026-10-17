@@ -1,6 +1,8 @@
-# Rapprocher question et réponse — propositions à valider
+# Rapprocher question et réponse — réflexion suspendue
 
-Ces propositions ne sont pas implémentées dans la v0.14. La disposition actuelle des questions et réponses est conservée. Les changements de temporisation et de saisie sont indépendants de ces propositions de mise en page.
+Décision du 17 octobre 2026 : ne pas rapprocher les questions et les réponses ; le sujet reste en réflexion à la demande du porteur du projet. Ne pas implémenter ces pistes sans nouvelle instruction.
+
+Ces propositions ne sont pas implémentées dans la v0.14 ni dans la v0.15. La disposition actuelle des questions et réponses est conservée. Les changements de temporisation et de saisie sont indépendants de ces propositions de mise en page.
 
 ## 1. Regrouper la consigne et la zone de réponse
 

@@ -39,3 +39,9 @@ Les panneaux réutilisent `.panel` et les contrôles réutilisent les règles co
 `tests/design-system.test.mjs` recherche les surcharges d’apparence interdites sur les classes d’action partagées dans tous les fichiers CSS de page, y compris leurs media queries. La recette Chromium vérifie les styles calculés dans la vraie application, les dimensions et l’accès aux boutons. Les captures conservées avec les rapports servent de références visuelles ; aucune comparaison automatique de pixels n’est encore en place.
 
 Pour un nouvel exercice, ajouter les données pédagogiques au générateur et réutiliser le contrôleur et les vues. Une nouvelle question du même format ne nécessite ni nouvelle page HTML ni nouvelle feuille de styles. Un nouveau format doit réutiliser les composants existants et faire l’objet d’une seule implémentation partagée.
+
+## Rendus pédagogiques partagés depuis la v0.15
+
+`neck-view.js` possède le dessin du manche ; `core.js` possède ses mesures et `neck.css` ses styles. Les vues de jeu, de micro-leçon, d’accueil et d’erreurs utilisent ce même générateur. Modifier les inlays, les frettes ou le sillet ne demande plus quatre modifications parallèles. Les couleurs physiques sont aussi utilisées par les cartes de données et les boutons de position.
+
+La roue est définie dans `answer-wheel.css`. Son anneau supplémentaire est piloté par les choix nécessaires à la question, pas par une copie du module. Les corrections visuelles ne bloquent jamais ses commandes.

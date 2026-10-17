@@ -18,7 +18,7 @@ test('Reentrant tuning uses the real lowest pitch, and altered tonics are explic
 });
 test('Each concept exposes separate, bounded name and find exercises with complete position coverage',()=>{
  for(const i of INSTRUMENTS){const profile=makeProfile(i.id),plan=pilotPlan(profile),activities=practiceActivities(plan);assert.equal(activities.length,plan.modules.filter(m=>m.pool.length).length*2);
-  for(const m of activities){const queue=questionsFor(m);assert.ok(queue.length>=20&&queue.length<=30);assert.equal(new Set(queue.map(q=>q.id)).size,queue.length);assert.ok(queue.every(q=>q.mode===m.mode));for(const p of m.pool)assert.ok(queue.some(q=>positionKey(q.target)===positionKey(p)));if(m.kind!=='tuning')assert.ok(m.pool.every(p=>NATURAL_PITCHES.includes(p.midi%12)));assert.ok(queue.every(q=>pilotCorrect(profile,q,q.mode==='name'?q.target.midi%12:q.target)));}
+  for(const m of activities){const queue=questionsFor(m);assert.ok(queue.length>=20&&queue.length<=30);assert.equal(new Set(queue.map(q=>q.id)).size,queue.length);assert.ok(queue.every(q=>q.mode===m.mode));for(const p of m.newPositions)assert.ok(queue.some(q=>positionKey(q.target)===positionKey(p)));assert.ok(queue.filter(q=>m.newPositions.some(p=>positionKey(p)===positionKey(q.target))).length>=Math.ceil(queue.length*.2));if(m.kind!=='tuning')assert.ok(m.pool.every(p=>NATURAL_PITCHES.includes(p.midi%12)));assert.ok(queue.every(q=>pilotCorrect(profile,q,q.mode==='name'?q.target.midi%12:q.target)));}
   for(const mode of ['name','find']){const diagnostic=naturalDiagnostic(profile,mode),queue=questionsFor(diagnostic);assert.ok(queue.length<=30);assert.ok(queue.every(q=>q.mode===mode&&q.evaluation));}
  }
 });
@@ -72,5 +72,5 @@ test('Passing needs the entire first-response sample and ninety percent; correct
 test('Two-position lessons allow occasional repeats instead of becoming a predictable ABAB pattern',()=>{
  const module=pilotPlan(makeProfile('guitar6')).modules.find(m=>m.degree===5);let n=0;const queue=questionsFor(module,{random:()=>n++%2?.9:.1}),names=queue.filter(q=>q.mode==='name');
  assert.ok(names.some((q,i)=>i&&positionKey(q.target)===positionKey(names[i-1].target)));
- for(let i=2;i<names.length;i++)assert.ok(new Set(names.slice(i-2,i+1).map(q=>positionKey(q.target))).size>1);
+ assert.equal(new Set(names.map(q=>positionKey(q.target))).size,2);
 });

@@ -1,12 +1,12 @@
 {
   "name": "daily-fretboard-trainer",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check app.js && node --check release.js && node --check state.js && node --check learning-help.js && node --check instrument-art.js && node --check tuning.js && node --check onboarding.js && node --check core.js && node --check pilot.js && node --check pilot-ui.js && node --check clock.js && node --check melodies.js && node --check progress.js && node --check results.js && node --check result-ui.js && node --check sound.js && node --check sw.js",
+    "check": "node --check app.js && node --check release.js && node --check state.js && node --check learning-help.js && node --check instrument-art.js && node --check tuning.js && node --check onboarding.js && node --check neck-view.js && node --check discovery-feedback.js && node --check core.js && node --check pilot.js && node --check pilot-ui.js && node --check clock.js && node --check melodies.js && node --check progress.js && node --check results.js && node --check result-ui.js && node --check sound.js && node --check sw.js",
     "package": "node tools/package.mjs"
   },
   "engines": {

@@ -11,7 +11,7 @@ with sync_playwright() as p:
  page.screenshot(path=str(OUT/'result.png'),full_page=True);assert page.locator('.result-actions>.primary').inner_text()=='Exercice suivant';page.locator('.result-actions>.primary').click();assert snap(page)['session']['activity']=='opens-find'
  page.locator('[data-pilot-action="home"]').last.click();page.locator('[data-action="settings"]:visible').first.click()
  with page.expect_download() as d:page.locator('[data-action="export"]').click()
- backupfile=OUT/'backup.json';d.value.save_as(str(backupfile));backup=json.load(open(backupfile));assert backup['epoch']=='0.14.0' and len(next(iter(backup['pilotBackup']['profiles'].values()))['attempts'])==1
+ backupfile=OUT/'backup.json';d.value.save_as(str(backupfile));backup=json.load(open(backupfile));assert backup['epoch']=='0.15.0' and len(next(iter(backup['pilotBackup']['profiles'].values()))['attempts'])==1
  page.locator('#import-file').set_input_files(str(backupfile));assert page.locator('.pilot-hero').count()==1
  before=page.evaluate('(k)=>localStorage.getItem(k)',KEY);bad=json.loads(json.dumps(backup));bad['epoch']='0.7.0';(OUT/'old-backup.json').write_text(json.dumps(bad));page.locator('[data-action="settings"]:visible').first.click();page.locator('#import-file').set_input_files(str(OUT/'old-backup.json'));assert page.locator('.toast').count()==1;assert page.evaluate('(k)=>localStorage.getItem(k)',KEY)==before
  bad=json.loads(json.dumps(backup));next(iter(bad['pilotBackup']['profiles'].values()))['attempts'][0]['events'][0]['target']['midi']=99;(OUT/'invalid.json').write_text(json.dumps(bad));page.locator('#import-file').set_input_files(str(OUT/'invalid.json'));assert page.evaluate('(k)=>localStorage.getItem(k)',KEY)==before
