@@ -10,14 +10,14 @@ import {introductionFor,helpGraphic} from './learning-help.js';
 import {noteName,pitchLabel,neckGeometry,fitNeck,score} from './core.js';
 import {pilotPlan,NATURAL_PITCHES,positionKey,questionsFor,pilotCorrect,firstSummary,initialPilotStore,validatePilotStore,naturalDiagnostic,practiceActivities,activityResult,admissiblePositions} from './pilot.js';
 import {ActiveClock} from './clock.js';
-import {PILOT_KEY as KEY} from './release.js';
+import {storageService} from './services/storage-service.js';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const equal=(a,b)=>a&&b&&a.string===b.string&&a.fret===b.fret;
 const spot=(p,profile)=>`corde ${profile.tuning.length-p.string}, ${p.fret?'case '+p.fret:'à vide'}`;
 export class PilotController{
  constructor(host){
   this.host=host;this.store=initialPilotStore();this.session=null;this.feedback=null;this.aids=[];this.paused=false;this.count=0;this.countEpoch=0;this.clock=new ActiveClock();this.countClock=new ActiveClock();this.storageError=false;this.effects=[];this.coordinatesOpen=!!host.getState().positionButtons;
-  try{const raw=localStorage.getItem(KEY);if(raw)this.store=validatePilotStore(JSON.parse(raw));}catch{this.storageError=true;try{this.unreadableRaw=localStorage.getItem(KEY);}catch{}}
+  this.storage=host.storage||storageService;const loaded=this.storage.readPilot();this.store=loaded.value;this.unreadableRaw=loaded.unreadableRaw;this.storageError=!loaded.ok;
  }
  get profile(){return this.host.getState().profile;}
  get notation(){return this.host.getState().notation;}
@@ -35,11 +35,11 @@ export class PilotController{
  save(){
   if(this.session){this.session.feedback=this.session.stage==='practice'||this.session.stage==='motif'?null:this.feedback;this.session.currentAids=this.aids;this.session.activeMs=this.session.stage==='practice'&&!this.feedback?this.clock.elapsed():0;this.data.session=this.session.completed?null:this.session;}
   if(this.unreadableRaw){this.storageError=true;return;}
-  try{localStorage.setItem(KEY,JSON.stringify(this.store));this.storageError=false;}catch{this.storageError=true;}
+  this.storageError=!this.storage.savePilot(this.store).ok;
  }
 
  exportData(){if(this.session)this.save();return this.store;}
- importData(value){const valid=validatePilotStore(value);this.leave();this.store=valid;this.unreadableRaw=null;this.storageError=false;this.save();}
+ importData(value,{persist=true}={}){const valid=validatePilotStore(value);this.leave();this.store=valid;this.unreadableRaw=null;this.storageError=false;if(persist)this.storageError=!this.storage.replacePilot(valid).ok;}
  emit(){this.host.showPilot();}
  bind(root){
   root.addEventListener('click',e=>{const b=e.target.closest('[data-pilot-action]');if(!b)return;e.preventDefault();e.stopPropagation();this.action(b.dataset.pilotAction,b);});

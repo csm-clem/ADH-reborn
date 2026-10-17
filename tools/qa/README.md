@@ -2,11 +2,12 @@
 
 Python, Playwright et Chromium sont nécessaires. Les outils de recette restent hors du ZIP FTP ; l’application n’a aucune dépendance d’exécution.
 
-Pour la v0.16, après `npm start` :
+Pour la v0.17, après `npm start` :
 
 ```sh
 python tools/qa/onboarding.py
 python tools/qa/v016.py
+python tools/qa/services.py
 python tools/qa/pilot-layout.py
 python tools/qa/pilot-full.py
 python tools/qa/reward.py
@@ -29,3 +30,5 @@ Les autres scripts de ce dossier conservent des scénarios historiques, notammen
 - `pilot-layout.py` : six instruments × cinq formats, cibles et axes cadrés.
 
 - `reward.py` : phrase accompagnée programmée dans Web Audio et arrêt de l’écoute.
+
+- `services.py` : contexte audio unique, préférences communes, thème système actif et restauration de sauvegarde après changement d’instrument.

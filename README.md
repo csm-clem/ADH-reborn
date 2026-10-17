@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.16.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.17.0**.
 
 ## Lancer et vérifier
 
@@ -75,9 +75,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.16.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.17.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.16/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.17/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 
@@ -92,3 +92,7 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 ## Livraison v0.16
 
 [Rapport des changements](docs/CHANGES-v0.16.md) · [Revue UX et sources](docs/UX-REVUE-v0.16.md) · [Choix des couleurs](docs/v0.16/choix-couleurs.png) · [Décisions Singletons](docs/SINGLETONS.md) · [Récompenses musicales](docs/RECOMPENSES-MUSICALES.md).
+
+## Livraison v0.17
+
+[Rapport v0.17](docs/CHANGES-v0.17.md) · [Manches et thèmes proposés](docs/v0.17/CHOIX-VISUELS.md) · [Six manches](docs/v0.17/manches.png) · [Six thèmes](docs/v0.17/themes.png). Les services audio, stockage, préférences et événements navigateur sont désormais partagés et injectés ; les séances et les horloges restent indépendantes.

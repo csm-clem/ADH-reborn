@@ -1,7 +1,7 @@
 import {makeProfile,pitchLabel} from './core.js';
 import {DATA_EPOCH,STATE_KEY,PILOT_KEY} from './release.js';
 export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',sound:true,voice:'auto',theme:'light',positionButtons:false};}
-function preferences(value){
+export function preferences(value){
  const state=initialState();if(!value||typeof value!=='object')return state;
  if(['international','latin'].includes(value.notation))state.notation=value.notation;
  if(['light','dark','system','accessible'].includes(value.theme))state.theme=value.theme;

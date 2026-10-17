@@ -1,21 +1,30 @@
-# Singletons : décisions proposées — v0.16
+# Services uniques : décisions appliquées — v0.17
 
-Un Singleton garantit une instance partagée. En JavaScript, un objet exporté par un module peut déjà remplir ce rôle ; une classe avec `getInstance()` n’est pas nécessaire. Il convient surtout à une ressource unique ou à des règles immuables. Il ne corrige pas, à lui seul, un défaut de styles ou de rendu.
+L’accord donné pour appliquer les conseils de cet inventaire est pris en compte. Les ressources communes sont extraites en **services uniques de modules**, injectés aux contrôleurs. Aucune classe `getInstance()` n’est nécessaire : JavaScript réutilise le même export de module. Chaque service expose une fabrique pour les tests isolés ; l’application utilise une seule instance exportée.
 
-| Cas dans cette PWA | Recommandation | État / décision attendue |
-|---|---|---|
-| Règles d’affichage des démonstrations | Un objet immuable partagé : cible verte nommée, aucun point d’appui supplémentaire | **Implémenté**, explicitement demandé : `DEMO_RULES` dans `demo-rules.js` |
-| Audio : contexte, cache de sons, sources en cours, annulation des séquences | Extraire le moteur actuel dans un service unique injecté aux vues | **Recommandé ensuite**, à valider. Ces ressources sont déjà uniques dans `app.js` ; pas de nouvelle classe créée ici |
-| Sauvegardes, import/export et erreurs de stockage | Un service unique de stockage, injecté dans les contrôleurs | **Recommandé ensuite**, à valider ; conserver les données distinctes de chaque profil |
-| Préférences : thème, notation, son | Un magasin partagé avec abonnements explicites, associé au service de stockage | Utile avec la croissance ; aujourd’hui `state` est déjà partagé. Éviter un second état concurrent |
-| Observateur du thème système et plein écran | Une seule souscription / un service de plateforme avec nettoyage | Optionnel ; centralisation du cycle de vie suffisante |
-| Règles pédagogiques, palettes, géométrie et catalogue d’instruments | Modules purs et constantes immuables | **Pas de Singleton mutable** : leur centralisation existe déjà et suffit |
-| Composants visuels, boutons, manche, rendu DOM | Fonctions et styles partagés | **Pas de Singleton** : chaque vue doit pouvoir avoir plusieurs exemplaires. Le flash est corrigé par la conservation du DOM |
-| Compteur de temps | Une horloge par fonction / séance, testable et indépendante | **Éviter un Singleton global** : préparation et temps de réponse ne doivent pas se contaminer |
-| Séance, questionnaire, profil et résultats | Instances/données séparées, passées explicitement | **Éviter** : un état global caché risquerait de mélanger instruments et tentatives |
-| Chargement des ressources et cache | Cache borné partagé derrière le service concerné | Pertinent pour l’audio ; pas besoin d’un gestionnaire universel |
-| Bus d’événements / routeur | Routage simple et callbacks explicites tant que cela suffit | Ne pas ajouter de bus global sans besoin concret : dépendances difficiles à retracer |
-| Service worker | Cycle de vie géré par le navigateur | Aucun Singleton applicatif à ajouter |
-| Future connexion / synchronisation (phase 8) | Client d’API partagé ; données isolées par compte et session | À concevoir lors de cette phase, sans figer maintenant un état global d’utilisateur |
+| Cas | Décision et réalisation |
+|---|---|
+| Règles d’affichage des démonstrations | `DEMO_RULES`, objet immuable partagé, conservé depuis la v0.16 |
+| Moteur audio | **Implémenté** dans `services/audio-service.js` : un contexte Web Audio créé à la première interaction, cache borné à 128 sons, sources actives, lecture de notes, séquences, accompagnements et annulation. Les notes de gameplay continuent à résonner lors du toucher suivant |
+| Sauvegardes et import/export | **Implémenté** dans `services/storage-service.js` : accès navigateur centralisé, validation des sauvegardes, protection d’un historique illisible, signalement des erreurs, import des deux ensembles de données avec restauration en cas d’échec d’écriture |
+| Préférences partagées | **Implémenté** dans `services/app-store.js` : source unique, instantanés immuables et abonnements explicites. Son, notation, thème, instrument et préférence des boutons sont lus depuis ce magasin. Aucun second état global concurrent |
+| Thème système, plein écran et événements navigateur | **Implémenté** dans `services/platform-service.js` : une seule souscription à chaque événement, connexion remplaçable avec nettoyage, suivi du thème système, redimensionnement temporisé, visibilité, plein écran et invitation d’installation |
+| Règles pédagogiques, instruments et géométrie | Fonctions pures et catalogues partagés conservés ; aucun Singleton mutable ajouté |
+| Composants visuels et rendu | Fonctions et styles partagés ; plusieurs vues peuvent coexister. Pas de Singleton de composant |
+| Chronomètres | **Restent indépendants** : une horloge de réponse et une de préparation par contrôleur. Aucun chronomètre global |
+| Séances, profils et résultats | **Restent séparés** dans chaque contrôleur et par clé d’instrument/accordage. Le service de stockage ne devient pas une séance globale |
+| Cache | Rattaché au service propriétaire, borné pour l’audio ; pas de gestionnaire universel |
+| Bus d’événements / routeur | Pas de bus global ajouté. Abonnements explicites limités aux préférences et au statut de stockage |
+| Service worker | Cycle de vie du navigateur conservé ; les nouveaux fichiers sont dans le cache hors connexion |
+| Connexion et synchronisation | Toujours en phase 8 : futur client partagé, données isolées par compte ; aucun état global d’authentification prématuré |
 
-**Choix proposé :** valider ensuite l’extraction du moteur audio, puis du stockage/préférences. Ne pas transformer systématiquement les modules en Singletons. Seules les règles de démonstration sont refactorées ainsi dans cette livraison.
+## Conséquences concrètes
+
+- Les vues ne créent plus leur moteur audio ou leurs accès à `localStorage`.
+- Changer de son, couper le son ou quitter un écran arrête les lectures concernées ; des réponses successives peuvent toujours se superposer musicalement.
+- Modifier une préférence produit une mise à jour explicite ; les consommateurs lisent le même instantané. Le thème système suit l’appareil tant que cette option est sélectionnée.
+- Un historique illisible est protégé contre une sauvegarde automatique par-dessus. Un import validé constitue son remplacement explicite.
+- L’import valide tout avant d’écrire. En cas d’échec, il tente de restaurer les deux anciennes valeurs ; si le stockage refuse aussi cette restauration, le message le dit. Le stockage navigateur n’offre pas de transaction native entre deux clés.
+- Les écouteurs du navigateur peuvent être déconnectés, et une reconnexion remplace les précédents : pas de duplication cachée des actions.
+
+Les tests couvrent notamment le contexte audio unique et les résonances, l’annulation pendant le déblocage audio, les sauvegardes corrompues, les échecs d’écriture, l’immutabilité des préférences et le nettoyage des événements.
