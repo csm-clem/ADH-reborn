@@ -11,7 +11,7 @@ with sync_playwright() as p:
    if fits(page):
     page.screenshot(path=str(OUT/'layout-failure.png'));print(page.evaluate('''()=>({view:document.querySelector('#pilot-neck').getBoundingClientRect().toJSON(),inner:document.querySelector('#pilot-neck-inner').getBoundingClientRect().toJSON(),cell:document.querySelector('.fret-hit rect').getBoundingClientRect().toJSON()})'''));assert False,(instrument,w,h,fits(page))
    assert page.locator('.pilot-axis-string').first.evaluate('e=>parseFloat(getComputedStyle(e).fontWeight)')>=700
-  page.locator('.pilot-position-buttons summary').click();assert page.locator('.pilot-coordinate-grid>div>span').all_text_contents()==['Corde '+str(i) for i in range(1,len(snap(page)['profile']['tuning'])+1)]
-  q=snap(page)['session']['queue'][0];page.locator(f'[data-pilot-action="position"][data-string="{q["target"]["string"]}"][data-fret="{q["target"]["fret"]}"]').click();assert page.locator('.pilot-coordinate-grid .answer-correct').count()==1
+  page.locator('.pilot-position-buttons summary').click();assert [re.match(r'\d+',s).group() for s in page.locator('.position-string').all_text_contents()]==[str(i) for i in range(1,len(snap(page)['profile']['tuning'])+1)]
+  q=snap(page)['session']['queue'][0];page.locator(f'[data-pilot-action="position"][data-string="{q["target"]["string"]}"][data-fret="{q["target"]["fret"]}"]').click();assert snap(page)['session']['index']==1
   c.close()
  assert not errors,errors;print(json.dumps({'six_instruments_five_sizes':True,'bold_axes':True,'accessible_buttons_treble_first':True,'errors':errors}));b.close()

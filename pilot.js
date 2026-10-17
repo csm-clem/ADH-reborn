@@ -11,10 +11,10 @@ const at=(profile,string,fret)=>({string,fret,midi:profile.tuning[string]+fret})
 export function pilotPlan(profile,{allowAlteredOpens=true,notation='international'}={}){
  const name=n=>noteName(n,notation);
  const all=positions(profile,profile.tuning.map((_,s)=>s)),natural=all.filter(p=>isNatural(p.midi));
- const opens=profile.tuning.map((_,s)=>at(profile,s,0)),root=opens.reduce((a,b)=>b.midi<a.midi?b:a),rootPC=root.midi%12;
+ const opens=profile.tuning.map((_,s)=>at(profile,s,0)),lowest=opens.reduce((a,b)=>b.midi<a.midi?b:a),root=isNatural(lowest.midi)?lowest:at(profile,lowest.string,1),rootPC=root.midi%12;
  const altered=opens.filter(p=>!isNatural(p.midi));
- const compatible=isNatural(root.midi)&&(!altered.length||allowAlteredOpens);
- const reason=!isNatural(root.midi)?`La corde la plus grave est ${name(root.midi)}. Une tonique altérée demande une variante diatonique spécifique ; le pilote naturel ne la remplace pas par une autre note.`:altered.length&&!allowAlteredOpens?'Cet accordage comporte des altérations à vide ; le préambule d’accordage est nécessaire avant le pilote naturel.':'';
+ const compatible=(!altered.length||allowAlteredOpens);
+ const reason=altered.length&&!allowAlteredOpens?'Cet accordage comporte des altérations à vide ; le préambule d’accordage est nécessaire avant le pilote naturel.':'';
  const modules=[],unavailable=[];
  const add=(id,title,kind,pool,focus,description,extra={})=>{const subject=kind==='opens'?'Les cordes à vide':kind==='tuning'?'L’accordage':kind==='interval'?`La note ${name(extra.target.midi)}`:kind==='transfer'?`Les cordes en ${name(extra.pitchClass)}`:kind==='recall'?'Les notes graves':kind==='phrase'?'La phrase musicale':title;const m={id,title,subject,kind,pool:unique(pool),focus:unique(focus),description,...extra};modules.push(m);return m;};
  if(altered.length)add('tuning','Les noms de votre accordage','tuning',opens,opens,`Les cordes à vide ${[...new Set(altered.map(p=>name(p.midi)))].join(', ')} comportent une altération dans votre accordage. Ce préambule apprend seulement ces vrais départs ; ensuite la roue revient aux sept notes naturelles.`);

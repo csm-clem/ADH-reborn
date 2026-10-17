@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.15.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.16.0**.
 
 ## Lancer et vérifier
 
@@ -23,7 +23,7 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - **20 à 30 questions maximum**, un seul type de réponse par exercice. Séries mélangées et équilibrées ; les grandes listes répartissent leurs positions dans cette limite. Les exercices « retrouver » conservent une courte suite musicale finale, pour un maximum de 30 réponses en tout.
 - Roue de sept notes naturelles ; second anneau uniquement pour les altérations utiles aux cordes à vide de certains accordages.
 - Révisions cumulatives : au moins 20 % de questions sur la nouvelle note d’intervalle, positions précédentes mélangées.
-- Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et médiane ≤ 1 seconde.
+- Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et moyenne ≤ 1 seconde.
 - Exemples graphiques à la première rencontre de chaque format et micro-leçons d’écoute des intervalles. Les instructions ne consomment pas le temps de réponse.
 - Corrections à hauteur exacte : E2 et E4 ne sont pas confondus. Démonstration distincte des essais de l’élève.
 - Manche horizontal, entièrement cadré sans glissement pour répondre. Deux panneaux de même hauteur en paysage, empilés en portrait. Réponses tactiles et boutons accessibles, corde 1 en haut.
@@ -32,11 +32,11 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 
 Les suites finales utilisent des extraits musicaux sourcés lorsque leurs hauteurs correspondent exactement aux notes étudiées ; sinon, une suite d’entraînement est annoncée comme telle. Voir [les sources musicales](docs/MELODIES-SOURCES.md).
 
-Les résultats présentent score, précision, médiane et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG.
+Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG.
 
 La carte naturelle complète, les ateliers d’altérations, les révisions différées et le microphone restent à produire. Une tonique altérée à vide limite actuellement le pilote aux cordes à vide ; l’application le signale et ne change jamais l’accordage pour contourner cette limite.
 
-Voir [le rapport v0.15](docs/CHANGES-v0.15.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.16](docs/CHANGES-v0.16.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -75,9 +75,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.15.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.16.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.15/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.16/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 
@@ -88,3 +88,7 @@ Modèle retenu : **essai gratuit de sept jours avec accès complet et illimité,
 Le prototype reste accessible sans paiement ni expiration automatique. Le paiement et la gestion de l’essai commercial seront intégrés avant l’ouverture commerciale ; voir [la décision commerciale](docs/MODELE-COMMERCIAL.md).
 
 Les interfaces et exemples graphiques sont originaux ; les images des instruments ont été fournies par le porteur du projet. Complete Music Trainer et Guitar Pro restent des références d’usage.
+
+## Livraison v0.16
+
+[Rapport des changements](docs/CHANGES-v0.16.md) · [Revue UX et sources](docs/UX-REVUE-v0.16.md) · [Choix des couleurs](docs/v0.16/choix-couleurs.png) · [Décisions Singletons](docs/SINGLETONS.md) · [Récompenses musicales](docs/RECOMPENSES-MUSICALES.md).

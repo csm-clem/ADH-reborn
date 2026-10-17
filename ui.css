@@ -11,3 +11,6 @@
 @import url('./neck.css') layer(components);
 
 @import url('./answer-wheel.css') layer(components);
+
+@import url('./position-buttons.css') layer(components);
+@import url('./refinement.css') layer(pages);

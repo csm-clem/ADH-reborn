@@ -18,3 +18,5 @@
   color-scheme:dark;
 }
 @media(max-width:700px){:root{font-size:16px}}
+
+:root[data-theme=accessible]{--bg:#fff;--surface:#fff;--surface-soft:#f0f2f5;--ink:#111827;--muted:#344256;--line:#64748b;--quiet-border:#475569;--purple:#003e8a;--purple-soft:#e5efff;--action-fill:#003e8a;--action-secondary:#111827;--wood:#fff6d6;--neck-ink:#111827;--neck-string:#182231;--neck-fret:#455164;--neck-nut:#111827;--neck-inlay:#596579;--success:#00539b;--success-soft:#e5efff;--danger:#862800;--danger-soft:#fff0e5;--brand:#003e8a;font-size:18px}

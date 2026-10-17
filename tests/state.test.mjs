@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {makeProfile,score,FIVE_STAR_MEDIAN_MS} from '../core.js';
+import {makeProfile,score,FIVE_STAR_MEAN_MS} from '../core.js';
 import {initialState,validateState,loadState} from '../state.js';
 import {STATE_KEY,PILOT_KEY,DATA_EPOCH,dataEpoch} from '../release.js';
 class Storage{
@@ -22,5 +22,5 @@ test('Backups restore only this preview epoch, validate profiles and drop histor
  const storage=new Storage({[STATE_KEY]:'broken'});assert.deepEqual(loadState(storage),initialState());
 });
 test('The optional five-star challenge requires at most one second, without changing the pass threshold',()=>{
- assert.equal(FIVE_STAR_MEDIAN_MS,1000);const answers=ms=>Array.from({length:20},()=>({correct:true,ms}));assert.equal(score(answers(1000)).stars,5);assert.equal(score(answers(1001)).stars,4);
+ assert.equal(FIVE_STAR_MEAN_MS,1000);const answers=ms=>Array.from({length:20},()=>({correct:true,ms}));assert.equal(score(answers(1000)).stars,5);assert.equal(score(answers(1001)).stars,4);
 });

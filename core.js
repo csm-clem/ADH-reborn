@@ -1,6 +1,6 @@
 /** Musical and learning rules. No browser dependencies; scientific pitch notation. */
 export const VERSION = 1;
-export const FIVE_STAR_MEDIAN_MS = 1000;
+export const FIVE_STAR_MEAN_MS = 1000;
 export const PITCHES = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const LATIN = ['Do','Do♯','Ré','Ré♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
 export const INSTRUMENTS = [
@@ -20,8 +20,8 @@ export function pitchLabel(midi, notation='international') {
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
 export const NECK_STYLE={openWidth:18,margin:8,fadeFraction:.5,inlayRadius:2.8,nutWidth:2.8,fretWidth:1.1};
-export function neckGeometry(strings,lastFret=4,scale=648){
-  const neckWidth=52+(strings-6)*7,height=neckWidth+14,nut=NECK_STYLE.margin+NECK_STYLE.openWidth;
+export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false}={}){
+  const neckWidth=(52+(strings-6)*7)*(gameplay?1.65:1),height=neckWidth+14,nut=NECK_STYLE.margin+NECK_STYLE.openWidth;
   const frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale));
   const bounds=f=>f===0?[nut-NECK_STYLE.openWidth,nut]:[frets[f-1],frets[f]];
   const centers=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)*2/3;}),labelXs=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)/3;});
@@ -51,15 +51,15 @@ export function positions(profile, strings, frets=[0,1,2,3,4]) {
   return strings.flatMap(string=>frets.map(fret=>({ string, fret, midi:profile.tuning[string]+fret })));
 }
 export function score(answers) {
-  if(!answers.length) return {stars:0,accuracy:0,medianMs:null,correct:0};
+  if(!answers.length) return {stars:0,accuracy:0,meanMs:null,correct:0};
   const correctAnswers=answers.filter(a=>a.correct);
   const accuracy=correctAnswers.length/answers.length;
-  const times=correctAnswers.map(a=>a.ms).sort((a,b)=>a-b);
-  const medianMs=times.length ? (times[Math.floor((times.length-1)/2)]+times[Math.floor(times.length/2)])/2 : null;
+  const times=correctAnswers.filter(a=>!a.aids?.length&&a.timingInterpretable!==false&&Number.isFinite(a.ms)).map(a=>a.ms);
+  const meanMs=times.length ? times.reduce((a,b)=>a+b,0)/times.length : null;
   let stars=accuracy>=.9?3:accuracy>=.75?2:accuracy>=.5?1:0;
-  if(stars===3&&accuracy>=.95&&medianMs<=2500) stars=4;
-  if(accuracy===1&&medianMs<=FIVE_STAR_MEDIAN_MS) stars=5;
-  return {stars,accuracy,medianMs,correct:correctAnswers.length};
+  if(stars===3&&accuracy>=.95&&meanMs!==null&&meanMs<=2500) stars=4;
+  if(accuracy===1&&times.length===answers.length&&meanMs!==null&&meanMs<=FIVE_STAR_MEAN_MS) stars=5;
+  return {stars,accuracy,meanMs,correct:correctAnswers.length};
 }
 
 export function fitNeck(g,width,height){const scale=Math.max(.01,Math.min((width-2)/g.width,(height-2)/g.height));return {scale,width:g.width*scale,height:g.height*scale};}

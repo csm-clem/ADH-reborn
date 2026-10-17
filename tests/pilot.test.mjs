@@ -12,9 +12,9 @@ test('Seven-string fifth is diminished; DADGAD and Drop B use available register
  plan=pilotPlan(makeProfile('guitar6','D2 A2 D3 G3 A3 D4'));const fourth=plan.modules.find(m=>m.degree===4);assert.equal(fourth.moved,true);assert.equal(fourth.anchor.midi,50);assert.equal(fourth.target.midi,55);assert.equal(fourth.target.fret,0);assert.equal(plan.modules.filter(m=>m.kind==='transfer').length,2);
  plan=pilotPlan(makeProfile('guitar7','B1 F#2 B2 E3 A3 C#4 F#4'));assert.equal(plan.modules[0].kind,'tuning');assert.equal(plan.modules.find(m=>m.degree===4).anchor.midi,47);assert.ok(plan.modules.every(m=>m.pool.every(p=>p.fret<=4)));
 });
-test('Reentrant tuning uses the real lowest pitch, and altered tonics are explicitly incompatible',()=>{
+test('Reentrant tuning uses the real lowest pitch, and altered open tonics use fret one without retuning',()=>{
  let plan=pilotPlan(makeProfile('guitar6','G3 E2 A2 D3 B3 E4'));assert.equal(plan.root.string,1);assert.equal(plan.root.midi,40);
- plan=pilotPlan(makeProfile('guitar8'));assert.equal(plan.compatible,false);assert.match(plan.reason,/tonique altérée/);assert.equal(plan.modules.some(m=>m.kind==='interval'),false);
+ plan=pilotPlan(makeProfile('guitar8'));assert.equal(plan.compatible,true);assert.equal(plan.root.fret,1);assert.equal(plan.root.midi,31);assert.equal(plan.modules.some(m=>m.kind==='interval'),true);
 });
 test('Each concept exposes separate, bounded name and find exercises with complete position coverage',()=>{
  for(const i of INSTRUMENTS){const profile=makeProfile(i.id),plan=pilotPlan(profile),activities=practiceActivities(plan);assert.equal(activities.length,plan.modules.filter(m=>m.pool.length).length*2);

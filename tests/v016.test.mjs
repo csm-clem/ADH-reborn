@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {score,makeProfile,neckGeometry} from '../core.js';
+import {pilotPlan} from '../pilot.js';
+import {resultMetrics} from '../results.js';
+import {DEMO_RULES} from '../demo-rules.js';
+import {rewardFor} from '../reward-music.js';
+test('An outlier changes the mean and prevents five stars despite a fast median',()=>{const events=[100,100,100,100,6000].map(ms=>({correct:true,ms}));assert.equal(score(events).meanMs,1280);assert.equal(score(events).stars,4);assert.equal(resultMetrics(events).meanMs,1280);});
+test('Every altered lowest string gets its natural neighbour at fret one without tuning changes',()=>{for(const note of ['C#2','D#2','F#2','G#2','A#2']){const p=makeProfile('guitar6',`${note} E3 A3 D4 G4 B4`),t=[...p.tuning],plan=pilotPlan(p);assert.equal(plan.root.fret,1);assert.equal(plan.root.midi,t[0]+1);assert.ok([0,2,4,5,7,9,11].includes(plan.root.midi%12));assert.deepEqual(p.tuning,t);}});
+test('Only gameplay geometry widens string spacing',()=>{const mini=neckGeometry(6),game=neckGeometry(6,4,648,{gameplay:true});assert.equal(mini.width,game.width);assert.ok(Math.abs(game.ys[0]-game.ys[1])>Math.abs(mini.ys[0]-mini.ys[1]));});
+test('The immutable demo policy names the actual question and omits interval anchors',()=>{assert.ok(Object.isFrozen(DEMO_RULES));const m=pilotPlan(makeProfile('guitar6')).modules.find(m=>m.kind==='interval');assert.deepEqual(DEMO_RULES.points(m).map(p=>p.midi),[m.target.midi]);const question={target:{string:0,fret:3,midi:43}};assert.equal(DEMO_RULES.points(m,{question,kind:'name'})[0].midi,43);assert.equal(DEMO_RULES.showNames,true);assert.equal(DEMO_RULES.showAnchor,false);});
+test('Every musical reward has a finite arranged phrase and quieter accompaniment',()=>{for(const id of ['twinkle','cuckoo','bride','entertainer','rainbow','trek','jaws','maria','frere','bonnie','saints']){const r=rewardFor({id,title:id,shift:-12});assert.ok(r.durationMs>3000);assert.ok(r.events.every(e=>Number.isFinite(e.start)&&e.start>=0&&e.beats>0&&e.midi>=12&&e.midi<=119));assert.ok(r.events.some(e=>e.voice==='bass-electric'&&e.velocity<1));assert.ok(r.events.some(e=>e.voice==='guitar-clean'&&e.velocity<1));}assert.equal(rewardFor(null),null);});

@@ -1,3 +1,4 @@
+import {DEMO_RULES} from './demo-rules.js';
 import {miniatureNeck} from './neck-view.js';
 import {intervalName} from './pilot.js';
 import {noteName,pitchLabel} from './core.js';
@@ -7,7 +8,7 @@ export function introductionFor(module,stage,question,seen=[],activity='',melody
  let key,title,text,kind='neck';
  if(stage==='discovery'){
   if(module.kind==='interval'){key=`interval-${module.degree}-${module.delta}`;title=`Écouter une ${intervalName(module.degree,module.delta).toLowerCase()}`;text=intervalSensation(module.delta);kind='interval';}
-  else if(['opens','tuning'].includes(module.kind)){key=module.kind==='tuning'?'explore-tuning':'explore';title='Touchez les cordes';text='Chaque ligne est une corde. Touchez chaque départ, à gauche de la grosse barre.';}
+  else if(['opens','tuning'].includes(module.kind)){key=module.kind==='tuning'?'explore-tuning':'explore';title='Touchez les cordes';text='Chaque ligne est une corde. Touchez chaque départ, avant le sillet (la barre verticale épaisse).';}
   else if(module.kind==='transfer'){key='transfer';title='Le même dessin';text=`Les cordes ${(module.equivalentStrings||[]).map(s=>stringCount-s).join(' et ')} portent le même nom à vide. À la même case, elles gardent le même nom. Écoutez la différence de hauteur.`;kind='transfer';}
   else{key='discovery-find';title='Trouvez la note';text='Lisez la note. Touchez sa place sur la corde demandée.';}
  }else if(stage==='practice'&&!question?.retry){
@@ -22,11 +23,10 @@ export function introductionFor(module,stage,question,seen=[],activity='',melody
  return key&&!seen.includes(key)?{key,title,text,kind}:null;
 }
 export function helpGraphic(help,module,profile,notation='international'){
- const example=help.kind==='motif'?module.pool.slice(0,1):module.kind==='interval'?[module.anchor,module.target]:help.kind==='transfer'?module.transferPairs[0]:module.pool.slice(0,1),all=profile.tuning.flatMap((m,string)=>[0,1,2,3,4].map(fret=>({string,fret,midi:m+fret}))),target=example[0],points=help.kind==='families'?all.filter(p=>p.midi%12===target.midi%12):example;
- const neck=miniatureNeck(profile,{id:'help-neck',points:points.map(p=>({...p,color:'#44516b'})),label:'Exemple sur le manche'}).replace('<svg ','<svg x="0" y="0" width="290" height="110" style="width:290px;height:110px" ');
-
+ const points=DEMO_RULES.points(module,{question:module.demoQuestion,kind:help.kind}),target=points[0]||module.pool[0],example=points;
+ const neck=miniatureNeck(profile,{id:'help-neck',points,showNames:DEMO_RULES.showNames,notation,label:'Exemple sur le manche'}).replace('<svg ','<svg x="0" y="0" width="290" height="110" style="width:290px;height:110px" ');
  let extra='';
- if(help.kind==='name'){const names=module.choices||(module.kind==='tuning'?[...new Set(profile.tuning.map(n=>n%12))].sort((a,b)=>a-b):[0,2,4,5,7,9,11]);extra=`<path d="M300 52h26m-7-6 7 6-7 6" stroke="#44516b" fill="none"/>${names.map((n,i)=>{const a=i*2*Math.PI/names.length-Math.PI/2,cx=377+37*Math.cos(a),cy=54+37*Math.sin(a);return `<circle cx="${cx}" cy="${cy}" r="12" fill="#fff" stroke="#657187"/><text x="${cx}" y="${cy+3}" text-anchor="middle" font-size="10" fill="#44516b">${esc(noteName(n,notation))}</text>`;}).join('')}`;}
+ if(help.kind==='name'){const names=module.choices||(module.kind==='tuning'?[...new Set(profile.tuning.map(n=>n%12))].sort((a,b)=>a-b):[0,2,4,5,7,9,11]);extra=`<path d="M300 52h26m-7-6 7 6-7 6" stroke="#44516b" fill="none"/>${names.map((n,i)=>{const a=i*2*Math.PI/names.length-Math.PI/2,cx=377+37*Math.cos(a),cy=54+37*Math.sin(a);return `<circle cx="${cx}" cy="${cy}" r="12" fill="${n===target.midi%12?'#d7efdd':'#fff'}" stroke="#657187"/><text x="${cx}" y="${cy+3}" text-anchor="middle" font-size="10" fill="#44516b">${esc(noteName(n,notation))}</text>`;}).join('')}`;}
  else if(help.kind==='motif'){extra=module.pool.slice(0,3).map((p,i)=>`<g><rect x="${300+i*43}" y="30" width="39" height="44" rx="7" fill="#f0f3f6"/><text x="${319+i*43}" y="48" text-anchor="middle" font-size="12" fill="#44516b">${esc(noteName(p.midi,notation))}</text><text x="${319+i*43}" y="65" text-anchor="middle" font-size="9" fill="#44516b">${i+1}</text></g>`).join('');}
  else{extra=`<text x="306" y="43" font-size="12" fill="#44516b">${esc(pitchLabel(target.midi,notation))}${example.length>1?' → '+esc(pitchLabel(example[1].midi,notation)):''}</text><text x="306" y="66" font-size="10" fill="#44516b">${help.kind==='families'?'Toutes les octaves':help.kind==='interval'?'Deux sons successifs':'Toucher le repère'}</text>`;}
  return `<svg class="instruction-graphic" viewBox="0 0 440 110" role="img" aria-label="${esc(help.title)}. Exemple : ${esc(points.map(p=>`${pitchLabel(p.midi,notation)}, corde ${profile.tuning.length-p.string}, ${p.fret?'case '+p.fret:'à vide'}`).join(' ; '))}">${neck}${extra}</svg>`;

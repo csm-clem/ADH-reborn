@@ -25,6 +25,6 @@ test('Accuracy unlocks progression independently of speed, errors cannot count a
   answers[17].correct=false;assert.equal(score(answers).stars,2);
   assert.equal(score(Array.from({length:20},()=>({correct:true,ms:1000}))).stars,5);
   assert.equal(score(Array.from({length:20},(_,i)=>({correct:i<19,ms:2000}))).stars,4);
-  assert.equal(score([{correct:false,ms:100}]).medianMs,null);
+  assert.equal(score([{correct:false,ms:100}]).meanMs,null);
   assert.equal(score([]).stars,0);
 });
