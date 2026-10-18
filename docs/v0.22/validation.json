@@ -1,0 +1,159 @@
+{
+  "release": "0.22.0",
+  "unit_tests": 112,
+  "checks": {
+    "mail": {
+      "csrf_and_origin": true,
+      "validation_and_header_injection": true,
+      "recipient_and_subject_server_only": true,
+      "mail_captured_without_real_send": true,
+      "rate_limit": true,
+      "no_cache_or_public_recipient": true
+    },
+    "interface": {
+      "in_app_mail_capture": true,
+      "offline_and_server_errors_preserve_text": true,
+      "no_recipient_in_client_payload": true,
+      "dialog_keyboard_and_four_sizes": true,
+      "stamp_same_row_twelve_layouts": true,
+      "accessible_check_colors": {
+        "background": "rgb(253, 251, 247)",
+        "color": "rgb(51, 54, 56)"
+      },
+      "debug_all_successes_and_real_progress_untouched": true,
+      "exact_reward_prefixes_six_instruments": 108,
+      "errors": []
+    },
+    "audio_runtime": {
+      "eighteen_real_audio_arrangements_scheduled": true,
+      "no_late_notes": true,
+      "held_buffers_long_enough": true,
+      "first_note_waveform_matches_exercise_register": true,
+      "details": [
+        {
+          "id": "my-sharona",
+          "firstMidi": 40,
+          "correlation": 1,
+          "scheduledVoices": 33
+        },
+        {
+          "id": "immigrant-song",
+          "firstMidi": 45,
+          "correlation": 1,
+          "scheduledVoices": 32
+        },
+        {
+          "id": "higher-ground",
+          "firstMidi": 50,
+          "correlation": 1,
+          "scheduledVoices": 15
+        },
+        {
+          "id": "thunderstruck",
+          "firstMidi": 55,
+          "correlation": 1,
+          "scheduledVoices": 44
+        },
+        {
+          "id": "singing-rain",
+          "firstMidi": 47,
+          "correlation": 1,
+          "scheduledVoices": 32
+        },
+        {
+          "id": "christmas-song",
+          "firstMidi": 41,
+          "correlation": 1,
+          "scheduledVoices": 36
+        },
+        {
+          "id": "rainbow",
+          "firstMidi": 48,
+          "correlation": 1,
+          "scheduledVoices": 63
+        },
+        {
+          "id": "bride",
+          "firstMidi": 40,
+          "correlation": 1,
+          "scheduledVoices": 28
+        },
+        {
+          "id": "seven-nation",
+          "firstMidi": 52,
+          "correlation": 0.999,
+          "scheduledVoices": 17
+        },
+        {
+          "id": "smoke-water",
+          "firstMidi": 52,
+          "correlation": 0.999,
+          "scheduledVoices": 27
+        },
+        {
+          "id": "iron-man",
+          "firstMidi": 59,
+          "correlation": 0.999,
+          "scheduledVoices": 25
+        },
+        {
+          "id": "around-world",
+          "firstMidi": 59,
+          "correlation": 0.999,
+          "scheduledVoices": 26
+        },
+        {
+          "id": "cuckoo",
+          "firstMidi": 50,
+          "correlation": 1,
+          "scheduledVoices": 24
+        },
+        {
+          "id": "come-as-you-are",
+          "firstMidi": 40,
+          "correlation": 1,
+          "scheduledVoices": 32
+        },
+        {
+          "id": "twinkle",
+          "firstMidi": 41,
+          "correlation": 1,
+          "scheduledVoices": 38
+        },
+        {
+          "id": "entertainer",
+          "firstMidi": 42,
+          "correlation": 1,
+          "scheduledVoices": 28
+        },
+        {
+          "id": "trek",
+          "firstMidi": 49,
+          "correlation": 1,
+          "scheduledVoices": 28
+        },
+        {
+          "id": "frere",
+          "firstMidi": 42,
+          "correlation": 1,
+          "scheduledVoices": 72
+        }
+      ]
+    },
+    "music_flows": {
+      "eighteen_audited_passages_completed": true,
+      "all_unlocks_persisted": true,
+      "errors": []
+    },
+    "offline": {
+      "nested_ftp_boot": true,
+      "six_images_cached": true,
+      "offline_setup_and_course": true,
+      "errors": []
+    }
+  },
+  "external_rhythm_review_limits": [
+    "higher-ground",
+    "my-sharona"
+  ]
+}

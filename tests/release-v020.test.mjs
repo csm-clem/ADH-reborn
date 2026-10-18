@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeProfile,neckGeometry} from '../core.js';
 import {pilotPlan,practiceActivities} from '../pilot.js';
-import {bugReportURL} from '../bug-report.js';
+import {bugConfiguration} from '../bug-report.js';
 import {PilotController} from '../pilot-ui.js';
 
 test('Cumulative capstone titles follow natural completion for each actual tuning',()=>{
@@ -16,9 +16,8 @@ test('Cumulative capstone titles follow natural completion for each actual tunin
 test('Only new-exercise diagrams shorten the open-string slot by a third',()=>{
  for(const n of [4,5,6,7,8]){assert.equal(neckGeometry(n,4,648,{lesson:true}).openWidth,38*2/3);assert.equal(neckGeometry(n,4).openWidth,18);assert.equal(neckGeometry(n,4,648,{gameplay:true}).openWidth,18);}
 });
-test('Bug report is an encoded GitHub draft, without progress, tokens or browser fingerprint',()=>{
- const url=new URL(bugReportURL({description:'Un bug & une question ?\nVoici les étapes.',release:'0.20.0',profile:makeProfile('guitar6'),theme:'dark',viewport:[375,812],standalone:true}));
- assert.equal(url.origin,'https://github.com');assert.equal(url.pathname,'/csm-clem/ADH-reborn/issues/new');assert.ok(url.searchParams.get('body').includes('Un bug & une question ?\nVoici les étapes.'));assert.ok(!url.searchParams.get('body').includes('attempts'));assert.ok(!url.searchParams.get('body').includes('userAgent'));
+test('Bug configuration excludes destination, history and browser fingerprint',()=>{
+ const c=bugConfiguration({release:'0.22.0',profile:makeProfile('guitar6'),theme:'dark',viewport:[375,812],standalone:true});assert.equal(c.release,'0.22.0');assert.equal(c.viewport,'375 × 812');assert.equal(c.standalone,'oui');assert.deepEqual(Object.keys(c).sort(),['instrument','release','standalone','theme','tuning','viewport']);
 });
 test('Incorrect neck feedback draws only the requested pitch, independently of wheel feedback',()=>{
  const profile=makeProfile('guitar6'),c=new PilotController({getState:()=>({profile,notation:'international',sound:false})});c.session={activity:'note-4',stage:'practice',queue:[{mode:'name',answerKind:'pitch',target:{string:0,fret:0,midi:40}}],index:0};c.addEffect({correct:false,target:{string:0,fret:0,midi:40},value:52,mode:'name'});
@@ -42,6 +41,6 @@ test('Every audible exercise prefix matches the corresponding full listening phr
 });
 test('Source-checked riffs respect their bar lengths and explicit rests',()=>{
  for(const [id,duration] of [['higher-ground',4],['my-sharona',8],['immigrant-song',8],['around-world',8],['smoke-water',16],['iron-man',8],['seven-nation',8]]){
-  const r=rewardFor(melodyById(id)),lead=r.events.filter(e=>e.velocity===1);const actual=Math.max(...lead.map(e=>e.start+e.beats));assert.equal(actual,id==='smoke-water'?15:duration,id);
+  const r=rewardFor(melodyById(id)),lead=r.events.filter(e=>e.velocity===1);const actual=Math.max(...lead.map(e=>e.start+e.beats));assert.equal(r.totalBeats,duration,id);assert.equal(actual,id==='smoke-water'?15:id==='immigrant-song'?7.75:duration,id);
  }
 });

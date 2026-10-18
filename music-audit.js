@@ -2,7 +2,7 @@
  * Pending passages are retained for correction but never assigned or played as rewards.
  * Findings, exact editions and limitations: docs/v0.20/audit-musical.md.
  */
-export const MUSIC_ARRANGEMENT_VERSION=2;
+export const MUSIC_ARRANGEMENT_VERSION=3;
 const checked=Object.freeze(['higher-ground','my-sharona','immigrant-song','thunderstruck','singing-rain','christmas-song','around-world','smoke-water','iron-man','seven-nation','come-as-you-are','twinkle','cuckoo','bride','entertainer','rainbow','trek','frere']);
 export const MUSIC_AUDIT=Object.freeze({
  checked,

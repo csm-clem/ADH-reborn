@@ -1,5 +1,5 @@
 import {debugAvailable} from './debug-mode.js';
-import {bugReportPanel,bugReportURL} from './bug-report.js';
+import {bugReportPanel,BugReportController,bugConfiguration} from './bug-report.js';
 import {AchievementsController} from './achievements-ui.js';
 import {themeChoices} from './themes.js';
 import {renderView} from './dom-view.js';
@@ -22,7 +22,7 @@ const icons={replay:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"/>',share:'<circle cx=
 const icon=(name)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.play}</svg>`;
 
 function toast(message){document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.role='status';el.textContent=message;document.body.append(el);setTimeout(()=>el.remove(),5000);}
-function setScreen(value){if(screen==='home')courseScroll.set(appStore.getState().profile?.key,window.scrollY);if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();window.scrollTo(0,value==='home'?courseScroll.get(appStore.getState().profile?.key)||0:0);}
+function setScreen(value){if(screen==='home')courseScroll.set(appStore.getState().profile?.key,window.scrollY);if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});window.scrollTo(0,value==='home'?courseScroll.get(appStore.getState().profile?.key)||0:0);}
 function fullscreenContent(active=!!document.fullscreenElement){return `${icon(active?'fullscreen-exit':'fullscreen')}<span>${active?'Quitter le plein écran':'Plein écran'}</span>`;}
 function syncFullscreen(active){for(const b of document.querySelectorAll('[data-action="fullscreen"],[data-pilot-action="fullscreen"]')){b.innerHTML=b.dataset.action?fullscreenContent(active):icon(active?'fullscreen-exit':'fullscreen');b.setAttribute('aria-label',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('title',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('aria-pressed',String(active));}}
 function debugPanel(){if(!debugAvailable(RELEASE))return '';return `<section class="panel debug-panel"><h2>Mode débug <small>· réservé à la v0</small></h2><p>${pilot.debugActive?'Simulation active : tous les exercices sont réussis à 100 % et tous les succès disponibles sont débloqués.':'Testez un parcours terminé et sa collection complète, pour cet instrument.'} Vos vrais résultats restent conservés. La simulation disparaît aussi au rechargement.</p><button class="button ${pilot.debugActive?'secondary':'quiet-button'}" data-action="debug" aria-pressed="${!!pilot.debugActive}">${pilot.debugActive?'Retrouver mes vrais résultats':'Simuler un parcours à 100 %'}</button></section>`;}
@@ -47,7 +47,7 @@ ROOT.addEventListener('click',e=>{
  case 'debug':if(debugAvailable(RELEASE)){pilot.setDebug(!pilot.debugActive);render();}break;
  case 'home':case 'stats':case 'settings':case 'achievements':stopAudio();setScreen(button.dataset.action);break;
  case 'fullscreen':toggleFullscreen();break;
- case 'report-bug':{const description=document.querySelector('#bug-description');if(!description.reportValidity())break;const url=bugReportURL({description:description.value,release:RELEASE,profile:state.profile,theme:document.documentElement.dataset.theme,viewport:[innerWidth,innerHeight],standalone:matchMedia('(display-mode: standalone)').matches});window.open(url,'_blank','noopener,noreferrer');break;}
+ case 'report-bug':bugReports.open();break;
  case 'preview-tuning':playSequence(state.profile.tuning,{step:.23});break;
  case 'preview-voice':playSequence(state.profile.tuning,{step:.23});break;
  case 'edit-profile':{if(pilot.debugActive)pilot.setDebug(false);onboarding.reset(state.profile,state.notation);pilot.leave();appStore.update({profile:null});render();}break;
@@ -69,6 +69,7 @@ ROOT.addEventListener('change',async e=>{
 });
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 const pilot=new PilotController({storage:storageService,setAccidentals:accidentals=>appStore.update({accidentals}),setPositionButtons:value=>appStore.update({positionButtons:value}),getState:appStore.getState,showPilot:()=>{screen='pilot';render();},onActivityStart:()=>{if(screen==='home')courseScroll.set(appStore.getState().profile.key,window.scrollY);},home:()=>setScreen('home'),stats:()=>setScreen('stats'),achievements:()=>setScreen('achievements'),icon,playNote,playSequence,playArrangement,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const bugReports=new BugReportController({getConfiguration:()=>bugConfiguration({release:RELEASE,profile:appStore.getState().profile,theme:document.documentElement.dataset.theme,viewport:[innerWidth,innerHeight],standalone:matchMedia('(display-mode: standalone)').matches})});
 const stateProfileKey=()=>appStore.getState().profile?.key;
 const achievements=new AchievementsController({pilot,getState:appStore.getState,setPreferences:collection=>appStore.update({collection}),render,icon,playArrangement,stopAudio,start:(id,profile)=>{if(profile){if(pilot.debugActive&&profile.key!==stateProfileKey())pilot.setDebug(false);appStore.update({profile});}pilot.start(id);}});
 const onboarding=new OnboardingController({getState:appStore.getState,render,icon,playNote:midi=>playNote(midi,{instrumentId:onboarding.instrumentId}),playSequence:notes=>playSequence(notes,{step:.23,instrumentId:onboarding.instrumentId}),stopAudio,setSound,complete:(profile,notation)=>{appStore.update({profile,notation});setScreen('home');}});

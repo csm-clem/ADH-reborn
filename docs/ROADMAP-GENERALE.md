@@ -10,7 +10,7 @@ Cette roadmap remplace l’ordre de priorité des huit phases pédagogiques init
 
 Les tests techniques et la recette interne restent nécessaires avant la V1. Les tests utilisateurs structurés commencent après cette première version fonctionnelle, selon la décision du porteur du projet. On peut la distribuer d’abord à un groupe restreint : « V1 fonctionnelle » ne signifie pas déclencher immédiatement la publicité.
 
-La décision de périmètre ci-dessus reste inchangée. La livraison de correctifs du 18 octobre est la [v0.20](CHANGES-v0.20.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
+La décision de périmètre ci-dessus reste inchangée. La livraison de correctifs du 18 octobre est la [v0.22](CHANGES-v0.22.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
 
 ## V1.0 — Une application simple, amusante et payable
 
@@ -35,6 +35,8 @@ Les parcours de gammes, les arpèges avancés et les harmoniques restent en V3. 
 | PWA | Installation, première connexion puis jeu hors ligne, reprise après interruption, audio, tactile, lisibilité et commandes accessibles. |
 | Progression | Conservation durable à partir de la V1, migrations testées entre mises à jour, export/import de secours. Les remises à zéro restent propres aux versions v0. |
 | Accès commercial | Essai complet de sept jours, paiement et vérification des droits, activation et restauration de l’achat. |
+
+Avant V1, retirer physiquement le mode débug et ses données simulées de la livraison, puis confirmer l’envoi et la réception des signalements sur l’hébergement réel.
 
 La V1 réutilise les fonctionnalités déjà présentes. Elle exige désormais de **produire le parcours complet au-delà de 0–4**, puis de stabiliser le jeu et de terminer l’accès commercial. Les règles de génération sont réutilisées ; les contenus, la couverture et la progression de difficulté doivent être vérifiés pour chaque zone.
 

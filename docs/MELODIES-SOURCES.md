@@ -1,5 +1,8 @@
 > État courant : voir l’[audit v0.20](v0.20/audit-musical.md). Ce document décrit des choix antérieurs ; sept arrangements de la v0.19 sont désormais en révision, et certaines durées ont été corrigées.
 
+État courant : voir [l’audit musical v0.22](v0.22/audit-musical.md), qui précise les corrections de rythme, les tempos, le registre exact de l’exercice et les limites de relecture.
+
+
 # Extraits musicaux du pilote
 
 La recherche a été effectuée en ligne dans des partitions LilyPond/ABC publiées et dans une table pédagogique d’intervalles. Le catalogue contient de très courts extraits, pas des morceaux complets. Aucun enregistrement tiers n’est embarqué : les notes sont synthétisées localement.

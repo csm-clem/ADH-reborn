@@ -1,5 +1,8 @@
 > État courant : voir l’[audit v0.20](v0.20/audit-musical.md). Ce document décrit des choix antérieurs ; sept arrangements de la v0.19 sont désormais en révision, et certaines durées ont été corrigées.
 
+État courant : voir [l’audit musical v0.22](v0.22/audit-musical.md), qui précise les corrections de rythme, les tempos, le registre exact de l’exercice et les limites de relecture.
+
+
 > Mise à jour v0.18 : la sélection active écarte les quatre cellules incomplètes (Jaws, Maria, Bonnie, Saints). Seuls les passages à phrase complète vérifiée sont retenus. L’écoute se déclenche automatiquement après une chaîne sans erreur ; la commande sur la fiche permet de l’arrêter ou de la relancer.
 
 # Phrases musicales et récompenses d’écoute

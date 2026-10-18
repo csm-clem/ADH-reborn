@@ -18,9 +18,10 @@
 .zone-hero .tag.light{background:var(--surface);color:var(--purple)}
 .game-progress{background:var(--progress-empty)}.game-progress i{background:var(--purple)}
 .lesson-symbol.complete{background:var(--success-soft);color:var(--success)}
-:root[data-theme=accessible] .lesson-symbol.complete{background:#005A9C;color:#fff;border:1px solid #111827}
+:root[data-theme=accessible] .lesson-symbol.complete{background:#fdfbf7;color:#333638;border:1px solid #333638}
 :root[data-theme=accessible] .game-progress{height:6px;border:1px solid #64748b}
 :root[data-theme=dark] .neck-viewport{background:#101720;border-color:#536076}
 .bug-report label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}
 .bug-report textarea{width:100%;min-height:100px;resize:vertical;border:1px solid var(--quiet-border);border-radius:var(--radius-field);background:var(--surface);color:var(--ink);font:inherit;padding:12px}
 .bug-report>.button{margin:14px 0 10px}.bug-report>small{display:block;max-width:64ch}
+.bug-dialog{width:min(600px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);overflow:auto}.bug-dialog::backdrop{background:#18202b99;backdrop-filter:blur(5px)}.bug-report>header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.bug-report h2{margin:0}.bug-report .eyebrow{margin:0 0 8px}.bug-report p{font-size:14px;line-height:1.5}.bug-report input[type=email]{width:100%}.bug-report label small{font-weight:400}.bug-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.bug-context{margin-top:16px;font-size:12px}.bug-context summary{min-height:44px;align-content:center;cursor:pointer}.bug-context dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px}.bug-context dd{margin:0;overflow-wrap:anywhere}.bug-privacy{color:var(--muted)}.bug-error{color:var(--danger);min-height:0}.bug-report .button-row{margin-top:16px}.bug-report textarea:focus-visible{outline:2px solid var(--purple);outline-offset:2px}

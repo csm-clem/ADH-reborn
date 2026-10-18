@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.21.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.22.0**.
 
 ## Priorités de développement
 
@@ -8,7 +8,7 @@ La [roadmap V1 / V2 / V3](docs/ROADMAP-GENERALE.md) est la référence actuelle 
 
 ## Lancer et vérifier
 
-Node.js 20 ou supérieur, aucune dépendance d’exécution :
+Node.js 20 ou supérieur pour le serveur local et les tests ; aucune dépendance JavaScript d’exécution. Le formulaire de signalement utilise PHP 8.1+ et `mail()` sur l’hébergement o2switch :
 
 ```sh
 npm start
@@ -34,13 +34,13 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
-Le parcours six cordes standard conserve 18 passages connus distincts après audit. Sept arrangements incertains sont temporairement exclus ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.20/audit-musical.md).
+Le parcours six cordes standard conserve 18 passages connus distincts après audit. Sept arrangements incertains sont temporairement exclus ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.22/audit-musical.md).
 
-Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres.
+Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres. Le bouton Signaler un bug ouvre un formulaire intégré ; l’envoi nécessite le relais PHP inclus et une connexion. Les récompenses musicales reprennent le registre exact de l’exercice.
 
 Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
 
-Voir [le rapport v0.21](docs/CHANGES-v0.21.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.22](docs/CHANGES-v0.22.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -105,4 +105,4 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 ## Livraison v0.20
 
-[Rapport v0.20](docs/CHANGES-v0.20.md) · [Audit musical](docs/v0.20/audit-musical.md) · [Validation](docs/v0.20/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 18 passages conservés, 7 en révision.
+[Rapport v0.20](docs/CHANGES-v0.20.md) · [Audit musical](docs/v0.22/audit-musical.md) · [Validation](docs/v0.20/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 18 passages conservés, 7 en révision.

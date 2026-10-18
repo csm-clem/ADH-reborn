@@ -60,3 +60,7 @@ Les outils génériques `onboarding.py`, `pilot-layout.py`, `pilot-full.py`, `re
 `v021.py` : onboarding, retour au parcours, découverte figée, états natifs du plein écran, Mute, collection et mode débug réversible.
 `discovery-v021.py` : compteur et bouton visibles sur six instruments et cinq tailles.
 Les scripts génériques `onboarding.py`, `pilot-layout.py` et `package-offline.py` complètent cette recette.
+
+## Recette v0.22
+
+`mail-v022.py` exige le serveur PHP local sur 127.0.0.1:4174 avec un `sendmail_path` de capture. Il ne doit jamais être utilisé pour envoyer vers une boîte réelle. `v022.py` utilise le même serveur de capture pour vérifier le formulaire et les cartes. `audio-runtime-v022.py` contrôle les 18 arrangements dans Web Audio. `music-v020.py` reste utilisable pour terminer les 18 suites. Les tests génériques de paquet et les tests Node complètent la recette.
