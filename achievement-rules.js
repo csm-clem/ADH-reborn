@@ -1,4 +1,5 @@
 /** Immutable catalogue + pure evidence evaluator. No clock, DOM, audio or storage access. */
+import {MUSIC_ARRANGEMENT_VERSION,musicChecked} from './music-audit.js';
 import {activityResult} from './pilot.js';
 import {resultMetrics,personalRecord} from './results.js';
 export const ACHIEVEMENT_VERSION=1;
@@ -34,8 +35,8 @@ export function evaluateAchievements({profile,plan,attempts,entry,existing=[]}){
   if(personalRecord(entry,comparable).kind==='speed')award('personal-fluidity',[entry]);
   const m=resultMetrics(entry.events);if(m.accuracy===1&&m.meanMs!==null&&m.meanMs<=1000)award('one-second',[entry]);
  }
- if(entry.finished===true&&entry.events.length>=20&&entry.motifCompleted&&entry.melodyId&&entry.music&&Number.isFinite(entry.music.shift)){
-  award('music-'+entry.melodyId,[entry],{musicId:entry.melodyId,shift:entry.music.shift,activity:entry.activity,arrangementVersion:1},true);
+ if(entry.finished===true&&entry.events.length>=20&&entry.motifCompleted&&entry.melodyId&&musicChecked(entry.melodyId)&&entry.music&&Number.isFinite(entry.music.shift)){
+  award('music-'+entry.melodyId,[entry],{musicId:entry.melodyId,shift:entry.music.shift,activity:entry.activity,arrangementVersion:MUSIC_ARRANGEMENT_VERSION},true);
   award('first-sleeve',[entry],{},true);
  }
  const records=[...existing,...fresh].filter(u=>u.scope==='global'&&u.musicId);

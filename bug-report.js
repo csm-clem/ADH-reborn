@@ -1,0 +1,6 @@
+/** Local draft only: GitHub asks the player to review and publish it. No progress is attached. */
+export function bugReportPanel(){return `<section class="panel bug-report"><h2>Signaler un bug</h2><p>Que s’est-il passé ? Indiquez les étapes pour reproduire le problème et le résultat attendu.</p><label for="bug-description">Votre description</label><textarea id="bug-description" rows="3" maxlength="2500" minlength="10" required placeholder="Dans quel exercice ? Après quelle action ?"></textarea><button class="button secondary" data-action="report-bug">Préparer le signalement</button><small>Un brouillon s’ouvrira sur GitHub. Vous pourrez le vérifier avant de le publier avec votre compte. Aucune progression personnelle n’est jointe.</small></section>`;}
+export function bugReportURL({description,release,profile,theme,viewport,standalone}){
+ const body=`## Problème\n${String(description).trim().slice(0,2500)}\n\n## Configuration\n- Version : ${release}\n- Instrument : ${profile.label}\n- Accordage (MIDI) : ${profile.tuning.join(', ')}\n- Thème : ${theme}\n- Écran : ${viewport.join(' × ')}\n- PWA installée : ${standalone?'oui':'non'}\n\nAucune sauvegarde ni historique de jeu n’est joint.`;
+ return 'https://github.com/csm-clem/ADH-reborn/issues/new?'+new URLSearchParams({title:`[Bug ${release}] ${String(description).trim().split('\n')[0].slice(0,65)}`,body});
+}

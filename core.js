@@ -23,9 +23,9 @@ export function pitchLabel(midi, notation='international') {
 }
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
-export const NECK_STYLE={openWidth:18,margin:8,fadeFraction:.5,inlayRadius:2.8,nutWidth:2.8,fretWidth:1.1};
+export const NECK_STYLE={openWidth:18,margin:8,fadeFraction:.5,inlayRadius:2.8,nutWidth:3.1,fretWidth:1.1};
 export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false,lesson=false}={}){
-  const openWidth=lesson?38:NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
+  const openWidth=lesson?38*2/3:NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
   const neckWidth=(52+(strings-6)*7)*(gameplay?1.65:1),height=neckWidth+14,nut=margin+openWidth;
   const frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale));
   const bounds=f=>f===0?[nut-openWidth,nut]:[frets[f-1],frets[f]];

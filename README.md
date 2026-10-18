@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.19.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.20.0**.
 
 ## Priorités de développement
 
@@ -34,13 +34,13 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
-Le parcours six cordes standard propose 25 œuvres distinctes pour ses 25 finales musicales, avec des départs en octaves pour ses 12 familles. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [les sources musicales](docs/MELODIES-SOURCES.md).
+Le parcours six cordes standard conserve 18 passages connus distincts après audit. Sept arrangements incertains sont temporairement exclus ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.20/audit-musical.md).
 
 Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Quatre palettes coordonnées sont proposées dans les Paramètres.
 
 Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
 
-Voir [le rapport v0.19](docs/CHANGES-v0.19.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.20](docs/CHANGES-v0.20.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
@@ -81,9 +81,9 @@ Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de l
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.19.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.20.zip), dans le dossier servi en HTTPS.
 
-Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.19/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
+Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.20/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
 Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
 
@@ -103,6 +103,6 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 [Rapport v0.17](docs/CHANGES-v0.17.md) · [Manches et thèmes proposés](docs/v0.17/CHOIX-VISUELS.md) · [Six manches](docs/v0.17/manches.png) · [Six thèmes](docs/v0.17/themes.png). Les services audio, stockage, préférences et événements navigateur sont désormais partagés et injectés ; les séances et les horloges restent indépendantes.
 
-## Livraison v0.19
+## Livraison v0.20
 
-[Rapport v0.19](docs/CHANGES-v0.19.md) · [Répertoire musical](docs/v0.19/repertoire.md) · [Validation](docs/v0.19/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Collection des succès, quatre palettes coordonnées et 25 passages musicaux différents pour le parcours six cordes standard.
+[Rapport v0.20](docs/CHANGES-v0.20.md) · [Audit musical](docs/v0.20/audit-musical.md) · [Validation](docs/v0.20/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 18 passages conservés, 7 en révision.

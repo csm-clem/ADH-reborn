@@ -20,7 +20,8 @@ export function pilotPlan(profile,{notation='international',zone={start:0,end:4}
   const family=all.filter(p=>p.midi%12===pc),name=noteName(pc,notation),id='note-'+pc;
   modules.push({id,kind:'family',pitchClass:pc,subject:'La note '+name,title:'La note '+name,pool:family,focus:family,newPositions:family,choices:choices(family),zone,description:`Repérez tous les ${name} dans cette zone. Le chiffre indique la hauteur de la note.`});
   learned=unique([...learned,...family]);
-  modules.push({id:'mix-'+pc,kind:'mix',pitchClass:pc,subject:name+' et vos repères',title:name+' et vos repères',pool:[...learned],focus:family,newPositions:family,choices:choices(learned),zone,skipDiscovery:true,description:`Mélangez les ${name} avec les notes déjà rencontrées.`});
+  const naturalEnd=pc===order.filter(n=>NATURAL_PITCHES.includes(n)).at(-1),fullEnd=pc===order.at(-1),subject=fullEnd?'Toutes les notes naturelles et altérées':naturalEnd?'Toutes les notes naturelles':name+' et vos repères';
+  modules.push({id:'mix-'+pc,kind:'mix',pitchClass:pc,subject,title:subject,pool:[...learned],focus:family,newPositions:family,choices:choices(learned),zone,skipDiscovery:true,description:`Mélangez les ${name} avec les notes déjà rencontrées.`});
  }
  return {root,opens,natural,all,modules,compatible:true,reason:'',altered,learned,unavailable:[],order,zone};
 }
@@ -48,7 +49,7 @@ export function correction(profile,q,value,notation='international'){
  const target=q.target,name=noteName(target.midi,notation),spot=`corde ${profile.tuning.length-target.string}, ${target.fret===0?'à vide':`case ${target.fret}`}`;
  if(q.mode==='find'&&value&&Number.isInteger(value.string)&&Number.isInteger(value.fret)){
   const midi=profile.tuning[value.string]+value.fret;
-  if(midi%12===target.midi%12&&q.allowedFrets&&!q.allowedFrets.includes(value.fret))return `Le nom est juste, mais cette consigne demande une corde à vide, donc la case 0.`;
+  if(midi%12===target.midi%12&&q.allowedFrets&&!q.allowedFrets.includes(value.fret))return `Le nom est juste, mais cette consigne demande une corde à vide, sans appuyer sur une case.`;
   if(midi%12===target.midi%12)return `C’est bien ${name}, mais la consigne précise ${spot}. Le même nom peut se retrouver ailleurs.`;
   if(value.string!==target.string)return `La corde change le point de départ. Ici ${name} se trouve ${spot} ; votre toucher donne ${noteName(midi,notation)}.`;
   if(Math.abs(value.fret-target.fret)===1)return `${name} se trouve juste à côté, ${spot}.`;

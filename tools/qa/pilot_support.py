@@ -4,7 +4,7 @@ from pathlib import Path
 BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 OUT=Path(os.environ.get('ADH_QA_OUTPUT','/tmp/adh-pilot-qa'));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get('CHROMIUM_BIN','/usr/bin/chromium')
-KEY='fretboard-trainer:pilot:0.19.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
+KEY='fretboard-trainer:pilot:0.20.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
 
 def setup_standard(page):
  page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()

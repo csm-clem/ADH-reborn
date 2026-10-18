@@ -89,3 +89,11 @@ img.setup-instrument-picture{object-fit:contain;object-position:center;max-width
 @media(orientation:portrait) and (max-height:650px),(max-height:380px){.landing-neck{display:none}}
 
 .setup-identity .setup-landing-copy{text-align:left}.setup-landing-copy .landing-description{margin-left:0;margin-right:0}.landing-neck{margin-left:0!important;margin-right:0!important;justify-items:start}.landing-neck svg{transform:rotate(-6deg) scale(.82);transform-origin:left center}
+
+/* Align copy on one column; reserve a fixed illustration slot with internal rotation. */
+.setup-identity .setup-landing-copy .landing-description{margin:18px 0 0;text-align:left}
+.setup-identity .setup-landing-copy .eyebrow{margin-inline:0}
+.landing-neck svg{transform:none;transform-origin:initial;overflow:visible}
+.landing-neck{overflow:visible;margin:20px 0;justify-items:start}
+.setup-landing-copy .landing-features{justify-content:flex-start;gap:14px;margin:0}
+@media(max-height:650px){.setup-identity .setup-landing-copy .landing-description{margin:8px 0 0}.landing-neck{margin:8px 0}}

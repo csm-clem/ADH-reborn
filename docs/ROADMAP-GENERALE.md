@@ -10,7 +10,7 @@ Cette roadmap remplace l’ordre de priorité des huit phases pédagogiques init
 
 Les tests techniques et la recette interne restent nécessaires avant la V1. Les tests utilisateurs structurés commencent après cette première version fonctionnelle, selon la décision du porteur du projet. On peut la distribuer d’abord à un groupe restreint : « V1 fonctionnelle » ne signifie pas déclencher immédiatement la publicité.
 
-Aucune nouvelle fonctionnalité n’est implémentée par cette mise à jour documentaire. La version exécutable reste la v0.19.
+La décision de périmètre ci-dessus reste inchangée. La livraison de correctifs du 18 octobre est la [v0.20](CHANGES-v0.20.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
 
 ## V1.0 — Une application simple, amusante et payable
 

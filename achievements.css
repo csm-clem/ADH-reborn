@@ -7,3 +7,26 @@
 @media(orientation:portrait) and (max-height:700px),(orientation:landscape) and (max-height:400px){.achievement-celebration{position:fixed;top:8px;right:64px;z-index:8;width:44px;height:44px;padding:0;border:0;background:transparent;display:grid;place-items:center}.achievement-celebration>strong,.achievement-celebration .celebration-long{display:none}.achievement-celebration .celebration-short{display:block;color:var(--purple);font-size:16px;font-weight:700}.achievement-celebration .text-button{width:44px;height:44px;padding:0}.redesigned-result:has(.achievement-celebration) .result-heading>div{padding-right:48px}}
 
 .music-sleeve{display:block;width:100%;max-width:180px;height:78px}.music-sleeve text{font:650 29px var(--font-heading);fill:currentColor;letter-spacing:1px}.music-sleeve rect{fill:currentColor;opacity:.7}.music-sleeve path{stroke:currentColor;stroke-width:.6;opacity:.2}.achievement-art:has(.music-sleeve) i{margin-top:0;font-size:8px;letter-spacing:1.4px}
+
+/* Collectible frames: a distinct illustration, a clear title, then the challenge. */
+.achievement-card{position:relative;border:1px solid var(--quiet-border);border-radius:20px;padding:7px;background:var(--surface-soft);box-shadow:0 3px 12px #11182709;display:flex;flex-direction:column}
+.achievement-art{position:relative;flex-shrink:0;height:132px;border-radius:14px 14px 5px 5px;border:1px solid var(--line);background:var(--collection-missing);color:var(--muted);isolation:isolate;overflow:hidden}
+.achievement-art::before{content:'';position:absolute;inset:9px;border:1px solid currentColor;border-radius:50% 50% 38% 38%;opacity:.13;z-index:-1;transform:rotate(-12deg)}
+.achievement-art::after{content:'✦';position:absolute;left:14px;top:10px;font-size:15px;opacity:.45}
+.is-earned.achievement-card{border-color:var(--purple);box-shadow:0 3px 14px #11182712}
+.is-earned .achievement-art{background:var(--collection-earned);color:var(--purple);border-color:var(--purple)}
+.achievement-art>.achievement-seal{position:absolute;right:9px;top:9px;width:30px;height:30px;border-radius:50%;background:var(--collection-seal);color:var(--on-seal);border:2px solid var(--surface);box-shadow:0 2px 6px #11182726;display:grid;place-items:center;font:750 20px/1 var(--font-body);z-index:1}
+.achievement-copy{padding:17px 11px 9px;display:flex;flex-direction:column;flex:1;min-width:0}
+.achievement-copy h2{font-size:22px;letter-spacing:-.5px;margin:0 0 6px}
+.achievement-criterion{margin:8px 0 0;font-size:13px;line-height:1.55}
+.achievement-copy>progress{margin-top:12px}.achievement-actions{margin-top:auto;padding-top:16px;gap:7px}
+.achievement-copy details{margin-top:13px;padding-top:8px}.achievement-copy summary{color:var(--muted);font-size:12px}
+.achievement-stamp{display:flex;align-items:center;justify-content:flex-end;gap:5px;border-top:1px solid var(--line);margin-top:8px;padding-top:7px;color:var(--muted);font-size:10px;letter-spacing:.3px}
+.achievement-stamp>span{color:var(--purple)}.achievement-proof{font-variant-numeric:tabular-nums}
+:root[data-theme=accessible] .is-earned .achievement-art{background:var(--collection-earned);color:#fff;border-color:#111827}
+:root[data-theme=accessible] .is-missing .achievement-art{background:#fff;color:#344256;border-style:dashed;border-color:#64748b}
+:root[data-theme=accessible] .achievement-seal{background:#fff;color:#003E8A;border-color:#111827}
+:root[data-theme=dark] .is-earned .achievement-art{color:#EBCE9D;border-color:#B99B6A}
+.achievement-grid.is-list .achievement-card{display:grid;grid-template-columns:125px minmax(0,1fr)}.is-list .achievement-art{height:100%;border-radius:14px 5px 5px 14px}
+@media(max-width:700px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.achievement-copy h2{font-size:19px}.achievement-card{padding:5px}.achievement-copy{padding:13px 6px 6px}.achievement-art{height:115px}.achievement-art>.achievement-seal{width:26px;height:26px;font-size:17px}.achievement-grid.is-list{grid-template-columns:1fr}}
+@media(max-width:450px){.achievement-grid{grid-template-columns:1fr}.achievement-art{height:128px}.achievement-copy{padding:16px 12px 9px}.achievement-copy h2{font-size:22px}}

@@ -27,7 +27,7 @@
 .instruction-content .lesson-target{font-size:15px}.instruction-content .melody-attribution{max-width:46ch}
 @media(max-width:420px){.help-name-example{grid-template-columns:1fr;gap:8px}.help-arrow{display:none}.help-note-options{max-width:300px;justify-self:center}.instruction-content{gap:12px}.instruction-page{padding-inline:16px}.instruction-content>p{line-height:1.5}}
 @media(max-height:500px) and (orientation:landscape){.instruction-page{padding:66px 18px 16px;gap:10px;align-content:center}.instruction-content{gap:8px}.instruction-content h1{font-size:25px}.instruction-content .shared-neck{max-height:115px}.instruction-page footer{padding:0}.instruction-content .melody-attribution{font-size:11px}.new-exercise-label{font-size:11px}}
-:root[data-theme=accessible] .echo-dot{stroke:#111827;stroke-width:.7}
+
 
 /* Shared lesson composition: visual and explanation are semantic groups. */
 .instruction-heading,.instruction-visual,.instruction-summary{width:100%;min-width:0}.instruction-heading p{margin:0 0 12px}.instruction-summary p{margin:0;font-size:16px;line-height:1.5}.instruction-summary .lesson-target{margin-bottom:10px}.instruction-visual .discovery-direction{margin:12px 0 0}.instruction-visual .shared-neck{margin:0}.instruction-summary .melody-attribution{margin:0 auto 8px}.lesson-actions{gap:12px;flex-wrap:wrap}.instruction-content{grid-template-columns:minmax(0,1fr)}

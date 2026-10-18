@@ -46,3 +46,11 @@ Les autres scripts de ce dossier conservent des scénarios historiques, notammen
 `v019.py` vérifie les corrections, les octaves, les indices partagés, les succès et les thèmes. `result-fit-v019.py` vérifie les 300 ms après la dernière note et six formats de résultats. `pilot-full.py` parcourt les 50 activités ; `onboarding.py`, `pilot-layout.py`, `lessons-v018.py` et `package-offline.py` restent applicables à la version courante. Les captures de test ne représentent pas des résultats réels d’élèves.
 
 `music-v019.py` joue les 25 passages différents et vérifie leurs obtentions. `music-lessons-v019.py` vérifie 15 présentations de passages musicaux sur petits écrans.
+
+## Recette v0.20
+
+`v020.py` : corrections sur le manche, roue de hauteurs, indice, succès et thèmes.
+`details-v020.py` : couleurs calculées, ordre des calques, bordure 1 pt, contrastes, alignement et brouillon de bug.
+`music-v020.py` : les 18 passages conservés sont joués et leurs succès enregistrés.
+`reward-v020.py` : remise à zéro de la chaîne, dernière note puis lecture accompagnée.
+Les outils génériques `onboarding.py`, `pilot-layout.py`, `pilot-full.py`, `result-fit-v019.py` et `package-offline.py` restent utilisables ; les noms de certains scripts rappellent leur version d’introduction.
