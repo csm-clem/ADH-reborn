@@ -4,16 +4,16 @@ import {activityResult} from './pilot.js';
 import {resultMetrics,personalRecord} from './results.js';
 export const ACHIEVEMENT_VERSION=1;
 export const ACHIEVEMENTS=Object.freeze([
- {id:'open-strings',category:'landmarks',title:'Mes premières cordes',criterion:'Réussir « Nommer les cordes » et « Retrouver les cordes » à 90 % ou plus.',symbol:'≋'},
- {id:'first-family',category:'landmarks',title:'Une famille bien repérée',criterion:'Réussir une famille seule et son mélange, en nommant et en retrouvant les positions.',symbol:'◉'},
- {id:'natural-map',category:'landmarks',title:'Mes notes naturelles',criterion:'Réussir le dernier mélange naturel dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'♮'},
- {id:'full-map',category:'landmarks',title:'Ma première carte complète',criterion:'Réussir le dernier mélange de la zone dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'▦'},
- {id:'clean-session',category:'landmarks',title:'Sans faute, sans aide',criterion:'Réussir au moins 20 premières réponses consécutives sans erreur ni indice dans un exercice.',symbol:'✓'},
- {id:'first-chain',category:'landmarks',title:'Une suite d’un trait',criterion:'Terminer une suite musicale. Une erreur remet la suite à zéro ; les essais précédents restent permis.',symbol:'♪'},
- {id:'personal-fluidity',category:'fluency',title:'Plus fluide, ici',criterion:'Battre son temps moyen, à précision au moins égale, sur ce même exercice et ce même instrument, sans aide.',symbol:'↗'},
- {id:'one-second',category:'fluency',title:'Du regard au réflexe',criterion:'Au moins 20 réponses, 100 % justes, sans aide, en 1 seconde de moyenne ou moins.',symbol:'ϟ'},
- {id:'first-sleeve',category:'music',title:'Ma première pochette',criterion:'Terminer la suite d’un morceau pour ajouter sa phrase accompagnée à la collection.',symbol:'♫',scope:'global'},
- {id:'three-sleeves',category:'music',title:'Une petite discothèque',criterion:'Collectionner trois phrases de morceaux différents.',symbol:'▣',scope:'global'}
+ {id:'open-strings',category:'landmarks',title:'Les présentations sont faites',criterion:'Réussir « Nommer les cordes » et « Retrouver les cordes » à 90 % ou plus.',symbol:'≋'},
+ {id:'first-family',category:'landmarks',title:'Réunion de famille',criterion:'Réussir une famille seule et son mélange, en nommant et en retrouvant les positions.',symbol:'◉'},
+ {id:'natural-map',category:'landmarks',title:'Le naturel revient au galop',criterion:'Réussir le dernier mélange naturel dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'♮'},
+ {id:'full-map',category:'landmarks',title:'Le manche dans la poche',criterion:'Réussir le dernier mélange de la zone dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'▦'},
+ {id:'clean-session',category:'landmarks',title:'Zéro accroc',criterion:'Réussir au moins 20 premières réponses consécutives sans erreur ni indice dans un exercice.',symbol:'✓'},
+ {id:'first-chain',category:'landmarks',title:'Le fil du riff',criterion:'Terminer une suite musicale. Une erreur remet la suite à zéro ; les essais précédents restent permis.',symbol:'♪'},
+ {id:'personal-fluidity',category:'fluency',title:'Mon record prend la fuite',criterion:'Battre son temps moyen, à précision au moins égale, sur ce même exercice et ce même instrument, sans aide.',symbol:'↗'},
+ {id:'one-second',category:'fluency',title:'Éclair de manche',criterion:'Au moins 20 réponses, 100 % justes, sans aide, en 1 seconde de moyenne ou moins.',symbol:'ϟ'},
+ {id:'first-sleeve',category:'music',title:'Premier pressage',criterion:'Terminer la suite d’un morceau pour ajouter sa phrase accompagnée à la collection.',symbol:'♫',scope:'global'},
+ {id:'three-sleeves',category:'music',title:'Le club des vinyles',criterion:'Collectionner trois phrases de morceaux différents.',symbol:'▣',scope:'global'}
 ].map(d=>Object.freeze({...d,version:1,scope:d.scope||'profile'})));
 export const collectionScope=(profile,zone={start:0,end:4})=>`${profile.key}@${zone.start}-${zone.end}`;
 const unaided=a=>a.events.length>=20&&a.events.every(e=>!e.retry&&!e.aids?.length);
@@ -43,12 +43,18 @@ export function evaluateAchievements({profile,plan,attempts,entry,existing=[]}){
  if(new Set(records.map(u=>u.musicId)).size>=3)award('three-sleeves',[entry],{},true);
  return fresh;
 }
-export function achievementProgress(def,attempts,plan,obtained,unlocks=[]){
- if(obtained)return {value:1,max:1,label:'Obtenu'};
- const success=attempts.filter(passed),ids=new Set(success.map(a=>a.activity));
- if(def.id==='open-strings'){const n=['opens','opens-find'].filter(id=>ids.has(id)).length;return {value:n,max:2,label:`${n} / 2 activités`};}
- if(def.id==='first-family'){const n=Math.max(0,...plan.order.map(pc=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find'].filter(id=>ids.has(id)).length));return {value:n,max:4,label:`${n} / 4 activités pour une famille`};}
- if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1),n=['mix-'+pc,'mix-'+pc+'-find'].filter(id=>success.some(a=>a.activity===id&&unaided(a)&&coverage(a))).length;return {value:n,max:2,label:`${n} / 2 validations sans aide`};}
- if(def.id==='three-sleeves'){const n=new Set(unlocks.filter(u=>u.musicId).map(u=>u.musicId)).size;return {value:Math.min(3,n),max:3,label:`${n} / 3 phrases différentes`};}
- return {value:0,max:1,label:'À découvrir'};
+/** Progress uses the same qualifying evidence as awards; a pending card never claims 100%. */
+export function achievementProgress(def,attempts,plan,obtained,unlocks=[],session=null){
+ const result=(value,max,label)=>({value,max,label,percent:obtained?100:Math.min(99,Math.max(0,Math.floor(value/Math.max(1,max)*100)))});
+ if(obtained)return result(1,1,'Défi accompli');
+ const success=attempts.filter(passed),ids=new Set(success.map(a=>a.activity)),eligible=attempts.filter(a=>a.finished===true&&unaided(a));
+ if(def.id==='open-strings'){const n=['opens','opens-find'].filter(id=>ids.has(id)).length;return result(n,2,`${n} / 2 activités réussies`);}
+ if(def.id==='first-family'){const n=Math.max(0,...plan.order.map(pc=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find'].filter(id=>ids.has(id)).length));return result(n,4,`${n} / 4 activités pour une famille`);}
+ if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1),n=['mix-'+pc,'mix-'+pc+'-find'].filter(id=>success.some(a=>a.activity===id&&unaided(a)&&coverage(a))).length;return result(n,2,`${n} / 2 validations sans aide`);}
+ if(def.id==='clean-session'){const best=eligible.map(a=>resultMetrics(a.events)).sort((a,b)=>b.accuracy-a.accuracy)[0];return result(best?.correct||0,best?.total||20,best?`Meilleure séance sans aide : ${best.correct} / ${best.total}`:'Terminez une séance sans aide');}
+ if(def.id==='personal-fluidity'){const n=eligible.some(passed)?1:0;return result(n,2,n?'Temps de référence enregistré · battez-le sur ce même exercice':'Enregistrez un premier temps sans aide');}
+ if(def.id==='one-second'){const best=eligible.map(a=>resultMetrics(a.events)).filter(m=>m.accuracy===1&&m.meanMs!==null).sort((a,b)=>a.meanMs-b.meanMs)[0];return result(best?1000:0,best?Math.max(1000,best.meanMs):1000,best?`Meilleur temps sans faute : ${(best.meanMs/1000).toLocaleString('fr-FR',{maximumFractionDigits:2})} s · objectif 1 s`:'Terminez une séance sans faute ni aide');}
+ if(def.id==='three-sleeves'||def.id==='first-sleeve'){const max=def.id==='three-sleeves'?3:1,n=new Set(unlocks.filter(u=>u.scope==='global'&&u.musicId).map(u=>u.musicId)).size;return result(Math.min(max,n),max,`${Math.min(max,n)} / ${max} phrase${max>1?'s différentes':''} collectionnée${max>1?'s':''}`);}
+ if(def.id==='first-chain'||def.music){const finished=attempts.some(a=>a.activity.endsWith('-find')&&a.finished===true&&a.events.length>=20&&(!def.activity||a.activity===def.activity)),matching=session?.activity.endsWith('-find')&&(!def.activity||session.activity===def.activity),questions=matching?Math.min(1,(session.events?.length||0)/Math.max(20,session.queue?.length||20)):0,value=finished?1:questions;return result(value,2,value===1?'Questions terminées · reste la suite musicale':value>0?'Questions en cours · puis la suite musicale':'Terminez les questions, puis la suite musicale');}
+ return result(0,1,'Prêt à relever le défi');
 }

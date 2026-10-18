@@ -54,3 +54,9 @@ Les autres scripts de ce dossier conservent des scénarios historiques, notammen
 `music-v020.py` : les 18 passages conservés sont joués et leurs succès enregistrés.
 `reward-v020.py` : remise à zéro de la chaîne, dernière note puis lecture accompagnée.
 Les outils génériques `onboarding.py`, `pilot-layout.py`, `pilot-full.py`, `result-fit-v019.py` et `package-offline.py` restent utilisables ; les noms de certains scripts rappellent leur version d’introduction.
+
+## Recette v0.21
+
+`v021.py` : onboarding, retour au parcours, découverte figée, états natifs du plein écran, Mute, collection et mode débug réversible.
+`discovery-v021.py` : compteur et bouton visibles sur six instruments et cinq tailles.
+Les scripts génériques `onboarding.py`, `pilot-layout.py` et `package-offline.py` complètent cette recette.

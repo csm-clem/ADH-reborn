@@ -30,3 +30,5 @@
 .achievement-grid.is-list .achievement-card{display:grid;grid-template-columns:125px minmax(0,1fr)}.is-list .achievement-art{height:100%;border-radius:14px 5px 5px 14px}
 @media(max-width:700px){.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.achievement-copy h2{font-size:19px}.achievement-card{padding:5px}.achievement-copy{padding:13px 6px 6px}.achievement-art{height:115px}.achievement-art>.achievement-seal{width:26px;height:26px;font-size:17px}.achievement-grid.is-list{grid-template-columns:1fr}}
 @media(max-width:450px){.achievement-grid{grid-template-columns:1fr}.achievement-art{height:128px}.achievement-copy{padding:16px 12px 9px}.achievement-copy h2{font-size:22px}}
+
+.achievement-progress{margin-top:16px}.achievement-progress>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12px;color:var(--muted)}.achievement-progress strong{font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums}.achievement-progress progress{display:block;width:100%;margin:6px 0}.achievement-progress small{display:block;line-height:1.45;font-size:12px;color:var(--muted)}

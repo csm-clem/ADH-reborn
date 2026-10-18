@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.20.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.21.0**.
 
 ## Priorités de développement
 
@@ -36,11 +36,11 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 
 Le parcours six cordes standard conserve 18 passages connus distincts après audit. Sept arrangements incertains sont temporairement exclus ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.20/audit-musical.md).
 
-Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Quatre palettes coordonnées sont proposées dans les Paramètres.
+Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres.
 
 Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
 
-Voir [le rapport v0.20](docs/CHANGES-v0.20.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.21](docs/CHANGES-v0.21.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
