@@ -4,10 +4,10 @@ from pathlib import Path
 BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 OUT=Path(os.environ.get('ADH_QA_OUTPUT','/tmp/adh-pilot-qa'));OUT.mkdir(parents=True,exist_ok=True)
 CHROMIUM=os.environ.get('CHROMIUM_BIN','/usr/bin/chromium')
-KEY='fretboard-trainer:pilot:0.22.0';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
+KEY='fretboard-trainer:pilot:stable';SETTINGS='fretboard-trainer:settings';LEGACY=SETTINGS
 
 def setup_standard(page):
- page.get_by_role('button',name='Continuer',exact=True).click();page.get_by_role('button',name='C’est parti').click()
+ page.get_by_role('button',name='Suivant →',exact=True).click();page.get_by_role('button',name='Suivant →',exact=True).click();page.get_by_role('button',name='Commencer',exact=True).click();page.locator('[data-guide=skip]').click()
 def snap(page):return page.evaluate('(k)=>Object.values(JSON.parse(localStorage.getItem(k)).profiles)[0]',KEY)
 def tick(page,ms=40):
  if getattr(page,'fast_clock',False):page.clock.run_for(ms)

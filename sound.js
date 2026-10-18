@@ -15,7 +15,7 @@ export function pluckedString(hz,sampleRate=44100,seconds=1.6,random=Math.random
   return samples;
 }
 
-export function instrumentVoice(instrumentId='guitar6',preference='auto'){if(['guitar-acoustic','guitar-clean','bass-electric'].includes(preference))return preference;return instrumentId.startsWith('bass')?'bass-electric':'guitar-clean';}
+export function instrumentVoice(instrumentId='guitar6',preference='auto'){if(['guitar-acoustic','guitar-clean','guitar-driven','bass-electric'].includes(preference))return preference;return instrumentId.startsWith('bass')?'bass-electric':'guitar-clean';}
 /** Clean magnetic-pickup timbres: pluck attack, harmonic-dependent decay, no distortion. */
 export function electricString(hz,sampleRate=44100,seconds=1.8,voice='guitar-clean',random=Math.random){
  if(!Number.isFinite(hz)||hz<=0||hz>sampleRate/4)throw new Error('Pitch outside synthesis range');
@@ -28,3 +28,11 @@ export function electricString(hz,sampleRate=44100,seconds=1.8,voice='guitar-cle
 }
 
 export function voiceCutoff(hz,voice){return voice==='guitar-acoustic'?Math.min(2800,hz*9):voice==='bass-electric'?Math.min(4200,hz*22):Math.min(12000,hz*56);}
+
+/** Soft-clipped electric string, with a controlled noisy pick attack. */
+export function drivenString(hz,sampleRate=44100,seconds=1.8,random=Math.random){
+ const clean=electricString(hz,sampleRate,seconds,'guitar-clean',random),out=new Float32Array(clean.length);
+ let low=0;const alpha=1-Math.exp(-2*Math.PI*5800/sampleRate);
+ for(let i=0;i<clean.length;i++){const drive=Math.tanh(clean[i]*5.5)*.68;low+=alpha*(drive-low);out[i]=low;}
+ return out;
+}

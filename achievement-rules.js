@@ -12,7 +12,7 @@ export const ACHIEVEMENTS=Object.freeze([
  {id:'first-chain',category:'landmarks',title:'Le fil du riff',criterion:'Terminer une suite musicale. Une erreur remet la suite à zéro ; les essais précédents restent permis.',symbol:'♪'},
  {id:'personal-fluidity',category:'fluency',title:'Mon record prend la fuite',criterion:'Battre son temps moyen, à précision au moins égale, sur ce même exercice et ce même instrument, sans aide.',symbol:'↗'},
  {id:'one-second',category:'fluency',title:'Éclair de manche',criterion:'Au moins 20 réponses, 100 % justes, sans aide, en 1 seconde de moyenne ou moins.',symbol:'ϟ'},
- {id:'first-sleeve',category:'music',title:'Premier pressage',criterion:'Terminer la suite d’un morceau pour ajouter sa phrase accompagnée à la collection.',symbol:'♫',scope:'global'},
+ {id:'first-sleeve',category:'music',title:'Premier pressage',criterion:'Terminer la suite d’un morceau pour ajouter le morceau à la collection.',symbol:'♫',scope:'global'},
  {id:'three-sleeves',category:'music',title:'Le club des vinyles',criterion:'Collectionner trois phrases de morceaux différents.',symbol:'▣',scope:'global'}
 ].map(d=>Object.freeze({...d,version:1,scope:d.scope||'profile'})));
 export const collectionScope=(profile,zone={start:0,end:4})=>`${profile.key}@${zone.start}-${zone.end}`;
@@ -57,4 +57,15 @@ export function achievementProgress(def,attempts,plan,obtained,unlocks=[],sessio
  if(def.id==='three-sleeves'||def.id==='first-sleeve'){const max=def.id==='three-sleeves'?3:1,n=new Set(unlocks.filter(u=>u.scope==='global'&&u.musicId).map(u=>u.musicId)).size;return result(Math.min(max,n),max,`${Math.min(max,n)} / ${max} phrase${max>1?'s différentes':''} collectionnée${max>1?'s':''}`);}
  if(def.id==='first-chain'||def.music){const finished=attempts.some(a=>a.activity.endsWith('-find')&&a.finished===true&&a.events.length>=20&&(!def.activity||a.activity===def.activity)),matching=session?.activity.endsWith('-find')&&(!def.activity||session.activity===def.activity),questions=matching?Math.min(1,(session.events?.length||0)/Math.max(20,session.queue?.length||20)):0,value=finished?1:questions;return result(value,2,value===1?'Questions terminées · reste la suite musicale':value>0?'Questions en cours · puis la suite musicale':'Terminez les questions, puis la suite musicale');}
  return result(0,1,'Prêt à relever le défi');
+}
+/** Resume the missing criterion, rather than restarting the first completed activity. */
+export function nextAchievementActivity(def,attempts,plan){
+ if(def.activity)return def.activity;
+ const complete=(id,strict=false)=>attempts.some(a=>a.activity===id&&passed(a)&&(!strict||unaided(a)&&coverage(a)));
+ let ids,strict=false;
+ if(def.id==='open-strings')ids=['opens','opens-find'];
+ else if(def.id==='first-family')ids=plan.order.map(pc=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find']).sort((a,b)=>b.filter(id=>complete(id)).length-a.filter(id=>complete(id)).length)[0];
+ else if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1);ids=['mix-'+pc,'mix-'+pc+'-find'];strict=true;}
+ else ids=plan.modules.flatMap(m=>[m.id,m.id+'-find']);
+ return ids.find(id=>!complete(id,strict))||ids[0]||'opens';
 }

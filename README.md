@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.22.0**.
+PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.23.0**.
 
 ## Priorités de développement
 
@@ -34,25 +34,23 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 - Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
-Le parcours six cordes standard conserve 18 passages connus distincts après audit. Sept arrangements incertains sont temporairement exclus ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.22/audit-musical.md).
+Le parcours six cordes standard utilise actuellement 14 passages connus distincts. Les airs retirés et les morceaux en attente ne sont pas attribués aux activités ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.23/audit-musical.md).
 
 Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres. Le bouton Signaler un bug ouvre un formulaire intégré ; l’envoi nécessite le relais PHP inclus et une connexion. Les récompenses musicales reprennent le registre exact de l’exercice.
 
 Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
 
-Voir [le rapport v0.22](docs/CHANGES-v0.22.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
+Voir [le rapport v0.23](docs/CHANGES-v0.23.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
 Pour préparer une nouvelle livraison, synchroniser la version dans `release.js`, `package.json` et le nom du cache de `sw.js` ; les tests vérifient cet alignement.
 
 ## Progression des versions de test
 
-Chaque nouvelle version **v0** utilise un historique neuf. Le chargement supprime les anciennes progressions de cette application tout en gardant l’instrument favori, la notation, le son et le thème. Une actualisation ou une réouverture de la même version conserve la séance et les résultats.
+Depuis la v0.23, les versions de test conservent les progrès sans compte. Une sauvegarde v0.22 compatible encore présente sur la même origine est migrée vers une clé durable, sans supprimer l’archive. Les imports v0 compatibles sont acceptés. Une donnée illisible est protégée et une écriture refusée n’est pas assimilée à une sauvegarde réussie.
 
-Les exports/imports sont propres à la version v0 courante. Le mécanisme de stockage utilise un espace commun aux versions stables à partir de v1 ; les futures évolutions de schéma devront conserver leurs migrations. Aucune donnée des autres applications du domaine n’est effacée.
+Les nouvelles mises à jour sont proposées, jamais imposées, y compris après fermeture des onglets. Voir les deux modes de déploiement (URL fixe ou annonce `latest.json` entre dossiers versionnés) dans [le rapport v0.23](docs/CHANGES-v0.23.md). Le tout premier passage depuis une v0.22 déjà installée demande une ouverture manuelle de la nouvelle URL.
 
-La connexion et la synchronisation entre appareils sont réservées à la phase 8.
-
-Le code de l’ancien parcours et les anciens ZIP applicatifs sont retirés de la branche courante. Les documents de conception et l’historique Git restent des références du projet.
+Les futures modifications de schéma devront ajouter leur convertisseur et ses tests. Aucune donnée des autres applications du domaine n’est supprimée.
 
 ## Architecture
 
@@ -85,7 +83,7 @@ Le site est entièrement statique et utilise des URL relatives. Copier **le cont
 
 Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.20/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 
-Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans la même version de test.
+Pour vérifier hors ligne : charger la page, attendre l’activation du service worker, recharger une fois, couper le réseau et rouvrir l’application. Les progrès sont locaux au navigateur ; une sauvegarde JSON permet de les restaurer dans une version compatible.
 
 ## Périmètre commercial
 
@@ -105,4 +103,4 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 ## Livraison v0.20
 
-[Rapport v0.20](docs/CHANGES-v0.20.md) · [Audit musical](docs/v0.22/audit-musical.md) · [Validation](docs/v0.20/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 18 passages conservés, 7 en révision.
+[Rapport v0.23](docs/CHANGES-v0.23.md) · [Audit musical](docs/v0.23/audit-musical.md) · [Validation](docs/v0.23/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 14 passages attribués au parcours standard ; deux demandes musicales restent à terminer.

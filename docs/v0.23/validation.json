@@ -1,0 +1,118 @@
+{
+  "browser": {
+    "checks": [
+      "3 screen sizes: onboarding 3 steps, primer 5 pages, tuning reminder",
+      "real v0.22 store migrates, 100 attempts and achievements retained",
+      "achievement flip: front inert, back accessible, only unlock criteria",
+      "distorted voice selectable; iPhone install guide opens and closes",
+      "update can be declined; no data change; offered again on reload",
+      "partial challenge routes to opens-find"
+    ],
+    "pageErrors": []
+  },
+  "audio": {
+    "source_register_arrangements_scheduled": true,
+    "no_late_notes": true,
+    "held_buffers_long_enough": true,
+    "first_note_waveform_matches_reference_register": true,
+    "details": [
+      {
+        "id": "higher-ground",
+        "firstMidi": 28,
+        "correlation": 1,
+        "scheduledVoices": 20
+      },
+      {
+        "id": "singing-rain",
+        "firstMidi": 62,
+        "correlation": 1,
+        "scheduledVoices": 12
+      },
+      {
+        "id": "my-sharona",
+        "firstMidi": 31,
+        "correlation": 1,
+        "scheduledVoices": 23
+      },
+      {
+        "id": "immigrant-song",
+        "firstMidi": 30,
+        "correlation": 1,
+        "scheduledVoices": 20
+      },
+      {
+        "id": "christmas-song",
+        "firstMidi": 63,
+        "correlation": 0.999,
+        "scheduledVoices": 16
+      },
+      {
+        "id": "seven-nation",
+        "firstMidi": 40,
+        "correlation": 1,
+        "scheduledVoices": 7
+      },
+      {
+        "id": "bites-dust",
+        "firstMidi": 33,
+        "correlation": 1,
+        "scheduledVoices": 11
+      },
+      {
+        "id": "iron-man",
+        "firstMidi": 47,
+        "correlation": 1,
+        "scheduledVoices": 15
+      },
+      {
+        "id": "trek",
+        "firstMidi": 55,
+        "correlation": 1,
+        "scheduledVoices": 8
+      },
+      {
+        "id": "entertainer",
+        "firstMidi": 64,
+        "correlation": 0.999,
+        "scheduledVoices": 16
+      },
+      {
+        "id": "around-world",
+        "firstMidi": 42,
+        "correlation": 1,
+        "scheduledVoices": 16
+      },
+      {
+        "id": "billie-jean",
+        "firstMidi": 42,
+        "correlation": 1,
+        "scheduledVoices": 16
+      },
+      {
+        "id": "rainbow",
+        "firstMidi": 63,
+        "correlation": 0.999,
+        "scheduledVoices": 23
+      },
+      {
+        "id": "smoke-water",
+        "firstMidi": 55,
+        "correlation": 1,
+        "scheduledVoices": 12
+      }
+    ]
+  },
+  "update": {
+    "refusal_survives_browser_tabs_close": true,
+    "same_path_update_activated_after_acceptance": true,
+    "all_progress_preserved": true
+  },
+  "offline": {
+    "nested_ftp_boot": true,
+    "six_images_cached": true,
+    "offline_setup_and_course": true,
+    "errors": []
+  },
+  "native_tests": 119,
+  "physical_iphone_tested": false
+}

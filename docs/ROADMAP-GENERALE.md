@@ -10,7 +10,7 @@ Cette roadmap remplace l’ordre de priorité des huit phases pédagogiques init
 
 Les tests techniques et la recette interne restent nécessaires avant la V1. Les tests utilisateurs structurés commencent après cette première version fonctionnelle, selon la décision du porteur du projet. On peut la distribuer d’abord à un groupe restreint : « V1 fonctionnelle » ne signifie pas déclencher immédiatement la publicité.
 
-La décision de périmètre ci-dessus reste inchangée. La livraison de correctifs du 18 octobre est la [v0.22](CHANGES-v0.22.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
+La décision de périmètre ci-dessus reste inchangée. La livraison courante du 18 octobre est la [v0.23](CHANGES-v0.23.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
 
 ## V1.0 — Une application simple, amusante et payable
 
@@ -33,7 +33,8 @@ Les parcours de gammes, les arpèges avancés et les harmoniques restent en V3. 
 | Résultats et progrès | Garder les scores, temps moyens, records du même exercice, carte par position et révisions manuelles ciblées. Ne pas annoncer une mémorisation durable à partir d’une séance réussie. |
 | Succès et personnalisation existants | Conserver et stabiliser ce qui est déjà livré, sans enrichir le catalogue ni ajouter de nouvelles mécaniques. Les succès restent secondaires par rapport au jeu. |
 | PWA | Installation, première connexion puis jeu hors ligne, reprise après interruption, audio, tactile, lisibilité et commandes accessibles. |
-| Progression | Conservation durable à partir de la V1, migrations testées entre mises à jour, export/import de secours. Les remises à zéro restent propres aux versions v0. |
+| Progression | Conservation durable dès la v0.23 pour les bêta-testeurs, mises à jour choisies et migrations testées, export/import de secours. Les remises à zéro des v0 sont supprimées. |
+| Compte | Prévoir la création et récupération du compte en V1 selon la note du 18 octobre ; le jeu et les données locales restent utilisables sans compte. La synchronisation complète entre appareils reste en V2. |
 | Accès commercial | Essai complet de sept jours, paiement et vérification des droits, activation et restauration de l’achat. |
 
 Avant V1, retirer physiquement le mode débug et ses données simulées de la livraison, puis confirmer l’envoi et la réception des signalements sur l’hébergement réel.
@@ -46,7 +47,7 @@ Le parcours inclut les zones 0–4, 4–8, 7–11 et 12–16 déjà envisagées,
 
 Le modèle retenu reste : **sept jours d’accès complet, puis achat pour continuer à jouer**. Après expiration, un non-acheteur voit une proposition d’achat ; payer rétablit l’accès complet. L’expiration ne supprime pas ses résultats ni sa sauvegarde. Le statut exact des clients déjà présents sur Le Compositeur reste à préciser : il n’est pas déduit automatiquement d’un autre achat.
 
-La création d’un compte de jeu et la synchronisation des progrès restent en V2. En V1, une identité d’achat peut suffire — par exemple une adresse e-mail et un lien/code de restauration — sans espace personnel ni profil de progression en ligne.
+La note du 18 octobre place désormais la création de compte en V1, à implémenter plus tard. La synchronisation complète entre appareils reste un chantier V2 tant que son anticipation n’est pas décidée. En V1, une identité d’achat peut suffire — par exemple une adresse e-mail et un lien/code de restauration — sans espace personnel ni profil de progression en ligne.
 
 Cela demande tout de même un petit service serveur : début et fin d’essai de référence, vérification des paiements, attribution et restauration des droits. Un simple compteur dans le navigateur ne constitue pas un mécanisme commercial fiable. Le raccordement au WordPress existant ou à un service dédié est à décider avant l’implémentation.
 
@@ -59,7 +60,7 @@ Cela demande tout de même un petit service serveur : début et fin d’essai de
 3. **Finaliser le jeu** : résoudre les bugs, fluidifier les séquences et vérifier que les exercices et extraits correspondent aux notes autorisées. Vérifier les droits d’utilisation des extraits retenus pour une diffusion commerciale, ou les remplacer par un répertoire autorisé.
 4. **Finaliser les écrans et les textes** : configuration, parcours complet, consignes, pause, résultats, progrès, paramètres et explications commerciales. Textes clairs et corrects pour la V1 ; perfectionnement éditorial complet en V2.
 5. **Mettre en place l’essai et le paiement** : dates d’essai, paiement confirmé côté serveur, activation, expiration, achat restauré, annulation/remboursement et messages compréhensibles. Vérifier les droits sans synchroniser les progrès en ligne.
-6. **Passer à une progression durable** : supprimer la politique de remise à zéro pour les versions stables, tester les migrations et les sauvegardes, conserver les données après expiration de l’essai.
+6. **Passer à une progression durable** : prolonger la conservation livrée dès la v0.23, tester les futurs changements de schéma et les sauvegardes, conserver les données après expiration de l’essai.
 7. **Recetter et livrer la V1.0** : vérifier le parcours entier et les paiements sur l’hébergement cible et sur de vrais téléphones. Préparer la distribution restreinte des tests utilisateurs.
 
 ### Critères de sortie V1.0
@@ -87,7 +88,7 @@ Les questions utiles : finit-on une première activité ? Sait-on quoi faire ens
 
 ### 2. Livrer les ajustements V1.x
 
-Corriger les blocages et les frictions constatées ; ajuster les textes, le volume des questions, la difficulté et les retours. Les V1.x servent à stabiliser la même promesse. Elles ne deviennent pas une voie détournée pour ajouter Arcade, Explorer ou un compte.
+Corriger les blocages et les frictions constatées ; ajuster les textes, le volume des questions, la difficulté et les retours. Les V1.x servent à stabiliser la même promesse. Elles ne deviennent pas une voie détournée pour ajouter Arcade ou Explorer.
 
 ### 3. Construire le marketing et lancer une campagne
 
@@ -107,7 +108,7 @@ Déclenchement conditionné au bilan de la V1 ; pas de développement en parall�
 
 | Chantier | Contenu |
 |---|---|
-| Compte et synchronisation | Création/récupération du compte, rattachement de l’achat et des progrès V1, synchronisation après jeu hors ligne, conflits, export et suppression. Aucune progression V1 perdue à l’activation du compte. |
+| Synchronisation du compte V1 | Rattachement de l’achat et des progrès locaux V1, synchronisation après jeu hors ligne, conflits, export et suppression. Aucune progression V1 perdue à l’activation du compte. |
 | Révisions personnalisées | Prochaine séance recommandée, rappels espacés, difficultés locales, vérifications sans aide et reprise raisonnable après une absence. |
 | Mode Arcade initial | Partie sans fin à trois vies sur l’étendue apprise/choisie, difficulté et délai progressifs ; variantes notes naturelles et chromatiques. Arpèges avancés en V3. |
 | Mode Explorer initial | Atlas interactif des notes, adapté à l’instrument et à l’accordage. Atlas des harmoniques en V3. |
@@ -116,7 +117,7 @@ Déclenchement conditionné au bilan de la V1 ; pas de développement en parall�
 
 Le parcours complet des notes appuyées est déjà un prérequis livré en V1. La V2 améliore son suivi et ses révisions ; elle n’en conditionne pas l’accès ni l’achèvement. Les gammes spécialisées, les arpèges avancés et les harmoniques restent en V3.
 
-Ordre recommandé : compte et reprise des données → révisions personnalisées et suivi → Explorer → Arcade → validation éditoriale et recette globale. Livrer ces chantiers par lots vérifiables plutôt que multiplier les changements simultanés.
+Ordre recommandé : reprise et synchronisation des données des comptes V1 → révisions personnalisées et suivi → Explorer → Arcade → validation éditoriale et recette globale. Livrer ces chantiers par lots vérifiables plutôt que multiplier les changements simultanés.
 
 ### Critères de sortie V2.0
 
@@ -151,7 +152,7 @@ Chaque lot a son propre prototype, ses critères et sa recette. « Toutes les fo
 | 5 — Tests et extension | Production du parcours complet avant V1 ; tests utilisateurs après V1 et corrections en V1.x. |
 | 6 — Instruments et données | Instruments existants et sauvegarde durable en V1 ; transferts/continuité entre appareils en V2. |
 | 7 — Fiabilité PWA | Indispensable avant V1, puis entretenue à chaque livraison. |
-| 8 — Extensions | Zones et travail des notes appuyées en V1 ; succès existants conservés ; Arcade/Explorer notes/compte en V2 ; autres fonctions avancées en V3. |
+| 8 — Extensions | Zones et travail des notes appuyées en V1 ; succès existants conservés ; compte en V1, Arcade/Explorer notes/synchronisation en V2 ; autres fonctions avancées en V3. |
 
 ## Décisions nécessaires pour préparer le prochain lot V1
 
@@ -161,3 +162,7 @@ Chaque lot a son propre prototype, ses critères et sa recette. « Toutes les fo
 4. Carte détaillée du parcours complet et liste finale des corrections/textes indispensables pour toutes les zones.
 
 Ces décisions précèdent leur implémentation ; elles n’empêchent pas de formaliser dès maintenant cette roadmap.
+
+## Retour des premiers bêta-testeurs — 18 octobre 2026
+
+La recette réelle a commencé avant la V1. Le lot v0.23 ajoute l’entrée visuelle des débutants, un tutoriel facultatif du diagramme, la reprise du prochain critère des succès et la conservation des données sans compte. Il ne livre ni le parcours complet, ni le paiement, ni les comptes. Avant une annonce de correction complète de l’audio iPhone, effectuer une recette sur appareil physique. Avant de considérer le catalogue musical finalisé, terminer l’appel vocal d’Immigrant Song et arbitrer le placement de Come As You Are.
