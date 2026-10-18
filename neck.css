@@ -8,3 +8,4 @@
 .requested-string rect{fill:var(--brand);opacity:.12}.requested-string text{fill:var(--brand);font-size:6px;font-weight:800;paint-order:stroke;stroke:var(--neck-bg,var(--surface));stroke-width:2px}.requested-string-label{font-weight:750!important;color:var(--brand)!important}.lesson-tuning-reminder{display:grid;gap:4px;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;text-align:center}.lesson-tuning-reminder small{font-size:12px;color:var(--muted)}.lesson-tuning-reminder strong{font-size:clamp(14px,2.3vw,20px)}
 
 .neck-axis.is-requested-string{fill:var(--brand);font-weight:850}
+.shared-neck .neck-string.is-requested-string{stroke:var(--brand);stroke-width:1.5}

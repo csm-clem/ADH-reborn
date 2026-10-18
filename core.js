@@ -24,14 +24,26 @@ export function pitchLabel(midi, notation='international') {
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
 export const NECK_STYLE={openWidth:18,margin:8,fadeFraction:.5,inlayRadius:2.8,nutWidth:3.1,fretWidth:1.1};
-export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false,lesson=false}={}){
+export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false,lesson=false,startFret=0,stringIndices=null,availableWidth=0,availableHeight=0,minTarget=44}={}){
+  const visibleStrings=stringIndices||Array.from({length:strings},(_,i)=>i),visibleFrets=Array.from({length:lastFret-startFret+1},(_,i)=>i+startFret);
   const openWidth=lesson?38*2/3:NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
-  const neckWidth=(52+(strings-6)*7)*(gameplay?1.65:1),height=neckWidth+14,nut=margin+openWidth;
-  const frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale));
-  const bounds=f=>f===0?[nut-openWidth,nut]:[frets[f-1],frets[f]];
+  let neckWidth=visibleStrings.length===1?72:(52+(visibleStrings.length-6)*7)*(gameplay?1.65:1),height=neckWidth+14;const nut=margin+(startFret===0?openWidth:0);
+  const offset=startFret?fretDistance(startFret-1,scale):0;
+  let frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale)-offset),actualOpenWidth=openWidth;
+  // Continuous long strings soften proportions only when necessary for non-overlapping targets.
+  if(availableWidth>0&&visibleStrings.length===1){
+   const room=Math.max(1,availableWidth-margin-8),base=visibleFrets.map(f=>f===0?openWidth:frets[f]-frets[f-1]),floor=room>=base.length*minTarget?minTarget:0;
+   let widths=base.map(v=>v/base.reduce((a,b)=>a+b,0)*room);
+   if(floor){const fixed=new Set();for(let pass=0;pass<base.length;pass++){widths.forEach((v,i)=>{if(v<floor)fixed.add(i);});const remainder=room-fixed.size*floor,total=base.reduce((sum,v,i)=>sum+(fixed.has(i)?0:v),0);widths=base.map((v,i)=>fixed.has(i)?floor:total?v/total*remainder:floor);}}
+   let x=margin;frets=Array.from({length:lastFret+2},()=>0);
+   for(const [i,f]of visibleFrets.entries()){if(f===0){actualOpenWidth=widths[i];frets[0]=x+widths[i];}else{frets[f-1]=x;frets[f]=x+widths[i];}x+=widths[i];}frets[lastFret+1]=x+8;
+  }
+  const actualNut=startFret===0?(availableWidth&&visibleStrings.length===1?frets[0]:nut):nut;
+  const bounds=f=>f===0?[actualNut-actualOpenWidth,actualNut]:[frets[f-1],frets[f]];
   const centers=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)*2/3;}),labelXs=Array.from({length:lastFret+1},(_,f)=>{const [a,b]=bounds(f);return a+(b-a)/3;});
-  const ys=Array.from({length:strings},(_,s)=>5+(strings-1-s)*(neckWidth-3)/(strings-1)),inlays=[];for(let f=1;f<frets.length;f++){const pc=f%12;if(![0,3,5,7,9].includes(pc))continue;const x=(frets[f-1]+frets[f])/2;for(const t of pc===0?[.25,.75]:[.5])inlays.push({fret:f,x,y:Math.min(...ys)+(Math.max(...ys)-Math.min(...ys))*t});}
-  const width=frets[lastFret]+(frets[lastFret+1]-frets[lastFret])*NECK_STYLE.fadeFraction;return {width,height,nut,openStart:nut-openWidth,openWidth,frets,centers,labelXs,ys,inlays:inlays.filter(p=>p.x<width),fadeStart:frets[lastFret]};
+  if(gameplay&&visibleStrings.length>1&&availableWidth>0&&availableHeight>0){const boardWidth=frets[lastFret]+(frets[lastFret+1]-frets[lastFret])*NECK_STYLE.fadeFraction,scaleToWidth=availableWidth/boardWidth;neckWidth=Math.max(neckWidth,Math.min(availableHeight,visibleStrings.length*72+24)/scaleToWidth-14);height=neckWidth+14;}
+  const ys=Array.from({length:strings},(_,s)=>visibleStrings.length===1?neckWidth/2:gameplay?5+(visibleStrings.length-1-visibleStrings.indexOf(s)+.5)*(neckWidth-9)/visibleStrings.length:5+(visibleStrings.length-1-visibleStrings.indexOf(s))*(neckWidth-3)/(visibleStrings.length-1)),visibleYs=visibleStrings.map(s=>ys[s]),inlays=[];for(let f=Math.max(1,startFret);f<frets.length;f++){const pc=f%12;if(![0,3,5,7,9].includes(pc))continue;const x=(frets[f-1]+frets[f])/2;for(const t of pc===0?[.25,.75]:[.5])inlays.push({fret:f,x,y:visibleStrings.length===1?8:Math.min(...visibleYs)+(Math.max(...visibleYs)-Math.min(...visibleYs))*t});}
+  const width=frets[lastFret]+(frets[lastFret+1]-frets[lastFret])*NECK_STYLE.fadeFraction;return {width,height,nut:actualNut,openStart:startFret?margin:actualNut-actualOpenWidth,openWidth:actualOpenWidth,frets,centers,labelXs,ys,inlays:inlays.filter(p=>p.x<width),fadeStart:frets[lastFret],visibleFrets,visibleStrings,startFret,lastFret,bounds};
 }
 export function parseTuning(raw, count) {
   const bases={C:0,D:2,E:4,F:5,G:7,A:9,B:11};

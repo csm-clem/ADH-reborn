@@ -64,3 +64,16 @@ Les scripts génériques `onboarding.py`, `pilot-layout.py` et `package-offline.
 ## Recette v0.22
 
 `mail-v022.py` exige le serveur PHP local sur 127.0.0.1:4174 avec un `sendmail_path` de capture. Il ne doit jamais être utilisé pour envoyer vers une boîte réelle. `v022.py` utilise le même serveur de capture pour vérifier le formulaire et les cartes. `audio-runtime-v022.py` contrôle les 18 arrangements dans Web Audio. `music-v020.py` reste utilisable pour terminer les 18 suites. Les tests génériques de paquet et les tests Node complètent la recette.
+
+## Recette bêta v0.24
+
+Après `npm start` :
+
+```sh
+python tools/qa/beta-browser.py
+python tools/qa/beta-offline.py
+npm run package
+ADH_BASE_URL=http://localhost:4173/dist/ python tools/qa/beta-offline.py
+```
+
+`beta-browser.py` contrôle 25 dispositions, sept parties complètes et neuf cours, ainsi que la simulation réversible de progression. `beta-offline.py` vérifie les nouveaux modules précachés, les cours hors ligne, la correction d’octave, la stabilité du manche et les commandes sur petit écran. Ces deux scripts constituent la recette du nouveau catalogue ; les anciens scénarios aux nombres fixes d’activités ne décrivent plus ce catalogue. Les variables `ADH_BASE_URL` et `ADH_QA_OUTPUT` permettent de choisir la cible et le dossier des rapports. Un contrôle sur iPhone réel reste nécessaire.

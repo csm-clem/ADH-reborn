@@ -10,7 +10,7 @@ Cette roadmap remplace l’ordre de priorité des huit phases pédagogiques init
 
 Les tests techniques et la recette interne restent nécessaires avant la V1. Les tests utilisateurs structurés commencent après cette première version fonctionnelle, selon la décision du porteur du projet. On peut la distribuer d’abord à un groupe restreint : « V1 fonctionnelle » ne signifie pas déclencher immédiatement la publicité.
 
-La décision de périmètre ci-dessus reste inchangée. La livraison courante du 18 octobre est la [v0.23](CHANGES-v0.23.md) ; le parcours jouable reste pour le moment la zone 0–4. Le parcours complet et le paiement restent à réaliser pour la V1.
+La décision de périmètre ci-dessus reste inchangée. La livraison bêta du 19 octobre est la [v0.24](CHANGES-v0.24.md) : Grand Débutant, trois zones (0–4, 4–8, 8–12), trois premières cordes physiques jusqu’à 12 et Niveau 1 guidé. Ce périmètre bêta est implémenté ; les extensions du parcours complet jusqu’à 24, les autres cordes, les duos et les mélanges étendus restent à réaliser pour la V1, ainsi que le paiement. La recette utilisateur et les essais sur appareils réels restent nécessaires.
 
 ## V1.0 — Une application simple, amusante et payable
 

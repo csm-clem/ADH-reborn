@@ -45,3 +45,6 @@ input:not([type=checkbox]):not([type=file]),select{background:var(--surface);col
 
 /* Compact focus rings stay visible without colliding with adjacent form labels. */
 select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+
+/* Correct untimed course answers keep the shared action shape and a non-color cue in the text. */
+.button.is-answer-correct:disabled{background:var(--surface);border-color:var(--note-correct);color:var(--ink)}

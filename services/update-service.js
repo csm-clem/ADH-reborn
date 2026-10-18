@@ -1,6 +1,6 @@
 import {RELEASE} from '../release.js';
 export function newerVersion(candidate,current=RELEASE){if(!/^\d+\.\d+\.\d+$/.test(candidate||''))return false;const a=candidate.split('.').map(Number),b=current.split('.').map(Number);for(let i=0;i<3;i++){if(a[i]!==b[i])return a[i]>b[i];}return false;}
-export function updateTarget(data,manifestURL,currentURL){if(!newerVersion(data?.version))return null;const current=new URL(currentURL),url=new URL(data.url||'./',manifestURL);if(url.origin!==current.origin||url.username||url.password||!['http:','https:'].includes(url.protocol))return null;return {version:data.version,url:url.href};}
+export function updateTarget(data,manifestURL,currentURL,currentVersion=RELEASE){if(!newerVersion(data?.version,currentVersion))return null;const current=new URL(currentURL),url=new URL(data.url||'./',manifestURL);if(url.origin!==current.origin||url.username||url.password||!['http:','https:'].includes(url.protocol))return null;return {version:data.version,url:url.href};}
 /** No forced activation/reload. Rejection is kept only in memory until the next launch. */
 export class UpdateController{
  constructor({beforeUpdate,canPrompt=()=>true}){this.beforeUpdate=beforeUpdate;this.canPrompt=canPrompt;this.deferred=false;this.registration=null;}

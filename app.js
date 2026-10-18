@@ -1,3 +1,4 @@
+import {CourseController} from './course-ui.js';
 import {BeginnerGuide,installGuide} from './beginner-guide.js';
 import {UpdateController} from './services/update-service.js';
 import {debugAvailable} from './debug-mode.js';
@@ -18,13 +19,14 @@ appStore.initialize();
 audioService.configure({getState:appStore.getState});
 const {unlockAudio,stopAudio,playNote,playSequence,playArrangement}=audioService;
 let screen='home',installPrompt=null,updates=null;
-const courseScroll=new Map();
+const courseScroll=new Map();let renderedHomeKey=null;
+const homeKey=()=>{const profile=appStore.getState().profile;if(!profile)return 'setup';const nav=pilot.data.navigation||{};return `${profile.key}:${nav.route||'catalog'}:${nav.chapter||''}`;};
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icons={replay:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.5 10.5 7-4m-7 7 7 4"/>','fullscreen-exit':'<path d="M3 3l5 5M3 8h5V3m13 0-5 5m0-5v5h5M3 21l5-5m-5 0h5v5m13 0-5-5m0 5v-5h5"/>',fullscreen:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',chart:'<path d="M4 19h17M7 15V9m6 6V5m6 10v-8"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',back:'<path d="m14 6-6 6 6 6"/>',play:'<path d="m9 5 11 7-11 7z"/>',check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',mute:'<path d="m11 5-6 4H2v6h3l6 4zM16 9l6 6m0-6-6 6"/>',tap:'<path d="M9 12V5a2 2 0 0 1 4 0v7l2-1 5 4-2 6H9l-5-7a2 2 0 0 1 3-2l2 2"/>',sound:'<path d="m11 5-6 4H2v6h3l6 4zM15 8a5 5 0 0 1 0 8m3-11a9 9 0 0 1 0 14"/>',pause:'<path d="M8 5v14M16 5v14"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>'};
 const icon=(name)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.play}</svg>`;
 
 function toast(message){document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.role='status';el.textContent=message;document.body.append(el);setTimeout(()=>el.remove(),5000);}
-function setScreen(value){if(screen==='home')courseScroll.set(appStore.getState().profile?.key,window.scrollY);if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});window.scrollTo(0,value==='home'?courseScroll.get(appStore.getState().profile?.key)||0:0);}
+function setScreen(value){if(screen==='home')courseScroll.set(renderedHomeKey,window.scrollY);if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});window.scrollTo(0,value==='home'?courseScroll.get(homeKey())||0:0);}
 function fullscreenContent(active=!!document.fullscreenElement){return `${icon(active?'fullscreen-exit':'fullscreen')}<span>${active?'Quitter le plein écran':'Plein écran'}</span>`;}
 function syncFullscreen(active){for(const b of document.querySelectorAll('[data-action="fullscreen"],[data-pilot-action="fullscreen"]')){b.innerHTML=b.dataset.action?fullscreenContent(active):icon(active?'fullscreen-exit':'fullscreen');b.setAttribute('aria-label',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('title',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('aria-pressed',String(active));}}
 function debugPanel(){if(!debugAvailable(RELEASE))return '';return `<section class="panel debug-panel"><h2>Mode débug <small>· réservé à la v0</small></h2><p>${pilot.debugActive?'Simulation active : tous les exercices sont réussis à 100 % et tous les succès disponibles sont débloqués.':'Testez un parcours terminé et sa collection complète, pour cet instrument.'} Vos vrais résultats restent conservés. La simulation disparaît aussi au rechargement.</p><button class="button ${pilot.debugActive?'secondary':'quiet-button'}" data-action="debug" aria-pressed="${!!pilot.debugActive}">${pilot.debugActive?'Retrouver mes vrais résultats':'Simuler un parcours à 100 %'}</button></section>`;}
@@ -33,7 +35,7 @@ function logo(){return `<a class="brand" href="#" data-action="home"><img src=".
 function shell(body){
  const state=appStore.getState(),storageAvailable=storageService.status.settings;
  const instrument=state.profile?`${esc(state.profile.label)}<small>${state.profile.tuning.map(n=>esc(noteName(n,notationFor(state)))).join(' · ')}</small>`:'';
- return `<div class="shell"><aside class="sidebar">${logo()}<p class="nav-label">VOTRE ESPACE</p><nav>${[['home','Mon parcours','home'],['stats','Mes progrès','chart'],['achievements','Mes succès','check'],['settings','Paramètres','settings']].map(([page,label,i])=>`<button data-action="${page}" class="nav-item ${screen===page?'active':''}">${icon(i)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-bottom"><div class="instrument-badge"><span class="status-dot"></span><div>${instrument}</div></div><p>Un peu chaque jour.<br>Un manche qui devient familier.</p></div></aside><div class="main-shell"><header class="topbar"><span class="crumb">${screen==='achievements'?'Mes succès':screen==='stats'?'Mes progrès':screen==='settings'?'Paramètres':'Mon parcours'} <span>/</span> ${screen==='home'?'Zone 01':esc(APP_NAME)}</span></header><main class="content" id="main-content" tabindex="-1">${pilot.debugActive?'<p class="notice debug-notice" role="status"><strong>Simulation débug</strong> · vos vrais résultats sont conservés.</p>':''}${!storageAvailable?'<p class="notice" role="alert">La sauvegarde locale est indisponible. Exportez vos progrès avant de fermer.</p>':''}${body}</main></div><nav class="mobile-nav">${[['home','Parcours','home'],['stats','Progrès','chart'],['achievements','Succès','check'],['settings','Réglages','settings']].map(([page,label,i])=>`<button data-action="${page}" class="${screen===page?'active':''}">${icon(i)}${label}</button>`).join('')}</nav></div>`;
+ return `<div class="shell"><aside class="sidebar">${logo()}<p class="nav-label">VOTRE ESPACE</p><nav>${[['home','Mon parcours','home'],['stats','Mes progrès','chart'],['achievements','Mes succès','check'],['settings','Paramètres','settings']].map(([page,label,i])=>`<button data-action="${page}" class="nav-item ${screen===page?'active':''}">${icon(i)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-bottom"><div class="instrument-badge"><span class="status-dot"></span><div>${instrument}</div></div><p>Un peu chaque jour.<br>Un manche qui devient familier.</p></div></aside><div class="main-shell"><header class="topbar"><span class="crumb">${screen==='achievements'?'Mes succès':screen==='stats'?'Mes progrès':screen==='settings'?'Paramètres':'Mon parcours'} <span>/</span> ${screen==='home'?'Premiers Parcours':esc(APP_NAME)}</span></header><main class="content" id="main-content" tabindex="-1">${pilot.debugActive?'<p class="notice debug-notice" role="status"><strong>Simulation débug</strong> · vos vrais résultats sont conservés.</p>':''}${!storageAvailable?'<p class="notice" role="alert">La sauvegarde locale est indisponible. Exportez vos progrès avant de fermer.</p>':''}${body}</main></div><nav class="mobile-nav">${[['home','Parcours','home'],['stats','Progrès','chart'],['achievements','Succès','check'],['settings','Réglages','settings']].map(([page,label,i])=>`<button data-action="${page}" class="${screen===page?'active':''}">${icon(i)}${label}</button>`).join('')}</nav></div>`;
 }
 function settings(){
  const state=appStore.getState();
@@ -41,7 +43,7 @@ function settings(){
 }
 function setSound(sound){appStore.update({sound});if(sound)unlockAudio();}
 
-function render(){queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
+function render(){queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}if(screen==='home')renderedHomeKey=homeKey();renderView(ROOT,screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
 ROOT.addEventListener('click',e=>{
  const state=appStore.getState(),button=e.target.closest('[data-action]');if(!button)return;e.preventDefault();
  switch(button.dataset.action){
@@ -72,7 +74,8 @@ ROOT.addEventListener('change',async e=>{
  }
 });
 
-const pilot=new PilotController({storage:storageService,setAccidentals:accidentals=>appStore.update({accidentals}),setPositionButtons:value=>appStore.update({positionButtons:value}),getState:appStore.getState,showPilot:()=>{screen='pilot';render();},onActivityStart:()=>{if(screen==='home')courseScroll.set(appStore.getState().profile.key,window.scrollY);},home:()=>setScreen('home'),stats:()=>setScreen('stats'),achievements:()=>setScreen('achievements'),icon,playNote,playSequence,playArrangement,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const pilot=new PilotController({storage:storageService,setAccidentals:accidentals=>appStore.update({accidentals}),setPositionButtons:value=>appStore.update({positionButtons:value}),getState:appStore.getState,showPilot:()=>{screen='pilot';render();},openCourse:id=>{screen='course';courses.open(id);},onActivityStart:()=>{if(screen==='home')courseScroll.set(renderedHomeKey,window.scrollY);},home:()=>setScreen('home'),stats:()=>setScreen('stats'),achievements:()=>setScreen('achievements'),icon,playNote,playSequence,playArrangement,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const courses=new CourseController({pilot,getState:appStore.getState,render:()=>{screen='course';render();},home:()=>setScreen('home'),playSequence,icon});
 const bugReports=new BugReportController({getConfiguration:()=>bugConfiguration({release:RELEASE,profile:appStore.getState().profile,theme:document.documentElement.dataset.theme,viewport:[innerWidth,innerHeight],standalone:matchMedia('(display-mode: standalone)').matches})});
 const stateProfileKey=()=>appStore.getState().profile?.key;
 const achievements=new AchievementsController({pilot,getState:appStore.getState,setPreferences:collection=>appStore.update({collection}),render,icon,playArrangement,stopAudio,start:(id,profile)=>{if(profile){if(pilot.debugActive&&profile.key!==stateProfileKey())pilot.setDebug(false);appStore.update({profile});}pilot.start(id);}});
@@ -83,14 +86,14 @@ platformService.setTheme(appStore.getState().theme);
 platformService.connect({
  onHidden(){if(screen==='pilot')pilot.pause({keepAudio:true});},
  onResize(){if(!appStore.getState().profile)requestAnimationFrame(()=>onboarding.layout());else if(screen==='pilot')pilot.clock.stop('layout');},
- onResizeSettled(){if(screen==='pilot'){pilot.layout();pilot.clock.resume('layout');}},
+ onResizeSettled(){if(screen==='pilot'){render();pilot.clock.resume('layout');}if(screen==='course')courses.layout();},
  onFullscreen:syncFullscreen,
  onInstallPrompt(event){installPrompt=event;if(screen==='settings')render();}
 });
-onboarding.bind(ROOT);pilot.bind(ROOT);achievements.bind(ROOT);render();
+onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
 
 const beginner=new BeginnerGuide({getState:appStore.getState,onDone:()=>{appStore.update({beginnerGuide:true});updates.offer();}});
-updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'});
+updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'&&screen!=='course'});
 // Unlock on an explicit tap/keyboard action, never after a delayed transition.
 for(const event of ['pointerdown','keydown'])document.addEventListener(event,e=>{if(e.isTrusted)unlockAudio();},{capture:true});
 updates.start();

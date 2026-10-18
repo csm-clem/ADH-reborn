@@ -5,7 +5,7 @@ import {resultMetrics,personalRecord} from './results.js';
 export const ACHIEVEMENT_VERSION=1;
 export const ACHIEVEMENTS=Object.freeze([
  {id:'open-strings',category:'landmarks',title:'Les présentations sont faites',criterion:'Réussir « Nommer les cordes » et « Retrouver les cordes » à 90 % ou plus.',symbol:'≋'},
- {id:'first-family',category:'landmarks',title:'Réunion de famille',criterion:'Réussir une famille seule et son mélange, en nommant et en retrouvant les positions.',symbol:'◉'},
+ {id:'first-family',category:'landmarks',title:'Réunion de famille',criterion:'Réussir les activités de nomination et de recherche d’une famille, avec son mélange aux repères précédents.',symbol:'◉'},
  {id:'natural-map',category:'landmarks',title:'Le naturel revient au galop',criterion:'Réussir le dernier mélange naturel dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'♮'},
  {id:'full-map',category:'landmarks',title:'Le manche dans la poche',criterion:'Réussir le dernier mélange de la zone dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'▦'},
  {id:'clean-session',category:'landmarks',title:'Zéro accroc',criterion:'Réussir au moins 20 premières réponses consécutives sans erreur ni indice dans un exercice.',symbol:'✓'},
@@ -16,16 +16,25 @@ export const ACHIEVEMENTS=Object.freeze([
  {id:'three-sleeves',category:'music',title:'Le club des vinyles',criterion:'Collectionner trois phrases de morceaux différents.',symbol:'▣',scope:'global'}
 ].map(d=>Object.freeze({...d,version:1,scope:d.scope||'profile'})));
 export const collectionScope=(profile,zone={start:0,end:4})=>`${profile.key}@${zone.start}-${zone.end}`;
+const familyActivities=(plan,pc)=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find'].filter(id=>!plan.activityIds||plan.activityIds.includes(id));
 const unaided=a=>a.events.length>=20&&a.events.every(e=>!e.retry&&!e.aids?.length);
 const passed=a=>a.finished===true&&a.events.length>=20&&activityResult(a.events,a.events.length).passed;
+function openEvidence(plan,attempts){
+ const successes=attempts.filter(passed),find=successes.find(a=>a.activity==='opens-find');
+ if(!plan.activityIds||plan.activityIds.includes('opens')){const name=successes.find(a=>a.activity==='opens');return {name:!!name,find:!!find,proofs:[name,find].filter(Boolean)};}
+ const naming=successes.filter(a=>plan.activityIds.includes(a.activity)&&a.events.some(e=>e.mode==='name'));
+ const complete=plan.opens.every(p=>naming.some(a=>a.events.some(e=>e.mode==='name'&&e.correct&&!e.retry&&!e.aids?.length&&e.target.string===p.string&&e.target.fret===p.fret)));
+ return {name:complete,find:!!find,proofs:[...(complete?naming:[]),find].filter(Boolean)};
+}
+
 const coverage=a=>new Set(a.events.map(e=>`${e.target.string}:${e.target.fret}`)).size>=10;
 export function evaluateAchievements({profile,plan,attempts,entry,existing=[]}){
  const scope=collectionScope(profile,plan.zone),fresh=[],known=new Set(existing.map(u=>`${u.scope}:${u.id}`));
  function award(id,proofs,extra={},global=false){const key=global?'global':scope;if(known.has(`${key}:${id}`))return;known.add(`${key}:${id}`);fresh.push({id,scope:key,version:1,at:entry.at,profileKey:profile.key,zone:{...plan.zone},proofs:proofs.map(p=>p.id),evidence:proofs.map(p=>{const m=resultMetrics(p.events);return {attempt:p.id,activity:p.activity,at:p.at,total:m.total,correct:m.correct,meanMs:m.meanMs,aidedResponses:p.events.filter(e=>e.aids?.length).length,positions:new Set(p.events.map(e=>`${e.target.string}:${e.target.fret}`)).size,motifCompleted:!!p.motifCompleted};}),...extra});}
  const successes=attempts.filter(passed);
  const pair=(base,strict=false)=>[base,base+'-find'].map(id=>successes.find(a=>a.activity===id&&(!strict||unaided(a)&&coverage(a))));
- const opens=pair('opens');if(opens.every(Boolean))award('open-strings',opens);
- for(const pc of plan.order){const set=[...pair('note-'+pc),...pair('mix-'+pc)];if(set.every(Boolean)){award('first-family',set);break;}}
+ const opens=openEvidence(plan,attempts);if(opens.name&&opens.find)award('open-strings',opens.proofs);
+ for(const pc of plan.order){const set=familyActivities(plan,pc).map(id=>successes.find(a=>a.activity===id));if(set.length>=2&&set.every(Boolean)){award('first-family',set);break;}}
  const lastNatural=plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1);
  for(const [id,pc]of [['natural-map',lastNatural],['full-map',plan.order.at(-1)]]){const set=pair('mix-'+pc,true);if(set.every(Boolean))award(id,set);}
  if(passed(entry)&&unaided(entry)&&entry.events.every(e=>e.correct))award('clean-session',[entry]);
@@ -48,8 +57,8 @@ export function achievementProgress(def,attempts,plan,obtained,unlocks=[],sessio
  const result=(value,max,label)=>({value,max,label,percent:obtained?100:Math.min(99,Math.max(0,Math.floor(value/Math.max(1,max)*100)))});
  if(obtained)return result(1,1,'Défi accompli');
  const success=attempts.filter(passed),ids=new Set(success.map(a=>a.activity)),eligible=attempts.filter(a=>a.finished===true&&unaided(a));
- if(def.id==='open-strings'){const n=['opens','opens-find'].filter(id=>ids.has(id)).length;return result(n,2,`${n} / 2 activités réussies`);}
- if(def.id==='first-family'){const n=Math.max(0,...plan.order.map(pc=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find'].filter(id=>ids.has(id)).length));return result(n,4,`${n} / 4 activités pour une famille`);}
+ if(def.id==='open-strings'){const evidence=openEvidence(plan,attempts),n=Number(evidence.name)+Number(evidence.find);return result(n,2,`${n} / 2 compétences vérifiées`);}
+ if(def.id==='first-family'){const candidates=plan.order.map(pc=>familyActivities(plan,pc)).filter(ids=>ids.length>=2).map(group=>({value:group.filter(id=>ids.has(id)).length,max:group.length})).sort((a,b)=>b.value/b.max-a.value/a.max),best=candidates[0]||{value:0,max:4};return result(best.value,best.max,`${best.value} / ${best.max} activités pour une famille`);}
  if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1),n=['mix-'+pc,'mix-'+pc+'-find'].filter(id=>success.some(a=>a.activity===id&&unaided(a)&&coverage(a))).length;return result(n,2,`${n} / 2 validations sans aide`);}
  if(def.id==='clean-session'){const best=eligible.map(a=>resultMetrics(a.events)).sort((a,b)=>b.accuracy-a.accuracy)[0];return result(best?.correct||0,best?.total||20,best?`Meilleure séance sans aide : ${best.correct} / ${best.total}`:'Terminez une séance sans aide');}
  if(def.id==='personal-fluidity'){const n=eligible.some(passed)?1:0;return result(n,2,n?'Temps de référence enregistré · battez-le sur ce même exercice':'Enregistrez un premier temps sans aide');}
@@ -63,8 +72,8 @@ export function nextAchievementActivity(def,attempts,plan){
  if(def.activity)return def.activity;
  const complete=(id,strict=false)=>attempts.some(a=>a.activity===id&&passed(a)&&(!strict||unaided(a)&&coverage(a)));
  let ids,strict=false;
- if(def.id==='open-strings')ids=['opens','opens-find'];
- else if(def.id==='first-family')ids=plan.order.map(pc=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find']).sort((a,b)=>b.filter(id=>complete(id)).length-a.filter(id=>complete(id)).length)[0];
+ if(def.id==='open-strings'){const evidence=openEvidence(plan,attempts);ids=plan.activityIds&&!plan.activityIds.includes('opens')?[(plan.activityIds.find(id=>id.startsWith('mix-')&&!id.endsWith('-find'))||'opens-find'),'opens-find']:['opens','opens-find'];if(!evidence.find&&evidence.name)return 'opens-find';}
+ else if(def.id==='first-family')ids=plan.order.map(pc=>familyActivities(plan,pc)).filter(ids=>ids.length>=2).sort((a,b)=>b.filter(id=>complete(id)).length/b.length-a.filter(id=>complete(id)).length/a.length)[0];
  else if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1);ids=['mix-'+pc,'mix-'+pc+'-find'];strict=true;}
  else ids=plan.modules.flatMap(m=>[m.id,m.id+'-find']);
  return ids.find(id=>!complete(id,strict))||ids[0]||'opens';

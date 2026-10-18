@@ -3,7 +3,7 @@
   "name": "Daily Fretboard Trainer",
   "short_name": "Daily Fretboard",
   "lang": "fr",
-  "description": "Un jeu de notes et de liens musicaux pour apprendre votre manche.",
+  "description": "Apprenez les notes par zones et par cordes, avec un parcours guidé adapté à votre instrument.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

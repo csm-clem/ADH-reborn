@@ -1,6 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, sur les **cases 0 à 4**, adaptée à l’instrument et à l’accordage choisis. Version actuelle : **0.23.0**.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.24.0** — Grand Débutant, trois zones 0–4 / 4–8 / 8–12, trois cordes à vide–12 et Niveau 1 guidé.
+
+[Archive FTP v0.24](downloads/daily-fretboard-trainer-v0.24.zip) · [Rapport de livraison](docs/CHANGES-v0.24.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -19,18 +21,18 @@ npm run package
 
 Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’hébergement HTTPS pour tester l’installation et le mode hors ligne. La recette Chromium est décrite dans [tools/qa/README.md](tools/qa/README.md).
 
-## Le pilote actuel
+## La bêta actuelle
 
 - Guitares 6/7/8 cordes et basses 4/5/6 cordes, bibliothèque de 32 accordages et éditeur sonore par demi-ton. Configuration initiale contenue dans l’écran, avec pagination des cordes sur écran court.
 - Six images WebP fournies par le porteur du projet, intégrées localement et disponibles hors ligne.
-- Parcours par familles calculé depuis les hauteurs réelles : accordage, chaque famille isolée, puis son mélange avec les positions déjà apprises. Cinquante activités en guitare six cordes standard, organisées en paires « nommer » / « retrouver ».
+- Parcours par familles calculé depuis les hauteurs réelles : accordage, chaque famille isolée, puis son mélange avec les positions déjà apprises. 214 activités évaluées pour la guitare six cordes standard, plus 72 découvertes de familles et les cours courts ; le nombre dépend des hauteurs réellement disponibles. Les cas sans discrimination sont travaillés en mélange plutôt que dans une roue à une seule réponse.
 - **20 à 30 questions maximum**, un seul type de réponse par exercice. Séries mélangées et équilibrées ; les grandes listes répartissent leurs positions dans cette limite. Les exercices « retrouver » conservent une courte suite musicale finale, pour un maximum de 30 réponses en tout.
 - Roue de hauteurs (E2/E3/E4…) pour les familles isolées ; roue de sept notes naturelles pour les mélanges ; altérations utiles dans un second anneau intérieur. Choix dièses/bémols dans les Paramètres et pendant le jeu.
-- Révisions cumulatives : au moins 20 % de questions sur la nouvelle famille dans ses mélanges ; exercices isolés réellement limités à leur famille.
+- Révisions cumulatives : au moins 30 % de questions sur la nouvelle famille dans ses mélanges ; exercices isolés réellement limités à leur famille.
 - Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et moyenne ≤ 1 seconde.
 - Exemples graphiques à la première rencontre de chaque format et micro-leçons sur les noms et positions des notes. Les instructions ne consomment pas le temps de réponse.
 - Corrections à hauteur exacte : E2 et E4 ne sont pas confondus. Démonstration distincte des essais de l’élève.
-- Manche horizontal, entièrement cadré sans glissement pour répondre. Deux panneaux de même hauteur en paysage, empilés en portrait. Réponses tactiles et boutons accessibles, corde 1 en haut.
+- Manche horizontal, entièrement cadré sans glissement pour répondre. Les exercices par zone gardent deux panneaux en paysage, empilés en portrait. Une corde entière reste continue, avec paysage conseillé ; en portrait, des boutons de cases prennent le relais si les cibles sont trop étroites. Corde physique 1 en haut.
 - Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
@@ -79,7 +81,7 @@ Les futures modifications de schéma devront ajouter leur convertisseur et ses t
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.20.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.24.zip), dans le dossier servi en HTTPS.
 
 Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.20/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 

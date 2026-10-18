@@ -18,3 +18,5 @@
 @import url('./interaction.css') layer(pages);
 
 @import url('./achievements.css') layer(pages);
+
+@import url("./beta.css") layer(pages);

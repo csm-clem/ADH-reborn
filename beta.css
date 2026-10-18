@@ -1,0 +1,922 @@
+/* Beta pathways: layout only. Shared .button rules remain the source of button appearance. */
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.route-card {
+  display: grid;
+  text-align: left;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease;
+}
+.route-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand);
+}
+.route-card > strong {
+  font: 700 24px/1.2 var(--font-heading);
+  padding-right: 28px;
+}
+.route-card > span:not(.route-card-icon),
+.route-card > small {
+  color: var(--muted);
+  font-size: 14px;
+}
+.route-card-icon {
+  position: absolute;
+  right: 20px;
+  top: 16px;
+  font-size: 26px;
+  color: var(--brand);
+}
+.route-card progress,
+.route-summary progress,
+.beta-featured progress {
+  width: 100%;
+  height: 7px;
+  accent-color: var(--brand);
+}
+.beta-beginner {
+  margin: 24px 0;
+}
+.beta-beginner .route-card {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+.beta-beginner .route-card strong {
+  grid-column: 1;
+}
+.beta-beginner .route-card progress,
+.beta-beginner .route-card small {
+  grid-column: 2;
+  grid-row: 1/3;
+  min-width: 150px;
+}
+.beta-beginner .route-card progress {
+  align-self: end;
+  margin-bottom: -10px;
+}
+.beta-beginner .route-card .route-card-icon {
+  display: none;
+}
+.beta-featured {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.beta-featured .button {
+  margin: 8px 12px 0 0;
+}
+.beta-featured-progress {
+  display: grid;
+  gap: 10px;
+  align-content: center;
+}
+.beta-featured-progress strong {
+  font: 700 40px var(--font-heading);
+}
+.beta-featured-progress span {
+  font-size: 14px;
+}
+.beta-featured-progress progress {
+  accent-color: var(--wood);
+}
+.beta-back {
+  margin-bottom: 14px;
+}
+.beta-unlocked {
+  font-size: 13px;
+  color: var(--muted);
+  margin-block: 20px;
+}
+.chapter-overview {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+.chapter-overview h2,
+.chapter-overview p {
+  margin: 0;
+}
+.chapter-context {
+  font-size: 13px;
+  color: var(--muted);
+}
+.chapter-activities {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+.route-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px 24px;
+  align-items: center;
+}
+.route-summary > div {
+  display: grid;
+  gap: 4px;
+}
+.route-summary strong {
+  font: 700 32px var(--font-heading);
+}
+.route-summary span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.route-summary progress {
+  grid-column: 1;
+}
+.route-summary .button {
+  grid-column: 2;
+  grid-row: 1/3;
+}
+.guided-stage {
+  margin-block: 32px;
+}
+.guided-stage > h2 {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 23px;
+}
+.guided-stage h2 small {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  color: var(--brand);
+  font-size: 17px;
+}
+.spiral-review {
+  border-left: 3px solid var(--brand);
+  margin-top: 14px;
+  padding: 8px 16px;
+  display: grid;
+  gap: 8px;
+}
+.spiral-review > span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.spiral-review > div {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.progress-scope-choices {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+/* One continuous string. Portrait uses an explicit answer pad, never three imitation strings. */
+.orientation-suggestion {
+  display: none;
+}
+.pilot-game.is-long-string {
+  grid-template-rows: auto auto 4px minmax(0, 1fr);
+}
+.pilot-game.is-long-string .orientation-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  padding: 3px 8px;
+}
+.orientation-suggestion > span:first-child {
+  font-size: 25px;
+  color: var(--brand);
+}
+.pilot-game.is-long-string .neck-panel {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  padding-inline: 0;
+}
+.pilot-game.is-long-string .neck-viewport {
+  grid-row: 1;
+}
+.pilot-game.is-long-string.is-touch .game-body {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(85px, 0.7fr) minmax(0, 1fr);
+}
+.pilot-game.is-long-string.is-touch .answer-workspace {
+  overflow: hidden;
+}
+.pilot-game.is-long-string.is-touch .pilot-response-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: auto;
+  width: 100%;
+}
+.long-position-controls {
+  width: 100%;
+  max-width: 390px;
+  margin-inline: auto;
+}
+.long-pad-label {
+  font-size: 12px;
+  margin: 0 0 6px !important;
+  color: var(--muted);
+}
+.long-position-pad {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(44px, 1fr));
+  gap: 7px;
+  padding: 2px;
+  max-width: 100%;
+  margin: auto;
+}
+.long-position-pad[hidden] {
+  display: none;
+}
+.position-pad-button {
+  min-height: 46px;
+  border: 1px solid var(--quiet-border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 650 17px var(--font-heading);
+  cursor: pointer;
+}
+.position-pad-button:hover,
+.position-pad-button:focus-visible {
+  border-color: var(--brand);
+  background: var(--purple-soft);
+}
+.position-pad-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.pilot-game.is-long-string .touch-prompt {
+  padding: 0 4px 6px;
+  font-size: 13px;
+}
+.pilot-game.is-long-string.uses-position-pad .game-body {
+  grid-template-rows: minmax(100px, 0.5fr) minmax(0, 1fr);
+}
+.pilot-game.is-long-string.uses-position-pad .pilot-answer.is-discovery {
+  overflow: auto;
+  gap: 8px;
+}
+.pilot-game.is-long-string.uses-position-pad
+  .pilot-answer.is-discovery
+  .long-position-controls {
+  order: 3;
+}
+.pilot-game.is-long-string.uses-position-pad
+  .pilot-answer.is-discovery
+  .button {
+  order: 4;
+}
+.pilot-game.is-long-string.uses-position-pad .discovery-direction {
+  font-size: 13px;
+}
+.pilot-game.is-long-string.is-touch .pilot-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: auto;
+}
+.pilot-game.is-long-string.is-touch .pilot-response-stage {
+  flex: 1;
+}
+.pilot-game.is-long-string.is-touch .pilot-answer > .text-button {
+  flex: none;
+  min-height: 44px;
+}
+.pilot-game.is-long-string .neck-inner svg {
+  overflow: visible;
+}
+/* Untimed short lessons, with a fixed navigation area and content that reflows. */
+.course-page {
+  max-width: 1000px;
+  margin: auto;
+  min-height: 100dvh;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: 12px max(16px, env(safe-area-inset-left))
+    max(12px, env(safe-area-inset-bottom));
+  gap: 10px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.course-page > .game-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  min-height: 44px;
+}
+.course-page > .game-header > div {
+  flex: 1;
+  min-width: 0;
+}
+.course-page > .game-header strong,
+.course-page > .game-header small {
+  display: block;
+}
+.course-page > .game-header strong {
+  font-size: 15px;
+}
+.course-page > .game-header small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.course-content {
+  overflow: auto;
+  min-height: 0;
+  text-align: center;
+  align-content: center;
+  padding: 12px 4px;
+  scrollbar-width: thin;
+}
+.course-content h1 {
+  font-size: clamp(23px, 4vw, 36px);
+  line-height: 1.15;
+  max-width: 26ch;
+  margin: 8px auto 12px;
+}
+.course-content > p:not(.eyebrow) {
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 50ch;
+  margin: 8px auto 20px;
+}
+.course-content .eyebrow {
+  margin: 0;
+  font-size: 12px;
+}
+.course-visual {
+  max-width: 760px;
+  width: 100%;
+  margin: 16px auto;
+}
+.course-visual .shared-neck {
+  width: 100%;
+  max-height: 230px;
+  min-height: 70px;
+}
+.course-instrument {
+  display: block;
+  height: 90px;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto 16px;
+}
+.course-feature {
+  max-height: 200px;
+}
+.course-highlight {
+  stroke: var(--brand);
+  stroke-width: 3.5;
+  fill: none;
+  pointer-events: none;
+}
+.course-highlight.is-area {
+  fill: var(--brand);
+  fill-opacity: 0.2;
+  stroke-width: 1;
+}
+.course-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.course-pair > div {
+  min-width: 0;
+}
+.course-pair span {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+.course-choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 650px;
+  margin: 20px auto;
+}
+.course-choices .button {
+  min-width: 110px;
+}
+.course-feedback {
+  min-height: 26px;
+  font-weight: 650;
+  color: var(--brand);
+}
+.course-feedback.is-correct {
+  color: var(--ink);
+}
+.course-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+.course-navigation .button {
+  min-height: 46px;
+}
+.notation-pairs {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.notation-pairs > div {
+  display: grid;
+  gap: 8px;
+  padding: 12px 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.notation-pairs strong {
+  font-size: 22px;
+}
+.notation-pairs span {
+  color: var(--muted);
+}
+.note-cycle {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.note-cycle b {
+  display: grid;
+  place-items: center;
+  min-width: 46px;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 21px;
+}
+.note-cycle .is-missing {
+  border: 2px dashed var(--brand);
+  color: var(--brand);
+}
+.note-cycle > span {
+  font-size: 30px;
+}
+.course-tuning {
+  display: grid;
+  gap: 6px;
+  max-width: 350px;
+  margin: auto;
+}
+.course-tuning > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding: 6px 12px;
+}
+.course-tuning strong {
+  font-size: 21px;
+}
+.course-tuning span {
+  font-size: 14px;
+}
+.course-tuning .is-highlighted {
+  background: var(--purple-soft);
+  border-radius: 10px;
+}
+.course-pitches {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.course-pitches span {
+  font: 700 32px var(--font-heading);
+  padding: 14px 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.course-pitches i {
+  font-style: normal;
+  color: var(--muted);
+  font-size: 24px;
+}
+.course-symbols {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.course-symbols span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.course-symbols i {
+  display: inline-block;
+  border-radius: 50%;
+}
+.inlay-symbol {
+  width: 10px;
+  height: 10px;
+  background: var(--neck-inlay);
+}
+.note-symbol {
+  width: 18px;
+  height: 18px;
+  background: var(--note-correct);
+}
+.course-direction {
+  font-weight: 650;
+  color: var(--brand);
+}
+.course-direction span {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.course-coordinate-buttons {
+  margin: 12px auto;
+  max-width: 600px;
+  display: grid;
+  gap: 8px;
+}
+.course-coordinate-buttons > div {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.course-coordinate-buttons > div > span {
+  font-size: 12px;
+  font-weight: 650;
+}
+.course-coordinate-buttons > div > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+  gap: 5px;
+}
+.course-coordinate-buttons .button {
+  padding: 8px 4px;
+  min-width: 0;
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .route-grid {
+    grid-template-columns: 1fr;
+  }
+  .beta-featured {
+    grid-template-columns: 1fr;
+  }
+  .beta-featured-progress {
+    display: none;
+  }
+  .beta-beginner .route-card {
+    grid-template-columns: 1fr;
+  }
+  .beta-beginner .route-card progress,
+  .beta-beginner .route-card small {
+    grid-column: 1;
+    grid-row: auto;
+    min-width: 0;
+    margin: 0;
+  }
+  .route-summary {
+    grid-template-columns: 1fr;
+  }
+  .route-summary .button {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+  }
+  .route-card {
+    padding: 20px;
+  }
+  .guided-stage > h2 {
+    font-size: 21px;
+  }
+  .course-page {
+    padding-inline: 12px;
+  }
+  .course-pair {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .course-pair .shared-neck {
+    max-height: 110px;
+  }
+  .notation-pairs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .notation-pairs > div {
+    padding: 8px;
+  }
+  .notation-pairs strong {
+    font-size: 20px;
+  }
+  .course-pitches span {
+    font-size: 26px;
+    padding: 10px 14px;
+  }
+  .course-symbols {
+    gap: 12px;
+    font-size: 12px;
+  }
+}
+@media (orientation: landscape) {
+  .pilot-game.is-long-string .orientation-suggestion {
+    display: none;
+  }
+  .pilot-game.is-long-string {
+    grid-template-rows: auto 4px minmax(0, 1fr);
+  }
+  .pilot-game.is-long-string.is-touch .game-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(90px, 1fr) minmax(90px, 1fr);
+  }
+  .pilot-game.is-long-string.is-touch .answer-workspace {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center !important;
+    padding: 4px;
+  }
+  .pilot-game.is-long-string.is-touch .pilot-answer {
+    display: flex !important;
+    align-items: center;
+    flex: 0;
+    min-height: 0;
+  }
+  .pilot-game.is-long-string.is-touch .pilot-response-stage {
+    height: auto;
+  }
+  .pilot-game.is-long-string.is-touch .question-copy {
+    grid-column: auto;
+    grid-row: auto;
+    max-height: none;
+  }
+  .pilot-game.is-long-string.is-touch .neck-viewport {
+    height: 100%;
+  }
+  .pilot-game.is-long-string.is-touch .pilot-answer > .text-button {
+    min-height: 44px;
+  }
+  .course-page {
+    max-width: 1100px;
+  }
+  .course-content {
+    padding: 4px;
+  }
+  .course-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+  .course-visual {
+    margin: 8px auto;
+  }
+  .course-content h1 {
+    font-size: 26px;
+    margin: 0 auto 6px;
+  }
+  .course-content > p:not(.eyebrow) {
+    margin: 6px auto 10px;
+    font-size: 14px;
+  }
+  .course-visual .shared-neck {
+    max-height: 120px;
+    min-height: 55px;
+  }
+  .course-instrument {
+    height: 55px;
+    margin-bottom: 6px;
+  }
+  .course-choices {
+    margin: 10px auto;
+  }
+  .course-feedback {
+    margin: 6px auto !important;
+  }
+  .course-tuning {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 500px;
+    gap: 3px;
+  }
+  .course-tuning > div {
+    padding: 3px 10px;
+  }
+  .course-tuning strong {
+    font-size: 17px;
+  }
+  .course-page .course-navigation {
+    padding-top: 4px;
+  }
+  .course-page .course-coordinate-buttons {
+    max-width: 720px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-card {
+    transition: none;
+  }
+  .route-card:hover {
+    transform: none;
+  }
+}
+@media (orientation: landscape) {
+  .pilot-game.is-long-string.is-touch .pilot-answer {
+    flex: 1;
+    justify-content: center;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .game-body {
+    grid-template-rows: 90px minmax(0, 1fr);
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .answer-workspace {
+    justify-content: flex-start !important;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice)
+    .pilot-answer.is-discovery {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 4px 12px;
+    width: 100%;
+    align-content: start;
+    overflow: auto;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .discovery-progress {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 280px;
+    margin: 0;
+    align-self: center;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .discovery-direction {
+    grid-column: 1/-1;
+    grid-row: 2;
+    margin: 0;
+    min-height: 18px;
+    font-size: 12px;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice)
+    [data-pilot-action="practice"] {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice)
+    .long-position-controls {
+    display: contents;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice)
+    .long-position-controls
+    > .text-button,
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .long-pad-label {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    align-self: center;
+  }
+  .pilot-game.is-long-string .long-position-pad {
+    grid-template-columns: repeat(7, minmax(44px, 1fr));
+    max-width: 600px;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .long-position-pad {
+    grid-column: 1/-1;
+    grid-row: 3;
+    width: 100%;
+    gap: 4px;
+    margin: 0 auto;
+  }
+  .pilot-game.is-long-string.is-touch:not(.is-practice) .position-pad-button {
+    min-height: 44px;
+  }
+}
+@media (orientation: portrait) {
+  .pilot-game.is-touch:not(.is-long-string) .game-body {
+    grid-template-rows: minmax(220px, 1.5fr) minmax(190px, 1fr);
+  }
+  .pilot-game.is-practice.is-touch:not(.is-long-string) .game-body {
+    grid-template-rows: minmax(220px, 1fr) 150px;
+  }
+  .pilot-game.is-practice.is-touch:not(.is-long-string) .pilot-answer {
+    grid-template-rows: minmax(0, 1fr) 44px;
+  }
+}
+@media (orientation: portrait) {
+  .pilot-game.is-long-string.uses-position-pad:not(.is-practice) .game-body {
+    grid-template-rows: 100px minmax(0, 1fr);
+  }
+  .pilot-game.is-long-string.uses-position-pad .pilot-answer.is-discovery {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: 6px;
+  }
+  .pilot-game.is-long-string.uses-position-pad
+    .pilot-answer.is-discovery
+    .discovery-progress {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 100%;
+  }
+  .pilot-game.is-long-string.uses-position-pad
+    .pilot-answer.is-discovery
+    .discovery-direction {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    font-size: 12px;
+    min-height: 0;
+  }
+  .pilot-game.is-long-string.uses-position-pad
+    .pilot-answer.is-discovery
+    .long-position-controls {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+  .pilot-game.is-long-string.uses-position-pad
+    .pilot-answer.is-discovery
+    [data-pilot-action="practice"] {
+    grid-column: 1/-1;
+    grid-row: 3;
+    justify-self: center;
+  }
+  .pilot-game.is-long-string.uses-position-pad .long-position-pad {
+    gap: 5px;
+  }
+  .pilot-game.is-long-string.uses-position-pad .position-pad-button {
+    min-height: 44px;
+  }
+  .pilot-game.is-long-string.uses-position-pad .long-pad-label {
+    margin-bottom: 3px !important;
+  }
+}
+@media (orientation: portrait) and (max-width: 420px) {
+  .pilot-game.is-long-string.uses-position-pad .discovery-progress {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+  .pilot-game.is-long-string.uses-position-pad .discovery-progress > strong {
+    font-size: 27px;
+    white-space: nowrap;
+  }
+  .pilot-game.is-long-string.uses-position-pad
+    .discovery-progress
+    > strong
+    span {
+    font-size: 20px;
+  }
+  .pilot-game.is-long-string.uses-position-pad .discovery-progress > span {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .pilot-game.is-long-string.uses-position-pad .discovery-progress progress {
+    height: 5px;
+    margin-top: 4px;
+  }
+}
+@media (orientation: portrait) and (max-height: 650px) {
+  .pilot-game.is-long-string.uses-position-pad:not(.is-practice) .game-body {
+    grid-template-rows: 80px minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .beta-featured {
+    padding: 20px;
+  }
+  .beta-featured h2 {
+    font-size: 24px;
+    margin: 12px 0 8px;
+  }
+  .beta-featured p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+  }
+  .beta-featured .tag {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}

@@ -1,12 +1,12 @@
 {
   "name": "daily-fretboard-trainer",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check beginner-guide.js && node --check services/update-service.js && node --check debug-mode.js && node --check music-audit.js && node --check bug-report.js && node --check achievement-rules.js && node --check achievement-data.js && node --check achievements-ui.js && node --check themes.js && node --check app.js && node --check release.js && node --check state.js && node --check learning-help.js && node --check instrument-art.js && node --check tuning.js && node --check onboarding.js && node --check neck-view.js && node --check discovery-feedback.js && node --check dom-view.js && node --check demo-rules.js && node --check reward-music.js && node --check curriculum-rules.js && node --check core.js && node --check pilot.js && node --check pilot-ui.js && node --check clock.js && node --check octave-music.js && node --check melodies.js && node --check progress.js && node --check results.js && node --check result-ui.js && node --check sound.js && node --check sw.js && node --check services/audio-service.js && node --check services/storage-service.js && node --check services/app-store.js && node --check services/platform-service.js",
+    "check": "node --check beta-catalog.js && node --check beta-courses.js && node --check beta-home.js && node --check course-ui.js && node --check beginner-guide.js && node --check services/update-service.js && node --check debug-mode.js && node --check music-audit.js && node --check bug-report.js && node --check achievement-rules.js && node --check achievement-data.js && node --check achievements-ui.js && node --check themes.js && node --check app.js && node --check release.js && node --check state.js && node --check learning-help.js && node --check instrument-art.js && node --check tuning.js && node --check onboarding.js && node --check neck-view.js && node --check discovery-feedback.js && node --check dom-view.js && node --check demo-rules.js && node --check reward-music.js && node --check curriculum-rules.js && node --check core.js && node --check pilot.js && node --check pilot-ui.js && node --check clock.js && node --check octave-music.js && node --check melodies.js && node --check progress.js && node --check results.js && node --check result-ui.js && node --check sound.js && node --check sw.js && node --check services/audio-service.js && node --check services/storage-service.js && node --check services/app-store.js && node --check services/platform-service.js",
     "package": "node tools/package.mjs"
   },
   "engines": {

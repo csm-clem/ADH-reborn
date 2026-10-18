@@ -9,7 +9,7 @@ test('Cumulative capstone titles follow natural completion for each actual tunin
  for(const p of [makeProfile('guitar6'),makeProfile('guitar7'),makeProfile('bass4'),makeProfile('guitar6','D2 A2 D3 G3 A3 D4'),makeProfile('guitar6','D#2 G#2 C#3 F#3 A#3 D#4')]){
   const plan=pilotPlan(p),acts=practiceActivities(plan);const naturalEnd=plan.order.filter(n=>[0,2,4,5,7,9,11].includes(n)).at(-1),last=plan.order.at(-1);
   assert.equal(acts.find(m=>m.id==='mix-'+naturalEnd).title,'Toutes les notes naturelles');
-  assert.equal(acts.find(m=>m.id==='mix-'+last).title,'Toutes les notes naturelles et altérées');
+  assert.equal(acts.find(m=>m.id==='mix-'+last).title,'Toutes les notes');
   assert.ok(plan.natural.every(p=>acts.find(m=>m.id==='mix-'+naturalEnd).pool.some(q=>q.midi===p.midi&&q.string===p.string&&q.fret===p.fret)));
  }
 });
