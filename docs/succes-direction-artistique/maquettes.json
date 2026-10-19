@@ -1,0 +1,126 @@
+[
+  {
+    "id": "01-commune",
+    "rank": "Commune",
+    "level": 1,
+    "material": "CUIVRE · IMPRESSION",
+    "category": "PREMIERS PAS",
+    "title": [
+      "La première",
+      "fait le jack"
+    ],
+    "meta": "Votre première activité terminée",
+    "progress": 100,
+    "fraction": "1 / 1 activité",
+    "earned": true,
+    "date": "19 oct. 2026",
+    "number": "01",
+    "color": "#AD5835",
+    "dark": false,
+    "criteria": [
+      "Terminer une activité évaluée.",
+      "Au moins 20 premières réponses.",
+      "Le score ne bloque pas ce premier succès."
+    ],
+    "model": "first-session"
+  },
+  {
+    "id": "02-inhabituelle",
+    "rank": "Inhabituelle",
+    "level": 2,
+    "material": "ÉMAIL · ALUMINIUM",
+    "category": "REPÈRES",
+    "title": [
+      "Réunion",
+      "de famille"
+    ],
+    "meta": "Une note, tous ses emplacements · Zone I",
+    "progress": 75,
+    "fraction": "3 / 4 activités",
+    "earned": false,
+    "number": "07",
+    "color": "#196E75",
+    "dark": false,
+    "criteria": [
+      "Valider les activités de la famille.",
+      "Valider ses mélanges avec les notes connues.",
+      "Au moins 90 % justes, sans les noms affichés."
+    ],
+    "model": "first-family"
+  },
+  {
+    "id": "03-rare",
+    "rank": "Rare",
+    "level": 3,
+    "material": "VERRE · DICHROÏQUE",
+    "category": "PHRASE MUSICALE",
+    "title": [
+      "Seven Nation",
+      "Army"
+    ],
+    "meta": "The White Stripes · Début du riff",
+    "progress": 100,
+    "fraction": "1 / 1 phrase",
+    "earned": true,
+    "date": "19 oct. 2026",
+    "number": "M01",
+    "color": "#235ED4",
+    "dark": false,
+    "criteria": [
+      "Terminer la suite compatible du morceau.",
+      "Une erreur remet la suite à zéro.",
+      "La pochette donne accès au phrasé écoutable."
+    ],
+    "model": "music-seven-nation",
+    "music": true
+  },
+  {
+    "id": "04-epique",
+    "rank": "Épique",
+    "level": 4,
+    "material": "TITANE · DIFFRACTION",
+    "category": "FLUIDITÉ",
+    "title": [
+      "Éclair",
+      "de manche"
+    ],
+    "meta": "100 % justes · objectif : 1 s de moyenne",
+    "progress": 80,
+    "fraction": "Meilleur temps : 1,25 s / objectif 1 s",
+    "earned": false,
+    "number": "32",
+    "color": "#9DD9FA",
+    "dark": true,
+    "criteria": [
+      "Terminer au moins 20 questions sans aide.",
+      "100 % de premières réponses correctes.",
+      "Temps moyen : 1 seconde ou moins."
+    ],
+    "model": "one-second"
+  },
+  {
+    "id": "05-legendaire",
+    "rank": "Légendaire",
+    "level": 5,
+    "material": "OBSIDIENNE · OR GRAVÉ",
+    "category": "ABOUTISSEMENT",
+    "title": [
+      "Le manche dans",
+      "toutes ses coutures"
+    ],
+    "meta": "Les trois zones et les trois cordes ciblées",
+    "progress": 100,
+    "fraction": "6 / 6 parcours ciblés validés",
+    "earned": true,
+    "date": "19 oct. 2026",
+    "number": "41",
+    "color": "#E3BC67",
+    "dark": true,
+    "criteria": [
+      "Valider tous les chapitres des six parcours ciblés.",
+      "Couvrir chaque position en nommant et retrouvant.",
+      "Aucun objectif de vitesse. Grand Débutant facultatif."
+    ],
+    "model": "beta-atlas"
+  }
+]
