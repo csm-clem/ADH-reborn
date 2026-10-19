@@ -33,3 +33,14 @@ export function melodiesForPlan(plan){
  return assigned;
 }
 export function melodyById(id,shift=0){const melody=MELODIES.find(m=>m.id===id);return melody?{...melody,shift}:null;}
+
+/** One known work per canonical beta activity, without repeats between zones/strings. */
+const catalogueMusic=new WeakMap();
+export function catalogMelodies(catalog){
+ if(!catalogueMusic.has(catalog)){
+  const assigned=new Map(),used=new Set(),available=new Set(catalog.activities.map(a=>a.id));
+  for(const s of catalog.scopes)for(const [id,m]of melodiesForPlan(s.plan))if(available.has(id)&&!used.has(m.id)){assigned.set(id,m);used.add(m.id);}
+  catalogueMusic.set(catalog,assigned);
+ }
+ return catalogueMusic.get(catalog);
+}

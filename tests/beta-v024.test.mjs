@@ -311,8 +311,8 @@ test("Existing achievement actions remain playable when single-option activities
       getState: () => state,
     });
     for (const def of achievements.catalogue) {
-      const id = achievements.target(def);
-      assert.ok(pilot.resolve(id), `${p.key}: ${def.id} → ${id}`);
+      const target = achievements.target(def);
+      assert.ok(target.kind === 'course' ? betaCourses(p,pilot.catalog).has(target.id) : pilot.resolve(target.id), `${p.key}: ${def.id} → ${target.id}`);
     }
   }
 });
@@ -326,6 +326,9 @@ test("Historical naming results remain stored but cannot silently certify the ne
       event.answerKind = "class";
       event.firstAnswer = event.target.midi % 12;
     }
+  // This case represents an old raw journal, without precomputed v0.26 proofs.
+  delete data.evidence;
+  delete data.collectionEvidence;
   assert.equal(
     validatePilotStore(store).profiles[profile.key].attempts.length,
     data.attempts.length,

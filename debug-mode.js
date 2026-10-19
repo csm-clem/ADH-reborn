@@ -2,9 +2,11 @@
 import {introductionFor} from './learning-help.js';
 import {RELEASE} from './release.js';
 import {initialPilotStore,practiceActivities,validatePilotStore} from './pilot.js';
-import {melodiesForPlan} from './melodies.js';
+import {melodiesForPlan,catalogMelodies} from './melodies.js';
 import {evaluateAchievements} from './achievement-rules.js';
 import {betaCourses} from './beta-courses.js';
+import {preserveLearningProofs} from './learning-evidence.js';
+import {preserveAchievementEvidence} from './achievement-evidence.js';
 export const debugAvailable=version=>version.startsWith('0.');
 export function simulatedCompletion(profile,plan,{version=RELEASE,now=Date.now()}={}){
  if(!debugAvailable(version))throw new Error('Le mode débug est réservé aux versions v0.');
@@ -26,11 +28,14 @@ export function simulatedBetaCompletion(profile,catalog,{now=Date.now()}={}){
  const store=simulatedCompletion(profile,catalog.byScope.get('z1').plan,{now}),data=store.profiles[profile.key];
  const existing=new Set(data.attempts.map(a=>a.activity));
  for(const activity of catalog.activities.filter(a=>!existing.has(a.id)))for(let pass=0;pass<2;pass++){
+  const melody=catalogMelodies(catalog).get(activity.id);
   const events=Array.from({length:24},(_,i)=>{const target=activity.pool[(i+24*pass)%activity.pool.length],exact=activity.kind==='family'||activity.kind==='opens';return {target:{...target},mode:activity.mode,answerKind:exact?'pitch':'class',correct:true,ms:500,at:now,retry:false,aids:[],firstAnswer:activity.mode==='find'?{string:target.string,fret:target.fret}:exact?target.midi:target.midi%12};});
-  data.attempts.push({id:'debug-beta-'+activity.id+'-'+pass,activity:activity.id,at:now,finished:true,passed:true,events,motifCompleted:activity.mode==='find'});
+  data.attempts.push({id:'debug-beta-'+activity.id+'-'+pass,activity:activity.id,at:now,finished:true,passed:true,events,motifCompleted:activity.mode==='find',motifErrors:0,melodyId:melody?.id||null,music:melody?{shift:melody.shift}:null});
  }
  data.discoveredModules=[...new Set([...data.discoveredModules,...catalog.discoveries.map(a=>a.baseId)])];
  data.courses=Object.fromEntries([...betaCourses(profile,catalog)].map(([id,c])=>[id,{index:0,visited:c.pages.map(p=>p.id),correct:c.pages.filter(p=>p.quiz).map(p=>p.id),completed:true,at:now}]));
  data.seenInstructions=[...new Set([...data.seenInstructions,'name-pitch',...catalog.discoveries.map(a=>'family-'+(a.scopeId!=='z1'?a.scopeId+'-':'')+a.pitchClass)])];
+ preserveLearningProofs(catalog,data);preserveAchievementEvidence(catalog,data);
+ store.achievements.push(...evaluateAchievements({profile,catalog,data,existing:store.achievements,entry:{at:now}}));
  return validatePilotStore(store);
 }

@@ -9,8 +9,9 @@ import {DEMO_RULES} from './demo-rules.js';
 import {neckBase,miniatureNeck,noteTagSVG,layoutNoteTags,layoutMiniature} from './neck-view.js';
 import {searchFeedback} from './discovery-feedback.js';
 import {progressView} from './progress.js';
-import {melodiesForPlan} from './melodies.js';
+import {catalogMelodies} from './melodies.js';
 import {evaluateAchievements} from './achievement-rules.js';
+import {preserveAchievementEvidence} from './achievement-evidence.js';
 import {resultMetrics,personalRecord,comparisonKey,mistakeGroups} from './results.js';
 import {seconds,chosenLabel,mistakeGraphic,shareResult} from './result-ui.js';
 import {introductionFor,helpGraphic} from './learning-help.js';
@@ -54,6 +55,12 @@ export class PilotController{
  }
 
  exportData(){if(this.session)this.save();return this.debugActive?this.realStore:this.store;}
+ syncAchievements(entry=null){
+  preserveLearningProofs(this.catalog,this.data);preserveAchievementEvidence(this.catalog,this.data);
+  this.store.achievements||=[];
+  const fresh=evaluateAchievements({profile:this.profile,catalog:this.catalog,data:this.data,entry:entry||{at:Date.now()},existing:this.store.achievements});
+  this.store.achievements.push(...fresh);return fresh;
+ }
  importData(value,{persist=true}={}){if(this.debugActive)throw new Error('Désactivez le mode débug avant d’importer.');const valid=validatePilotStore(value);this.leave();this.store=valid;this.unreadableRaw=null;this.storageError=false;if(persist)this.storageError=!this.storage.replacePilot(valid).ok;}
  setDebug(active){
   if(active===!!this.debugActive)return;
@@ -136,7 +143,7 @@ export class PilotController{
   else if(!this.aids.length&&this.session.activity.startsWith('review'))this.data.later=this.data.later.filter(e=>!(equal(e.target,q.target)&&e.mode===q.mode));
   if(correct)this.host.playNote(actual.midi);this.prepareNext({correct});
  }
- melody(){const m=this.module,key=`${this.profile.key}:${m.id}`;if(this.melodyKey!==key){this.melodyKey=key;this.cachedMelody=m.scopeId&&m.scopeId!=='z1'?null:melodiesForPlan(this.catalog.byScope.get('z1').plan).get(m.id)||null;}return this.cachedMelody;}
+ melody(){const m=this.module,key=`${this.profile.key}:${m.id}`;if(this.melodyKey!==key){this.melodyKey=key;this.cachedMelody=catalogMelodies(this.catalog).get(m.id)||null;}return this.cachedMelody;}
  motif(){const selected=this.melody();if(selected)return selected.sequence;const sorted=[...this.module.pool].sort((a,b)=>a.midi-b.midi);return [sorted[0],sorted.at(-1),sorted[Math.floor(sorted.length/2)],sorted[0]];}
 
  greenPositions(){
@@ -183,9 +190,8 @@ export class PilotController{
   if(this.session.completed)return;this.session.completed=true;const s=this.session;
   const validation=activityResult(s.events,s.queue.filter(q=>!q.retry).length);
   const entry={passed:validation.passed,id:s.id,activity:s.activity,at:Date.now(),events:s.events,finished:true,motifErrors:s.motifErrors||0,motifCompleted:!!s.motifCompleted,melodyId:s.motifCompleted?this.melody()?.id||null:null,music:s.motifCompleted&&this.melody()?{shift:this.melody().shift}:null,familyErrors:s.familyErrors??null,comparisonKey:comparisonKey(s)};
-  if(!this.data.attempts.some(a=>a.id===entry.id))this.data.attempts.push(entry);preserveLearningProofs(this.catalog,this.data);this.data.attempts=this.data.attempts.slice(-250);
+  if(!this.data.attempts.some(a=>a.id===entry.id))this.data.attempts.push(entry);s.newAchievements=this.syncAchievements(entry);this.data.attempts=this.data.attempts.slice(-250);
   if(s.activity.startsWith('natural-diagnostic'))this.data.diagnostic={passed:validation.passed,mode:this.module.mode,at:Date.now(),attempt:s.id};
-  this.store.achievements||=[];s.newAchievements=evaluateAchievements({profile:this.profile,plan:this.catalog.byScope.get('z1').plan,attempts:this.data.attempts,entry,existing:this.store.achievements});this.store.achievements.push(...s.newAchievements);
   this.resultView='summary';this.resultNotice='';s.stage='result';this.data.session=null;this.save();this.emit();window.scrollTo(0,0);document.querySelector('#main-content')?.focus({preventScroll:true});
  }
  action(action,button){
@@ -219,7 +225,7 @@ export class PilotController{
    case 'resume-pause':this.resumePause();return;
    case 'mute':this.host.setSound(!this.host.getState().sound);this.emit();document.querySelector('[data-pilot-action="mute"]')?.focus({preventScroll:true});return;
    case 'hint':this.addAid('open-names');this.emit();return;
-   case 'practice':{if(!this.session.discoveryDone)return;const module=this.module;this.data.discoveredModules=[...new Set([...(this.data.discoveredModules||[]),module.baseId])];this.feedback=null;
+   case 'practice':{if(!this.session.discoveryDone)return;const module=this.module;this.data.discoveredModules=[...new Set([...(this.data.discoveredModules||[]),module.baseId])];this.syncAchievements();this.feedback=null;
     if(module.discoveryOnly){this.session.completed=true;this.data.session=null;this.save();if(module.nextId)this.start(module.nextId);else{this.leave();this.host.home();}return;}
     this.session.stage='practice';this.save();this.startCount();return;}
    case 'note':this.answer(Number(button.dataset.note));return;

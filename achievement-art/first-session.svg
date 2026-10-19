@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="25 88 580 398"><defs>
+ <linearGradient id="01-commune-metal" x2="1" y2="1"><stop stop-color="#FFF1C7"/><stop offset=".19" stop-color="#AD5835"/><stop offset=".43" stop-color="#F6E9CD"/><stop offset=".62" stop-color="#705237"/><stop offset=".8" stop-color="#AD5835"/><stop offset="1" stop-color="#E1D6BB"/></linearGradient>
+ <linearGradient id="01-commune-silver" x2=".8" y2="1"><stop stop-color="#EFF7F6"/><stop offset=".3" stop-color="#7D9396"/><stop offset=".45" stop-color="#E9F1EC"/><stop offset=".63" stop-color="#56737B"/><stop offset="1" stop-color="#C9DDDE"/></linearGradient>
+ <linearGradient id="01-commune-gold" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#87632E"/><stop offset=".22" stop-color="#E4B65E"/><stop offset=".46" stop-color="#FFF0B6"/><stop offset=".68" stop-color="#AD7531"/><stop offset="1" stop-color="#F5D790"/></linearGradient>
+ <linearGradient id="01-commune-foil" x2="1" y2="1"><stop stop-color="#E4BC71"/><stop offset=".23" stop-color="#A6E4D1"/><stop offset=".42" stop-color="#669BE4"/><stop offset=".6" stop-color="#D6AFE9"/><stop offset=".8" stop-color="#FAC295"/><stop offset="1" stop-color="#F8EAB5"/></linearGradient>
+ <radialGradient id="01-commune-warm" cx=".3" cy=".2" r=".9"><stop stop-color="#EBD4A8"/><stop offset=".65" stop-color="#C6A17C"/><stop offset="1" stop-color="#927058"/></radialGradient>
+ <radialGradient id="01-commune-enamel" cx=".3" cy=".2" r=".9"><stop stop-color="#8FCBC5"/><stop offset=".5" stop-color="#246F78"/><stop offset="1" stop-color="#123D49"/></radialGradient>
+ <radialGradient id="01-commune-night" cx=".4" cy=".2" r="1"><stop stop-color="#354F6B"/><stop offset=".55" stop-color="#142638"/><stop offset="1" stop-color="#0A1522"/></radialGradient>
+ <radialGradient id="01-commune-blue" cx=".18" cy=".14" r="1"><stop stop-color="#B4E9E4"/><stop offset=".42" stop-color="#668ECC"/><stop offset="1" stop-color="#293E71"/></radialGradient>
+ <radialGradient id="01-commune-sunset" cx=".8" cy=".2" r=".8"><stop stop-color="#FEAC78"/><stop offset=".5" stop-color="#DB5D46"/><stop offset="1" stop-color="#662F4F"/></radialGradient>
+ <pattern id="01-commune-paper" width="9" height="11" patternUnits="userSpaceOnUse"><path d="M1 1l1 .5M6 5l1-.8M3 9l1 .3" stroke="#FFFFFF" stroke-opacity=".25" stroke-width=".7"/></pattern>
+ <pattern id="01-commune-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#D9F5EF" stroke-opacity=".13" stroke-width="1"/></pattern>
+ <pattern id="01-commune-hatch" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 5L5 0" stroke="#FFFFFF" stroke-opacity=".18" stroke-width=".5"/></pattern>
+ <clipPath id="01-commune-art"><rect x="25" y="88" width="580" height="398" rx="12"/></clipPath>
+ </defs><g font-family="system-ui,sans-serif"><g clip-path="url(#01-commune-art)"><rect x="25" y="88" width="580" height="398" fill="url(#01-commune-warm)"/><rect x="25" y="88" width="580" height="398" fill="url(#01-commune-paper)"/><path d="M15 475C155 430 80 210 610 125" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M45 475C168 430 109 210 610 142" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M75 475C181 430 138 210 610 159" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M105 475C194 430 167 210 610 176" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M135 475C207 430 196 210 610 193" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M165 475C220 430 225 210 610 210" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M195 475C233 430 254 210 610 227" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M225 475C246 430 283 210 610 244" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M255 475C259 430 312 210 610 261" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M285 475C272 430 341 210 610 278" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M315 475C285 430 370 210 610 295" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M345 475C298 430 399 210 610 312" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><path d="M375 475C311 430 428 210 610 329" fill="none" stroke="#795940" stroke-width=".8" opacity=".24"/><circle cx="459" cy="186" r="114" fill="#EEDAB4" opacity=".45"/><circle cx="459" cy="186" r="102" fill="none" stroke="#FEEDCB" stroke-width="1"/>
+ <path d="M343 379C379 414 442 427 492 384C548 334 466 303 452 349C438 393 357 426 281 426C172 426 153 461 83 427C31 396 14 388-30 400" fill="none" stroke="#694D37" stroke-width="18" opacity=".18" transform="translate(3 10)"/>
+ <path d="M343 379C379 414 442 427 492 384C548 334 466 303 452 349C438 393 357 426 281 426C172 426 153 461 83 427C31 396 14 388-30 400" fill="none" stroke="#3F423D" stroke-width="15"/>
+ <path d="M343 375C379 410 442 423 492 380C548 330 466 299 452 345C438 389 357 422 281 422C172 422 153 457 83 423C31 392 14 384-30 396" fill="none" stroke="#788076" stroke-width="3"/>
+ <g transform="translate(270 270) rotate(-34)">
+ <ellipse cx="18" cy="107" rx="60" ry="17" fill="#694B33" opacity=".17"/>
+ <rect x="-47" y="-56" width="94" height="153" rx="17" fill="url(#01-commune-metal)" stroke="#885232" stroke-width="2"/>
+ <rect x="-40" y="-42" width="80" height="123" rx="10" fill="#AD5835"/>
+ <rect x="-37" y="-39" width="74" height="117" rx="8" fill="url(#01-commune-hatch)"/>
+ <path d="M-28-28V61" stroke="#F9D8AC" stroke-width="3" opacity=".65"/>
+ <rect x="-19" y="-149" width="38" height="96" rx="8" fill="url(#01-commune-silver)" stroke="#596865" stroke-width="1.5"/>
+ <path d="M-19-126H19M-19-87H19" stroke="#37433F" stroke-width="7"/>
+ <path d="M-19-150Q0-177 19-150" fill="url(#01-commune-silver)" stroke="#516461" stroke-width="2"/>
+ <rect x="-22" y="96" width="44" height="35" rx="8" fill="#37433F"/>
+ <path d="M-19 106H19M-19 115H19M-16 124H16" stroke="#849083" stroke-width="2"/>
+ <text x="0" y="17" font-size="20" fill="#FFF0D4" font-weight="700" text-anchor="middle" letter-spacing="3">DFT</text>
+ </g>
+ <path d="M70 151H149M70 151V171M558 430H506" fill="none" stroke="#70553E" stroke-width="1"/>
+ <text x="72" y="139" font-size="13" fill="#574834" font-weight="600" letter-spacing="2.5">PREMIER SIGNAL</text>
+ <text x="515" y="455" font-size="55" fill="#73583D" font-weight="500" font-family="Georgia,serif">01</text>
+ </g></g></svg>

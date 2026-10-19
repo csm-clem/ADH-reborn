@@ -11,6 +11,7 @@
 .button.quiet-button,.button.quiet{background:var(--quiet-fill);border-color:var(--quiet-border);color:var(--ink)}
 .button.lime{background:var(--lime);color:#333c4e}
 .button.compact{font-size:14px;padding:8px 14px}
+.button.card-action{font-size:13px;padding:8px 10px;min-height:44px;gap:6px;white-space:nowrap}
 .button.wide{width:100%}
 .button svg{width:17px;height:17px}
 .icon-button{width:var(--touch-size);height:var(--touch-size);min-width:var(--touch-size);padding:0;border-radius:50%;border-color:var(--line);flex-shrink:0}

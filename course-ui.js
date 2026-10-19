@@ -175,6 +175,7 @@ export class CourseController {
     if (this.record.index === this.course.pages.length - 1) {
       this.record.completed = courseCompleted(this.course, this.record);
       this.record.at = Date.now();
+      this.pilot.syncAchievements();
       this.close();
       return;
     }

@@ -1,80 +1,157 @@
-/** Immutable catalogue + pure evidence evaluator. No clock, DOM, audio or storage access. */
-import {MUSIC_ARRANGEMENT_VERSION,musicChecked} from './music-audit.js';
-import {activityResult} from './pilot.js';
-import {resultMetrics,personalRecord} from './results.js';
-export const ACHIEVEMENT_VERSION=1;
-export const ACHIEVEMENTS=Object.freeze([
- {id:'open-strings',category:'landmarks',title:'Les présentations sont faites',criterion:'Réussir « Nommer les cordes » et « Retrouver les cordes » à 90 % ou plus.',symbol:'≋'},
- {id:'first-family',category:'landmarks',title:'Réunion de famille',criterion:'Réussir les activités de nomination et de recherche d’une famille, avec son mélange aux repères précédents.',symbol:'◉'},
- {id:'natural-map',category:'landmarks',title:'Le naturel revient au galop',criterion:'Réussir le dernier mélange naturel dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'♮'},
- {id:'full-map',category:'landmarks',title:'Le manche dans la poche',criterion:'Réussir le dernier mélange de la zone dans les deux sens, sans aide, avec au moins 10 positions différentes par activité.',symbol:'▦'},
- {id:'clean-session',category:'landmarks',title:'Zéro accroc',criterion:'Réussir au moins 20 premières réponses consécutives sans erreur ni indice dans un exercice.',symbol:'✓'},
- {id:'first-chain',category:'landmarks',title:'Le fil du riff',criterion:'Terminer une suite musicale. Une erreur remet la suite à zéro ; les essais précédents restent permis.',symbol:'♪'},
- {id:'personal-fluidity',category:'fluency',title:'Mon record prend la fuite',criterion:'Battre son temps moyen, à précision au moins égale, sur ce même exercice et ce même instrument, sans aide.',symbol:'↗'},
- {id:'one-second',category:'fluency',title:'Éclair de manche',criterion:'Au moins 20 réponses, 100 % justes, sans aide, en 1 seconde de moyenne ou moins.',symbol:'ϟ'},
- {id:'first-sleeve',category:'music',title:'Premier pressage',criterion:'Terminer la suite d’un morceau pour ajouter le morceau à la collection.',symbol:'♫',scope:'global'},
- {id:'three-sleeves',category:'music',title:'Le club des vinyles',criterion:'Collectionner trois phrases de morceaux différents.',symbol:'▣',scope:'global'}
-].map(d=>Object.freeze({...d,version:1,scope:d.scope||'profile'})));
+/** Pure projection: one set of criteria feeds counters, routing and awards. */
+import {ACHIEVEMENTS,RARITIES,MUSIC_CARD_NUMBERS} from './achievement-catalog.js';
+import {achievementEvidence} from './achievement-evidence.js';
+import {betaCatalog,betaEvidence} from './beta-catalog.js';
+import {betaCourses,courseCompleted} from './beta-courses.js';
+import {activityContract} from './learning-evidence.js';
+import {noteName} from './core.js';
+import {catalogMelodies,melodyById} from './melodies.js';
+import {musicChecked,MUSIC_ARRANGEMENT_VERSION} from './music-audit.js';
+export {ACHIEVEMENTS,RARITIES};
+export const ACHIEVEMENT_VERSION=2;
 export const collectionScope=(profile,zone={start:0,end:4})=>`${profile.key}@${zone.start}-${zone.end}`;
-const familyActivities=(plan,pc)=>['note-'+pc,'note-'+pc+'-find','mix-'+pc,'mix-'+pc+'-find'].filter(id=>!plan.activityIds||plan.activityIds.includes(id));
-const unaided=a=>a.events.length>=20&&a.events.every(e=>!e.retry&&!e.aids?.length);
-const passed=a=>a.finished===true&&a.events.length>=20&&activityResult(a.events,a.events.length).passed;
-function openEvidence(plan,attempts){
- const successes=attempts.filter(passed),find=successes.find(a=>a.activity==='opens-find');
- if(!plan.activityIds||plan.activityIds.includes('opens')){const name=successes.find(a=>a.activity==='opens');return {name:!!name,find:!!find,proofs:[name,find].filter(Boolean)};}
- const naming=successes.filter(a=>plan.activityIds.includes(a.activity)&&a.events.some(e=>e.mode==='name'));
- const complete=plan.opens.every(p=>naming.some(a=>a.events.some(e=>e.mode==='name'&&e.correct&&!e.retry&&!e.aids?.length&&e.target.string===p.string&&e.target.fret===p.fret)));
- return {name:complete,find:!!find,proofs:[...(complete?naming:[]),find].filter(Boolean)};
+const key=p=>`${p.string}:${p.fret}`;
+const activity=id=>({kind:'activity',id});
+const course=id=>({kind:'course',id});
+const check=(label,value,max=1,target=null)=>({label,value:Math.min(max,value),max,done:value>=max,target});
+const done=(label,yes,target)=>check(label,Number(!!yes),1,target);
+const sum=xs=>xs.reduce((v,x)=>v+x.value,0);
+const total=xs=>xs.reduce((v,x)=>v+x.max,0);
+const defaultCatalogs=new WeakMap();
+const defaultCatalog=profile=>{if(!defaultCatalogs.has(profile))defaultCatalogs.set(profile,betaCatalog(profile));return defaultCatalogs.get(profile);};
+
+export function achievementContext({profile,catalog=defaultCatalog(profile),data={attempts:[]},existing=[],notation='international'}){
+ const evidence=achievementEvidence(catalog,data),courses=betaCourses(profile,catalog),validatedCourses=Object.fromEntries(Object.entries(data.courses||{}).map(([id,r])=>[id,{...r,completed:!!courses.get(id)&&courseCompleted(courses.get(id),r)}])),beta=betaEvidence(catalog,{...data,courses:validatedCourses}),modules=new Map(catalog.activities.map(m=>[m.id,m])),music=new Map();
+ for(const [id,m]of catalogMelodies(catalog))music.set(m.id,{...m,activity:id,scopeId:modules.get(id).scopeId});
+ const record=id=>{const r=evidence.activities[id],m=modules.get(id);return m&&r?.contract===activityContract(m)?r:null;};
+ const passed=id=>!!record(id)?.passed||beta.passed(id);
+ const coverage=(positions,scopeId=null,mode=null)=>{
+  const scopes=scopeId?[scopeId]:catalog.scopes.map(s=>s.id),modes=mode?[mode]:['name','find'];
+  return positions.reduce((n,p)=>n+modes.filter(m=>scopes.some(id=>evidence.coverage[id]?.[m]?.includes(key(p)))||!scopeId&&m!=='pitch'&&beta.coverage[m].has(key(p))).length,0);
+ };
+ const coverTarget=(positions,scopeId,mode=null)=>{
+  for(const m of mode?[mode]:['name','find'])for(const p of positions)if(!coverage([p],scopeId,m)){
+   const found=catalog.activities.find(a=>(!scopeId||a.scopeId===scopeId)&&a.mode===(m==='pitch'?'name':m)&&a.pool.some(q=>key(p)===key(q))&&(m!=='pitch'||['family','opens'].includes(a.kind)));
+   if(found)return activity(found.id);
+  }
+  return null;
+ };
+ const summaryIds=(id,nat=false)=>{const s=catalog.byScope.get(id),m=s?.plan.modules.find(m=>m.kind==='mix'&&(nat?m.naturalEnd:m.fullEnd));return m?[m.id,m.id+'-find'].filter(id=>modules.has(id)):[];};
+ const nextScope=id=>{
+  const s=catalog.byScope.get(id);if(!s)return null;
+  for(const ch of s.chapters)if(!beta.chapters.get(ch.id)?.complete){
+   if(ch.kind==='course')return course(ch.courseId);
+   if(ch.discoveryId&&!data.discoveredModules?.includes(catalog.discoveries.find(d=>d.id===ch.discoveryId)?.baseId))return activity(ch.discoveryId);
+   const missing=ch.activityIds.find(id=>!passed(id));if(missing)return activity(missing);
+   return coverTarget(ch.focus,id)||coverTarget(ch.focus,null)||activity(ch.activityIds[0]||ch.discoveryId);
+  }
+  return activity(summaryIds(id)[0]||s.activityIds[0]);
+ };
+ const synthesis=(id,nat=false)=>{
+  const s=catalog.byScope.get(id),ids=summaryIds(id,nat),positions=nat?s.plan.natural:s.plan.all;
+  return [...ids.map(id=>done((modules.get(id).mode==='name'?'Nommer':'Retrouver')+' · bilan '+(nat?'naturel':'complet'),passed(id),activity(id))),check('Emplacements vérifiés dans les deux sens',coverage(positions),positions.length*2,coverTarget(positions,id))];
+ };
+ const scopeCheck=id=>{const r=beta.scopes.get(id);return check(catalog.byScope.get(id).title+' · chapitres et couverture',r?.chapters||0,r?.total||1,nextScope(id));};
+ const naturalChecks=['z1','z2','z3'].flatMap(id=>synthesis(id,true));
+ const families=catalog.chapters.filter(ch=>ch.kind==='family'&&ch.activityIds.length),pairs=catalog.scopes.flatMap(s=>s.plan.modules.filter(m=>m.kind==='mix'&&new Set(m.pool.map(p=>p.midi%12)).size>=2).map(m=>[m.id,m.id+'-find'].filter(id=>modules.has(id)))).filter(ids=>ids.length===2);
+ const familyChecks=ch=>ch.activityIds.map(id=>done(modules.get(id).subtitle,passed(id),activity(id)));
+ const best=groups=>groups.slice().sort((a,b)=>(sum(b)/Math.max(1,total(b)))-(sum(a)/Math.max(1,total(a))))[0]||[check('Terminer une famille',0,1,nextScope('z1'))];
+ const recs=[...modules].map(([id,m])=>({id,m,r:record(id)})).filter(x=>x.r),fallback=activity(catalog.activities[0]?.id||'opens');
+ const perfect=(mode=null)=>{const rs=recs.filter(x=>!mode||x.m.mode===mode),p=rs.find(x=>x.r.perfect);return done('100 % sans aide · au moins 20 questions',!!p,activity(p?.id||rs[0]?.id||catalog.activities.find(a=>!mode||a.mode===mode)?.id));};
+ const speed=(ms,full)=>{const rs=recs.filter(x=>(full?x.r.perfectMean:x.r.fastMean)!==null).sort((a,b)=>(full?a.r.perfectMean:a.r.fastMean)-(full?b.r.perfectMean:b.r.fastMean)),r=rs[0],mean=r?(full?r.r.perfectMean:r.r.fastMean):null;return check(mean===null?`${full?'100 %':'95 %'} justes · moyenne ≤ ${ms/1000} s`:`Meilleur : ${(mean/1000).toLocaleString('fr-FR',{maximumFractionDigits:2})} s · objectif ${ms/1000} s`,mean===null?0:Math.min(1,ms/Math.max(1,mean)),1,activity(r?.id||catalog.activities[0]?.id));};
+ const ownedMusic=new Map(existing.filter(u=>u.musicId&&musicChecked(u.musicId)).map(u=>[u.musicId,{...u,clean:false}]));
+ for(const [id,r]of Object.entries(evidence.music))if(musicChecked(id))ownedMusic.set(id,{...ownedMusic.get(id),...r});
+ const playableIds=new Set([...music.keys(),...ownedMusic.keys()]);
+ const musicTarget=()=>activity([...music.values()].find(m=>!ownedMusic.has(m.id))?.activity||[...music.values()][0]?.activity||catalog.activities.find(a=>a.mode==='find')?.id||fallback.id);
+ const checksFor=def=>{
+  const s=def.scopeId||'z1',nat=def.modelId==='perfect-natural',positions=nat?catalog.byScope.get(s).plan.natural:catalog.byScope.get(s).plan.all;
+  switch(def.modelId||def.id){
+   case 'first-session':return [done('Terminer au moins 20 questions',recs.some(x=>x.r.finished),fallback)];
+   case 'opens-named':return [done('Nommer votre accordage sans aide',passed('opens'),activity('opens'))];
+   case 'open-strings':return ['opens','opens-find'].map(id=>done(modules.get(id)?.subtitle||'Votre accordage',passed(id),activity(id)));
+   case 'diagram-check':return [done('Réussir les vérifications du diagramme',validatedCourses['gd-02']?.completed,course('gd-02'))];
+   case 'beginner-route':return ['gd-01','gd-02','gd-03','gd-04'].map(id=>done(courses.get(id)?.title||id,validatedCourses[id]?.completed,course(id)));
+   case 'first-discovery':return [done('Retrouver tous les emplacements d’une famille',catalog.discoveries.some(m=>data.discoveredModules?.includes(m.baseId)),activity(catalog.discoveries[0]?.id))];
+   case 'first-family':return best(families.map(familyChecks));
+   case 'first-cumulative':return best(pairs.map(ids=>ids.map(id=>done(modules.get(id).subtitle,passed(id),activity(id)))));
+   case 'natural-map':case 'z2-natural':case 'z3-natural':return synthesis(s,true);
+   case 'full-map':case 'z2-full':case 'z3-full':case 'first-string-full':case 'second-string-full':case 'third-string-full':return synthesis(s);
+   case 'same-pitch-bridges':{
+    const byPitch=new Map();for(const p of catalog.allPositions)if(coverage([p],null,'pitch')&&coverage([p],null,'find')){const ss=byPitch.get(p.midi)||new Set();ss.add(p.string);byPitch.set(p.midi,ss);}
+    return [check('Trois hauteurs, chacune sur deux cordes',Math.min(3,[...byPitch.values()].filter(s=>s.size>=2).length),3,coverTarget(catalog.allPositions,null,'pitch')||fallback)];
+   }
+   case 'octave-family':return best(families.filter(ch=>new Set(ch.focus.map(p=>Math.floor(p.midi/12))).size>=2).map(ch=>[...familyChecks(ch),check('Chaque emplacement nommé et retrouvé',coverage(ch.focus),ch.focus.length*2,coverTarget(ch.focus,ch.scopeId))]));
+   case 'boundary-four':case 'boundary-eight':{
+    const fret=def.id==='boundary-four'?4:8,scopes=fret===4?['z1','z2']:['z2','z3'],points=catalog.allPositions.filter(p=>p.fret===fret);
+    return scopes.flatMap(id=>[check(`Case ${fret} · ${catalog.byScope.get(id).title}`,coverage(points,id),points.length*2,coverTarget(points,id)),done('Un bilan validé · '+catalog.byScope.get(id).title,summaryIds(id).some(passed),activity(summaryIds(id).find(id=>!passed(id))||summaryIds(id)[0]))]);
+   }
+   case 'guided-level-one':return ['z1','cs1','cs2'].map(scopeCheck);
+   case 'three-natural-zones':return naturalChecks;
+   case 'clean-session':return [check('20 premières réponses justes à la suite',Math.max(0,...recs.map(x=>x.r.cleanRun)),20,fallback)];
+   case 'perfect-name':return [perfect('name')];
+   case 'perfect-find':return [perfect('find')];
+   case 'perfect-natural':case 'perfect-chromatic':{
+    const ids=summaryIds(s,nat),success=ids.find(id=>record(id)?.perfect);
+    return [done('Un bilan à 100 %, sans aide',!!success,activity(success||ids[0])),check('Chaque emplacement nommé et retrouvé',coverage(positions),positions.length*2,coverTarget(positions,s))];
+   }
+   case 'repeat-proof':{const r=recs.slice().sort((a,b)=>b.r.perfect-a.r.perfect)[0];return [check('Deux réussites parfaites du même exercice',r?.r.perfect||0,2,activity(r?.id||fallback.id))];}
+   case 'personal-fluidity':return [check('Référence puis amélioration de 5 % · précision ≥90 %',recs.some(x=>x.r.recordBeat)?2:recs.some(x=>x.r.best?.accuracy>=.9)?1:0,2,activity(recs.find(x=>x.r.best?.accuracy>=.9)?.id||fallback.id))];
+   case 'two-second':return [speed(2000,false)];
+   case 'one-second':return [speed(1000,true)];
+   case 'three-flashes':{const xs=recs.filter(x=>x.r.perfectMean!==null&&x.r.perfectMean<=1000);return [check('Trois exercices différents à 100 % et ≤1 s',xs.length,3,fallback),done('Au moins une activité Nommer',xs.some(x=>x.m.mode==='name'),activity(catalog.activities.find(m=>m.mode==='name').id)),done('Au moins une activité Retrouver',xs.some(x=>x.m.mode==='find'),activity(catalog.activities.find(m=>m.mode==='find').id))];}
+   case 'fluent-zones':return ['z1','z2','z3'].flatMap(id=>[...summaryIds(id).map(a=>done(catalog.byScope.get(id).title+' · '+modules.get(a).subtitle+' · ≥95 % et ≤2 s',record(a)?.fastMean!==null&&record(a)?.fastMean!==undefined&&record(a).fastMean<=2000,activity(a))),check('Couverture complète · '+catalog.byScope.get(id).title,coverage(catalog.byScope.get(id).plan.all),catalog.byScope.get(id).plan.all.length*2,coverTarget(catalog.byScope.get(id).plan.all,id))]);
+   case 'first-chain':{const session=data.session,partial=session?.activity?.endsWith('-find')?Math.min(1,(session.events?.length||0)/Math.max(20,session.queue?.length||20)):0;return [check('Questions, puis suite musicale',recs.some(x=>x.r.chain)?2:recs.some(x=>x.m.mode==='find'&&x.r.finished)?1:partial,2,partial?activity(session.activity):musicTarget())];}
+   case 'first-sleeve':case 'three-sleeves':case 'seven-sleeves':{const n=def.id==='first-sleeve'?1:def.id==='three-sleeves'?3:7;return [check(`${n} morceau${n>1?'x différents':''} dans la collection`,ownedMusic.size,n,musicTarget())];}
+   case 'three-clean-phrases':return [check('Trois suites différentes, sans erreur dès le départ',[...ownedMusic.values()].filter(m=>m.clean).length,3,activity([...music.values()].find(m=>!ownedMusic.get(m.id)?.clean)?.activity||musicTarget().id))];
+   case 'three-strings':return ['cs1','cs2','cs3'].flatMap(id=>synthesis(id));
+   case 'beta-atlas':return catalog.scopes.map(s=>scopeCheck(s.id));
+   case 'beta-encore':return [...catalog.scopes.map(s=>scopeCheck(s.id)),...catalog.scopes.flatMap(s=>summaryIds(s.id).map(id=>done(s.title+' · '+modules.get(id).subtitle+' · 100 %',record(id)?.perfect,activity(id))))];
+   default:if(def.music)return [done('Terminer la suite de ce morceau',ownedMusic.has(def.music.id),activity(def.activity))];return [];
+  }
+ };
+ const scopeIds={'natural-map':'z1','full-map':'z1','z2-natural':'z2','z2-full':'z2','z3-natural':'z3','z3-full':'z3','first-string-full':'cs1','second-string-full':'cs2','third-string-full':'cs3'};
+ const defs=ACHIEVEMENTS.flatMap(d=>['perfect-natural','perfect-chromatic'].includes(d.id)?['z1','z2','z3'].map((s,i)=>({...d,id:d.id+(i?'-'+s:''),modelId:d.id,scopeId:s,number:d.number+'-'+['I','II','III'][i]})):[{...d,scopeId:scopeIds[d.id]}]);
+ for(const def of defs){def.title=def.title.replace('{note}',noteName(profile.tuning[0],notation)).replace('{n}',String(profile.tuning.length));def.context=def.scopeId?catalog.byScope.get(def.scopeId).title+' · '+catalog.byScope.get(def.scopeId).subtitle:'Votre '+profile.label.toLowerCase();}
+ const acquiredId=id=>existing.some(u=>u.id===id&&(u.scope==='global'||u.profileKey===profile.key));
+ const reachablePitches=new Map();for(const m of catalog.activities.filter(m=>m.mode==='name'&&['family','opens'].includes(m.kind)))for(const p of m.pool){const strings=reachablePitches.get(p.midi)||new Set();strings.add(p.string);reachablePitches.set(p.midi,strings);}
+ const available=defs.filter(d=>{
+  if(acquiredId(d.id))return true;
+  if(['opens-named','open-strings'].includes(d.id)&&!modules.has('opens'))return false;
+  if(d.id==='same-pitch-bridges'&&[...reachablePitches.values()].filter(s=>s.size>=2).length<3)return false;
+  return !['first-sleeve','three-sleeves','seven-sleeves','three-clean-phrases'].includes(d.id)||playableIds.size>=(d.id==='seven-sleeves'?7:d.id==='first-sleeve'?1:3);
+ });
+ const allMusic=new Map(music);for(const [id,r]of ownedMusic)if(!allMusic.has(id)){const m=melodyById(id,r.shift);if(m)allMusic.set(id,{...m,activity:r.activity,scopeId:'z1'});}
+ for(const u of existing.filter(u=>u.musicId))if(!allMusic.has(u.musicId)){const m=melodyById(u.musicId,u.shift);if(m)allMusic.set(u.musicId,{...m,activity:u.activity,scopeId:'z1'});}
+ for(const [id,m]of allMusic){if(!MUSIC_CARD_NUMBERS[id])continue;available.push({id:'music-'+id,modelId:'music',category:'music',scope:'global',scopeId:m.scopeId,title:m.title,context:m.composer,criterion:'Terminer la suite compatible de ce morceau. Une erreur remet la suite à zéro.',rarity:RARITIES[2],level:3,number:MUSIC_CARD_NUMBERS[id],version:2,music:m,activity:m.activity});}
+ const scopeFor=d=>d.scope==='global'?'global':collectionScope(profile,d.scopeId?catalog.byScope.get(d.scopeId).zone:undefined);
+ const definitions=available.map(def=>{
+  const obtained=existing.find(u=>u.id===def.id&&u.scope===scopeFor(def)),checks=checksFor(def),eligible=checks.length>0&&checks.every(c=>c.done),value=sum(checks),max=Math.max(1,total(checks)),ratios=checks.map(c=>c.value/Math.max(1,c.max)),percent=obtained?100:Math.min(eligible?100:99,Math.floor((ratios.length?ratios.reduce((a,b)=>a+b,0)/ratios.length:0)*100));
+  let target=checks.find(c=>!c.done&&c.target)?.target||checks.find(c=>c.target)?.target||fallback;
+  if(target.kind==='activity'&&!modules.has(target.id)&&!catalog.discoveries.some(a=>a.id===target.id))target=nextScope(def.scopeId||'z1')||fallback;
+  return {...def,scopeKey:scopeFor(def),obtained,checks,eligible,target,progress:{value,max,percent,label:checks.length===1?checks[0].label:`${checks.filter(c=>c.done).length} / ${checks.length} critères validés`}};
+ });
+ return {definitions,evidence,catalog,beta};
 }
 
-const coverage=a=>new Set(a.events.map(e=>`${e.target.string}:${e.target.fret}`)).size>=10;
-export function evaluateAchievements({profile,plan,attempts,entry,existing=[]}){
- const scope=collectionScope(profile,plan.zone),fresh=[],known=new Set(existing.map(u=>`${u.scope}:${u.id}`));
- function award(id,proofs,extra={},global=false){const key=global?'global':scope;if(known.has(`${key}:${id}`))return;known.add(`${key}:${id}`);fresh.push({id,scope:key,version:1,at:entry.at,profileKey:profile.key,zone:{...plan.zone},proofs:proofs.map(p=>p.id),evidence:proofs.map(p=>{const m=resultMetrics(p.events);return {attempt:p.id,activity:p.activity,at:p.at,total:m.total,correct:m.correct,meanMs:m.meanMs,aidedResponses:p.events.filter(e=>e.aids?.length).length,positions:new Set(p.events.map(e=>`${e.target.string}:${e.target.fret}`)).size,motifCompleted:!!p.motifCompleted};}),...extra});}
- const successes=attempts.filter(passed);
- const pair=(base,strict=false)=>[base,base+'-find'].map(id=>successes.find(a=>a.activity===id&&(!strict||unaided(a)&&coverage(a))));
- const opens=openEvidence(plan,attempts);if(opens.name&&opens.find)award('open-strings',opens.proofs);
- for(const pc of plan.order){const set=familyActivities(plan,pc).map(id=>successes.find(a=>a.activity===id));if(set.length>=2&&set.every(Boolean)){award('first-family',set);break;}}
- const lastNatural=plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1);
- for(const [id,pc]of [['natural-map',lastNatural],['full-map',plan.order.at(-1)]]){const set=pair('mix-'+pc,true);if(set.every(Boolean))award(id,set);}
- if(passed(entry)&&unaided(entry)&&entry.events.every(e=>e.correct))award('clean-session',[entry]);
- if(entry.finished===true&&entry.events.length>=20&&entry.motifCompleted)award('first-chain',[entry]);
- if(passed(entry)&&unaided(entry)){
-  const comparable=attempts.filter(a=>a.id!==entry.id&&unaided(a));
-  if(personalRecord(entry,comparable).kind==='speed')award('personal-fluidity',[entry]);
-  const m=resultMetrics(entry.events);if(m.accuracy===1&&m.meanMs!==null&&m.meanMs<=1000)award('one-second',[entry]);
+export function evaluateAchievements({profile,catalog,attempts=[],data,entry,existing=[]}){
+ const context=achievementContext({profile,catalog:catalog||defaultCatalog(profile),data:data||{attempts},existing}),at=entry?.at??Math.max(0,...attempts.map(a=>a.at||0)),fresh=[];
+ for(const def of context.definitions){if(def.obtained||!def.eligible)continue;
+  const proofs=(data?.attempts||attempts).filter(a=>a.finished&&a.events?.length>=20).slice(-10);
+  fresh.push({id:def.id,scope:def.scopeKey,profileKey:profile.key,at,version:1,ruleVersion:2,proofs:proofs.map(a=>a.id),evidence:proofs.map(a=>{const es=a.events.filter(e=>!e.retry),cs=es.filter(e=>e.correct),times=cs.filter(e=>!e.aids?.length&&e.timingInterpretable!==false).map(e=>e.ms);return {attempt:a.id,activity:a.activity,at:a.at,total:es.length,correct:cs.length,meanMs:times.length?times.reduce((a,b)=>a+b,0)/times.length:null,aidedResponses:es.filter(e=>e.aids?.length).length,positions:new Set(es.map(e=>key(e.target))).size,motifCompleted:!!a.motifCompleted};}),zone:{...(context.catalog.byScope.get(def.scopeId||'z1')?.zone||{start:0,end:4})},...(def.music?{musicId:def.music.id,shift:context.evidence.music[def.music.id]?.shift??def.music.shift??0,activity:context.evidence.music[def.music.id]?.activity??def.activity,arrangementVersion:MUSIC_ARRANGEMENT_VERSION}:{})});
  }
- if(entry.finished===true&&entry.events.length>=20&&entry.motifCompleted&&entry.melodyId&&musicChecked(entry.melodyId)&&entry.music&&Number.isFinite(entry.music.shift)){
-  award('music-'+entry.melodyId,[entry],{musicId:entry.melodyId,shift:entry.music.shift,activity:entry.activity,arrangementVersion:MUSIC_ARRANGEMENT_VERSION},true);
-  award('first-sleeve',[entry],{},true);
- }
- const records=[...existing,...fresh].filter(u=>u.scope==='global'&&u.musicId);
- if(new Set(records.map(u=>u.musicId)).size>=3)award('three-sleeves',[entry],{},true);
  return fresh;
 }
-/** Progress uses the same qualifying evidence as awards; a pending card never claims 100%. */
+
+/** Compatibility for older callers; new UI consumes achievementContext once per render. */
 export function achievementProgress(def,attempts,plan,obtained,unlocks=[],session=null){
- const result=(value,max,label)=>({value,max,label,percent:obtained?100:Math.min(99,Math.max(0,Math.floor(value/Math.max(1,max)*100)))});
- if(obtained)return result(1,1,'Défi accompli');
- const success=attempts.filter(passed),ids=new Set(success.map(a=>a.activity)),eligible=attempts.filter(a=>a.finished===true&&unaided(a));
- if(def.id==='open-strings'){const evidence=openEvidence(plan,attempts),n=Number(evidence.name)+Number(evidence.find);return result(n,2,`${n} / 2 compétences vérifiées`);}
- if(def.id==='first-family'){const candidates=plan.order.map(pc=>familyActivities(plan,pc)).filter(ids=>ids.length>=2).map(group=>({value:group.filter(id=>ids.has(id)).length,max:group.length})).sort((a,b)=>b.value/b.max-a.value/a.max),best=candidates[0]||{value:0,max:4};return result(best.value,best.max,`${best.value} / ${best.max} activités pour une famille`);}
- if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1),n=['mix-'+pc,'mix-'+pc+'-find'].filter(id=>success.some(a=>a.activity===id&&unaided(a)&&coverage(a))).length;return result(n,2,`${n} / 2 validations sans aide`);}
- if(def.id==='clean-session'){const best=eligible.map(a=>resultMetrics(a.events)).sort((a,b)=>b.accuracy-a.accuracy)[0];return result(best?.correct||0,best?.total||20,best?`Meilleure séance sans aide : ${best.correct} / ${best.total}`:'Terminez une séance sans aide');}
- if(def.id==='personal-fluidity'){const n=eligible.some(passed)?1:0;return result(n,2,n?'Temps de référence enregistré · battez-le sur ce même exercice':'Enregistrez un premier temps sans aide');}
- if(def.id==='one-second'){const best=eligible.map(a=>resultMetrics(a.events)).filter(m=>m.accuracy===1&&m.meanMs!==null).sort((a,b)=>a.meanMs-b.meanMs)[0];return result(best?1000:0,best?Math.max(1000,best.meanMs):1000,best?`Meilleur temps sans faute : ${(best.meanMs/1000).toLocaleString('fr-FR',{maximumFractionDigits:2})} s · objectif 1 s`:'Terminez une séance sans faute ni aide');}
- if(def.id==='three-sleeves'||def.id==='first-sleeve'){const max=def.id==='three-sleeves'?3:1,n=new Set(unlocks.filter(u=>u.scope==='global'&&u.musicId).map(u=>u.musicId)).size;return result(Math.min(max,n),max,`${Math.min(max,n)} / ${max} phrase${max>1?'s différentes':''} collectionnée${max>1?'s':''}`);}
- if(def.id==='first-chain'||def.music){const finished=attempts.some(a=>a.activity.endsWith('-find')&&a.finished===true&&a.events.length>=20&&(!def.activity||a.activity===def.activity)),matching=session?.activity.endsWith('-find')&&(!def.activity||session.activity===def.activity),questions=matching?Math.min(1,(session.events?.length||0)/Math.max(20,session.queue?.length||20)):0,value=finished?1:questions;return result(value,2,value===1?'Questions terminées · reste la suite musicale':value>0?'Questions en cours · puis la suite musicale':'Terminez les questions, puis la suite musicale');}
- return result(0,1,'Prêt à relever le défi');
+ if(obtained)return {value:1,max:1,percent:100,label:'Défi accompli'};
+ const p=def.progress|| (plan.profile?achievementContext({profile:plan.profile,data:{attempts,session},existing:unlocks}).definitions.find(d=>d.id===def.id)?.progress:null);
+ return p?{...p,percent:Math.min(99,p.percent)}:{value:0,max:1,percent:0,label:'Voir les critères du défi'};
 }
-/** Resume the missing criterion, rather than restarting the first completed activity. */
 export function nextAchievementActivity(def,attempts,plan){
- if(def.activity)return def.activity;
- const complete=(id,strict=false)=>attempts.some(a=>a.activity===id&&passed(a)&&(!strict||unaided(a)&&coverage(a)));
- let ids,strict=false;
- if(def.id==='open-strings'){const evidence=openEvidence(plan,attempts);ids=plan.activityIds&&!plan.activityIds.includes('opens')?[(plan.activityIds.find(id=>id.startsWith('mix-')&&!id.endsWith('-find'))||'opens-find'),'opens-find']:['opens','opens-find'];if(!evidence.find&&evidence.name)return 'opens-find';}
- else if(def.id==='first-family')ids=plan.order.map(pc=>familyActivities(plan,pc)).filter(ids=>ids.length>=2).sort((a,b)=>b.filter(id=>complete(id)).length/b.length-a.filter(id=>complete(id)).length/a.length)[0];
- else if(['natural-map','full-map'].includes(def.id)){const pc=def.id==='natural-map'?plan.order.filter(pc=>[0,2,4,5,7,9,11].includes(pc)).at(-1):plan.order.at(-1);ids=['mix-'+pc,'mix-'+pc+'-find'];strict=true;}
- else ids=plan.modules.flatMap(m=>[m.id,m.id+'-find']);
- return ids.find(id=>!complete(id,strict))||ids[0]||'opens';
+ if(def.target)return def.target.id;if(def.activity)return def.activity;
+ if(plan.profile)return achievementContext({profile:plan.profile,data:{attempts}}).definitions.find(d=>d.id===def.id)?.target.id;
+ const passed=id=>attempts.some(a=>a.activity===id&&a.finished&&a.events?.length>=20&&a.events.filter(e=>e.correct&&!e.retry&&!e.aids?.length).length/a.events.length>=.9);
+ if(def.id==='open-strings')return ['opens','opens-find'].find(id=>!passed(id))||'opens';
+ return plan.activityIds?.find(id=>!passed(id))||plan.modules[0]?.id||'opens';
 }

@@ -218,7 +218,7 @@ export function createAudioService({
     }
     return soundCache.get(key).buffer;
   }
-  async function playArrangement(arrangement) {
+  async function playArrangement(arrangement, {onStart} = {}) {
     stopAudio();
     const epoch = sequenceEpoch;
     await unlockAudio();
@@ -266,6 +266,7 @@ export function createAudioService({
         e.voice || voice,
         e.velocity,
       );
+    onStart?.({delayMs:Math.max(0,(base-audio.currentTime)*1000)});
     return true;
   }
   function createNote(midi, when, duration, voice, velocity = 1) {
