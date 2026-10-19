@@ -920,3 +920,265 @@
     padding: 6px 10px;
   }
 }
+
+/* Navigation contract: exactly three branches, one primary action per level. */
+.branch-stack {
+  display: grid;
+  gap: 18px;
+  max-width: 900px;
+  margin: 28px auto;
+}
+.branch-jumbo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 162px;
+  padding: 28px 32px;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+  font: inherit;
+}
+.branch-jumbo:hover {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+.branch-jumbo:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 4px;
+}
+.branch-number {
+  font: 600 18px var(--font-heading);
+  color: var(--muted);
+  align-self: flex-start;
+  padding-top: 6px;
+}
+.branch-copy {
+  display: grid;
+  gap: 9px;
+  flex: 1;
+  min-width: 0;
+}
+.branch-copy strong {
+  font: 700 clamp(23px, 3vw, 34px) / 1.12 var(--font-heading);
+  max-width: 25ch;
+}
+.branch-copy > span {
+  color: var(--muted);
+  font-size: 16px;
+}
+.branch-copy small {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--brand);
+  margin-top: 5px;
+}
+.branch-arrow {
+  font-size: 30px;
+  color: var(--brand);
+}
+.branch-paths {
+  max-width: 1000px;
+}
+.branch-paths > section {
+  margin-bottom: 28px;
+}
+.branch-paths > .route-card {
+  max-width: 650px;
+}
+.chapter-options {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+}
+.chapter-options > summary {
+  padding: 18px 0;
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--muted);
+}
+.guided-stage > summary {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 18px 4px;
+  cursor: pointer;
+  list-style: none;
+  font: 700 20px/1.25 var(--font-heading);
+}
+.guided-stage > summary:after {
+  content: "+";
+  margin-left: auto;
+  color: var(--muted);
+}
+.guided-stage[open] > summary:after {
+  content: "−";
+}
+.guided-stage > summary small {
+  display: block;
+  font: 400 13px var(--font-body);
+  color: var(--muted);
+  margin-top: 5px;
+}
+.stage-number {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 15px;
+  flex: none;
+}
+.guided-bilan {
+  margin-top: 24px;
+}
+.guided-bilan > summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.guided-bilan > summary > span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.bilan-scopes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+.bilan-scopes > div {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.bilan-scopes > div > span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.bilan-scopes strong > span {
+  color: var(--success);
+}
+.bilan-scopes progress {
+  width: 100%;
+  accent-color: var(--success);
+}
+.instrument-overview {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  margin: 12px auto;
+  overflow: visible;
+}
+.instrument-body {
+  fill: var(--surface-soft);
+  stroke: var(--neck-ink);
+  stroke-width: 2;
+}
+.instrument-head {
+  fill: var(--wood);
+  stroke: var(--neck-ink);
+  stroke-width: 2;
+}
+.instrument-to-neck {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--brand);
+  margin: 8px auto;
+}
+.course-position-options {
+  max-width: 650px;
+  margin: 12px auto;
+  text-align: center;
+}
+.course-position-options > summary {
+  padding: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--brand);
+}
+.course-coordinate-buttons .position-pad-button {
+  min-width: 44px;
+  min-height: 46px;
+  font-size: 15px;
+}
+.course-feature {
+  max-height: 155px;
+}
+.course-page .course-visual .instrument-overview {
+  min-height: 70px;
+}
+.course-page .course-instrument {
+  height: 64px;
+}
+.course-highlight {
+  stroke: var(--brand);
+}
+@media (max-width: 600px) {
+  .branch-stack {
+    gap: 12px;
+    margin: 20px auto;
+  }
+  .branch-jumbo {
+    min-height: 150px;
+    padding: 23px 18px;
+    gap: 14px;
+    border-radius: 20px;
+  }
+  .branch-number {
+    font-size: 13px;
+  }
+  .branch-copy > span {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .branch-arrow {
+    font-size: 24px;
+  }
+  .bilan-scopes {
+    grid-template-columns: 1fr;
+  }
+  .bilan-scopes > div {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .course-coordinate-buttons > div {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+  .course-coordinate-buttons > div > div {
+    grid-template-columns: repeat(5, minmax(36px, 1fr));
+  }
+  .course-coordinate-buttons .position-pad-button {
+    min-width: 36px;
+  }
+  .course-coordinate-buttons > div > span {
+    font-size: 11px;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .course-page .instrument-overview {
+    max-height: 90px;
+  }
+  .course-feature {
+    max-height: 95px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .branch-jumbo {
+    transition: none;
+  }
+  .branch-jumbo:hover {
+    transform: none;
+  }
+}

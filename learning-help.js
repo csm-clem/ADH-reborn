@@ -23,7 +23,7 @@ export function introductionFor(module,stage,question,seen=[],activity='',melody
  return key&&!seen.includes(key)?{key,title,text,kind}:null;
 }
 export function helpGraphic(help,module,profile,notation='international'){
- const all=DEMO_RULES.points(module,{question:module.demoQuestion,kind:help.kind}),points=help.kind==='motif'?(module.demoMelody?.sequence||all).slice(0,3):help.kind==='mix'?all.filter((p,i)=>i===0||p.midi%12===module.pitchClass).slice(0,3):all,target=points[0]||module.pool[0];
+ const all=DEMO_RULES.points(module,{question:module.demoQuestion,kind:help.kind}),points=help.kind==='motif'?(module.demoMelody?.sequence||all).slice(0,3):help.kind==='mix'?module.pool.filter(p=>!module.assessedQuestion||(module.assessedQuestion.mode==='name'?p.midi%12!==module.assessedQuestion.target.midi%12:p.string!==module.assessedQuestion.target.string||p.fret!==module.assessedQuestion.target.fret)).slice(0,3):all,target=points[0]||module.pool[0];
  const neck=miniatureNeck(profile,{id:'help-neck',points,showNames:true,notation,lesson:true,lastFret:module.zone?.end||4,startFret:module.zone?.start||0,strings:module.strings,label:'Exemple : '+points.map(p=>pitchLabel(p.midi,notation)).join(', ')});
  if(help.kind==='motif'){const sequence=module.demoMelody?.sequence||points;return `<div class="help-sequence">${neck}<div class="help-sequence-notes" aria-label="Touchez les notes dans cet ordre">${sequence.map((p,i)=>`<span><small>${i+1}</small><strong>${esc(pitchLabel(p.midi,notation))}</strong></span>${i<sequence.length-1?'<i aria-hidden="true">→</i>':''}`).join('')}</div></div>`;}
  if(help.kind!=='name')return neck;

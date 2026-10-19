@@ -10,10 +10,10 @@ with sync_playwright() as p:
  page.evaluate('''async()=>{const {makeProfile}=await import('./core.js'),{initialState}=await import('./state.js'),{STATE_KEY,PILOT_KEY}=await import('./release.js'),{initialPilotStore}=await import('./pilot.js');const profile=makeProfile('guitar6'),store=initialPilotStore();store.profiles[profile.key]={profile,attempts:[],later:[],session:null,seenInstructions:['find','family-cs1-4'],discoveredModules:['cs1-note-4'],navigation:{route:'cs1',chapter:'cs1-f04'}};localStorage.setItem(STATE_KEY,JSON.stringify({...initialState(),profile,beginnerGuide:true,sound:false}));localStorage.setItem(PILOT_KEY,JSON.stringify(store));}''')
  page.wait_for_function('navigator.serviceWorker.controller!==null',timeout=15000)
  page.reload();page.wait_for_timeout(150)
- cached=page.evaluate('''async()=>{const cache=await caches.open((await caches.keys()).find(k=>k.includes('0.24.0')));return (await cache.keys()).map(r=>new URL(r.url).pathname);}''')
- for name in ['beta-catalog.js','beta-courses.js','beta-home.js','course-ui.js','beta.css']:
+ cached=page.evaluate('''async()=>{const cache=await caches.open((await caches.keys()).find(k=>k.includes('0.25.0')));return (await cache.keys()).map(r=>new URL(r.url).pathname);}''')
+ for name in ['learning-evidence.js','navigation-rules.js','instrument-diagram.js','beta-catalog.js','beta-courses.js','beta-home.js','course-ui.js','beta.css']:
   assert any(path.endswith('/'+name) for path in cached),name
- context.set_offline(True);page.reload();page.locator('[data-module="cs1-note-4-find"]').click();page.wait_for_selector('.pilot-count',state='detached')
+ context.set_offline(True);page.reload();page.locator('.chapter-options summary').click();page.locator('[data-module="cs1-note-4-find"]').click();page.wait_for_selector('.pilot-count',state='detached')
  page.wait_for_timeout(150)
  s=page.evaluate("()=>Object.values(JSON.parse(localStorage.getItem('fretboard-trainer:pilot:stable')).profiles)[0].session")
  q=s['queue'][0];wrong=12 if q['target']['fret']==0 else 0
@@ -30,18 +30,18 @@ with sync_playwright() as p:
  page.locator('[data-pilot-action=exit]').click()
  assert page.locator('[data-module="cs1-note-4-find"]').count()==1
  page.locator('[data-pilot-action=beta-route]').click()
- page.locator('[data-pilot-action=beta-catalog]').click()
- page.locator('[data-pilot-action=beta-route][data-id=beginner]').click()
+ page.locator('[data-pilot-action=beta-branch]').click();page.locator('[data-pilot-action=beta-catalog]').click()
+ page.locator('[data-pilot-action=beta-branch][data-id=beginner]').click();page.locator('[data-pilot-action=beta-route][data-id=beginner]').click()
  page.locator('[data-pilot-action=beta-chapter][data-id=gd-01]').click()
  page.locator('[data-pilot-action=beta-course]').click()
  assert page.locator('.course-page').count()==1
  page.locator('[data-course-action=skip]').click()
  course=page.evaluate("()=>Object.values(JSON.parse(localStorage.getItem('fretboard-trainer:pilot:stable')).profiles)[0].courses['gd-01']")
  assert course['completed'] is False
- page.locator('[data-pilot-action=beta-route]').click();page.locator('[data-pilot-action=beta-catalog]').click()
+ page.locator('[data-pilot-action=beta-route]').click();page.locator('[data-pilot-action=beta-branch]').click();page.locator('[data-pilot-action=beta-catalog]').click()
  # The main first-session action fits the small portrait screen.
  page.set_viewport_size({'width':320,'height':568});page.wait_for_timeout(200)
- box=page.locator('.beta-featured .button.primary').bounding_box();nav=page.locator('.mobile-nav').bounding_box()
+ box=page.locator('.branch-jumbo').first.bounding_box();nav=page.locator('.mobile-nav').bounding_box()
  assert box['y']+box['height']<=nav['y'],(box,nav)
  assert not errors,errors
  page.screenshot(path=str(OUT/'catalog-small.png'))

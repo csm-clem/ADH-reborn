@@ -1,3 +1,4 @@
+import { learningProofs, activityContract } from "./learning-evidence.js";
 import {
   pilotPlan,
   practiceActivities,
@@ -243,41 +244,16 @@ export function betaCatalog(profile, { notation = "international" } = {}) {
 
 /** Contextual results remain contextual; physical coverage is reusable across paths. */
 export function betaEvidence(catalog, data) {
-  const attempts = data.attempts || [],
-    events = attempts.flatMap((a) => a.events || []),
+  const proof = learningProofs(catalog, data),
     courses = data.courses || {};
-  const autonomous = (e) => e.correct && !e.retry && !e.aids?.length;
-  const covered = (mode) =>
-    new Set(
-      events
-        .filter((e) => e.mode === mode && autonomous(e))
-        .map((e) => positionKey(e.target)),
-    );
-  const coverage = { name: covered("name"), find: covered("find") };
-  const modules = new Map(catalog.activities.map((a) => [a.id, a]));
-  const passed = (id) => {
-    const module = modules.get(id);
-    return attempts.some(
-      (a) =>
-        a.activity === id &&
-        a.finished === true &&
-        a.passed === true &&
-        a.events?.length >= 20 &&
-        a.events.every(
-          (e) =>
-            !e.retry &&
-            !e.aids?.length &&
-            (!module ||
-              (e.mode === module.mode &&
-                module.pool.some(
-                  (p) => positionKey(p) === positionKey(e.target),
-                ) &&
-                (module.mode !== "name" ||
-                  !["family", "opens"].includes(module.kind) ||
-                  e.answerKind === "pitch"))),
-        ),
-    );
+  const coverage = {
+    name: new Set(proof.coverage.name),
+    find: new Set(proof.coverage.find),
   };
+  const modules = new Map(catalog.activities.map((a) => [a.id, a]));
+  const passed = (id) =>
+    !!modules.get(id) &&
+    proof.activities[id]?.contract === activityContract(modules.get(id));
   const chapters = new Map();
   for (const chapter of catalog.chapters) {
     if (chapter.kind === "course") {

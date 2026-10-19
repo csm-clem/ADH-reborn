@@ -20,7 +20,17 @@ export function betaCourses(profile, catalog, notation = "international") {
     pressed = at(profile, 0, 2),
     courses = new Map();
   const add = (id, title, goal, pages, scopeId = "z1") =>
-    courses.set(id, { id, title, goal, pages, scopeId });
+    courses.set(id, {
+      id,
+      title,
+      goal,
+      pages,
+      scopeId,
+      stringCount: profile.tuning.length,
+      tuning: profile.tuning,
+      notation,
+      zone: catalog.byScope.get(scopeId)?.zone,
+    });
   const features = [
     ["neck", "manche", "Voici le manche."],
     ["string", "corde", "Une corde : une ligne sur le dessin."],
@@ -100,8 +110,8 @@ export function betaCourses(profile, catalog, notation = "international") {
       {
         id: "link",
         title: "Votre manche, en dessin",
-        text: "Une ligne = une corde. La corde 1 reste en haut.",
-        visual: "neck",
+        text: "Même corde en couleur. Le dessin commence au sillet, à gauche.",
+        visual: "instrument-link",
         photo: true,
         points: [at(profile, n - 1, 0)],
         showNames: false,
@@ -252,6 +262,11 @@ export function betaCourses(profile, catalog, notation = "international") {
       break;
     }
   }
+  const nameTarget = anchor,
+    findTarget =
+      all.find((p) => p.string !== anchor.string) ||
+      all.find((p) => p.fret !== anchor.fret) ||
+      anchor;
   add(
     "gd-04",
     "Nom, hauteur et octave",
@@ -292,6 +307,40 @@ export function betaCourses(profile, catalog, notation = "international") {
           option("lower", pitchLabel(anchor.midi, notation)),
           option("higher", pitchLabel(anchor.midi + 12, notation)),
         ]),
+      },
+      {
+        id: "actions-example",
+        title: "Un point à nommer, une note à retrouver",
+        text: `Voici ${pitchLabel(nameTarget.midi, notation)} et ${pitchLabel(findTarget.midi, notation)}. Le nom dit quoi chercher ; le numéro dit sur quelle corde.`,
+        visual: "neck",
+        points: [nameTarget, findTarget],
+        showNames: true,
+      },
+      {
+        id: "name-point",
+        title: "Quel est le nom de ce point ?",
+        text: "Choisissez son nom avec le chiffre.",
+        visual: "neck",
+        points: [nameTarget],
+        showNames: false,
+        quiz: choice(String(nameTarget.midi), [
+          option(
+            String(nameTarget.midi),
+            pitchLabel(nameTarget.midi, notation),
+          ),
+          option(
+            String(nameTarget.midi + 12),
+            pitchLabel(nameTarget.midi + 12, notation),
+          ),
+        ]),
+      },
+      {
+        id: "find-point",
+        title: `Retrouvez ${pitchLabel(findTarget.midi, notation)} · corde ${n - findTarget.string}`,
+        text: "Touchez sa place sur le dessin.",
+        visual: "neck",
+        points: [],
+        quiz: { kind: "position", target: findTarget },
       },
       ...(pair
         ? [
@@ -481,6 +530,7 @@ export function betaCourses(profile, catalog, notation = "international") {
         pages,
         scope.id,
       );
+      courses.get(id).pairs = unique;
     }
   }
   return courses;
@@ -495,4 +545,77 @@ export function courseCompleted(course, record) {
       .filter((p) => !p.quiz)
       .every((p) => (record?.visited || []).includes(p.id))
   );
+}
+
+/** A missed concept is checked on a changed figure, not just the identical correction. */
+export function coursePage(course, record) {
+  const base = course.pages[Math.min(record.index, course.pages.length - 1)],
+    variant =
+      (record.variants?.[base.id] || 0) +
+      (base.quiz && base.visual === "feature" ? 1 : 0);
+  if (!variant || !base.quiz) return { ...base, variant };
+  const p = structuredClone(base);
+  p.variant = variant;
+  p.text = "Un autre exemple. À vous de repérer !";
+  if (p.visual === "open-choice" && variant % 2) {
+    p.points.reverse();
+    p.quiz.answer = p.quiz.answer === "left" ? "right" : "left";
+  }
+  if (p.quiz.kind === "position") {
+    const t = p.quiz.target,
+      zone = p.zone ||
+        course.zone || { start: 0, end: course.id.startsWith("cs") ? 12 : 4 };
+    p.quiz.target = { ...t };
+    if (!course.id.startsWith("cs") && t.fret === zone.start) {
+      p.quiz.target.string = (t.string + variant) % (course.stringCount || 6);
+    } else
+      p.quiz.target.fret =
+        zone.start +
+        ((t.fret - zone.start + variant) % (zone.end - zone.start + 1));
+    p.quiz.target.midi =
+      (course.tuning || [])[p.quiz.target.string] + p.quiz.target.fret;
+    p.title =
+      course.id === "gd-04"
+        ? `Retrouvez ${pitchLabel(p.quiz.target.midi, course.notation)} · corde ${(course.stringCount || 6) - p.quiz.target.string}`
+        : `Corde ${(course.stringCount || 6) - p.quiz.target.string} · ${p.quiz.target.fret ? "case " + p.quiz.target.fret : "à vide"}`;
+  }
+  if (course.pairs?.length && p.quiz?.kind === "choice") {
+    const index = Number(base.id.split("-").at(-1)) || 0,
+      pair = course.pairs[(index + variant) % course.pairs.length];
+    p.points = pair;
+    p.visual = pair.some((pt) => pt.fret < (course.zone?.start || 0))
+      ? "octave-ends"
+      : "neck";
+    const steps = Math.abs(pair[1].midi - pair[0].midi) / 12;
+    p.quiz.answer = "oct-" + steps;
+    p.title = `Comparez ces deux ${noteName(pair[0].midi, course.notation)}`;
+    p.quiz.choices = [
+      option("oct-0", "Même hauteur"),
+      option("oct-1", "Une octave"),
+      option(
+        steps > 1 ? "oct-" + steps : "oct-2",
+        steps > 1 ? steps + " octaves" : "Deux octaves",
+      ),
+    ];
+    if (course.pairs.length === 1 && variant % 2) p.visual = "pitch-cards";
+  }
+  if (p.quiz.kind === "choice" && variant % 2) p.quiz.choices.reverse();
+  if (p.visual === "note-cycle") p.cycleOffset = variant;
+  if (p.visual === "pitch-cards" && variant % 2) {
+    p.points = p.points.slice().reverse();
+  }
+
+  if (p.visual === "markers")
+    p.points = p.points.map((pt) => ({
+      ...pt,
+      fret: 1 + ((pt.fret + variant) % 4),
+      midi: course.tuning[pt.string] + 1 + ((pt.fret + variant) % 4),
+    }));
+  if (base.id === "higher-check")
+    p.points = p.points.map((pt) => ({
+      ...pt,
+      string: (pt.string + variant) % course.stringCount,
+      midi: course.tuning[(pt.string + variant) % course.stringCount] + pt.fret,
+    }));
+  return p;
 }

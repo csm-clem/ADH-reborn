@@ -166,3 +166,8 @@ Ces décisions précèdent leur implémentation ; elles n’empêchent pas de fo
 ## Retour des premiers bêta-testeurs — 18 octobre 2026
 
 La recette réelle a commencé avant la V1. Le lot v0.23 ajoute l’entrée visuelle des débutants, un tutoriel facultatif du diagramme, la reprise du prochain critère des succès et la conservation des données sans compte. Il ne livre ni le parcours complet, ni le paiement, ni les comptes. Avant une annonce de correction complète de l’audio iPhone, effectuer une recette sur appareil physique. Avant de considérer le catalogue musical finalisé, terminer l’appel vocal d’Immigrant Song et arbitrer le placement de Come As You Are.
+
+
+### Correctifs de la bêta — v0.25
+
+Reprise de séance, preuves durables, séparation démonstration/évaluation, vérifications Grand Débutant et bilan Niveau 1 corrigés. Accueil en trois branches, carte des progrès unique 0–24 et moteur audio préparé. Cette carte ne constitue pas une extension du catalogue d’exercices bêta au-delà de la case 12. Voir [le rapport v0.25](CHANGES-v0.25.md). Les essais audio sur Windows réel et sur iPhone restent à effectuer.

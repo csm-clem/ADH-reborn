@@ -21,7 +21,7 @@ test('Every interaction format has an explicit example and respects muted recall
  const m=pilotPlan(profile).modules[0];for(const [stage,question,activity] of [['discovery',null,'opens'],['practice',{mode:'name'},'opens'],['practice',{mode:'find'},'opens'],['practice',{mode:'name',evaluation:true},'natural-diagnostic'],['motif',null,'opens'],['motif',null,'natural-diagnostic']]){const help=introductionFor(m,stage,question,[],activity);assert.ok(help);assert.match(helpGraphic(help,m,profile),/role="img"/);assert.equal(introductionFor(m,stage,question,[help.key],activity),null);}
 });
 test('Every lesson is available from the home page even without any passed activity',()=>{
- const c=controller(),html=c.home();assert.doesNotMatch(html,/data-module="degree-5" disabled/);assert.match(html,/Toutes les activités sont accessibles/);assert.doesNotMatch(html,/90 % de premières réponses correctes pour la suite/);
+ const c=controller(),html=c.home();assert.doesNotMatch(html,/data-module="degree-5" disabled/);assert.equal((html.match(/class="branch-jumbo"/g)||[]).length,3);assert.doesNotMatch(html,/class="route-card"[^]*disabled/);assert.doesNotMatch(html,/90 % de premières réponses correctes pour la suite/);
 });
 test('Lesson search is unlimited, never reveals the target after a wrong try and remains unscored',()=>{
  const c=controller('note-11');c.host.playNote=()=>{};c.host.showPilot=()=>{};

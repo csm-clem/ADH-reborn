@@ -1,4 +1,5 @@
-import { betaCourses, courseCompleted } from "./beta-courses.js";
+import { instrumentDiagram } from "./instrument-diagram.js";
+import { betaCourses, courseCompleted, coursePage } from "./beta-courses.js";
 import { miniatureNeck, neckBase, layoutMiniature } from "./neck-view.js";
 import { neckGeometry, noteName, pitchLabel, notationFor } from "./core.js";
 import { INSTRUMENT_IMAGES } from "./instrument-art.js";
@@ -54,16 +55,27 @@ export class CourseController {
     });
   }
   get page() {
-    return this.course?.pages[
-      Math.min(this.record.index, this.course.pages.length - 1)
-    ];
+    return this.course ? coursePage(this.course, this.record) : null;
   }
   open(id) {
     if (!this.courses.has(id)) return;
     this.pilot.leave();
     this.active = id;
     this.message = "";
-    if (this.record.completed) this.record.index = 0;
+    if (this.record.completed) {
+      this.record.completed = courseCompleted(this.course, this.record);
+      this.record.index = this.record.completed
+        ? 0
+        : Math.max(
+            0,
+            this.course.pages.findIndex((p) =>
+              p.quiz
+                ? !this.record.correct.includes(p.id)
+                : !this.record.visited.includes(p.id),
+            ),
+          );
+    }
+    this.record.variants ||= {};
     this.record.index = Math.min(
       this.record.index,
       this.course.pages.length - 1,
@@ -82,6 +94,14 @@ export class CourseController {
     this.home();
   }
   bind(root) {
+    root.addEventListener(
+      "toggle",
+      (e) => {
+        if (e.target.matches?.(".course-position-options"))
+          this.coordinatesOpen = e.target.open;
+      },
+      true,
+    );
     root.addEventListener("click", (e) => {
       if (!this.active) return;
       const button = e.target.closest("[data-course-action]");
@@ -126,7 +146,7 @@ export class CourseController {
   answer(value) {
     const page = this.page,
       q = page?.quiz;
-    if (!q) return;
+    if (!q || this.record.correct.includes(page.id)) return;
     const correct =
       q.kind === "position"
         ? value?.string === q.target.string && value?.fret === q.target.fret
@@ -135,6 +155,12 @@ export class CourseController {
       ? "Bien repéré !"
       : "Regardez encore. Vous pouvez réessayer.";
     this.lastCorrect = correct;
+    if (!correct) {
+      this.record.variants ||= {};
+      this.record.variants[page.id] = (this.record.variants[page.id] || 0) + 1;
+      this.message = "Essayez sur ce nouvel exemple.";
+      this.save();
+    }
     if (correct) {
       this.record.correct = [...new Set([...this.record.correct, page.id])];
       this.save();
@@ -181,21 +207,40 @@ export class CourseController {
       ? `<img class="course-instrument" src="./instruments/${INSTRUMENT_IMAGES[this.profile.instrumentId]}" alt="Votre ${esc(this.profile.label.toLowerCase())}">`
       : "";
     switch (page.visual) {
+      case "instrument-link":
+        return (
+          instrumentDiagram(this.profile, {
+            feature: "string",
+            activeString: page.points[0].string,
+          }) +
+          `<p class="instrument-to-neck" aria-hidden="true">↓ Même corde, en dessin ↓</p>` +
+          neck()
+        );
       case "feature": {
-        const g = neckGeometry(this.profile.tuning.length, 4, 648, {
-            lesson: true,
-          }),
-          feature = page.feature;
+        const g = neckGeometry(
+            this.profile.tuning.length,
+            page.variant % 2 ? 3 : 4,
+            648,
+            {
+              lesson: true,
+            },
+          ),
+          feature = page.feature,
+          exampleFret = page.variant % 2 ? 3 : 2;
         const shape =
           feature === "neck"
             ? `<rect x="${g.nut}" y="2" width="${g.width - g.nut}" height="${g.height - 10}"/>`
             : feature === "cell"
-              ? `<rect x="${g.frets[1]}" y="2" width="${g.frets[2] - g.frets[1]}" height="${g.height - 10}"/>`
+              ? `<rect x="${g.frets[exampleFret - 1]}" y="2" width="${g.frets[exampleFret] - g.frets[exampleFret - 1]}" height="${g.height - 10}"/>`
               : feature === "string"
-                ? `<path d="M${g.openStart} ${g.ys[0]}H${g.width}"/>`
-                : `<path d="M${feature === "nut" ? g.nut : g.frets[2]} 2V${g.height - 8}"/>`;
+                ? `<path d="M${g.openStart} ${g.ys[page.variant % 2 ? this.profile.tuning.length - 1 : 0]}H${g.width}"/>`
+                : `<path d="M${feature === "nut" ? g.nut : g.frets[exampleFret]} 2V${g.height - 8}"/>`;
         return (
           photo +
+          instrumentDiagram(this.profile, {
+            feature,
+            variant: page.variant || 0,
+          }) +
           `<svg class="course-feature shared-neck" viewBox="0 0 ${g.width} ${g.height}" role="img" aria-label="Un élément du manche est mis en évidence">${neckBase(this.profile, { g, id: "feature" })}<g class="course-highlight ${["cell", "neck"].includes(feature) ? "is-area" : ""}">${shape}</g></svg>`
         );
       }
@@ -205,7 +250,16 @@ export class CourseController {
       case "notation":
         return `<div class="notation-pairs">${[0, 2, 4, 5, 7, 9, 11].map((pc) => `<div><strong>${noteName(pc, "latin")}</strong><span aria-hidden="true">↔</span><strong>${noteName(pc, "international")}</strong></div>`).join("")}</div>`;
       case "note-cycle":
-        return `<div class="note-cycle" aria-label="Le cycle des notes"><span aria-hidden="true">↻</span>${[0, 2, 4, 5, 7, 9, 11].map((pc) => `<b class="${pc === page.missing ? "is-missing" : ""}">${pc === page.missing ? "?" : noteName(pc, this.notation)}</b>`).join("")}</div>`;
+        return `<div class="note-cycle" aria-label="Le cycle des notes"><span aria-hidden="true">↻</span>${(() => {
+          const ns = [0, 2, 4, 5, 7, 9, 11],
+            i = (page.cycleOffset || 0) % 7;
+          return [...ns.slice(i), ...ns.slice(0, i)];
+        })()
+          .map(
+            (pc) =>
+              `<b class="${pc === page.missing ? "is-missing" : ""}">${pc === page.missing ? "?" : noteName(pc, this.notation)}</b>`,
+          )
+          .join("")}</div>`;
       case "tuning":
         return `<div class="course-tuning">${this.profile.tuning
           .map((midi, string) => ({ midi, string }))
@@ -253,7 +307,7 @@ export class CourseController {
       p.quiz?.kind === "choice"
         ? `<div class="course-choices">${p.quiz.choices.map((o) => `<button class="button quiet-button ${passed && o.value === p.quiz.answer ? "is-answer-correct" : ""}" data-course-action="answer" data-value="${esc(o.value)}" ${passed ? "disabled" : ""}>${esc(o.label)}</button>`).join("")}</div>`
         : p.quiz?.kind === "position"
-          ? `<div class="course-coordinate-buttons" aria-label="Boutons de réponse">${strings
+          ? `<details class="course-position-options" ${this.coordinatesOpen ? "open" : ""}><summary>Boutons de réponse</summary><div class="course-coordinate-buttons" aria-label="Boutons de réponse">${strings
               .slice()
               .reverse()
               .map(
@@ -264,11 +318,11 @@ export class CourseController {
                   )
                     .map(
                       (f) =>
-                        `<button class="button quiet-button compact" data-course-action="position" data-string="${s}" data-fret="${f}" ${passed ? "disabled" : ""}>${f ? "Case " + f : "À vide"}</button>`,
+                        `<button class="position-pad-button" data-course-action="position" data-string="${s}" data-fret="${f}" ${passed ? "disabled" : ""}>${f || "À vide"}</button>`,
                     )
                     .join("")}</div></div>`,
               )
-              .join("")}</div>`
+              .join("")}</div></details>`
           : "";
     return `<main id="main-content" tabindex="-1" class="course-page"><header class="game-header"><button class="icon-button" data-course-action="close" aria-label="Retour au chapitre">${this.icon("back")}</button><div><strong>${esc(c.title)}</strong><small>${this.record.index + 1} / ${c.pages.length}</small></div><button class="text-button" data-course-action="skip">Ignorer</button></header><section class="course-content"><p class="eyebrow">${p.quiz ? "À vous de repérer" : "Un repère à la fois"}</p><h1 tabindex="-1">${esc(p.title)}</h1><p>${esc(p.text)}</p><div class="course-visual">${this.visual(p)}</div>${choices}<p class="course-feedback ${this.lastCorrect ? "is-correct" : ""}" role="status">${esc(this.message || "")}</p></section><nav class="course-navigation">${this.record.index ? '<button class="button secondary" data-course-action="back">Précédent</button>' : "<span></span>"}${p.listen ? `<button class="icon-button" data-course-action="listen" aria-label="Écouter cet exemple" ${this.getState().sound ? "" : "disabled"}>${this.icon("play")}</button>` : ""}<button class="button primary" data-course-action="next" ${p.quiz && !passed ? "disabled" : ""}>${this.record.index === c.pages.length - 1 ? "Terminer" : "Suivant →"}</button></nav></main>`;
   }

@@ -1,0 +1,11 @@
+{
+  "offline_reload": true,
+  "new_modules_precached": true,
+  "offline_course": true,
+  "wrong_octave_rejected": true,
+  "wrong_target_red_and_named": true,
+  "neck_dom_stable": true,
+  "skip_not_validation": true,
+  "small_portrait_primary_visible": true,
+  "errors": []
+}

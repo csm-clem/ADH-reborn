@@ -1,13 +1,167 @@
-import {noteName,pitchLabel} from './core.js';
-import {resultMetrics} from './results.js';
-const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function positionProgress(events,string,fret){
- const first=events.filter(e=>!e.retry&&e.target.string===string&&e.target.fret===fret),metrics=resultMetrics(first);
- return {accuracy:metrics.total?metrics.accuracy:null,total:metrics.total,status:!metrics.total?'new':metrics.accuracy>.85?'worked':'review',name:resultMetrics(first.filter(e=>e.mode==='name')),find:resultMetrics(first.filter(e=>e.mode==='find'))};
+import { noteName, pitchLabel } from "./core.js";
+import { resultMetrics } from "./results.js";
+const esc = (v) =>
+  String(v).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ],
+  );
+export function positionProgress(events, string, fret, aggregate = null) {
+  const first = events.filter(
+      (e) => !e.retry && e.target.string === string && e.target.fret === fret,
+    ),
+    metrics = resultMetrics(first);
+  const part = (mode) =>
+    aggregate
+      ? { ...aggregate[mode] }
+      : resultMetrics(first.filter((e) => e.mode === mode));
+  const name = part("name"),
+    find = part("find"),
+    total = aggregate ? name.total + find.total : metrics.total,
+    correct = aggregate ? name.correct + find.correct : metrics.correct;
+  const accuracy = total ? correct / total : null;
+  return {
+    accuracy,
+    total,
+    status: !total ? "new" : accuracy > 0.85 ? "worked" : "review",
+    name,
+    find,
+  };
 }
-export function progressView(profile,natural,attempts,notation='international',{zone={start:0,end:4},strings=profile.tuning.map((_,s)=>s)}={}){
- const frets=Array.from({length:zone.end-zone.start+1},(_,i)=>zone.start+i);
- const events=attempts.flatMap(a=>a.events).filter(e=>strings.includes(e.target.string)&&frets.includes(e.target.fret)),cells=strings.flatMap(string=>frets.map(fret=>({string,fret,midi:profile.tuning[string]+fret}))).map(p=>({...p,...positionProgress(events,p.string,p.fret)})),counts={new:0,worked:0,review:0};cells.forEach(p=>counts[p.status]++);
- const label={new:'À découvrir',worked:'Travaillée',review:'À revoir'},symbol={new:'·',worked:'✓',review:'!'},pct=n=>cells.length?Math.round(n/cells.length*100):0;
- return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Où en êtes-vous ${zone.start?'des cases '+zone.start+' à '+zone.end:'à vide jusqu’à la case '+zone.end} ?</p></div></div><section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${['worked','review','new'].map(status=>`<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status==='new'?'':status==='worked'?'s':''}</span></div>`).join('')}</div><div class="progress-track" aria-label="${counts.worked} positions travaillées, ${counts.review} à revoir, ${counts.new} à découvrir">${['worked','review','new'].map(status=>`<i class="${status}" style="width:${pct(counts[status])}%"></i>`).join('')}</div><p class="progress-instruction">Touchez une note pour voir vos résultats.</p><div class="progress-map"><table><caption class="visually-hidden">Toutes les notes, corde aiguë en haut. Le symbole et le libellé indiquent la moyenne des premières réponses.</caption><thead><tr><th scope="col">Corde</th>${frets.map(f=>`<th scope="col">${f||'À vide'}</th>`).join('')}</tr></thead><tbody>${strings.slice().reverse().map(string=>`<tr><th scope="row"><span class="progress-string-label">${profile.tuning.length-string}</span></th>${frets.map(fret=>{const p=cells.find(p=>p.string===string&&p.fret===fret);if(!p)return '<td class="progress-outside"><span aria-label="Note altérée, hors de cette carte">—</span></td>';return `<td><details name="progress-position" class="progress-cell ${p.status}"><summary aria-label="${esc(pitchLabel(p.midi,notation))}, corde ${profile.tuning.length-string}, ${fret?"case "+fret:"à vide"} : ${label[p.status]}"><strong>${esc(noteName(p.midi,notation))}</strong><span aria-hidden="true">${p.accuracy===null?symbol[p.status]:Math.round(p.accuracy*100)+'%'}</span></summary><div class="progress-popover"><strong>${esc(pitchLabel(p.midi,notation))} · corde ${profile.tuning.length-string} · ${fret?"case "+fret:"à vide"}</strong>${[['name','Nommer'],['find','Retrouver']].map(([mode,title])=>`<p>${title} : <b>${p[mode].total?`${p[mode].correct}/${p[mode].total}`:'Pas encore essayé'}</b></p>`).join('')}<small>${label[p.status]} · ${p.total} première${p.total>1?'s':''} réponse${p.total>1?'s':''}</small></div></details></td>`;}).join('')}</tr>`).join('')}</tbody></table></div><div class="progress-key">${['worked','review','new'].map(s=>`<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join('')}</div><p class="progress-footnote">Travaillée : plus de 85 % de bonnes réponses à cette position. À revoir : 85 % ou moins. Sans essai : à découvrir.</p></section><section class="progress-skills" aria-label="Vos deux compétences">${[['name','Nommer les notes'],['find','Retrouver les positions']].map(([mode,title])=>{const m=resultMetrics(events.filter(e=>e.mode===mode));return `<article class="panel"><h2>${title}</h2><strong>${m.total?Math.round(m.accuracy*100)+' %':'—'}</strong><p>${m.total?`${m.correct} bonnes réponses sur ${m.total}`:'Commencez un exercice pour voir vos résultats.'}</p><small>Premières réponses uniquement</small></article>`;}).join('')}</section>`;
+export function progressView(
+  profile,
+  natural,
+  attempts,
+  notation = "international",
+  {
+    zone = { start: 0, end: 24 },
+    strings = profile.tuning.map((_, s) => s),
+    evidence = null,
+  } = {},
+) {
+  const frets = Array.from(
+      { length: zone.end - zone.start + 1 },
+      (_, i) => zone.start + i,
+    ),
+    raw = attempts.flatMap((a) => a.events),
+    processed = new Set(evidence?.processed || []);
+  const pending = attempts
+    .filter((a) => !processed.has(a.id))
+    .flatMap((a) => a.events);
+  const cumulative = (string, fret) => {
+    if (!evidence?.stats) return null;
+    const base = structuredClone(
+      evidence.stats[`${string}:${fret}`] || {
+        name: { total: 0, correct: 0 },
+        find: { total: 0, correct: 0 },
+      },
+    );
+    for (const e of pending)
+      if (!e.retry && e.target.string === string && e.target.fret === fret) {
+        base[e.mode].total++;
+        base[e.mode].correct += Number(e.correct);
+      }
+    return base;
+  };
+  const cells = strings
+    .flatMap((string) =>
+      frets.map((fret) => ({
+        string,
+        fret,
+        midi: profile.tuning[string] + fret,
+      })),
+    )
+    .map((p) => ({
+      ...p,
+      ...positionProgress(raw, p.string, p.fret, cumulative(p.string, p.fret)),
+    }));
+  const counts = { new: 0, worked: 0, review: 0 };
+  cells.forEach((p) => counts[p.status]++);
+  const label = {
+      new: "À découvrir",
+      worked: "Travaillée",
+      review: "À revoir",
+    },
+    symbol = { new: "·", worked: "✓", review: "!" };
+  const totals = (mode) =>
+    cells.reduce(
+      (m, p) => ({
+        total: m.total + p[mode].total,
+        correct: m.correct + p[mode].correct,
+      }),
+      { total: 0, correct: 0 },
+    );
+  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div><section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
+    .slice()
+    .reverse()
+    .map(
+      (string) =>
+        `<tr><th scope="row"><span class="progress-string-label">${profile.tuning.length - string}</span></th>${frets
+          .map((fret) => {
+            const p = cells.find((p) => p.string === string && p.fret === fret);
+            return `<td class="progress-fret-${fret}"><details name="progress-position" class="progress-cell ${p.status}" data-progress-string="${string}" data-progress-fret="${fret}"><summary aria-label="${esc(pitchLabel(p.midi, notation))}, corde ${profile.tuning.length - string}, ${fret ? "case " + fret : "à vide"} : ${label[p.status]}"><strong>${esc(noteName(p.midi, notation))}</strong><span>${p.accuracy === null ? symbol[p.status] : Math.round(p.accuracy * 100) + "%"}</span></summary></details></td>`;
+          })
+          .join("")}</tr>`,
+    )
+    .join(
+      "",
+    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Travaillée : plus de 85 % de bonnes réponses à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
+    ["name", "Nommer les notes"],
+    ["find", "Retrouver les positions"],
+  ]
+    .map(([mode, title]) => {
+      const m = totals(mode);
+      return `<article class="panel"><h2>${title}</h2><strong>${m.total ? Math.round((m.correct / m.total) * 100) + " %" : "—"}</strong><p>${m.total ? `${m.correct} bonnes réponses sur ${m.total}` : "Votre progression apparaîtra ici."}</p></article>`;
+    })
+    .join("")}</section>`;
+}
+/** Details live outside the scroll viewport, so the selected note never opens a clipped popover. */
+export function bindProgress(root) {
+  root.addEventListener(
+    "toggle",
+    (e) => {
+      const cell = e.target;
+      if (!cell.matches?.(".progress-cell[open]")) return;
+      const panel = cell.closest(".progress-overview"),
+        data = JSON.parse(
+          panel.querySelector(".progress-cell-data").textContent,
+        ),
+        p = data.find(
+          (p) =>
+            p.string === Number(cell.dataset.progressString) &&
+            p.fret === Number(cell.dataset.progressFret),
+        );
+      if (!p) return;
+      panel.querySelector(".progress-selection").innerHTML =
+        `<strong>${esc(p.label)} · corde ${data.reduce((n, p) => Math.max(n, p.string + 1), 0) - p.string} · ${p.fret ? "case " + p.fret : "à vide"}</strong><span>Nommer : ${p.name.total ? p.name.correct + "/" + p.name.total : "pas encore essayé"}</span><span>Retrouver : ${p.find.total ? p.find.correct + "/" + p.find.total : "pas encore essayé"}</span>`;
+    },
+    true,
+  );
+  const sync = (el) => {
+    if (!el.matches?.(".progress-map")) return;
+    el.closest(".progress-map-frame").classList.toggle(
+      "is-at-end",
+      el.scrollLeft + el.clientWidth >= el.scrollWidth - 2,
+    );
+    const bar = el
+      .closest(".progress-overview")
+      .querySelector(".progress-scrollbar");
+    if (bar)
+      bar.value = String(
+        Math.round(
+          (el.scrollLeft / Math.max(1, el.scrollWidth - el.clientWidth)) * 1000,
+        ),
+      );
+  };
+  root.addEventListener("input", (e) => {
+    if (!e.target.matches?.(".progress-scrollbar")) return;
+    const map = e.target
+      .closest(".progress-overview")
+      .querySelector(".progress-map");
+    map.scrollLeft =
+      (Number(e.target.value) / 1000) * (map.scrollWidth - map.clientWidth);
+  });
+  root.addEventListener("scroll", (e) => sync(e.target), true);
 }

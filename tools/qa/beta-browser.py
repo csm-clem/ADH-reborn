@@ -14,7 +14,7 @@ def snap(page):return page.evaluate("()=>Object.values(JSON.parse(localStorage.g
 def seed(page,instrument='guitar6',activity=None):
  page.goto(BASE);page.evaluate(SEED,{'instrument':instrument,'activity':activity});page.reload();page.wait_for_timeout(130)
 def launch(page,activity,instrument='guitar6'):
- seed(page,instrument,activity);page.locator(f'[data-pilot-action="start"][data-module="{activity}"]').click()
+ seed(page,instrument,activity);page.locator('.chapter-options summary').click();page.locator(f'[data-pilot-action="start"][data-module="{activity}"]').click()
  for _ in range(5):
   if not page.locator('[data-pilot-action="help-next"]').count():break
   page.locator('[data-pilot-action="help-next"]').click()
@@ -86,14 +86,16 @@ with sync_playwright() as p:
   data=page.evaluate('''async id=>{const {betaCatalog}=await import('./beta-catalog.js'),{betaCourses}=await import('./beta-courses.js'),d=Object.values(JSON.parse(localStorage.getItem('fretboard-trainer:pilot:stable')).profiles)[0];return betaCourses(d.profile,betaCatalog(d.profile)).get(id);}''',course_id)
   # Navigate via the actual route and chapter card.
   route='beginner' if course_id.startswith('gd-') else course_id.split('-')[0]
-  page.locator(f'[data-pilot-action=beta-route][data-id="{route}"]').click()
+  page.locator(f'[data-pilot-action=beta-branch][data-id="{"beginner" if route=="beginner" else "targeted"}"]').click();page.locator(f'[data-pilot-action=beta-route][data-id="{route}"]').click()
   page.locator(f'[data-pilot-action=beta-chapter][data-id="{course_id}"]').click()
   page.locator('[data-pilot-action=beta-course]').click()
   for index,card in enumerate(data['pages']):
    if card.get('quiz'):
     q=card['quiz']
     if q['kind']=='choice':page.locator(f'[data-course-action=answer][data-value="{q["answer"]}"]').click()
-    else:page.locator(f'[data-course-action=position][data-string="{q["target"]["string"]}"][data-fret="{q["target"]["fret"]}"]').click()
+    else:
+     if not page.locator('.course-position-options').get_attribute('open')=='' :page.locator('.course-position-options summary').click()
+     page.locator(f'[data-course-action=position][data-string="{q["target"]["string"]}"][data-fret="{q["target"]["fret"]}"]').click()
    page.locator('[data-course-action=next]').click()
   assert snap(page)['courses'][course_id]['completed'],course_id
   checks.append({'course':course_id,'pages':len(data['pages'])})
@@ -103,7 +105,7 @@ with sync_playwright() as p:
  page.locator('[data-action=settings]:visible').first.click();page.locator('[data-action=debug]').click()
  assert 'Simulation active' in page.locator('body').inner_text()
  page.locator('[data-action=home]:visible').first.click()
- assert '42 / 42' in page.locator('.beta-featured-progress').inner_text()
+ page.locator('[data-pilot-action=beta-branch][data-id=guided]').click();page.locator('[data-pilot-action=beta-route][data-id=guided]').click();assert '42 / 42' in page.locator('.route-summary').inner_text()
  assert page.evaluate("localStorage.getItem('fretboard-trainer:pilot:stable')")==before
  page.locator('[data-action=settings]:visible').first.click();page.locator('[data-action=debug]').click()
  assert page.evaluate("localStorage.getItem('fretboard-trainer:pilot:stable')")==before

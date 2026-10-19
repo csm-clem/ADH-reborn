@@ -1,8 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.24.0** — Grand Débutant, trois zones 0–4 / 4–8 / 8–12, trois cordes à vide–12 et Niveau 1 guidé.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.25.0** — Grand Débutant, trois zones 0–4 / 4–8 / 8–12, trois cordes à vide–12 et Niveau 1 guidé.
 
-[Archive FTP v0.24](downloads/daily-fretboard-trainer-v0.24.zip) · [Rapport de livraison](docs/CHANGES-v0.24.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.25](downloads/daily-fretboard-trainer-v0.25.zip) · [Rapport de livraison](docs/CHANGES-v0.25.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -38,9 +38,9 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 
 Le parcours six cordes standard utilise actuellement 14 passages connus distincts. Les airs retirés et les morceaux en attente ne sont pas attribués aux activités ; les activités restent accessibles avec une suite d’entraînement explicitement nommée. Les autres configurations utilisent également des hauteurs exactes ; si aucun passage disponible ne convient, la suite d’entraînement reste explicitement annoncée. Voir [l’audit musical et ses limites](docs/v0.23/audit-musical.md).
 
-Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres. Le bouton Signaler un bug ouvre un formulaire intégré ; l’envoi nécessite le relais PHP inclus et une connexion. Les récompenses musicales reprennent le registre exact de l’exercice.
+Les résultats présentent score, précision, moyenne et records du même exercice, avec erreurs sur le manche, révision ciblée et carte de partage PNG. L’accueil regroupe trois branches : Grand Débutant, Progression Guidée et Pratique ciblée. Les acquis, les statistiques et les records sont conservés indépendamment du journal détaillé des 250 dernières tentatives. La collection Succès propose repères, fluidité et pochettes musicales : critères transparents, preuves conservées, filtres, vue album/liste et écoute des phrases obtenues. Chaque carte indique son pourcentage et les étapes du défi. Un mode débug v0 réversible simule le parcours terminé sans remplacer les vrais résultats. Quatre palettes coordonnées sont proposées dans les Paramètres. Le bouton Signaler un bug ouvre un formulaire intégré ; l’envoi nécessite le relais PHP inclus et une connexion. Les récompenses musicales reprennent le registre exact de l’exercice.
 
-Les familles naturelles et altérées sont calculées pour chaque accordage. Les révisions différées, les autres zones accessibles dans l’interface et le microphone restent à produire. Le moteur pédagogique des zones suivantes est préparé et testé ; leur accès utilisateur reste une extension future.
+Les familles naturelles et altérées sont calculées pour chaque accordage. La bêta propose les trois zones jusqu’à la case 12, trois cordes complètes et un Niveau 1 guidé. Les révisions peuvent être recommandées après une pause ou une difficulté. Les extensions au-delà de ce catalogue, la planification espacée avancée et le microphone restent dans la roadmap. La carte des progrès affiche déjà le manche entier de 0 à 24 avec défilement horizontal.
 
 Voir [le rapport v0.23](docs/CHANGES-v0.23.md) et les dossiers de conception dans `docs/` pour les choix pédagogiques.
 
@@ -81,7 +81,7 @@ Les futures modifications de schéma devront ajouter leur convertisseur et ses t
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.24.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.25.zip), dans le dossier servi en HTTPS.
 
 Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.20/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 

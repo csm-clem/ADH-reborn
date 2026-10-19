@@ -77,3 +77,8 @@ ADH_BASE_URL=http://localhost:4173/dist/ python tools/qa/beta-offline.py
 ```
 
 `beta-browser.py` contrôle 25 dispositions, sept parties complètes et neuf cours, ainsi que la simulation réversible de progression. `beta-offline.py` vérifie les nouveaux modules précachés, les cours hors ligne, la correction d’octave, la stabilité du manche et les commandes sur petit écran. Ces deux scripts constituent la recette du nouveau catalogue ; les anciens scénarios aux nombres fixes d’activités ne décrivent plus ce catalogue. Les variables `ADH_BASE_URL` et `ADH_QA_OUTPUT` permettent de choisir la cible et le dossier des rapports. Un contrôle sur iPhone réel reste nécessaire.
+
+
+## Recette v0.25
+
+`python tools/qa/v025.py` reproduit la reprise après rechargement, la séparation de la démonstration, les variantes de cours après erreur, les trois branches, les cibles 0–24, la barre de défilement et le bilan guidé. Il contrôle aussi quatre thèmes sur quatre formats et mesure le coût de préparation de deux notes dans un AudioContext Chromium réel ; cette mesure ne représente pas la latence acoustique du matériel Windows. `beta-browser.py` et `beta-offline.py` sont adaptés à la nouvelle navigation. Les tests Node couvrent également la conservation des acquis après rotation du journal et la calibration des timbres.

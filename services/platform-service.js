@@ -6,7 +6,7 @@ export function createPlatformService({getWindow=()=>globalThis.window,getDocume
   cleanup();const win=getWindow(),doc=getDocument();if(!win||!doc)return ()=>{};const removers=[];let timer;
   function on(target,type,fn){target?.addEventListener(type,fn);removers.push(()=>target?.removeEventListener(type,fn));}
   media=win.matchMedia('(prefers-color-scheme: dark)');on(media,'change',applyTheme);
-  on(doc,'visibilitychange',()=>{if(doc.hidden)callbacks.onHidden?.();});on(win,'pagehide',()=>callbacks.onHidden?.());
+  on(doc,'visibilitychange',()=>{if(doc.hidden)callbacks.onHidden?.();else callbacks.onVisible?.();});on(win,'pagehide',()=>callbacks.onHidden?.());
   on(win,'resize',()=>{callbacks.onResize?.();clearTimeout(timer);timer=setTimeout(()=>callbacks.onResizeSettled?.(),delay);});
   on(doc,'fullscreenchange',()=>callbacks.onFullscreen?.(!!doc.fullscreenElement));
   on(win,'beforeinstallprompt',e=>{e.preventDefault();callbacks.onInstallPrompt?.(e);});
