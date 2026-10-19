@@ -9,3 +9,9 @@
 
 .neck-axis.is-requested-string{fill:var(--brand);font-weight:850}
 .shared-neck .neck-string.is-requested-string{stroke:var(--brand);stroke-width:1.5}
+
+/* A few static vector fibres, shared by every diagram. No images, noise filter or animation. */
+.neck-finish,.neck-grain{pointer-events:none}
+.neck-grain{opacity:.05}
+:root[data-theme=dark] .neck-grain{opacity:.04}
+:root[data-theme=accessible] .neck-grain,:root[data-theme=accessible] .neck-finish,:root[data-theme=paper] .neck-grain,:root[data-theme=paper] .neck-finish{display:none}

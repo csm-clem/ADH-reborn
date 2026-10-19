@@ -1,8 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.27.0** — parcours bêta complets et collection interactive : 42 modèles de succès, cinq raretés, illustrations vectorielles, reflets souris/tactile et pochettes musicales.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.28.0** — proportions du manche rétablies, finition bois vectorielle, reflets tactiles dès le contact et célébration des succès avec accès à leur carte.
 
-[Archive FTP v0.27](downloads/daily-fretboard-trainer-v0.27.zip) · [Rapport de livraison](docs/CHANGES-v0.27.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.28](downloads/daily-fretboard-trainer-v0.28.zip) · [Rapport de livraison](docs/CHANGES-v0.28.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -81,7 +81,7 @@ Les futures modifications de schéma devront ajouter leur convertisseur et ses t
 
 ## Hébergement FTP
 
-Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.27.zip), dans le dossier servi en HTTPS.
+Le site est entièrement statique et utilise des URL relatives. Copier **le contenu** de `dist/`, ou du [ZIP prêt pour FTP](downloads/daily-fretboard-trainer-v0.28.zip), dans le dossier servi en HTTPS.
 
 Adresse conseillée pour cette livraison : `https://media.lecompositeur.com/adh-pwa/v0.20/`. Le dossier du serveur n’a pas été modifié automatiquement. Éviter un cache HTTP long sur `sw.js` et `index.html`.
 

@@ -1,0 +1,90 @@
+{
+  "actual_activity": true,
+  "multiple_rewards": true,
+  "exact_card_target": "opens-named",
+  "focus_and_filters": true,
+  "layouts": [
+    [
+      "light",
+      320,
+      568
+    ],
+    [
+      "light",
+      390,
+      844
+    ],
+    [
+      "light",
+      844,
+      390
+    ],
+    [
+      "light",
+      1440,
+      1000
+    ],
+    [
+      "dark",
+      320,
+      568
+    ],
+    [
+      "dark",
+      390,
+      844
+    ],
+    [
+      "dark",
+      844,
+      390
+    ],
+    [
+      "dark",
+      1440,
+      1000
+    ],
+    [
+      "accessible",
+      320,
+      568
+    ],
+    [
+      "accessible",
+      390,
+      844
+    ],
+    [
+      "accessible",
+      844,
+      390
+    ],
+    [
+      "accessible",
+      1440,
+      1000
+    ],
+    [
+      "paper",
+      320,
+      568
+    ],
+    [
+      "paper",
+      390,
+      844
+    ],
+    [
+      "paper",
+      844,
+      390
+    ],
+    [
+      "paper",
+      1440,
+      1000
+    ]
+  ],
+  "reduced_motion": true,
+  "errors": []
+}

@@ -90,3 +90,13 @@ ADH_BASE_URL=http://localhost:4173/dist/ python tools/qa/beta-offline.py
 - `python tools/qa/collection-offline-v027.py` : utilise le ZIP extrait dans `work/v027/ftp-check/` ; vérifie son démarrage et ses ressources hors ligne. Le test exige le paquet préparé, extrait à cet endroit et servi par `npm start`.
 
 Les captures et résultats sont écrits dans `docs/v0.27/`. Le chiffre de 59 cartes concerne un profil guitare 6 standard neuf de cette version ; les cartes historiques acquises et les autres accordages peuvent changer le total.
+
+## Recette v0.28
+
+- `python tools/qa/cards-touch-v028.py` : vrais événements tactiles injectés par CDP Chromium. Un contact et un mouvement de trois pixels doivent déjà modifier le reflet. Vérifie ensuite le glissement, le retour à plat, le défilement vertical, les boutons et la réduction du mouvement.
+- `python tools/qa/celebration-v028.py` : termine une activité avec ses réponses, parcourt plusieurs succès, contrôle seize dispositions du résultat, puis ouvre la carte exacte avec focus et filtres adaptés.
+- `python tools/qa/celebration-music-v028.py` : termine une activité de recherche et sa suite pour obtenir Higher Ground, puis vérifie trois formats avec pochette et lecteur audio.
+- `python tools/qa/refinement-v028.py` : vérifie la géométrie v0.23 sur neuf configurations, les roues, les réponses rapides et les progrès.
+- `python tools/qa/collection-offline-v028.py` : vérifie le ZIP extrait dans `work/v028/ftp-check/`, notamment le nouveau module de célébration précaché.
+
+Rapports et captures dans `docs/v0.28/`. Ces tests ne remplacent pas une manipulation sur un iPhone physique.

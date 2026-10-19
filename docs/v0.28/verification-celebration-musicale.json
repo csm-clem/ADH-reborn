@@ -1,0 +1,25 @@
+{
+  "actual_activity": true,
+  "multiple_rewards": true,
+  "exact_card_target": "music-higher-ground",
+  "focus_and_filters": true,
+  "layouts": [
+    [
+      "light",
+      320,
+      568
+    ],
+    [
+      "light",
+      844,
+      390
+    ],
+    [
+      "light",
+      1440,
+      1000
+    ]
+  ],
+  "reduced_motion": true,
+  "errors": []
+}

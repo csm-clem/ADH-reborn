@@ -30,10 +30,13 @@ test('Perfect requires six observations in both directions, durable counts agree
 test('Scroll thumb faithfully represents visible content, independently of scroll position',()=>{
  assert.equal(scrollbarThumb(1000,800,1600),500);assert.equal(scrollbarThumb(300,300,1500),60);assert.equal(scrollbarThumb(300,600,400),300);
 });
-test('Gameplay uses available height; the dimensions of teaching diagrams do not change',()=>{
- for(const n of [4,6,7,8])for(const [w,h]of [[340,240],[620,650],[480,150]]){
-  const g=neckGeometry(n,4,648,{gameplay:true,availableWidth:w,availableHeight:h}),fit=fitNeck(g,w,h);assert.ok(fit.height>=h-5);assert.ok(fit.width<=w);
-  assert.ok(Math.min(...g.ys)*fit.scale<35);assert.ok((g.height-Math.max(...g.ys))*fit.scale<75);
+test('Gameplay preserves v0.23 proportions rather than filling the viewport height',()=>{
+ for(const n of [4,6,7,8]){
+  const expected=(52+(n-6)*7)*1.65;
+  for(const [w,h]of [[340,240],[620,650],[480,150]]){
+   const g=neckGeometry(n,4,648,{gameplay:true,availableWidth:w,availableHeight:h}),fit=fitNeck(g,w,h);
+   assert.equal(g.height,expected+14);assert.equal(g.ys.at(-1),5);assert.ok(Math.abs(g.ys[0]-expected-2)<1e-10);assert.ok(fit.width<=w&&fit.height<=h);
+  }
  }
  assert.equal(neckGeometry(6).height,66);
 });

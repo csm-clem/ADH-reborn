@@ -1,0 +1,82 @@
+{
+  "game_layouts": [
+    {
+      "instrument": "guitar6",
+      "width": 390,
+      "margins": {
+        "top": 43.9,
+        "bottom": 61.8
+      }
+    },
+    {
+      "instrument": "guitar6",
+      "width": 844,
+      "margins": {
+        "top": 46.1,
+        "bottom": 65.6
+      }
+    },
+    {
+      "instrument": "guitar6",
+      "width": 1440,
+      "margins": {
+        "top": 274.3,
+        "bottom": 305.7
+      }
+    },
+    {
+      "instrument": "guitar8",
+      "width": 390,
+      "margins": {
+        "top": 20.0,
+        "bottom": 37.9
+      }
+    },
+    {
+      "instrument": "guitar8",
+      "width": 844,
+      "margins": {
+        "top": 19.8,
+        "bottom": 39.3
+      }
+    },
+    {
+      "instrument": "guitar8",
+      "width": 1440,
+      "margins": {
+        "top": 228.2,
+        "bottom": 259.7
+      }
+    },
+    {
+      "instrument": "bass4",
+      "width": 390,
+      "margins": {
+        "top": 67.8,
+        "bottom": 85.7
+      }
+    },
+    {
+      "instrument": "bass4",
+      "width": 844,
+      "margins": {
+        "top": 72.4,
+        "bottom": 91.9
+      }
+    },
+    {
+      "instrument": "bass4",
+      "width": 1440,
+      "margins": {
+        "top": 320.3,
+        "bottom": 351.8
+      }
+    }
+  ],
+  "progress_themes": 4,
+  "scroll_ratio": true,
+  "immediate_answers": true,
+  "all_wheel_choices": true,
+  "grayscale_except_try": true,
+  "errors": []
+}

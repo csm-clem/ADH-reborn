@@ -70,3 +70,9 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 .is-missing .card-foil{display:none}
 .collection-tabs .button{flex:1 1 100px}
 .is-missing .achievement-card-header,.is-missing .achievement-copy>h2,.is-missing .achievement-context,.is-missing .achievement-number,.is-missing .achievement-actions>:not(.challenge-action),.is-missing .achievement-back>header,.is-missing .achievement-back>h2,.is-missing .achievement-criteria-body{filter:grayscale(1)}
+/* A touch reveals a visible specular band immediately, including on common cards. */
+.card-reflection{background:linear-gradient(115deg,transparent 25%,#fff0 35%,#fffc 47%,#fff2 53%,transparent 66%);background-size:240% 160%;background-position:var(--light-x,50%) var(--light-y,50%)}
+.is-tilting .card-reflection{opacity:.72}
+.is-tilting .card-foil{opacity:calc(var(--foil-strength) * 3.5 * var(--card-finish,.55))}
+.achievement-card.is-revealed{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
+.achievement-card:focus-visible{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
