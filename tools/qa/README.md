@@ -82,3 +82,11 @@ ADH_BASE_URL=http://localhost:4173/dist/ python tools/qa/beta-offline.py
 ## Recette v0.25
 
 `python tools/qa/v025.py` reproduit la reprise après rechargement, la séparation de la démonstration, les variantes de cours après erreur, les trois branches, les cibles 0–24, la barre de défilement et le bilan guidé. Il contrôle aussi quatre thèmes sur quatre formats et mesure le coût de préparation de deux notes dans un AudioContext Chromium réel ; cette mesure ne représente pas la latence acoustique du matériel Windows. `beta-browser.py` et `beta-offline.py` sont adaptés à la nouvelle navigation. Les tests Node couvrent également la conservation des acquis après rotation du journal et la calibration des timbres.
+
+## Recette v0.27
+
+- `python tools/qa/refinement-v027.py` : neuf configurations du manche, roues naturelles/chromatiques, entrées rapides, quatre thèmes de progrès, état Parfait et rapport réel de la poignée de défilement ; vérifie aussi que le bouton Essayer n'hérite pas d'un filtre gris.
+- `python tools/qa/collection-v027.py` : collection Tout, vingt dispositions, commandes, critères, mouvement souris/tactile et audio. La vue alternative Liste est retirée.
+- `python tools/qa/collection-offline-v027.py` : utilise le ZIP extrait dans `work/v027/ftp-check/` ; vérifie son démarrage et ses ressources hors ligne. Le test exige le paquet préparé, extrait à cet endroit et servi par `npm start`.
+
+Les captures et résultats sont écrits dans `docs/v0.27/`. Le chiffre de 59 cartes concerne un profil guitare 6 standard neuf de cette version ; les cartes historiques acquises et les autres accordages peuvent changer le total.

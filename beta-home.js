@@ -339,34 +339,31 @@ export function betaHome(c) {
       "Grand Débutant : commencez ici !",
       "Comprendre le manche et les règles du jeu.",
       "Les bases · facultatif",
-      "01",
     ],
     [
       "guided",
       "Progression Guidée",
       "Suivre le chemin conseillé, à votre rythme.",
       "Votre prochaine étape",
-      "02",
     ],
     [
       "targeted",
       "Pratique ciblée",
       "Choisir une zone ou une corde à travailler.",
       "Explorer les parcours",
-      "03",
     ],
   ];
   return (
     warning +
     heading("À vous de jouer.", "Choisissez votre chemin.") +
     `<div class="branch-stack">${entries
-      .map(([id, title, text, cta, num]) => {
+      .map(([id, title, text, cta]) => {
         const here =
           saved &&
           branchForRoute(
             saved.originRoute || c.resolve(saved.activity)?.scopeId,
           ) === id;
-        return `<button class="branch-jumbo" data-pilot-action="beta-branch" data-id="${id}"><span class="branch-number" aria-hidden="true">${num}</span><span class="branch-copy"><strong>${title}</strong><span>${text}</span><small>${here ? "Une séance vous attend" : cta}</small></span><span class="branch-arrow" aria-hidden="true">→</span></button>`;
+        return `<button class="branch-jumbo" data-pilot-action="beta-branch" data-id="${id}"><span class="branch-copy"><strong>${title}</strong><span>${text}</span><small>${here ? "Une séance vous attend" : cta}</small></span><span class="branch-arrow" aria-hidden="true">→</span></button>`;
       })
       .join("")}</div>`
   );

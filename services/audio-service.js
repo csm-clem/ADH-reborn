@@ -2,7 +2,7 @@ import { frequency } from "../core.js";
 import {
   electricString,
   drivenString,
-  pluckedString,
+  acousticString,
   instrumentVoice,
   voiceCutoff,
   calibrateVoice,
@@ -205,7 +205,7 @@ export function createAudioService({
     if (!soundCache.has(key) || soundCache.get(key).seconds < seconds) {
       const samples =
           voice === "guitar-acoustic"
-            ? pluckedString(hz, audio.sampleRate, seconds)
+            ? acousticString(hz, audio.sampleRate, seconds)
             : voice === "guitar-driven"
               ? drivenString(hz, audio.sampleRate, seconds)
               : electricString(hz, audio.sampleRate, seconds, voice),

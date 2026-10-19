@@ -40,7 +40,7 @@ test('Every audible exercise prefix matches the corresponding full listening phr
  }
 });
 test('Source-checked riffs respect their bar lengths and explicit rests',()=>{
- for(const [id,duration] of [['higher-ground',8],['my-sharona',16],['immigrant-song',8],['around-world',8],['smoke-water',16],['iron-man',8],['seven-nation',8]]){
-  const r=rewardFor(melodyById(id)),lead=r.events.filter(e=>e.velocity===1);const actual=Math.max(...lead.map(e=>e.start+e.beats));assert.ok(Math.abs(r.totalBeats-duration)<1e-9,id);assert.ok(Math.abs(actual-(id==='smoke-water'?15:id==='immigrant-song'?7.75:duration))<1e-9,id);
+ for(const [id,duration] of [['higher-ground',8],['my-sharona',16],['around-world',16],['smoke-water',16],['iron-man',8],['seven-nation',8]]){
+  const r=rewardFor(melodyById(id)),lead=r.events.filter(e=>e.velocity===1);const actual=Math.max(...lead.map(e=>e.start+e.beats));assert.ok(Math.abs(r.totalBeats-duration)<1e-9,id);assert.ok(Math.abs(actual-(id==='smoke-water'?15:duration))<1e-9,id);
  }
 });

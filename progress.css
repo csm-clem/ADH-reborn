@@ -3,7 +3,7 @@
 }
 .progress-counts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 .progress-count {
@@ -99,10 +99,10 @@
   color: var(--muted);
 }
 .progress-cell.worked summary {
-  border-bottom: 3px solid var(--success);
+  background: var(--cell-worked);
 }
 .progress-cell.review summary {
-  border-bottom: 3px solid var(--danger);
+  background: var(--cell-review);
 }
 .progress-cell.worked summary > span {
   color: var(--success);
@@ -333,7 +333,7 @@
 .progress-scrollbar::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 54px;
+  width: var(--scroll-thumb, 54px);
   height: 18px;
   margin-top: -5px;
   border: 2px solid var(--surface);
@@ -346,7 +346,7 @@
   background: var(--line);
 }
 .progress-scrollbar::-moz-range-thumb {
-  width: 50px;
+  width: var(--scroll-thumb, 54px);
   height: 14px;
   border: 2px solid var(--surface);
   border-radius: 10px;
@@ -368,3 +368,18 @@
 .progress-edge-fade {
   bottom: 0;
 }
+
+.progress-overview{--cell-worked:#deedcf;--cell-review:#f8dcd5;--cell-perfect:#8cda9b;--cell-ink:#182d22;--perfect-ink:#116a36}
+.progress-cell.worked summary,.progress-cell.review summary,.progress-cell.perfect summary{color:var(--cell-ink);border:1px solid color-mix(in srgb,var(--cell-ink) 18%,transparent)}
+.progress-cell.perfect summary{background:var(--cell-perfect)}
+.progress-cell summary>span{white-space:nowrap;font-size:11px}
+.progress-cell.worked summary>span,.progress-cell.review summary>span,.progress-cell.perfect summary>span{color:inherit}
+.progress-track .perfect{background:var(--perfect-ink)}
+.progress-key .perfect{color:var(--perfect-ink)}
+.progress-count.perfect{background:var(--cell-perfect);color:var(--cell-ink)}
+.progress-count.perfect strong,.progress-count.perfect span{color:inherit}
+:root[data-theme=dark] .progress-overview{--cell-worked:#2e493c;--cell-review:#663c36;--cell-perfect:#185d3c;--cell-ink:#fff;--perfect-ink:#69ee9c}
+:root[data-theme=accessible] .progress-overview{--cell-worked:#d7e6fa;--cell-review:#ffe0bf;--cell-perfect:#a5e8b7;--cell-ink:#15282b;--perfect-ink:#005d2a}
+:root[data-theme=paper] .progress-overview{--cell-worked:#e4e4e4;--cell-review:#f4f4f4;--cell-perfect:#ccc;--cell-ink:#111;--perfect-ink:#222}
+input.progress-scrollbar{padding:0;min-height:28px;border:0;background:transparent}
+@media(max-width:420px){.progress-counts{grid-template-columns:repeat(2,minmax(0,1fr))}}

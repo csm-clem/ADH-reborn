@@ -1,6 +1,6 @@
 import {makeProfile,pitchLabel} from './core.js';
 import {DATA_EPOCH,STATE_KEY,PILOT_KEY} from './release.js';
-export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',accidentals:'sharp',sound:true,voice:'auto',theme:'light',positionButtons:false,beginnerGuide:false,collection:{category:'landmarks',filter:'all',layout:'album',sort:'path'}};}
+export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',accidentals:'sharp',sound:true,voice:'auto',theme:'light',positionButtons:false,beginnerGuide:false,collection:{category:'all',filter:'all',layout:'album',sort:'path'}};}
 export function preferences(value){
  const state=initialState();if(!value||typeof value!=='object')return state;
  if(['international','latin'].includes(value.notation))state.notation=value.notation;
@@ -10,7 +10,7 @@ export function preferences(value){
  if(typeof value.positionButtons==='boolean')state.positionButtons=value.positionButtons;
  if(typeof value.sound==='boolean')state.sound=value.sound;
  if(['auto','guitar-acoustic','guitar-clean','guitar-driven','bass-electric'].includes(value.voice))state.voice=value.voice;
- if(value.collection&&typeof value.collection==='object'){for(const [key,allowed]of Object.entries({category:['landmarks','fluency','music'],filter:['all','earned','missing'],layout:['album','list'],sort:['path','recent','rarity']}))if(allowed.includes(value.collection[key]))state.collection[key]=value.collection[key];}
+ if(value.collection&&typeof value.collection==='object'){for(const [key,allowed]of Object.entries({category:['all','landmarks','fluency','music'],filter:['all','earned','missing'],layout:['album','list'],sort:['path','recent','rarity']}))if(allowed.includes(value.collection[key]))state.collection[key]=value.collection[key];}
  if(value.profile){try{state.profile=makeProfile(value.profile.instrumentId,value.profile.tuning.map(n=>{if(!Number.isInteger(n)||n<12||n>119)throw new Error();return pitchLabel(n);}).join(' '));}catch{}}
  return state;
 }

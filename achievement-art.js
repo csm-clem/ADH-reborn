@@ -2,6 +2,7 @@ import {rewardFor} from './reward-music.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /** A curated composition for each work; pitches/durations always come from the audio timeline. */
 const MUSIC_ART=Object.freeze({
+ 'cantaloupe-island':{colors:['#F5BD68','#2E8B84','#263F59'],object:'island',code:'CI'},
  'higher-ground':{colors:['#D9A34E','#434F46','#153E48'],object:'pickup',code:'HG'},
  'my-sharona':{colors:['#F0D6B5','#B95E4C','#2E3B56'],object:'burst',code:'MS'},
  'immigrant-song':{colors:['#C8DADB','#4E7E92','#23394F'],object:'sail',code:'IS'},
@@ -29,6 +30,7 @@ function object(kind){
   case 'burst':return path('M315 37L344 109L417 57L396 135L494 143L417 184L471 252L377 229L347 292L311 233L224 283L240 211L142 187L239 148L208 76L288 118Z','#F4D5B0',3,'url(#METAL)')+circle(316,169,57,'#3A465C','#F3DEC2',3);
   case 'sail':return path('M332 44L168 235H332Z','#C7DCD6',3,'url(#METAL)')+path('M344 75L461 234H344Z','#C7DCD6',2,'#507C8B')+path('M145 247Q315 305 476 247L437 277H189Z','#DDE4D5',3,'url(#METAL)')+path('M330 36V251','#E4DBC3',5);
   case 'rain':return path('M158 153Q315 7 472 153Q432 131 395 161Q352 130 315 162Q272 130 235 161Q196 133 158 153Z','#E4E5CB',3,'url(#METAL)')+path('M315 75V245Q315 289 274 262','#E3D6BB',9)+Array.from({length:15},(_,i)=>path(`M${116+i*28} ${60+i%3*45}l-12 21`,'#C8E3DD',1)).join('');
+  case 'island':return circle(315,135,95,'#EDC078','none')+path('M94 266Q219 220 315 241Q397 257 535 223','#B3E1CE',12)+path('M155 230Q269 178 437 230Z','#E7D0A4',3,'url(#METAL)')+path('M305 230Q331 167 302 98M303 105Q234 55 197 110M303 105Q349 40 402 88M303 105Q365 96 402 145M303 105Q243 101 231 158','#213F4B',9);
   case 'star':return path('M315 39L352 118L439 130L376 191L391 275L315 235L239 275L254 191L191 130L278 118Z','#F5E0AE',4,'url(#METAL)')+path('M315 62V225M211 135L376 191M254 191L416 135','#8C5C48',1);
   case 'globe':return circle(315,166,124,'#1F4655','url(#METAL)',7)+[38,76,112].map(r=>`<ellipse cx="315" cy="166" rx="${r}" ry="124" fill="none" stroke="#BFE0D2" stroke-width="1.5"/>`).join('')+[105,166,227].map(y=>path(`M${y===166?193:207} ${y}H${y===166?437:423}`,'#BFE0D2',1.5)).join('')+`<ellipse cx="315" cy="166" rx="178" ry="50" transform="rotate(-24 315 166)" fill="none" stroke="url(#METAL)" stroke-width="4"/>`;
   case 'steps':return Array.from({length:5},(_,i)=>rect(152+i*67,222-i*34,57,42+i*34,'url(#METAL)',3)+rect(159+i*67,230-i*34,43,30+i*34,'#4C638B',1)).join('')+path('M152 248L459 79','url(#METAL)',2);

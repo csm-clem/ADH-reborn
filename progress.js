@@ -25,7 +25,7 @@ export function positionProgress(events, string, fret, aggregate = null) {
   return {
     accuracy,
     total,
-    status: !total ? "new" : accuracy > 0.85 ? "worked" : "review",
+    status: !total ? "new" : accuracy === 1 && name.correct >= 3 && find.correct >= 3 ? "perfect" : accuracy > 0.85 ? "worked" : "review",
     name,
     find,
   };
@@ -77,14 +77,15 @@ export function progressView(
       ...p,
       ...positionProgress(raw, p.string, p.fret, cumulative(p.string, p.fret)),
     }));
-  const counts = { new: 0, worked: 0, review: 0 };
+  const counts = { new: 0, worked: 0, review: 0, perfect: 0 };
   cells.forEach((p) => counts[p.status]++);
   const label = {
       new: "À découvrir",
+      perfect: "Parfait",
       worked: "Travaillée",
       review: "À revoir",
     },
-    symbol = { new: "·", worked: "✓", review: "!" };
+    symbol = { new: "·", worked: "✓", review: "!", perfect: "✓✓" };
   const totals = (mode) =>
     cells.reduce(
       (m, p) => ({
@@ -93,7 +94,7 @@ export function progressView(
       }),
       { total: 0, correct: 0 },
     );
-  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div><section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
+  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div><section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["perfect", "worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["perfect", "worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
     .slice()
     .reverse()
     .map(
@@ -101,13 +102,13 @@ export function progressView(
         `<tr><th scope="row"><span class="progress-string-label">${profile.tuning.length - string}</span></th>${frets
           .map((fret) => {
             const p = cells.find((p) => p.string === string && p.fret === fret);
-            return `<td class="progress-fret-${fret}"><details name="progress-position" class="progress-cell ${p.status}" data-progress-string="${string}" data-progress-fret="${fret}"><summary aria-label="${esc(pitchLabel(p.midi, notation))}, corde ${profile.tuning.length - string}, ${fret ? "case " + fret : "à vide"} : ${label[p.status]}"><strong>${esc(noteName(p.midi, notation))}</strong><span>${p.accuracy === null ? symbol[p.status] : Math.round(p.accuracy * 100) + "%"}</span></summary></details></td>`;
+            return `<td class="progress-fret-${fret}"><details name="progress-position" class="progress-cell ${p.status}" data-progress-string="${string}" data-progress-fret="${fret}"><summary aria-label="${esc(pitchLabel(p.midi, notation))}, corde ${profile.tuning.length - string}, ${fret ? "case " + fret : "à vide"} : ${label[p.status]}"><strong>${esc(noteName(p.midi, notation))}</strong><span>${p.accuracy === null ? symbol[p.status] : Math.round(p.accuracy * 100) + "% " + symbol[p.status]}</span></summary></details></td>`;
           })
           .join("")}</tr>`,
     )
     .join(
       "",
-    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Travaillée : plus de 85 % de bonnes réponses à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
+    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["perfect", "worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Travaillée : plus de 85 % de bonnes réponses. Parfait : 100 %, avec au moins 3 réponses dans chaque sens à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
     ["name", "Nommer les notes"],
     ["find", "Retrouver les positions"],
   ]
@@ -116,6 +117,9 @@ export function progressView(
       return `<article class="panel"><h2>${title}</h2><strong>${m.total ? Math.round((m.correct / m.total) * 100) + " %" : "—"}</strong><p>${m.total ? `${m.correct} bonnes réponses sur ${m.total}` : "Votre progression apparaîtra ici."}</p></article>`;
     })
     .join("")}</section>`;
+}
+export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){
+  return Math.min(trackWidth,Math.max(24,trackWidth*viewportWidth/Math.max(1,contentWidth)));
 }
 /** Details live outside the scroll viewport, so the selected note never opens a clipped popover. */
 export function bindProgress(root) {
@@ -148,12 +152,15 @@ export function bindProgress(root) {
     const bar = el
       .closest(".progress-overview")
       .querySelector(".progress-scrollbar");
-    if (bar)
+    if (bar) {
+      bar.style.setProperty('--scroll-thumb', `${scrollbarThumb(bar.clientWidth,el.clientWidth,el.scrollWidth)}px`);
+      bar.disabled=el.scrollWidth<=el.clientWidth;
       bar.value = String(
         Math.round(
           (el.scrollLeft / Math.max(1, el.scrollWidth - el.clientWidth)) * 1000,
         ),
       );
+    }
   };
   root.addEventListener("input", (e) => {
     if (!e.target.matches?.(".progress-scrollbar")) return;
@@ -164,4 +171,14 @@ export function bindProgress(root) {
       (Number(e.target.value) / 1000) * (map.scrollWidth - map.clientWidth);
   });
   root.addEventListener("scroll", (e) => sync(e.target), true);
+  // The app binds once, then swaps pages. Follow the mounted map and actual size.
+  let current=null;
+  const resize=new ResizeObserver(()=>{if(current)sync(current);});
+  const mount=()=>{
+    const map=root.querySelector('.progress-map');
+    if(map===current)return;
+    resize.disconnect();current=map;
+    if(map){resize.observe(map);resize.observe(map.querySelector('table'));sync(map);}
+  };
+  new MutationObserver(mount).observe(root,{childList:true,subtree:true});mount();
 }

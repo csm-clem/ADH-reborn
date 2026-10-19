@@ -14,7 +14,7 @@ export function introductionFor(module,stage,question,seen=[],activity='',melody
    kind='family';}
  }else if(stage==='practice'){
   key=question?.mode+(question?.answerKind==='pitch'?'-pitch':'')+(question?.evaluation?'-evaluation':'');
-  if(question?.mode==='name'){title='Quelle est cette note ?';text=question?.answerKind==='pitch'?'Regardez le point. Touchez son nom avec le bon chiffre.':'Regardez le point. Touchez son nom dans la roue.';kind='name';}
+  if(question?.mode==='name'){title=question?.answerKind==='pitch'?'Quelle est cette hauteur ?':'Quelle est cette note ?';text=question?.answerKind==='pitch'?'Regardez le point. Touchez son nom avec le bon chiffre.':'Regardez le point. Touchez son nom dans la roue.';kind='name';}
   else{title='Trouvez cette note';text='Lisez la note et le numéro de corde. Touchez sa place.';kind='find';}
   if(module.kind==='mix'&&!seen.includes('mix-intro')){key='mix-intro';title='Vos notes se mélangent';text=`Les ${noteName(module.pitchClass,notation)} rejoignent vos anciens repères. Retrouvez-les dans le désordre.`;kind='mix';}
  }else if(stage==='motif'){

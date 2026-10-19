@@ -102,23 +102,36 @@ export function voiceCutoff(hz, voice) {
       : Math.min(12000, hz * 56);
 }
 
-/** Soft-clipped electric string, with a controlled noisy pick attack. */
-export function drivenString(
-  hz,
-  sampleRate = 44100,
-  seconds = 1.8,
-  random = Math.random,
-) {
-  const clean = electricString(hz, sampleRate, seconds, "guitar-clean", random),
-    out = new Float32Array(clean.length);
-  let low = 0;
-  const alpha = 1 - Math.exp((-2 * Math.PI * 5800) / sampleRate);
-  for (let i = 0; i < clean.length; i++) {
-    const drive = Math.tanh(clean[i] * 5.5) * 0.68;
-    low += alpha * (drive - low);
-    out[i] = low;
-  }
-  return out;
+/** Resonant wooden body + a warm, stable low-harmonic string.
+ * A parallel body keeps the bass present without a narrow nasal midrange peak.
+ */
+export function acousticString(hz,sampleRate=44100,seconds=1.8,random=Math.random){
+ const wire=pluckedString(hz,sampleRate,seconds,random),out=new Float32Array(wire.length);
+ const amplitudes=[1,.48,.21,.13,.09,.055];
+ for(let n=1;n<=amplitudes.length&&hz*n<sampleRate*.45;n++){
+  const w=2*Math.PI*hz*n/sampleRate,co=Math.cos(w),si=Math.sin(w),decay=Math.exp(-(2.1+n*.38)/sampleRate);
+  let x=0,y=amplitudes[n-1];
+  for(let i=0;i<out.length;i++){out[i]+=x*.29;const next=(x*co+y*si)*decay;y=(y*co-x*si)*decay;x=next;}
+ }
+ const alpha=1-Math.exp(-2*Math.PI*Math.min(4200,hz*12)/sampleRate);
+ let low=0;
+ for(let i=0;i<out.length;i++){low+=alpha*(wire[i]-low);out[i]=(out[i]+low*.27)*Math.min(1,i/64,(out.length-1-i)/512);}
+ return out;
+}
+/** Two driven preamp stages and a speaker cabinet; 2x oversampling reduces aliasing.
+ * No source is stopped when another note begins. This function only builds a buffer.
+ */
+export function drivenString(hz,sampleRate=44100,seconds=1.8,random=Math.random){
+ const rate=sampleRate*2,clean=electricString(hz,rate,seconds,'guitar-clean',random),out=new Float32Array(Math.ceil(sampleRate*seconds));
+ const hp=Math.exp(-2*Math.PI*85/rate),presence=1-Math.exp(-2*Math.PI*1700/rate),cab=1-Math.exp(-2*Math.PI*Math.min(4100,sampleRate*.36)/rate);
+ let high=0,prev=0,mid=0,low=0,low2=0,dc=0,sum=0;
+ for(let i=0;i<clean.length;i++){
+  high=hp*(high+clean[i]-prev);prev=clean[i];mid+=presence*(high-mid);
+  const boosted=high+.55*(high-mid),pre=Math.tanh(boosted*3.8+.055)-Math.tanh(.055),power=Math.tanh(pre*1.9);
+  dc+=.0015*(power-dc);low+=cab*(power-dc-low);low2+=cab*(low-low2);sum+=low2;
+  if(i%2){out[(i-1)/2]=sum*.36;sum=0;}
+ }
+ return out;
 }
 
 /** Match audible attack/body power after the same low-pass used for playback.
