@@ -123,6 +123,44 @@ export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){
 }
 /** Details live outside the scroll viewport, so the selected note never opens a clipped popover. */
 export function bindProgress(root) {
+  // Desktop grab-to-scroll: a click still opens a note; only a deliberate drag
+  // captures the pointer. Touch keeps native scrolling and the slider is retained.
+  let drag=null,suppressClick=null;
+  const release=()=>{
+    if(!drag)return;
+    const {map,id,claimed}=drag;drag=null;
+    if(claimed)suppressClick={map,until:performance.now()+300};
+    map.classList.remove('is-grabbing');
+    if(map.hasPointerCapture(id))map.releasePointerCapture(id);
+  };
+  root.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='mouse'||e.button!==0||!e.isPrimary)return;
+    const map=e.target.closest('.progress-map');
+    if(!map||map.scrollWidth<=map.clientWidth)return;
+    release();suppressClick=null;
+    drag={map,id:e.pointerId,x:e.clientX,y:e.clientY,left:map.scrollLeft,claimed:false};
+  });
+  root.addEventListener('pointermove',e=>{
+    if(!drag||drag.id!==e.pointerId)return;
+    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(!drag.claimed){
+      if(Math.abs(dy)>6&&Math.abs(dy)>Math.abs(dx)){release();return;}
+      if(Math.abs(dx)<6)return;
+      drag.claimed=true;drag.map.setPointerCapture(e.pointerId);drag.map.classList.add('is-grabbing');
+    }
+    e.preventDefault();drag.map.scrollLeft=drag.left-dx;
+  });
+  root.addEventListener('click',e=>{
+    if(suppressClick&&performance.now()<suppressClick.until&&suppressClick.map.contains(e.target)){
+      e.preventDefault();e.stopImmediatePropagation();
+    }
+    suppressClick=null;
+  },true);
+  root.addEventListener('pointerup',release);
+  root.addEventListener('pointercancel',release);
+  root.addEventListener('lostpointercapture',release);
+  window.addEventListener('pointerup',release);
+  window.addEventListener('blur',release);
   root.addEventListener(
     "toggle",
     (e) => {
@@ -177,7 +215,7 @@ export function bindProgress(root) {
   const mount=()=>{
     const map=root.querySelector('.progress-map');
     if(map===current)return;
-    resize.disconnect();current=map;
+    release();resize.disconnect();current=map;
     if(map){resize.observe(map);resize.observe(map.querySelector('table'));sync(map);}
   };
   new MutationObserver(mount).observe(root,{childList:true,subtree:true});mount();

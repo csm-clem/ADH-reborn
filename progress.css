@@ -382,4 +382,8 @@
 :root[data-theme=accessible] .progress-overview{--cell-worked:#d7e6fa;--cell-review:#ffe0bf;--cell-perfect:#a5e8b7;--cell-ink:#15282b;--perfect-ink:#005d2a}
 :root[data-theme=paper] .progress-overview{--cell-worked:#e4e4e4;--cell-review:#f4f4f4;--cell-perfect:#ccc;--cell-ink:#111;--perfect-ink:#222}
 input.progress-scrollbar{padding:0;min-height:28px;border:0;background:transparent}
+@media(pointer:fine){
+  .progress-map,.progress-map summary{cursor:grab;user-select:none}
+  .progress-map.is-grabbing,.progress-map.is-grabbing *{cursor:grabbing!important}
+}
 @media(max-width:420px){.progress-counts{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -184,7 +184,7 @@
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
-/* One continuous string. Portrait uses an explicit answer pad, never three imitation strings. */
+/* Full instrument context for a whole-string activity. The answer pad is opt-in. */
 .orientation-suggestion {
   display: none;
 }

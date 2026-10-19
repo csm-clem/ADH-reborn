@@ -1,6 +1,6 @@
 /* One album stage. Card geometry, art and interactions share this component. */
 .collection-heading{margin-bottom:24px}.collection-heading h1{margin-bottom:10px}.collection-heading p{max-width:58ch}
-.collection-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.collection-tabs .button{gap:9px}.collection-tabs .button span{font-size:12px;font-variant-numeric:tabular-nums;opacity:.8}
+.collection-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.collection-tabs .button{gap:9px}.collection-tabs .button span{font-size:12px;font-variant-numeric:tabular-nums}
 .collection-count{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:12px}.collection-count>strong{display:inline-flex;align-items:baseline;gap:8px;white-space:nowrap;font-size:32px}.collection-count>strong small{font-size:18px}.collection-count>span{font-size:14px;color:var(--muted)}
 .collection-overview>progress{display:block;width:100%;height:9px;accent-color:var(--brand);border:0;border-radius:8px;overflow:hidden;background:var(--progress-empty)}
 progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-overview>progress::-webkit-progress-value{background:var(--brand)}
@@ -26,7 +26,7 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 .card-reflection{background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,18%),#fff8 0%,#fff1 35%,transparent 68%)}
 .card-foil{opacity:calc(var(--foil-strength) * var(--card-finish,.55));background:linear-gradient(115deg,transparent 15%,#9fdfc7 28%,#9ab6e9 37%,#e7b3dc 46%,#ffe2a3 54%,transparent 67%);background-size:240% 240%;background-position:var(--light-x,50%) var(--light-y,50%)}
 .achievement-card.is-earned{--card-finish:1}
-.is-tilting .card-reflection{opacity:.38}.is-tilting .card-foil{opacity:calc(var(--foil-strength) * 2.2 * var(--card-finish,.55))}
+.is-tilting .card-reflection{opacity:.22}.is-tilting .card-foil{opacity:calc(var(--foil-strength) * .9 * var(--card-finish,.55))}
 .achievement-copy{padding:14px 16px 12px;display:flex;flex-direction:column;flex:1;gap:0;min-width:0}
 .achievement-material{font-size:9px;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 7px;color:var(--muted);line-height:1.4}
 .achievement-copy h2{font-size:clamp(21px,2vw,27px);line-height:1.1;letter-spacing:-.6px;font-weight:700;margin:0 0 9px;overflow-wrap:break-word;text-wrap:pretty}
@@ -71,8 +71,6 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 .collection-tabs .button{flex:1 1 100px}
 .is-missing .achievement-card-header,.is-missing .achievement-copy>h2,.is-missing .achievement-context,.is-missing .achievement-number,.is-missing .achievement-actions>:not(.challenge-action),.is-missing .achievement-back>header,.is-missing .achievement-back>h2,.is-missing .achievement-criteria-body{filter:grayscale(1)}
 /* A touch reveals a visible specular band immediately, including on common cards. */
-.card-reflection{background:linear-gradient(115deg,transparent 25%,#fff0 35%,#fffc 47%,#fff2 53%,transparent 66%);background-size:240% 160%;background-position:var(--light-x,50%) var(--light-y,50%)}
-.is-tilting .card-reflection{opacity:.72}
-.is-tilting .card-foil{opacity:calc(var(--foil-strength) * 3.5 * var(--card-finish,.55))}
+.card-reflection{background:linear-gradient(115deg,transparent 27%,#fff0 38%,#fff9 48%,#fff1 54%,transparent 65%);background-size:240% 160%;background-position:var(--light-x,50%) var(--light-y,50%)}
 .achievement-card.is-revealed{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
 .achievement-card:focus-visible{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}

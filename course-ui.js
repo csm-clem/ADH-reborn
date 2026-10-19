@@ -195,13 +195,13 @@ export class CourseController {
         id: "course-" + page.id,
         lastFret: zone.end,
         startFret: zone.start,
-        strings,
+        strings: strings?.length === 1 ? null : strings,
         points,
         notation: this.notation,
         showNames: !!page.showNames,
         lesson: true,
         interactive: page.quiz?.kind === "position",
-        activeString: page.id === "link" ? page.points?.[0]?.string : null,
+        activeString: strings?.length === 1 ? strings[0] : page.id === "link" ? page.points?.[0]?.string : null,
         ...opts,
       });
     const photo = page.photo

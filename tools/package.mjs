@@ -7,8 +7,8 @@ for(const file of ['learning-evidence.js','navigation-rules.js','instrument-diag
 for(const folder of ['achievement-art','icons','fonts','instruments','services','api'])await cp(resolve(root,folder),resolve(dest,folder),{recursive:true});
 await writeFile(resolve(dest,'LISEZ-MOI.txt'),`${APP_NAME} — ${RELEASE}
 
-Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.28/.
-Ouvrez https://media.lecompositeur.com/adh-pwa/v0.28/
+Copiez le contenu de ce dossier par FTP dans adh-pwa/v0.29/.
+Ouvrez https://media.lecompositeur.com/adh-pwa/v0.29/
 
 Les progrès restent conservés entre versions, y compris les données v0.22/v0.23
 encore présentes sur ce navigateur et cette même origine (protocole + domaine).
@@ -16,7 +16,7 @@ Ne supprimez pas les données du navigateur. Exportez une sauvegarde avant dépl
 Pour les futures mises à jour, privilégiez une URL fixe (adh-pwa/app/) et remplacez
 ses fichiers. La mise à jour est proposée, jamais imposée. Pour des dossiers v0.xx
 séparés, déposez latest.json dans adh-pwa/ avec :
-{"version":"0.28.0","url":"./v0.28/"}
+{"version":"0.29.0","url":"./v0.29/"}
 La v0.22 ne connaissait pas ce protocole : ouvrez une première fois la nouvelle URL
 manuellement. Une ancienne version ayant déjà effacé ses anciens résultats ne
 permet pas de les reconstituer. Les sauvegardes v0 valides restent importables.

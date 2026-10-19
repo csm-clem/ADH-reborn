@@ -100,3 +100,13 @@ Les captures et résultats sont écrits dans `docs/v0.27/`. Le chiffre de 59 car
 - `python tools/qa/collection-offline-v028.py` : vérifie le ZIP extrait dans `work/v028/ftp-check/`, notamment le nouveau module de célébration précaché.
 
 Rapports et captures dans `docs/v0.28/`. Ces tests ne remplacent pas une manipulation sur un iPhone physique.
+
+## Recette v0.29
+
+- `checkup-v029.py` : 25 configurations du manche complet, toucher avec et sans boutons, boutons facultatifs, souris/clavier des progrès, onboarding et thèmes.
+- `cards-touch-v029.py` : gestes tactiles réels Chromium et reflet d’opacité maximale modérée ; retour à plat, boutons et défilement natif.
+- `onboarding-v029.py` : les six instruments, leur réglage personnalisé et sa pagination, formats portrait/paysage et conservation du profil.
+- `update-v029.py` : véritable ZIP précédent servi puis remplacé par `dist/` à URL fixe ; refus, lancement suivant, acceptation et progression identique.
+- `accessibility-v029.py` : audit axe-core 4.14.0. L’outil d’audit n’est pas une dépendance de l’application : fournir `work/v029/axe.min.js` pour cette recette. Rapport automatique, pas certification.
+
+Les recettes `beta-browser.py` et `beta-offline.py` restent utiles ; pour la règle tactile v0.29, l’ancienne assertion « largeur des cases supérieure à 44 px à 844 × 390 » sur une seule corde ne s’applique plus au manche complet proportionné. La recette de reprise utilisée est archivée sous `v0.29/beta/`. Les boutons restent une alternative à 44 px.

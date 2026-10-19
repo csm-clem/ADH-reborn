@@ -1,0 +1,290 @@
+{
+  "checks": [
+    {
+      "instrument": "guitar6",
+      "viewport": [
+        320,
+        568
+      ],
+      "strings": 6,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 14.8,
+      "row_height": 8.5
+    },
+    {
+      "instrument": "guitar6",
+      "viewport": [
+        390,
+        844
+      ],
+      "strings": 6,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 18.3,
+      "row_height": 10.5
+    },
+    {
+      "instrument": "guitar6",
+      "viewport": [
+        667,
+        375
+      ],
+      "strings": 6,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 24.7,
+      "row_height": 13.2
+    },
+    {
+      "instrument": "guitar6",
+      "viewport": [
+        844,
+        390
+      ],
+      "strings": 6,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 24.3,
+      "row_height": 13.9
+    },
+    {
+      "instrument": "guitar6",
+      "viewport": [
+        1440,
+        900
+      ],
+      "strings": 6,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 75.3,
+      "row_height": 40.2
+    },
+    {
+      "instrument": "guitar7",
+      "viewport": [
+        320,
+        568
+      ],
+      "strings": 7,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 14.8,
+      "row_height": 8.1
+    },
+    {
+      "instrument": "guitar7",
+      "viewport": [
+        390,
+        844
+      ],
+      "strings": 7,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 18.3,
+      "row_height": 10.1
+    },
+    {
+      "instrument": "guitar7",
+      "viewport": [
+        667,
+        375
+      ],
+      "strings": 7,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 20.7,
+      "row_height": 11.3
+    },
+    {
+      "instrument": "guitar7",
+      "viewport": [
+        844,
+        390
+      ],
+      "strings": 7,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 23.4,
+      "row_height": 12.0
+    },
+    {
+      "instrument": "guitar7",
+      "viewport": [
+        1440,
+        900
+      ],
+      "strings": 7,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 63.0,
+      "row_height": 34.5
+    },
+    {
+      "instrument": "guitar8",
+      "viewport": [
+        320,
+        568
+      ],
+      "strings": 8,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 30.0,
+      "row_height": 7.9
+    },
+    {
+      "instrument": "guitar8",
+      "viewport": [
+        390,
+        844
+      ],
+      "strings": 8,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 37.1,
+      "row_height": 9.7
+    },
+    {
+      "instrument": "guitar8",
+      "viewport": [
+        667,
+        375
+      ],
+      "strings": 8,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 37.9,
+      "row_height": 10.0
+    },
+    {
+      "instrument": "guitar8",
+      "viewport": [
+        844,
+        390
+      ],
+      "strings": 8,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 39.9,
+      "row_height": 10.5
+    },
+    {
+      "instrument": "guitar8",
+      "viewport": [
+        1440,
+        900
+      ],
+      "strings": 8,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 115.4,
+      "row_height": 30.4
+    },
+    {
+      "instrument": "bass4",
+      "viewport": [
+        320,
+        568
+      ],
+      "strings": 4,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 14.8,
+      "row_height": 9.8
+    },
+    {
+      "instrument": "bass4",
+      "viewport": [
+        390,
+        844
+      ],
+      "strings": 4,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 18.3,
+      "row_height": 12.2
+    },
+    {
+      "instrument": "bass4",
+      "viewport": [
+        667,
+        375
+      ],
+      "strings": 4,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 32.2,
+      "row_height": 19.9
+    },
+    {
+      "instrument": "bass4",
+      "viewport": [
+        844,
+        390
+      ],
+      "strings": 4,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 31.7,
+      "row_height": 21.0
+    },
+    {
+      "instrument": "bass4",
+      "viewport": [
+        1440,
+        900
+      ],
+      "strings": 4,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 71.0,
+      "row_height": 47.1
+    },
+    {
+      "instrument": "bass5",
+      "viewport": [
+        320,
+        568
+      ],
+      "strings": 5,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 15.9,
+      "row_height": 9.0
+    },
+    {
+      "instrument": "bass5",
+      "viewport": [
+        390,
+        844
+      ],
+      "strings": 5,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 18.3,
+      "row_height": 11.1
+    },
+    {
+      "instrument": "bass5",
+      "viewport": [
+        667,
+        375
+      ],
+      "strings": 5,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 27.9,
+      "row_height": 15.8
+    },
+    {
+      "instrument": "bass5",
+      "viewport": [
+        844,
+        390
+      ],
+      "strings": 5,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 27.5,
+      "row_height": 16.7
+    },
+    {
+      "instrument": "bass5",
+      "viewport": [
+        1440,
+        900
+      ],
+      "strings": 5,
+      "direct_touch_with_and_without_pad": true,
+      "smallest_fret_width": 71.0,
+      "row_height": 43.0
+    },
+    {
+      "desktop_drag": true,
+      "native_click_and_keyboard": true,
+      "scrollbar_sync": true
+    },
+    {
+      "theme_switches": 5,
+      "bug_form_opens_without_sending": true
+    }
+  ],
+  "findings": [],
+  "errors": []
+}

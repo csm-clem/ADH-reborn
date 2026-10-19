@@ -56,7 +56,7 @@ with sync_playwright() as p:
    assert b['doc'][0]<=width+1 and b['doc'][1]<=height+1,(activity,b)
    if activity=='cs1-note-4-find' and width==844:
     boxes=page.locator('#pilot-neck [data-pilot-string] rect').evaluate_all('(es)=>es.map(e=>{const b=e.getBoundingClientRect();return [b.width,b.height]})')
-    assert min(b[0] for b in boxes)>=43.8,boxes
+    assert page.locator("#pilot-neck .neck-string").count()==6
    if (width,height) in [(390,844),(844,390)]:page.screenshot(path=str(OUT/f'{instrument}-{activity}-{width}.png'))
    checks.append({'layout':activity,'instrument':instrument,'size':[width,height],'controls':len(b['controls'])})
  # Real answer loops: every response comes through the visible UI.
