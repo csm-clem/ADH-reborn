@@ -5,7 +5,7 @@ import {OCTAVE_MUSIC,DANCE_MUSIC,EXTRA_RIFFS} from './octave-music.js';
  * Reference passages and exceptions are documented in docs/RECOMPENSES-MUSICALES.md.
  */
 const PHRASES={...Object.fromEntries([...OCTAVE_MUSIC,DANCE_MUSIC,...EXTRA_RIFFS].map(m=>[m.id,{notes:m.notes.map((n,i)=>[n,m.beats[i],m.rests?.[i]||0]),chords:m.chords,bar:m.bar,step:m.step,section:m.section,voice:m.voice}])),
- 'seven-nation':{notes:[[40,1.5],[40,.5],[43,.5],[40,.5],[38,1],[36,2],[35,2]],voice:'guitar-driven',chords:[[40,47,52],[40,47,52]],bar:4,step:60/120,section:'Deux mesures du riff principal, version de la partition de basse Bonedo'},
+ 'seven-nation':{notes:[[40,1.5],[40,.5],[43,.75],[40,.25,.5],[38,.5],[36,2],[35,1,1]],voice:'guitar-driven',chords:[[40,47,52],[40,47,52]],bar:4,step:60/120,section:'Riff principal : liaison initiale, croche pointée, double croche, silence puis fin de phrase ; d’après la partition fournie'},
  'come-as-you-are':{notes:[[38,.5],[38,.5],[39,.5],[40,1],[43,.5],[40,.5],[43,.5],[40,.5],[40,.5],[39,.5],[38,.5],[45,.5],[38,.5],[38,1],[45,.5],[38,.5],[39,.5],[40,1]],chords:[[40,43,47],[38,42,45],[40,43,47]],bar:4,step:.5,section:'Levée, deux mesures du riff de guitare et note de reprise'},
  bride:{notes:[[65,2],[70,1.5],[70,.5],[70,3,1],[65,2],[72,1.5],[69,.5],[70,3,1]],chords:[[46,50,53],[46,50,53],[53,57,60],[46,50,53]],bar:4,step:60/216,section:'Première phrase complète'},
  entertainer:{notes:[[64,.25],[72,.5],[64,.25],[72,.5],[64,.25],[72,1.5],[72,.25],[74,.25],[75,.25],[76,.25],[72,.25],[74,.25],[76,.5],[71,.25],[74,.5],[72,1.5,.5]],chords:[[48,52,55],[53,57,60],[43,47,50],[48,52,55]],bar:2,step:60/92,section:'Première phrase du thème, voix inférieure des octaves du piano'},

@@ -85,7 +85,7 @@ export function progressView(
       worked: "Travaillée",
       review: "À revoir",
     },
-    symbol = { new: "·", worked: "✓", review: "!", perfect: "✓✓" };
+    symbol = { new: "·", worked: "✓", review: "!", perfect: '<span class="double-check">✓✓</span>' };
   const totals = (mode) =>
     cells.reduce(
       (m, p) => ({

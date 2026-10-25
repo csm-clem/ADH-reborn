@@ -7,7 +7,7 @@ export const RARITIES=Object.freeze([
  {id:'legendary',label:'Légendaire',stars:5,material:'Obsidienne · or gravé'}
 ].map(Object.freeze));
 /** Append only: a catalogue reorder must never renumber a collected sleeve. */
-export const MUSIC_CARD_NUMBERS=Object.freeze(Object.fromEntries(['higher-ground','my-sharona','made-for-loving','superstition','get-lucky','blue-monday-orgy','immigrant-song','singing-rain','christmas-song','sweet-dreams','around-world','bad-guy','billie-jean','bites-dust','smoke-water','iron-man','seven-nation','come-as-you-are','bride','entertainer','jaws','rainbow','trek','maria','bonnie','saints','cantaloupe-island'].map((id,i)=>[id,'M'+String(i+1).padStart(3,'0')])));
+export const MUSIC_CARD_NUMBERS=Object.freeze(Object.fromEntries(['higher-ground','my-sharona','made-for-loving','superstition','get-lucky','blue-monday-orgy','immigrant-song','singing-rain','christmas-song','sweet-dreams','around-world','bad-guy','billie-jean','bites-dust','smoke-water','iron-man','seven-nation','come-as-you-are','bride','entertainer','jaws','rainbow','trek','maria','bonnie','saints','cantaloupe-island','feel-good-inc'].map((id,i)=>[id,'M'+String(i+1).padStart(3,'0')])));
 const rows=[
  ['first-session','La première fait le jack',1,'landmarks','Terminer une activité évaluée d’au moins 20 questions, quel que soit le score.'],
  ['opens-named','Enchanté, moi c’est {note}',1,'landmarks','Nommer les cordes à vide à au moins 90 %, sans aide.'],

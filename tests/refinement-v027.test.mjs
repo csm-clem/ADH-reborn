@@ -25,7 +25,7 @@ test('Perfect requires six observations in both directions, durable counts agree
  assert.equal(positionProgress(events.slice(0,1),0,0).status,'worked');assert.equal(positionProgress(events,0,0).status,'perfect');
  assert.equal(positionProgress([],0,0,{name:{total:3,correct:3},find:{total:3,correct:3}}).status,'perfect');
  events[5].correct=false;assert.equal(positionProgress(events,0,0).status,'review');
- const html=progressView(profile,[],events.length?[{events:events.map(e=>({...e,correct:true}))}]:[]);assert.match(html,/100% ✓✓/);assert.match(html,/Parfait/);
+ const html=progressView(profile,[],events.length?[{events:events.map(e=>({...e,correct:true}))}]:[]);assert.match(html,/100% <span class="double-check">✓✓<\/span>/);assert.match(html,/Parfait/);
 });
 test('Scroll thumb faithfully represents visible content, independently of scroll position',()=>{
  assert.equal(scrollbarThumb(1000,800,1600),500);assert.equal(scrollbarThumb(300,300,1500),60);assert.equal(scrollbarThumb(300,600,400),300);
@@ -40,21 +40,21 @@ test('Gameplay preserves v0.23 proportions rather than filling the viewport heig
  }
  assert.equal(neckGeometry(6).height,66);
 });
-test('Collection defaults to all, retains old preferences, and removes the redundant layout switch',()=>{
+test('Collection defaults to all, retains old preferences, and provides an album overview and detail switch',()=>{
  assert.equal(initialState().collection.category,'all');assert.equal(preferences({collection:{category:'all'}}).collection.category,'all');
  assert.equal(preferences({collection:{category:'music',layout:'list'}}).collection.category,'music');
  const pilot=new PilotController({getState:()=>({...initialState(),profile})});pilot.syncAchievements=()=>{};pilot.save=()=>{};
- const c=new AchievementsController({pilot,getState:()=>({...initialState(),profile}),icon:()=>''});const html=c.render();assert.match(html,/data-value="all"/);assert.ok(!html.includes('data-success-action="layout"'));assert.ok(!html.includes('is-list'));
+ const c=new AchievementsController({pilot,getState:()=>({...initialState(),profile}),icon:()=>''});const html=c.render();assert.match(html,/data-value="all"/);assert.ok(html.includes('data-success-action="layout"'));assert.ok(!html.includes('is-list'));
 });
 test('Retired Christmas sleeve never gets assigned again; new island has a distinct stable number, preserved old proof',()=>{
- const catalog=betaCatalog(profile),assigned=[...catalogMelodies(catalog).values()];assert.ok(assigned.some(m=>m.id==='cantaloupe-island'));assert.ok(!assigned.some(m=>m.id==='christmas-song'||m.id==='immigrant-song'));
+ const catalog=betaCatalog(profile),assigned=[...catalogMelodies(catalog).values()];assert.ok(assigned.some(m=>m.id==='feel-good-inc'));assert.ok(!assigned.some(m=>m.id==='christmas-song'||m.id==='cantaloupe-island'||m.id==='immigrant-song'));
  assert.equal(MUSIC_CARD_NUMBERS['christmas-song'],'M009');assert.equal(MUSIC_CARD_NUMBERS['cantaloupe-island'],'M027');
  const old={id:'music-christmas-song',musicId:'christmas-song',scope:'global',profileKey:profile.key,activity:'note-3-find',shift:0,at:123,version:1};
  const card=achievementContext({profile,catalog,data:{attempts:[]},existing:[old]}).definitions.find(d=>d.music?.id==='christmas-song');assert.equal(card.obtained.at,123);
  assert.equal(rewardFor(melodyById('immigrant-song')),null);
 });
 test('Revised musical timelines retain exact bar totals, register and requested tempo',()=>{
- const seven=rewardFor(melodyById('seven-nation'));assert.deepEqual(seven.events.map(e=>e.start),[0,1.5,2,2.5,3,4,6]);assert.equal(seven.totalBeats,8);
+ const seven=rewardFor(melodyById('seven-nation'));assert.deepEqual(seven.events.map(e=>e.start),[0,1.5,2,2.75,3.5,4,6]);assert.equal(seven.totalBeats,8);
  const around=rewardFor(melodyById('around-world'));assert.equal(around.totalBeats,16);assert.equal(around.events[0].midi,33);assert.equal(around.events[6].start,4);assert.equal(around.events[12].start,8);assert.equal(around.events[16].start,12);
  const island=rewardFor(melodyById('cantaloupe-island'));assert.equal(island.totalBeats,13);assert.deepEqual(island.events.slice(0,5).map(e=>e.start),[0,.5,3,3.5,4]);assert.equal(rewardFor(melodyById('rainbow')).step,60/156);
 });

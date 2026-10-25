@@ -2,6 +2,7 @@ import {rewardFor} from './reward-music.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /** A curated composition for each work; pitches/durations always come from the audio timeline. */
 const MUSIC_ART=Object.freeze({
+ 'feel-good-inc':{colors:['#DFB26B','#96534F','#233C49'],object:'steps',code:'FG / INC'},
  'cantaloupe-island':{colors:['#F5BD68','#2E8B84','#263F59'],object:'island',code:'CI'},
  'higher-ground':{colors:['#D9A34E','#434F46','#153E48'],object:'pickup',code:'HG'},
  'my-sharona':{colors:['#F0D6B5','#B95E4C','#2E3B56'],object:'burst',code:'MS'},
@@ -46,9 +47,9 @@ function object(kind){
   default:return '';
  }
 }
-export function achievementArtwork(def){
+export function achievementArtwork(def,namespace=''){
  if(!def.music)return `<img class="achievement-artwork" src="./achievement-art/${esc(def.id)}.svg" alt="" width="580" height="398" loading="lazy" decoding="async">`;
- const m=def.music,style=MUSIC_ART[m.id]||{colors:['#D1DCD0','#667D8D','#2E486D'],object:'orbit',code:'DFT'},p='music-art-'+m.id,events=rewardFor(m)?.events||[],low=Math.min(...events.map(e=>e.midi)),high=Math.max(...events.map(e=>e.midi)),end=Math.max(1,...events.map(e=>e.start+e.beats)),[a,b,c]=style.colors;
+ const m=def.music,style=MUSIC_ART[m.id]||{colors:['#D1DCD0','#667D8D','#2E486D'],object:'orbit',code:'DFT'},p='music-art-'+namespace+m.id,events=rewardFor(m)?.events||[],low=Math.min(...events.map(e=>e.midi)),high=Math.max(...events.map(e=>e.midi)),end=Math.max(1,...events.map(e=>e.start+e.beats)),[a,b,c]=style.colors;
  const drawing=object(style.object).replaceAll('#METAL','#'+p+'-metal');
  return `<svg class="music-sleeve achievement-artwork" viewBox="0 0 630 398" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="${p}-bg" x2="1" y2="1"><stop stop-color="${a}"/><stop offset=".5" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient><linearGradient id="${p}-metal" x2="1" y2="1"><stop stop-color="#F5DBAD"/><stop offset=".3" stop-color="#B7DCD3"/><stop offset=".58" stop-color="#8BA6D3"/><stop offset=".82" stop-color="#E2B5BD"/><stop offset="1" stop-color="#EAD5A5"/></linearGradient></defs><rect width="630" height="398" fill="url(#${p}-bg)"/><path d="M0 301L630 68V398H0Z" fill="${c}" opacity=".25"/>${drawing}<text x="25" y="34" fill="#FFFFFF" font-family="system-ui,sans-serif" font-weight="650" font-size="12" letter-spacing="2">DFT / ${esc(style.code)}</text><rect x="25" y="304" width="580" height="76" rx="8" fill="#122B40" stroke="#C7DBD2" stroke-opacity=".4"/>${[325,340,355,370].map(y=>`<path d="M42 ${y}H588" stroke="#B4C9CA" stroke-opacity=".16" stroke-width=".8"/>`).join('')}<g class="music-events">${events.map((e,i)=>`<rect class="midi-event" data-midi="${e.midi}" data-event-index="${i}" data-start="${e.start}" data-beats="${e.beats}" style="--note-delay:${50+e.start*rewardFor(m).step*1000}ms;--note-duration:${Math.max(100,e.beats*rewardFor(m).step*1000)}ms" x="${42+e.start/end*546}" y="${364-(e.midi-low)/Math.max(1,high-low)*43}" width="${Math.max(.8,e.beats/end*546-.8)}" height="5" rx="1.5" fill="${i%3===0?'#F3D18D':i%3===1?'#C7DFD1':'#B5D1F1'}"/>`).join('')}</g></svg>`;
 }

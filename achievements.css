@@ -74,3 +74,24 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 .card-reflection{background:linear-gradient(115deg,transparent 27%,#fff0 38%,#fff9 48%,#fff1 54%,transparent 65%);background-size:240% 160%;background-position:var(--light-x,50%) var(--light-y,50%)}
 .achievement-card.is-revealed{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
 .achievement-card:focus-visible{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
+
+/* Album is an overview, not a stack of scaled controls. Each cover is one target. */
+.achievement-grid.is-album{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:none}
+.album-thumbnail{font:inherit;text-align:left;min-width:0;display:flex;flex-direction:column;gap:7px;padding:7px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer;touch-action:pan-y;transition:transform 160ms ease-out}
+.album-thumbnail:hover{transform:translateY(-2px)}
+.album-thumbnail:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.album-thumbnail .achievement-art{display:block;width:100%;margin:0;aspect-ratio:580/398;border-radius:6px}
+.album-title{font-family:var(--font-heading);font-weight:650;font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+.album-percent{font-size:11px;color:var(--muted);margin-top:auto}
+.album-thumbnail>progress{width:100%;height:4px;accent-color:var(--brand)}
+.album-thumbnail.is-missing .achievement-art{filter:grayscale(1)}
+.collection-dialog{position:fixed;inset:0;margin:auto;padding:12px;max-height:calc(100dvh - 24px);width:min(450px,calc(100vw - 24px));max-width:none;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink);overflow:auto;overscroll-behavior:contain}
+.collection-dialog[open]{animation:album-open 220ms cubic-bezier(.2,.8,.2,1)}
+.collection-dialog::backdrop{background:#101821b8;backdrop-filter:blur(5px)}
+.album-close{display:flex;margin:0 0 10px auto;min-height:44px}
+.collection-dialog .achievement-card{min-width:0}
+body:has(.collection-dialog[open]){overflow:hidden}
+@keyframes album-open{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@media(max-width:650px){.achievement-grid.is-album{gap:8px}.is-album .album-thumbnail{padding:5px;gap:5px;border-radius:9px}.album-title{font-size:12px}.album-percent{font-size:10px}.collection-toolbar>.button{grid-column:1/-1;justify-self:end}.collection-stage:has(.is-album){padding:10px 7px}}
+@media(prefers-reduced-motion:reduce){.collection-dialog[open]{animation:none}.album-thumbnail{transition:none}.album-thumbnail:hover{transform:none}}
+@media(max-width:650px){.collection-dialog{inset:0;width:100vw;height:100dvh;max-height:100dvh;margin:0;padding:12px;border:0;border-radius:0}.collection-dialog .achievement-card{max-width:420px;margin-inline:auto}.collection-dialog .album-close{position:sticky;top:0;z-index:2}}

@@ -2,8 +2,8 @@
  * Pending passages are retained for correction but never assigned or played as rewards.
  * Current findings and limitations: docs/CHANGES-v0.27.md; earlier audit: docs/v0.20/audit-musical.md.
  */
-export const MUSIC_ARRANGEMENT_VERSION=5;
-const checked=Object.freeze(['cantaloupe-island','higher-ground','my-sharona','singing-rain','christmas-song','around-world','smoke-water','iron-man','seven-nation','come-as-you-are','billie-jean','bites-dust','bride','entertainer','rainbow','trek']);
+export const MUSIC_ARRANGEMENT_VERSION=6;
+const checked=Object.freeze(['feel-good-inc','cantaloupe-island','higher-ground','my-sharona','singing-rain','christmas-song','around-world','smoke-water','iron-man','seven-nation','come-as-you-are','billie-jean','bites-dust','bride','entertainer','rainbow','trek']);
 export const MUSIC_AUDIT=Object.freeze({
  checked,
  pending:Object.freeze({

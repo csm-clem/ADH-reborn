@@ -52,7 +52,8 @@ ROOT.addEventListener('click',e=>{
  switch(button.dataset.action){
  case 'mute-global':setSound(!state.sound);render();document.querySelector('#setting-sound')?.focus({preventScroll:true});break;
  case 'debug':if(debugAvailable(RELEASE)){pilot.setDebug(!pilot.debugActive);render();}break;
- case 'home':case 'stats':case 'settings':case 'achievements':case 'changelog':stopAudio();setScreen(button.dataset.action);break;
+ case 'home':stopAudio();if(screen==='home'){pilot.data.navigation={branch:null,route:null,chapter:null};pilot.save();}setScreen('home');break;
+ case 'stats':case 'settings':case 'achievements':case 'changelog':stopAudio();setScreen(button.dataset.action);break;
  case 'fullscreen':toggleFullscreen();break;
  case 'beginner-guide':beginner.open();break;
  case 'install-help':installGuide();break;

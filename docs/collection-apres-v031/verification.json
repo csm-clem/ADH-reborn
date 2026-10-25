@@ -1,0 +1,28 @@
+{
+  "layouts": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "horizontal_card_drag": true,
+  "vertical_native_scroll": true,
+  "no_tilt_before_gesture": true,
+  "album_modal_controls": true,
+  "path_memory": true,
+  "shared_double_checks": true,
+  "reduced_motion": true,
+  "errors": []
+}
