@@ -1,0 +1,40 @@
+name: Déployer DFT v0.31 sur o2switch
+on:
+  workflow_dispatch:
+  push:
+    branches: [deploy/dft-v0.31]
+permissions:
+  contents: read
+concurrency:
+  group: dft-o2switch
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.repository == 'csm-clem/ADH-reborn'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Transfert FTPS vérifié, fichiers statiques uniquement
+        env:
+          DFT_FTP_HOST: ${{ secrets.DFT_FTP_HOST }}
+          DFT_FTP_USERNAME: ${{ secrets.DFT_FTP_USERNAME }}
+          DFT_FTP_PASSWORD: ${{ secrets.DFT_FTP_PASSWORD }}
+        run: python tools/deploy/ftps.py
+      - name: Vérifier le site publié
+        run: |
+          python - <<'PY'
+          import urllib.request,json
+          base='https://media.lecompositeur.com/DFT/'
+          def get(path):
+              req=urllib.request.Request(base+path,headers={'Cache-Control':'no-cache'})
+              return urllib.request.urlopen(req,timeout=45).read()
+          assert json.loads(get('update.json'))['version']=='0.31.0'
+          assert b'0.31.0' in get('release.js')
+          assert b'Daily Fretboard Trainer' in get('index.html')
+          assert b'RELEASE_HISTORY' in get('changelog.js')
+          print('HTTPS, accueil, version 0.31.0 et journal accessibles.')
+          PY
