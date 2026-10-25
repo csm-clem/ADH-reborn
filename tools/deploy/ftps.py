@@ -1,6 +1,7 @@
 """Upload only the verified v0.31 static archive to a dedicated FTPS account root."""
 import ftplib,ssl,os,zipfile,json,hashlib,io
 from pathlib import PurePosixPath,Path
+from tls_chain import verified_context
 archive=Path('downloads/daily-fretboard-trainer-v0.31.zip');meta=json.loads(archive.with_suffix('.json').read_text())
 assert meta['version']=='0.31.0' and hashlib.sha256(archive.read_bytes()).hexdigest()==meta['sha256'],'Archive invalide'
 allowed={'.js','.css','.html','.json','.svg','.png','.webp','.ttf','.woff','.woff2','.webmanifest','.txt'}
@@ -15,7 +16,7 @@ with zipfile.ZipFile(archive)as z:
   files.append((name,z.read(name)))
  assert json.loads(z.read('update.json'))['version']=='0.31.0'
 host=os.environ['DFT_FTP_HOST'];assert host=='gout.o2switch.net','Hôte inattendu'
-ftp=ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=60)
+ftp=ftplib.FTP_TLS(context=verified_context(),timeout=60)
 try:
  ftp.connect(host,21);ftp.auth();ftp.login(os.environ['DFT_FTP_USERNAME'],os.environ['DFT_FTP_PASSWORD']);ftp.prot_p();ftp.cwd('/')
  assert ftp.pwd()=='/','Compte non limité à sa racine'
