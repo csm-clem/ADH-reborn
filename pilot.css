@@ -56,7 +56,7 @@
 .pilot-axis-string{font-weight:750}.pilot-axis-fret{font-weight:750}.note-tag{pointer-events:none}.keyboard-hint{display:none}.fret-hit:focus-visible .keyboard-hint{display:block}
 .pilot-game .neck-viewport .fret-hit:focus-visible rect{fill:transparent!important;stroke:none!important}.fret-hit.selectable:hover>rect{fill:transparent!important;stroke:none!important}
 
-@keyframes touch-out{from{opacity:.8;transform:translate(-50%,-50%) scale(.65)}to{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+
 .compact-result{height:100dvh;max-height:100dvh;min-height:0;margin:0 auto;padding:clamp(12px,4vh,28px) 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden;border:0;border-radius:0;max-width:680px}
 .compact-result h1{font-size:clamp(23px,4vw,32px);margin:0}.compact-result .eyebrow{margin:0;font-size:12px}.compact-result .score-display strong{font-size:clamp(62px,11vh,90px)}.compact-result .score-details{margin:0}.compact-result .result-actions{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px}.compact-result .result-actions .primary{margin:0;min-height:44px}.compact-result .result-secondary-actions{margin:0}.compact-result .score-strip{width:100%;margin:8px 0 0}.compact-result .score-strip i{height:7px}
 @media(max-height:400px){.compact-result{gap:5px;padding-block:8px}.compact-result .score-display strong{font-size:58px}.compact-result h1{font-size:23px}.compact-result .result-actions{gap:5px}.compact-result .score-strip{margin-top:3px}.compact-result .score-details small{display:none}}

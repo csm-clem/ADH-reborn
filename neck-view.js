@@ -23,3 +23,15 @@ export function layoutMiniature(svg,profile){
  svg.querySelectorAll('.neck-axis').forEach(t=>{const b=svg.getBoundingClientRect(),scale=Math.min(b.width/g.width,b.height/g.height);if(scale)t.style.fontSize=`${Math.min(14/scale,g.visibleStrings.length===1?15:10)}px`;});
  layoutNoteTags(svg,g);
 }
+
+/** One tab stop per instrument; arrows follow physical string and fret numbers. */
+export function bindNeckKeyboard(root){
+ const selector='[data-pilot-string],[data-lesson-string],[data-course-string]';
+ const coordinates=e=>[Number(e.dataset.pilotString??e.dataset.lessonString??e.dataset.courseString),Number(e.dataset.pilotFret??e.dataset.lessonFret??e.dataset.courseFret)];
+ const normalize=()=>root.querySelectorAll('svg').forEach(svg=>{const cells=[...svg.querySelectorAll(selector)].filter(e=>e.getAttribute('aria-disabled')!=='true');const current=cells.includes(document.activeElement)?document.activeElement:cells.find(e=>e.dataset.keyboardCurrent==='true')||cells[0];for(const cell of cells){const value=cell===current?'0':'-1';if(cell.getAttribute('tabindex')!==value)cell.setAttribute('tabindex',value);}});
+ root.addEventListener('focusin',e=>{if(!e.target.matches(selector))return;const svg=e.target.closest('svg');svg.querySelectorAll(selector).forEach(cell=>{cell.dataset.keyboardCurrent=String(cell===e.target);cell.setAttribute('tabindex',cell===e.target?'0':'-1');});});
+ root.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)||!e.target.matches(selector))return;const cells=[...e.target.closest('svg').querySelectorAll(selector)].filter(c=>c.getAttribute('aria-disabled')!=='true'),[s,f]=coordinates(e.target);let target;
+ if(e.key==='Home'||e.key==='End'){const row=cells.filter(c=>coordinates(c)[0]===s).sort((a,b)=>coordinates(a)[1]-coordinates(b)[1]);target=e.key==='Home'?row[0]:row.at(-1);}else{const ds=e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0,df=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;target=cells.find(c=>{const [a,b]=coordinates(c);return a===s+ds&&b===f+df;});}
+ e.preventDefault();target?.focus({preventScroll:true});});
+ new MutationObserver(normalize).observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['tabindex','aria-disabled']});normalize();
+}

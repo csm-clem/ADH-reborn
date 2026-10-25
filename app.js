@@ -1,3 +1,4 @@
+import {bindNeckKeyboard} from './neck-view.js';
 import {bindProgress} from "./progress.js";
 import {CourseController} from './course-ui.js';
 import {BeginnerGuide,installGuide} from './beginner-guide.js';
@@ -92,7 +93,7 @@ platformService.connect({
  onFullscreen:syncFullscreen,
  onInstallPrompt(event){installPrompt=event;if(screen==='settings')render();}
 });
-bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
+bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
 
 const beginner=new BeginnerGuide({getState:appStore.getState,onDone:()=>{appStore.update({beginnerGuide:true});updates.offer();}});
 updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'&&screen!=='course'});

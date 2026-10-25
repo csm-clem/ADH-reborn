@@ -1,8 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.29.0** — contexte complet des cordes, toucher direct en portrait, reflets discrets, glisser de la carte des progrès et audit général.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.30.0** — palette Sunrise, navigation clavier, sauvegardes compatibles, livraison automatisée et paquet de production sans simulation.
 
-[Archive FTP v0.29](downloads/daily-fretboard-trainer-v0.29.zip) · [Rapport de livraison](docs/CHANGES-v0.29.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.30](downloads/daily-fretboard-trainer-v0.30.zip) · [Rapport de livraison](docs/CHANGES-v0.30.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -106,3 +106,7 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 ## Livraison v0.20
 
 [Rapport v0.23](docs/CHANGES-v0.23.md) · [Audit musical](docs/v0.23/audit-musical.md) · [Validation](docs/v0.23/validation.md) · [Roadmap générale](docs/ROADMAP-GENERALE.md). Manche et accueil corrigés, collection retravaillée, contrastes renforcés, signalement de bug et catalogue musical revu : 14 passages attribués au parcours standard ; deux demandes musicales restent à terminer.
+
+## Livraisons contrôlées
+
+`npm run release` prépare la bêta, ses tests et son ZIP. `npm run release:production` produit une archive séparée sans simulation. Voir le [rapport v0.30](docs/CHANGES-v0.30.md). Le workflow GitHub vérifie également les parcours, la migration et le hors-ligne.

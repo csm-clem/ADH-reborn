@@ -1,0 +1,10 @@
+{
+  "single_tab_stop": true,
+  "arrow_navigation": true,
+  "home_end": true,
+  "enter_answers": true,
+  "day": "linear-gradient(rgb(255, 56, 57) 0%, rgb(255, 178, 48) 100%)",
+  "hover": "linear-gradient(rgb(39, 51, 158) 0%, rgb(81, 187, 232) 100%)",
+  "night": "linear-gradient(rgb(219, 72, 91) 0%, rgb(185, 105, 40) 100%)",
+  "errors": []
+}
