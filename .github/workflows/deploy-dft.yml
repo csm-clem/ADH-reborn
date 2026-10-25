@@ -1,8 +1,8 @@
-name: Déployer DFT v0.31 sur o2switch
+name: Déployer DFT v0.33 sur o2switch
 on:
   workflow_dispatch:
   push:
-    branches: [deploy/dft-v0.31]
+    branches: [deploy/dft-v0.33]
 permissions:
   contents: read
 concurrency:
@@ -18,6 +18,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Vérifier le code et la livraison avant transfert
+        run: |
+          npm run check
+          npm test
+          npm run verify:release
       - name: Transfert FTPS vérifié, fichiers statiques uniquement
         env:
           DFT_FTP_HOST: ${{ secrets.DFT_FTP_HOST }}
@@ -36,9 +44,12 @@ jobs:
           def get(path):
               req=urllib.request.Request(base+path,headers={'Cache-Control':'no-cache'})
               return urllib.request.urlopen(req,timeout=45).read()
-          assert json.loads(get('update.json'))['version']=='0.31.0'
-          assert b'0.31.0' in get('release.js')
+          assert json.loads(get('update.json'))['version']=='0.33.0'
+          assert b'0.33.0' in get('release.js')
           assert b'Daily Fretboard Trainer' in get('index.html')
           assert b'RELEASE_HISTORY' in get('changelog.js')
-          print('HTTPS, accueil, version 0.31.0 et journal accessibles.')
+          for texture in ['paper','brushed','engraved']:
+              assert b'<svg' in get('achievement-finishes/'+texture+'.svg')
+          assert b'is-album' in get('achievements.css')
+          print('HTTPS, accueil, version 0.33.0 et journal accessibles.')
           PY

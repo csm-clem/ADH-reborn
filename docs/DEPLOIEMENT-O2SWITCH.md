@@ -2,7 +2,7 @@
 
 Destination autorisée : https://media.lecompositeur.com/DFT/ via un compte FTP dédié dont la racine est exclusivement ce dossier. Ne jamais utiliser le compte cPanel principal.
 
-Le workflow `deploy-dft.yml` transfère uniquement l’archive v0.31 vérifiée par SHA-256. Les secrets `DFT_FTP_HOST`, `DFT_FTP_USERNAME` et `DFT_FTP_PASSWORD` restent dans GitHub Actions. Le jeton du workflow a uniquement le droit de lire le dépôt.
+Le workflow `deploy-dft.yml` transfère uniquement l’archive v0.33 vérifiée par SHA-256. Les secrets `DFT_FTP_HOST`, `DFT_FTP_USERNAME` et `DFT_FTP_PASSWORD` restent dans GitHub Actions. Le jeton du workflow a uniquement le droit de lire le dépôt.
 
 ## TLS
 
@@ -15,12 +15,12 @@ Chaque certificat ajouté doit être vérifié par OpenSSL jusqu’à une racine
 
 ## Périmètre
 
-Fichiers statiques seulement, `api/` et PHP exclus. Aucun effacement automatique. Chaque transfert passe par un nom temporaire, une vérification de taille puis un renommage. Ressources d’abord, accueil/manifeste de mise à jour/service worker ensuite. Le transfert est atomique par fichier, pas pour l’ensemble d’une version. Pour ce premier essai, le dossier est neuf.
+Fichiers statiques seulement, `api/` et PHP exclus. Aucun effacement automatique. Chaque transfert passe par un nom temporaire, une vérification de taille puis un renommage. Ressources d’abord, accueil/manifeste de mise à jour/service worker ensuite. Le transfert est atomique par fichier, pas pour l’ensemble d’une version. Le dossier permanent existe déjà : les fichiers remplacés sont publiés sur la même URL, les autres fichiers restent en place.
 
 Le formulaire de signalement ne pourra envoyer ses messages tant que son API PHP n’aura pas été installée et vérifiée séparément. Cela ne bloque pas les exercices.
 
 ## Déclenchement
 
-Premier essai : push sur la branche dédiée `deploy/dft-v0.31`. Déclenchement manuel possible depuis GitHub Actions, workflow « Déployer DFT v0.31 sur o2switch ». Un push ordinaire sur `main` ne déploie pas le site. Le workflow sérialise les déploiements et contrôle ensuite l’accueil HTTPS, la version et le journal.
+Version autorisée : push sur la branche dédiée `deploy/dft-v0.33`. Déclenchement manuel possible depuis GitHub Actions, workflow « Déployer DFT v0.33 sur o2switch ». Un push ordinaire sur `main` ne déploie pas le site. Le workflow sérialise les déploiements et contrôle ensuite l’accueil HTTPS, la version et le journal.
 
 Ne pas supprimer les données du navigateur pour mettre à jour l’application. Un changement de dossier sur la même origine conserve les clés de stockage, mais l’ancien raccourci installé peut encore viser l’ancienne adresse.
