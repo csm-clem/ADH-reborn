@@ -19,6 +19,8 @@ npm test
 npm run package
 ```
 
+Les [contrôles de maintenance et de livraison](docs/MAINTENANCE-VALIDATION.md) découvrent automatiquement les nouveaux modules et vérifient aussi les ressources HTML/CSS, les icônes et la syntaxe du paquet préparé pour publication.
+
 Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’hébergement HTTPS pour tester l’installation et le mode hors ligne. La recette Chromium est décrite dans [tools/qa/README.md](tools/qa/README.md).
 
 ## La bêta actuelle
