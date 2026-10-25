@@ -1,0 +1,42 @@
+{
+  "primary": {
+    "gradient": "linear-gradient(90deg, rgb(255, 178, 48) 0%, rgb(255, 56, 57) 100%)",
+    "text": "none",
+    "shadow": "none",
+    "border": "0px"
+  },
+  "hover": {
+    "gradient": "linear-gradient(90deg, rgb(81, 187, 232) 0%, rgb(39, 51, 158) 100%)",
+    "text": "none",
+    "shadow": "none",
+    "border": "0px"
+  },
+  "secondary": {
+    "gradient": "linear-gradient(90deg, rgb(126, 137, 143), rgb(55, 64, 82))",
+    "text": "none",
+    "shadow": "none",
+    "border": "0px"
+  },
+  "journal_versions": 30,
+  "layouts": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "return_settings": true,
+  "production_offline": true,
+  "errors": []
+}

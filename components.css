@@ -7,7 +7,7 @@
   transition:opacity var(--motion-feedback) ease-out,background-color var(--motion-feedback) ease-out;
 }
 .button.primary{background:var(--action-fill);color:var(--on-brand)}
-.button.secondary{background:var(--action-secondary);border-color:var(--action-secondary);color:#fff}
+.button.secondary{background:var(--secondary-fill,var(--action-secondary));border-color:transparent;color:#fff}
 .button.quiet-button,.button.quiet{background:var(--quiet-fill);border-color:var(--quiet-border);color:var(--ink)}
 .button.lime{background:var(--lime);color:#333c4e}
 .button.compact{font-size:14px;padding:8px 14px}
@@ -53,7 +53,9 @@ select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
 @media(hover:hover){
  .button.primary:hover:not(:disabled){--button_gradient_top_color:var(--button-hover-top);--button_gradient_bottom_color:var(--button-hover-bottom);opacity:1}
 }
-.button.primary:not(:disabled){--button_gradient:linear-gradient(var(--button_gradient_angle,180deg),var(--button_gradient_top_color) var(--button_gradient_start,0%),var(--button_gradient_bottom_color) var(--button_gradient_end,100%));background:var(--button_gradient);text-shadow:0 1px 2px #49200d80}
+.button.primary:not(:disabled){--button_gradient:linear-gradient(var(--button_gradient_angle,180deg),var(--button_gradient_top_color) var(--button_gradient_start,0%),var(--button_gradient_bottom_color) var(--button_gradient_end,100%));background:var(--button_gradient);text-shadow:none}
 :root[data-theme=paper] .button.primary,:root[data-theme=accessible] .button.primary{background:var(--action-fill);text-shadow:none}
 
 .button-count{font-size:12px;font-variant-numeric:tabular-nums}
+
+.button.primary,.button.secondary{border:0;box-shadow:none;text-shadow:none}

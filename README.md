@@ -1,8 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.30.0** — palette Sunrise, navigation clavier, sauvegardes compatibles, livraison automatisée et paquet de production sans simulation.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.31.0** — boutons horizontaux sans ombre ni bordure, journal des modifications intégré et disponible hors ligne.
 
-[Archive FTP v0.30](downloads/daily-fretboard-trainer-v0.30.zip) · [Rapport de livraison](docs/CHANGES-v0.30.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.31](downloads/daily-fretboard-trainer-v0.31.zip) · [Rapport de livraison](docs/CHANGES-v0.31.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -109,4 +109,6 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 ## Livraisons contrôlées
 
-`npm run release` prépare la bêta, ses tests et son ZIP. `npm run release:production` produit une archive séparée sans simulation. Voir le [rapport v0.30](docs/CHANGES-v0.30.md). Le workflow GitHub vérifie également les parcours, la migration et le hors-ligne.
+`npm run release` prépare la bêta, ses tests et son ZIP. `npm run release:production` produit une archive séparée sans simulation. Voir le [rapport v0.30](docs/CHANGES-v0.31.md). Le workflow GitHub vérifie également les parcours, la migration et le hors-ligne.
+
+[Journal des modifications DFT](docs/JOURNAL-DFT.md) — également accessible dans les Paramètres de l’application.
