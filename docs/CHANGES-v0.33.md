@@ -19,4 +19,9 @@ Clés de sauvegarde, preuves d’acquisition, numéros de cartes et règles péd
 
 32 fichiers de tests Node réussis et vérification de syntaxe passée. Gestes tactiles Chromium et vues Album à 320, 390, 844 et 1440 px. Contrôle complémentaire des cinq raretés dans les quatre thèmes à 320, 390, 768, 844 et 1440 px, des critères et des trois textures dans la livraison et le cache hors ligne. Les captures et résultats sont dans [v0.33](v0.33/verification.json).
 
-Cette version est préparée pour transfert. La publication sur o2switch est distincte ; le flux de déploiement v0.31 n’a pas été déclenché.
+Le déploiement v0.33 sur o2switch a été explicitement autorisé. Le statut et les preuves sont consignés dans [le journal de publication](DEPLOIEMENT-v0.33.md).
+
+## Contrôles complémentaires avant publication
+
+- [Vérification GitHub Actions complète](https://github.com/csm-clem/ADH-reborn/actions/runs/40246294273) réussie : parcours bêta, clavier, migration, hors ligne et version de production sans débug.
+- Migration locale depuis l’archive réelle v0.28 vers v0.33 : refus sans changement, nouvelle proposition au lancement suivant, activation du nouveau service worker, sauvegarde des progrès identique après mise à jour ; aucune erreur JavaScript. [Résultat](v0.33/verification-migration.json).
