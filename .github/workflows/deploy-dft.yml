@@ -24,6 +24,10 @@ jobs:
           DFT_FTP_USERNAME: ${{ secrets.DFT_FTP_USERNAME }}
           DFT_FTP_PASSWORD: ${{ secrets.DFT_FTP_PASSWORD }}
         run: python tools/deploy/ftps.py
+      - name: Diagnostic public du certificat FTPS
+        if: failure()
+        run: |
+          timeout 20 openssl s_client -connect gout.o2switch.net:21 -starttls ftp -servername gout.o2switch.net -showcerts </dev/null
       - name: Vérifier le site publié
         run: |
           python - <<'PY'
