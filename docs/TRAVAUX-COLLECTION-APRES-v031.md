@@ -1,6 +1,6 @@
 # Corrections de collection après la v0.31
 
-État : changements dans le code, sans publication ni nouveau numéro de version. La fusion graphique du ZIP v0.32 attend sa transmission dans cette discussion. Les fichiers d’installation et la version en ligne restent en v0.31.
+État actualisé : corrections et finitions du ZIP v0.32 fusionnées dans la livraison v0.33. Voir [le rapport de fusion](CHANGES-v0.33.md). La publication sur o2switch n’a pas été déclenchée.
 
 ## Interface
 
@@ -40,7 +40,7 @@ La réintégration complète avec exposition à la guitare saturée puis chant s
 
 ## Points en attente de contenu
 
-- ZIP v0.32 de l’autre discussion : absent des pièces jointes et du dépôt à l’ouverture de cette tâche. Fusion graphique à effectuer dès réception.
+- ZIP v0.32 de l’autre discussion : reçu ensuite par URL GitHub ; fusion graphique terminée en v0.33.
 - « faire un slide à gauche » et « Les cartes de niveau » : consignes incomplètes, aucun comportement supplémentaire déduit.
 - Source complète du passage d’Around the World et du chant d’Immigrant Song.
 

@@ -1,10 +1,10 @@
 /** Stable collectible identities. Rules and artwork evolve without renumbering a card. */
 export const RARITIES=Object.freeze([
- {id:'common',label:'Commune',stars:1,material:'Cuivre · impression'},
- {id:'uncommon',label:'Inhabituelle',stars:2,material:'Émail · aluminium'},
- {id:'rare',label:'Rare',stars:3,material:'Verre · dichroïque'},
- {id:'epic',label:'Épique',stars:4,material:'Titane · diffraction'},
- {id:'legendary',label:'Légendaire',stars:5,material:'Obsidienne · or gravé'}
+ {id:'common',label:'Commune',stars:1,material:'Papier d’atelier · cuivre mat'},
+ {id:'uncommon',label:'Inhabituelle',stars:2,material:'Aluminium brossé'},
+ {id:'rare',label:'Rare',stars:3,material:'Opale bleue'},
+ {id:'epic',label:'Épique',stars:4,material:'Argent nacré'},
+ {id:'legendary',label:'Légendaire',stars:5,material:'Or gravé'}
 ].map(Object.freeze));
 /** Append only: a catalogue reorder must never renumber a collected sleeve. */
 export const MUSIC_CARD_NUMBERS=Object.freeze(Object.fromEntries(['higher-ground','my-sharona','made-for-loving','superstition','get-lucky','blue-monday-orgy','immigrant-song','singing-rain','christmas-song','sweet-dreams','around-world','bad-guy','billie-jean','bites-dust','smoke-water','iron-man','seven-nation','come-as-you-are','bride','entertainer','jaws','rainbow','trek','maria','bonnie','saints','cantaloupe-island','feel-good-inc'].map((id,i)=>[id,'M'+String(i+1).padStart(3,'0')])));

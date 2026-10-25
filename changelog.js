@@ -1,6 +1,15 @@
 /** Player-facing history, curated from docs/CHANGES-v*.md. No planned features. */
 export const CHANGE_TYPES=Object.freeze({feature:['⭐️','Nouveautés'],improvement:['⚙️','Améliorations'],bug:['🐛','Corrections'],event:['🎉','Événements']});
 export const RELEASE_HISTORY=Object.freeze([
+ ['0.33','Votre collection, en poche',[
+ ['feature','Vue Album à trois cartes par ligne, avec ouverture interactive en grand.'],
+ ['improvement','Les cinq finitions de la v0.32 habillent aussi les couvertures de l’Album.'],
+ ['bug','Glissement horizontal des cartes distinct du défilement vertical ; filtres À faire et En cours séparés.'],
+ ['improvement','Parcours reprend votre dernière page ; un second appui ramène aux branches. Doubles coches plus compactes.'],
+ ['improvement','Rythme de Seven Nation Army corrigé, descente d’Around the World détachée et nouveau défi Feel Good Inc.']]],
+ ['0.32','Cinq matières à collectionner',[
+ ['improvement','Papier d’atelier, aluminium brossé, opale bleue, argent nacré et or gravé : finitions distinctes selon la rareté.'],
+ ['improvement','Matières adaptées aux thèmes Studio Nuit, Inclusif-contrasté et Papier, avec textures dans les marges.']]],
  ['0.31','Des boutons plus nets et un journal intégré',[
  ['feature','Consultez le journal des modifications depuis les Paramètres, même hors ligne.'],
  ['improvement','Boutons principaux : dégradé horizontal orange vers rouge, puis bleu clair vers indigo au survol. Boutons secondaires : gris vers bleu ardoise.'],

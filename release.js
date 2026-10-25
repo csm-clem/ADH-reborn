@@ -1,5 +1,5 @@
 export const APP_NAME='Daily Fretboard Trainer';
-export const RELEASE='0.31.0';
+export const RELEASE='0.33.0';
 export const dataEpoch=version=>'stable';
 export const DATA_EPOCH=dataEpoch(RELEASE);
 export const STATE_KEY='fretboard-trainer:settings';

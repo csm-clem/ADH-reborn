@@ -1,0 +1,90 @@
+{
+  "layouts": [
+    [
+      "light",
+      320
+    ],
+    [
+      "light",
+      390
+    ],
+    [
+      "light",
+      768
+    ],
+    [
+      "light",
+      844
+    ],
+    [
+      "light",
+      1440
+    ],
+    [
+      "dark",
+      320
+    ],
+    [
+      "dark",
+      390
+    ],
+    [
+      "dark",
+      768
+    ],
+    [
+      "dark",
+      844
+    ],
+    [
+      "dark",
+      1440
+    ],
+    [
+      "accessible",
+      320
+    ],
+    [
+      "accessible",
+      390
+    ],
+    [
+      "accessible",
+      768
+    ],
+    [
+      "accessible",
+      844
+    ],
+    [
+      "accessible",
+      1440
+    ],
+    [
+      "paper",
+      320
+    ],
+    [
+      "paper",
+      390
+    ],
+    [
+      "paper",
+      768
+    ],
+    [
+      "paper",
+      844
+    ],
+    [
+      "paper",
+      1440
+    ]
+  ],
+  "rarities": 5,
+  "themes": 4,
+  "same_finish_on_back": true,
+  "offline_textures": true,
+  "journal_versions": 32,
+  "errors": []
+}

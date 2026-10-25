@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 600" preserveAspectRatio="none">
+  <!-- Guilloche on the rim; the central reading area remains untextured. -->
+  <defs>
+    <pattern id="engraving" width="28" height="28" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#8f591c" stroke-opacity=".32" stroke-width=".55">
+        <path d="M-14 0Q0 28 14 0T42 0M-14 7Q0 35 14 7T42 7M-14 14Q0 42 14 14T42 14M-14 21Q0 49 14 21T42 21M-14-7Q0 21 14-7T42-7M-14-14Q0 14 14-14T42-14M-14-21Q0 7 14-21T42-21"/>
+        <path d="M0-14Q28 0 0 14T0 42M7-14Q35 0 7 14T7 42M14-14Q42 0 14 14T14 42M21-14Q49 0 21 14T21 42M-7-14Q21 0-7 14T-7 42M-14-14Q14 0-14 14T-14 42"/>
+      </g>
+    </pattern>
+  </defs>
+  <path d="M0 0h320v600H0Zm8 12v576h304V12Z" fill="url(#engraving)" fill-rule="evenodd"/>
+  <rect x="2" y="2" width="316" height="596" rx="15" fill="none" stroke="#fff0ad" stroke-opacity=".85"/>
+  <rect x="6.5" y="6.5" width="307" height="587" rx="12" fill="none" stroke="#966021" stroke-opacity=".48" stroke-width=".65"/>
+</svg>

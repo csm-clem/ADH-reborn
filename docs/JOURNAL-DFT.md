@@ -4,6 +4,19 @@
 
 Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
+## v0.33 — Votre collection, en poche
+
+- ⭐️ Vue Album à trois cartes par ligne, avec ouverture interactive en grand.
+- ⚙️ Les cinq finitions de la v0.32 habillent aussi les couvertures de l’Album.
+- 🐛 Glissement horizontal des cartes distinct du défilement vertical ; filtres À faire et En cours séparés.
+- ⚙️ Parcours reprend votre dernière page ; un second appui ramène aux branches. Doubles coches plus compactes.
+- ⚙️ Rythme de Seven Nation Army corrigé, descente d’Around the World détachée et nouveau défi Feel Good Inc.
+
+## v0.32 — Cinq matières à collectionner
+
+- ⚙️ Papier d’atelier, aluminium brossé, opale bleue, argent nacré et or gravé : finitions distinctes selon la rareté.
+- ⚙️ Matières adaptées aux thèmes Studio Nuit, Inclusif-contrasté et Papier, avec textures dans les marges.
+
 ## v0.31 — Des boutons plus nets et un journal intégré
 
 - ⭐️ Consultez le journal des modifications depuis les Paramètres, même hors ligne.
