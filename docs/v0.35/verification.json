@@ -22,5 +22,8 @@
   "no_drag_answers": true,
   "optional_buttons": true,
   "no_change_0_12": true,
-  "errors": []
+  "errors": [],
+  "direct_neck_tap": true,
+  "mixed_optional_grid": true,
+  "naming_stimulus_visible": true
 }

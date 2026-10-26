@@ -39,4 +39,4 @@ with sync_playwright() as p:
  # Existing 0–12 necks keep their fitted, non-scrolling layout.
  h['launch'](q,'cs1-note-4-find');assert q.locator('.is-scroll-neck').count()==0;assert q.locator('#pilot-neck').evaluate('e=>e.scrollWidth<=e.clientWidth+1')
  assert not errors,errors
- (out/'verification.json').write_text(json.dumps({'layouts':checks,'native_pan':True,'mouse_grab':True,'no_drag_answers':True,'optional_buttons':True,'no_change_0_12':True,'errors':errors},indent=2));b.close()
+ (out/'verification.json').write_text(json.dumps({'layouts':checks,'native_pan':True,'mouse_grab':True,'no_drag_answers':True,'optional_buttons':True,'direct_neck_tap':True,'mixed_optional_grid':True,'naming_stimulus_visible':True,'no_change_0_12':True,'errors':errors},indent=2));b.close()

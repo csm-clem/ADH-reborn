@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.35.0** — manche 0–24 continu défilable en prévisualisation ; 0–12 inchangé.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.35.1** — manche 0–24 continu défilable en prévisualisation ; 0–12 inchangé.
 
 [Archive FTP v0.35](downloads/daily-fretboard-trainer-v0.35.zip) · [Rapport de livraison](docs/CHANGES-v0.35.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
