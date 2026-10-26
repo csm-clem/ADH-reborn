@@ -28,3 +28,7 @@ Les transitions d’entrée et les correspondances d’octaves sont préparées,
 ## Vérification
 
 Rapports [fondations](v0.34/foundations.json) et [navigateur représentatif](v0.34/browser.json). Les tests automatisés ne prouvent pas le confort sur un appareil physique, ni la fidélité des mélodies en attente de source.
+
+## Retour à une ancienne version
+
+L’upgrade conserve les anciennes données et identifiants. En revanche, une v0.33 ne connaît pas les nouveaux parcours de la prévisualisation (z4–z6, cordes supplémentaires, duos, etc.). Après les avoir utilisés, ne pas supposer qu’un retour arrière logiciel peut relire leur progression : exporter une sauvegarde avant l’essai et conserver l’archive v0.34 pour la restaurer. La publication ne supprime pas les anciennes archives ni les données du navigateur.
