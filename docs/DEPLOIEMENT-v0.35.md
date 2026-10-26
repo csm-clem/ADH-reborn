@@ -7,7 +7,7 @@ Prévisualisation des parcours 0–24 : https://media.lecompositeur.com/DFT/?cur
 - 135 fichiers statiques transférés, aucune suppression, API PHP exclue ; validation TLS stricte conservée.
 - HTTPS, accueil, descripteur de mise à jour, version 0.35.1, journal, styles et textures vérifiés le `2026-10-26T01:27:21Z`.
 - 35 fichiers de tests Node réussis localement ; recette tactile et souris, nommer, retrouver, alternatives de réponse et invariance 0–12 vérifiées à quatre tailles. Archives bêta et production vérifiées ; production sans débug recettée.
-- Les tests de source de la CI v0.35.1 ont réussi avant le transfert. La [recette navigateur distante](https://github.com/csm-clem/ADH-reborn/actions/runs/40253959419) était encore à l’installation de Chromium lors de cette consignation : sa conclusion n’est pas présumée. La CI complète de l’itération précédente v0.35 avait réussi ; la v0.35.1 aligne en plus le contrôle des boutons dans les mélanges, vérifié localement.
+- Les tests de source de la CI v0.35.1 ont réussi avant le transfert. La [recette navigateur distante complète](https://github.com/csm-clem/ADH-reborn/actions/runs/40253959419) a ensuite réussi : parcours, gestes 0–24, migration, hors ligne et paquet production. La CI complète de l’itération précédente v0.35 avait réussi ; la v0.35.1 aligne en plus le contrôle des boutons dans les mélanges, vérifié localement.
 
 ## Suivi
 
