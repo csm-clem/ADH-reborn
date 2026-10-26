@@ -6,6 +6,7 @@ Les entrées décrivent chaque version à sa livraison. Historique rédigé depu
 
 ## v0.35 — Un manche continu pour les 24 cases
 
+- ⚙️ Le guide du manche dispose de sa propre section, distincte des réglages de confort et du plein écran.
 - ⭐️ Les activités 0–24 de la prévisualisation utilisent un manche défilable au doigt et par glisser à la souris.
 - ⚙️ Chaque case garde au moins 44 pixels de largeur. Barre de défilement et fondu indiquent la suite du manche.
 - 🐛 Faire glisser le manche ne valide aucune réponse. Les boutons restent en option et les activités 0–12 conservent leur affichage.

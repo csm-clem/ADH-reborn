@@ -24,3 +24,7 @@ Les captures ont été relues : en paysage, manche et réponses sont en colonnes
 Les activités étendues restent dans la prévisualisation `?curriculum=full` tant que la recette complète de leurs cours n’est pas achevée. UX-24 peut être clos après les contrôles ; V1-06 à V1-09 ne sont pas déclarés automatiquement validés par cette seule décision d’interface.
 
 La révision 0.35.1 corrige aussi l’alignement de l’accès aux boutons dans les mélanges à plusieurs cordes. Une réponse via cette grille a été vérifiée dans la recette navigateur.
+
+## Correctif v0.35.2
+
+Le guide pédagogique et le plein écran sont séparés dans les paramètres : « Prendre ses repères » puis « Confort de jeu ». Les activités 0–24 concernent des cases et restent en prévisualisation étendue.
