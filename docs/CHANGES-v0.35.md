@@ -1,4 +1,4 @@
-# v0.35 — UX-24 : manche continu défilable
+# v0.35.1 — UX-24 : manche continu défilable
 
 Décision de Clément : conserver une seule ligne de manche, défilable pour les activités 0–24, avec boutons de réponse en option. Le comportement 0–12 est conservé.
 
@@ -22,3 +22,5 @@ Les captures ont été relues : en paysage, manche et réponses sont en colonnes
 ## Disponibilité
 
 Les activités étendues restent dans la prévisualisation `?curriculum=full` tant que la recette complète de leurs cours n’est pas achevée. UX-24 peut être clos après les contrôles ; V1-06 à V1-09 ne sont pas déclarés automatiquement validés par cette seule décision d’interface.
+
+La révision 0.35.1 corrige aussi l’alignement de l’accès aux boutons dans les mélanges à plusieurs cordes. Une réponse via cette grille a été vérifiée dans la recette navigateur.

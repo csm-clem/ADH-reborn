@@ -26,7 +26,9 @@ with sync_playwright() as p:
   target=h['snap'](q)['session']['queue'][1]['target'];h['tap'](q,target['string'],target['fret']);assert len(h['snap'](q)['session']['events'])==2
   q.screenshot(path=str(out/f'corde24-{w}.png'));checks.append([w,hgt])
  # All strings remain visible, including in a mixed activity.
- q.set_viewport_size({'width':844,'height':390});h['launch'](q,'mix24-mix-10-find','guitar8');assert q.locator('.pilot-axis-string').count()==8;q.screenshot(path=str(out/'melange24.png'))
+ q.set_viewport_size({'width':844,'height':390});h['launch'](q,'mix24-mix-10-find','guitar8');assert q.locator('.pilot-axis-string').count()==8
+ q.locator('[data-pilot-action=toggle-positions]:visible').first.click();target=h['snap'](q)['session']['queue'][0]['target'];q.locator('.position-grid-row [data-string="'+str(target['string'])+'"][data-fret="'+str(target['fret'])+'"]').click();assert len(h['snap'](q)['session']['events'])==1
+ q.locator('[data-pilot-action=toggle-positions]:visible').first.click();toggle=q.locator('.position-toggle-slot').bounding_box();assert toggle['width']>200;q.screenshot(path=str(out/'melange24.png'))
  # Naming questions keep their stimulus visible, without affecting finding questions.
  h['launch'](q,'c24s1-note-4');seen_far=False
  for i in range(8):

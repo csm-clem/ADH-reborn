@@ -44,12 +44,12 @@ jobs:
           def get(path):
               req=urllib.request.Request(base+path,headers={'Cache-Control':'no-cache'})
               return urllib.request.urlopen(req,timeout=45).read()
-          assert json.loads(get('update.json'))['version']=='0.35.0'
-          assert b'0.35.0' in get('release.js')
+          assert json.loads(get('update.json'))['version']=='0.35.1'
+          assert b'0.35.1' in get('release.js')
           assert b'Daily Fretboard Trainer' in get('index.html')
           assert b'RELEASE_HISTORY' in get('changelog.js')
           for texture in ['paper','brushed','engraved']:
               assert b'<svg' in get('achievement-finishes/'+texture+'.svg')
           assert b'is-album' in get('achievements.css')
-          print('HTTPS, accueil, version 0.35.0 et journal accessibles.')
+          print('HTTPS, accueil, version 0.35.1 et journal accessibles.')
           PY

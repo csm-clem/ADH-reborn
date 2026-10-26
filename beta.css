@@ -1178,7 +1178,7 @@
 
 /* 0–24 only: keep a continuous neck with comfortable frets, never shrink to fit. */
 #main-content.is-scroll-neck .game-body{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(180px,38svh) minmax(0,1fr);gap:10px;min-height:0}
-#main-content.is-scroll-neck .neck-panel{min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;position:relative;padding:0;overflow:hidden}
+#main-content.is-scroll-neck .neck-panel{min-height:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;position:relative;padding:0;overflow:hidden}
 #main-content.is-scroll-neck #pilot-neck{overflow-x:scroll;overflow-y:hidden;touch-action:pan-x pan-y;scrollbar-width:auto;scrollbar-color:var(--muted) var(--surface-soft);cursor:grab;overscroll-behavior-x:contain}
 #main-content.is-scroll-neck #pilot-neck::-webkit-scrollbar{height:12px}
 #main-content.is-scroll-neck #pilot-neck::-webkit-scrollbar-track{background:var(--surface-soft)}
@@ -1193,6 +1193,6 @@
 #main-content.is-scroll-neck .position-grid-panel{overflow:auto;max-height:220px}
 #main-content.is-scroll-neck .position-grid{width:max-content;min-width:100%}
 #main-content.is-scroll-neck .position-grid-heading,#main-content.is-scroll-neck .position-grid-row{grid-template-columns:38px repeat(var(--position-columns),minmax(44px,1fr))}
-#main-content.is-scroll-neck .pilot-position-buttons{min-height:0;margin:0}
-#main-content.is-scroll-neck .pilot-position-buttons:has(.position-grid-panel[hidden]){display:contents}
+#main-content.is-scroll-neck .pilot-position-buttons{grid-column:1;grid-row:2;min-height:0;margin:0}
+
 @media(min-aspect-ratio:4/3){#main-content.is-scroll-neck .game-body{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr);grid-template-rows:minmax(0,1fr)}#main-content.is-scroll-neck .neck-panel{min-height:160px}}
