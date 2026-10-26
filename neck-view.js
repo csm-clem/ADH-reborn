@@ -35,3 +35,13 @@ export function bindNeckKeyboard(root){
  e.preventDefault();target?.focus({preventScroll:true});});
  new MutationObserver(normalize).observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['tabindex','aria-disabled']});normalize();
 }
+
+/** Full-length neck: native touch scrolling, mouse grab, and taps only after release. */
+export function bindScrollableNeck(root,{canTap=()=>true,onTap}={}){
+ let gesture=null;
+ const finish=e=>{const g=gesture;if(!g||g.id!==e.pointerId)return;gesture=null;g.viewport.classList.remove('is-grabbing');if(g.viewport.hasPointerCapture(e.pointerId))g.viewport.releasePointerCapture(e.pointerId);if(e.type==='pointerup'&&!g.dragged&&canTap()&&g.hit?.isConnected)onTap(Number(g.hit.dataset.pilotString),Number(g.hit.dataset.pilotFret));};
+ root.addEventListener('pointerdown',e=>{const viewport=e.target.closest('#pilot-neck');if(e.button!==0||e.isPrimary===false||!viewport?.closest('.is-scroll-neck'))return;gesture={id:e.pointerId,viewport,hit:e.target.closest('[data-pilot-string]'),x:e.clientX,y:e.clientY,left:viewport.scrollLeft,dragged:false,mouse:e.pointerType==='mouse'};});
+ root.addEventListener('pointermove',e=>{const g=gesture;if(!g||g.id!==e.pointerId)return;const dx=e.clientX-g.x,dy=e.clientY-g.y;if(Math.hypot(dx,dy)>7)g.dragged=true;if(g.mouse&&g.dragged&&Math.abs(dx)>Math.abs(dy)){e.preventDefault();g.viewport.setPointerCapture(e.pointerId);g.viewport.classList.add('is-grabbing');g.viewport.scrollLeft=g.left-dx;}},{passive:false});
+ root.addEventListener('scroll',e=>{if(e.target.matches?.('#pilot-neck'))e.target.dataset.scrollEnd=e.target.scrollLeft+e.target.clientWidth>=e.target.scrollWidth-2?'true':'false';},true);
+ window.addEventListener('pointerup',finish);window.addEventListener('pointercancel',finish);window.addEventListener('blur',()=>{if(gesture){gesture.viewport.classList.remove('is-grabbing');gesture=null;}});
+}

@@ -1,9 +1,9 @@
-"""Upload only the verified v0.34 static archive to a dedicated FTPS account root."""
+"""Upload only the verified v0.35 static archive to a dedicated FTPS account root."""
 import ftplib,ssl,os,zipfile,json,hashlib,io
 from pathlib import PurePosixPath,Path
 from tls_chain import verified_context
-archive=Path('downloads/daily-fretboard-trainer-v0.34.zip');meta=json.loads(archive.with_suffix('.json').read_text())
-assert meta['version']=='0.34.0' and hashlib.sha256(archive.read_bytes()).hexdigest()==meta['sha256'],'Archive invalide'
+archive=Path('downloads/daily-fretboard-trainer-v0.35.zip');meta=json.loads(archive.with_suffix('.json').read_text())
+assert meta['version']=='0.35.0' and hashlib.sha256(archive.read_bytes()).hexdigest()==meta['sha256'],'Archive invalide'
 allowed={'.js','.css','.html','.json','.svg','.png','.webp','.ttf','.woff','.woff2','.webmanifest','.txt'}
 files=[]
 with zipfile.ZipFile(archive)as z:
@@ -14,7 +14,7 @@ with zipfile.ZipFile(archive)as z:
   if p.parts[0]=='api':continue
   assert p.suffix.lower()in allowed, 'Type interdit'
   files.append((name,z.read(name)))
- assert json.loads(z.read('update.json'))['version']=='0.34.0'
+ assert json.loads(z.read('update.json'))['version']=='0.35.0'
 host=os.environ['DFT_FTP_HOST'];assert host=='gout.o2switch.net','Hôte inattendu'
 ftp=ftplib.FTP_TLS(context=verified_context(),timeout=60)
 try:
@@ -34,7 +34,7 @@ try:
   ftp.storbinary('STOR '+temporary,io.BytesIO(data))
   assert ftp.size(temporary)==len(data),'Taille incorrecte'
   ftp.rename(temporary,filename)
- print(f'DFT 0.34.0 : {len(files)} fichiers statiques transférés. API exclue. Aucune suppression.')
+ print(f'DFT 0.35.0 : {len(files)} fichiers statiques transférés. API exclue. Aucune suppression.')
 finally:
  try:ftp.quit()
  except Exception:ftp.close()

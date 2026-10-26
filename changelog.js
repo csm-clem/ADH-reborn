@@ -1,6 +1,10 @@
 /** Player-facing history, curated from docs/CHANGES-v*.md. No planned features. */
 export const CHANGE_TYPES=Object.freeze({feature:['⭐️','Nouveautés'],improvement:['⚙️','Améliorations'],bug:['🐛','Corrections'],event:['🎉','Événements']});
 export const RELEASE_HISTORY=Object.freeze([
+ ['0.35','Un manche continu pour les 24 cases',[
+ ['feature','Les activités 0–24 de la prévisualisation utilisent un manche défilable au doigt et par glisser à la souris.'],
+ ['improvement','Chaque case garde au moins 44 pixels de largeur. Barre de défilement et fondu indiquent la suite du manche.'],
+ ['bug','Faire glisser le manche ne valide aucune réponse. Les boutons restent en option et les activités 0–12 conservent leur affichage.']]],
  ['0.34','Des sauvegardes mieux protégées',[
  ['bug','Les préférences illisibles ou issues d’un format futur sont conservées, sans remplacement silencieux. Une restauration valide rétablit la sauvegarde.'],
  ['improvement','Vérification automatique des nouveaux modules JavaScript et de toutes les ressources nécessaires au mode hors ligne.'],

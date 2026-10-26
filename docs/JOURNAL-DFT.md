@@ -4,6 +4,12 @@
 
 Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
+## v0.35 — Un manche continu pour les 24 cases
+
+- ⭐️ Les activités 0–24 de la prévisualisation utilisent un manche défilable au doigt et par glisser à la souris.
+- ⚙️ Chaque case garde au moins 44 pixels de largeur. Barre de défilement et fondu indiquent la suite du manche.
+- 🐛 Faire glisser le manche ne valide aucune réponse. Les boutons restent en option et les activités 0–12 conservent leur affichage.
+
 ## v0.34 — Des sauvegardes mieux protégées
 
 - 🐛 Les préférences illisibles ou issues d’un format futur sont conservées, sans remplacement silencieux. Une restauration valide rétablit la sauvegarde.

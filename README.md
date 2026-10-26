@@ -1,8 +1,8 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.34.0** — sauvegardes protégées et garde-fous de livraison renforcés.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.35.0** — manche 0–24 continu défilable en prévisualisation ; 0–12 inchangé.
 
-[Archive FTP v0.34](downloads/daily-fretboard-trainer-v0.34.zip) · [Rapport de livraison](docs/CHANGES-v0.34.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.35](downloads/daily-fretboard-trainer-v0.35.zip) · [Rapport de livraison](docs/CHANGES-v0.35.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
@@ -117,4 +117,4 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 ## Prévisualisation du parcours V1
 
-Le catalogue étendu se teste avec `?curriculum=full`. Cette prévisualisation conserve les anciennes données et identifiants ; elle reste hors du parcours par défaut tant que la contrainte tactile 0–24 n’est pas tranchée et recettée. Suivi : V1-06 à V1-09 dans le tableau de bord.
+Le catalogue étendu se teste avec `?curriculum=full`. Cette prévisualisation conserve les anciennes données et identifiants ; elle reste hors du parcours par défaut tant que la recette du parcours complet n’est pas terminée. Le choix tactile est confirmé : manche continu défilable pour 0–24, boutons optionnels. Suivi : V1-06 à V1-09 dans le tableau de bord.
