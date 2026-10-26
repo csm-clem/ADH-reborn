@@ -4,6 +4,12 @@
 
 Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
+## v0.36 — Des cours plus courts et mieux cadrés
+
+- 🐛 Les exemples et les nouveaux essais restent sur les cordes du duo ou de l’activité choisie.
+- ⚙️ Les cours jusqu’à la case 24 proposent un manche continu défilable, avec les boutons de réponse en option.
+- ⚙️ Les cours de correspondances présentent chaque relation utile une fois, sans enchaîner des dizaines d’exemples identiques.
+
 ## v0.35 — Un manche continu pour les 24 cases
 
 - ⚙️ Le guide du manche dispose de sa propre section, distincte des réglages de confort et du plein écran.

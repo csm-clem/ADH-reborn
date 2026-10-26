@@ -1,6 +1,6 @@
 import { instrumentDiagram } from "./instrument-diagram.js";
 import { betaCourses, courseCompleted, coursePage } from "./beta-courses.js";
-import { miniatureNeck, neckBase, layoutMiniature } from "./neck-view.js";
+import { miniatureNeck, neckBase, layoutMiniature, bindScrollableNeck } from "./neck-view.js";
 import { neckGeometry, noteName, pitchLabel, notationFor } from "./core.js";
 import { INSTRUMENT_IMAGES } from "./instrument-art.js";
 const esc = (v) =>
@@ -94,11 +94,14 @@ export class CourseController {
     this.home();
   }
   bind(root) {
+    bindScrollableNeck(root, { viewportSelector: ".course-neck-scroll", viewportGuard: ".course-page", hitSelector: "[data-lesson-string]", coordinates: hit => [Number(hit.dataset.lessonString), Number(hit.dataset.lessonFret)], canTap: () => !!this.active && this.page?.quiz?.kind === "position", onTap: (string, fret) => this.answer({ string, fret }) });
     root.addEventListener(
       "toggle",
       (e) => {
-        if (e.target.matches?.(".course-position-options"))
+        if (e.target.matches?.(".course-position-options")) {
           this.coordinatesOpen = e.target.open;
+          e.target.querySelector("summary").textContent = this.coordinatesOpen ? "Masquer les boutons de réponse" : "Boutons de réponse";
+        }
       },
       true,
     );
@@ -138,7 +141,7 @@ export class CourseController {
         fret: Number(hit.dataset.lessonFret),
       });
     };
-    root.addEventListener("pointerdown", tap);
+    root.addEventListener("pointerdown", e => { if (!e.target.closest(".course-neck-scroll")) tap(e); });
     root.addEventListener("keydown", (e) => {
       if (["Enter", " "].includes(e.key)) tap(e);
     });
@@ -174,6 +177,12 @@ export class CourseController {
     this.message = "";
     if (this.record.index === this.course.pages.length - 1) {
       this.record.completed = courseCompleted(this.course, this.record);
+      if (!this.record.completed) {
+        this.record.index = this.course.pages.findIndex(p => p.quiz ? !this.record.correct.includes(p.id) : !this.record.visited.includes(p.id));
+        this.save();
+        this.renderApp();
+        return;
+      }
       this.record.at = Date.now();
       this.pilot.syncAchievements();
       this.close();
@@ -190,8 +199,9 @@ export class CourseController {
     const scope = this.pilot.catalog.byScope.get(this.course.scopeId),
       zone = page.zone || scope?.zone || { start: 0, end: 4 },
       strings = page.strings || scope?.plan.strings;
-    const neck = (points = page.points || [], opts = {}) =>
-      miniatureNeck(this.profile, {
+    const neck = (points = page.points || [], opts = {}) => {
+      const scrollable = (opts.lastFret ?? zone.end) - (opts.startFret ?? zone.start) > 12;
+      const diagram = miniatureNeck(this.profile, {
         id: "course-" + page.id,
         lastFret: zone.end,
         startFret: zone.start,
@@ -200,10 +210,13 @@ export class CourseController {
         notation: this.notation,
         showNames: !!page.showNames,
         lesson: true,
+        scrollable,
         interactive: page.quiz?.kind === "position",
         activeString: strings?.length === 1 ? strings[0] : page.id === "link" ? page.points?.[0]?.string : null,
         ...opts,
       });
+      return scrollable ? `<div class="course-neck-frame"><div class="course-neck-scroll" role="region" aria-label="Manche défilable horizontalement">${diagram}</div></div><p class="course-scroll-hint">Glissez pour voir les autres cases ↔</p>` : diagram;
+    };
     const photo = page.photo
       ? `<img class="course-instrument" src="./instruments/${INSTRUMENT_IMAGES[this.profile.instrumentId]}" alt="Votre ${esc(this.profile.label.toLowerCase())}">`
       : "";
@@ -308,7 +321,7 @@ export class CourseController {
       p.quiz?.kind === "choice"
         ? `<div class="course-choices">${p.quiz.choices.map((o) => `<button class="button quiet-button ${passed && o.value === p.quiz.answer ? "is-answer-correct" : ""}" data-course-action="answer" data-value="${esc(o.value)}" ${passed ? "disabled" : ""}>${esc(o.label)}</button>`).join("")}</div>`
         : p.quiz?.kind === "position"
-          ? `<details class="course-position-options" ${this.coordinatesOpen ? "open" : ""}><summary>Boutons de réponse</summary><div class="course-coordinate-buttons" aria-label="Boutons de réponse">${strings
+          ? `<details class="course-position-options" ${this.coordinatesOpen ? "open" : ""}><summary>${this.coordinatesOpen ? "Masquer les boutons de réponse" : "Boutons de réponse"}</summary><div class="course-coordinate-buttons" aria-label="Boutons de réponse">${strings
               .slice()
               .reverse()
               .map(

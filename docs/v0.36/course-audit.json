@@ -1,0 +1,134 @@
+{
+  "profiles": [
+    {
+      "instrument": "guitar6",
+      "tuning": [
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ],
+      "courses": 53,
+      "pages": 350,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "guitar7",
+      "tuning": [
+        35,
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ],
+      "courses": 59,
+      "pages": 385,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "guitar8",
+      "tuning": [
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        59,
+        64
+      ],
+      "courses": 69,
+      "pages": 428,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "bass4",
+      "tuning": [
+        28,
+        33,
+        38,
+        43
+      ],
+      "courses": 41,
+      "pages": 257,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "bass5",
+      "tuning": [
+        23,
+        28,
+        33,
+        38,
+        43
+      ],
+      "courses": 47,
+      "pages": 305,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "bass6",
+      "tuning": [
+        23,
+        28,
+        33,
+        38,
+        43,
+        48
+      ],
+      "courses": 53,
+      "pages": 340,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "guitar7",
+      "tuning": [
+        35,
+        42,
+        47,
+        52,
+        57,
+        61,
+        66
+      ],
+      "courses": 68,
+      "pages": 398,
+      "longest": 16,
+      "largestCorrespondence": 16
+    },
+    {
+      "instrument": "guitar6",
+      "tuning": [
+        64,
+        45,
+        50,
+        55,
+        59,
+        40
+      ],
+      "courses": 53,
+      "pages": 347,
+      "longest": 16,
+      "largestCorrespondence": 16
+    }
+  ],
+  "pageChecks": 14050,
+  "variants": [
+    0,
+    1,
+    2,
+    5,
+    11
+  ],
+  "contractTest": "tests/course-scope.test.mjs"
+}

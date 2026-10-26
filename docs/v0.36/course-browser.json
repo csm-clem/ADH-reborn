@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "mouse": "no answer",
+      "touch": "no answer",
+      "retry": "same physical string",
+      "directTap": "passed"
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "mouse": "no answer",
+      "touch": "no answer",
+      "retry": "same physical string",
+      "directTap": "passed"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "mouse": "no answer",
+      "touch": "no answer",
+      "retry": "same physical string",
+      "directTap": "passed"
+    },
+    {
+      "instrument": "guitar6",
+      "course": "duo1-entry",
+      "completed": true
+    },
+    {
+      "instrument": "guitar8",
+      "course": "c24s8-entry",
+      "completed": true
+    },
+    {
+      "instrument": "bass4",
+      "course": "mix24-entry",
+      "completed": true
+    },
+    {
+      "instrument": "bass5",
+      "course": "z6-entry",
+      "completed": true
+    }
+  ],
+  "errors": []
+}

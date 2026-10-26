@@ -1,6 +1,10 @@
 /** Player-facing history, curated from docs/CHANGES-v*.md. No planned features. */
 export const CHANGE_TYPES=Object.freeze({feature:['⭐️','Nouveautés'],improvement:['⚙️','Améliorations'],bug:['🐛','Corrections'],event:['🎉','Événements']});
 export const RELEASE_HISTORY=Object.freeze([
+ ['0.36','Des cours plus courts et mieux cadrés',[
+ ['bug','Les exemples et les nouveaux essais restent sur les cordes du duo ou de l’activité choisie.'],
+ ['improvement','Les cours jusqu’à la case 24 proposent un manche continu défilable, avec les boutons de réponse en option.'],
+ ['improvement','Les cours de correspondances présentent chaque relation utile une fois, sans enchaîner des dizaines d’exemples identiques.']]],
  ['0.35','Un manche continu pour les 24 cases',[
  ['improvement','Le guide du manche dispose de sa propre section, distincte des réglages de confort et du plein écran.'],
  ['feature','Les activités 0–24 de la prévisualisation utilisent un manche défilable au doigt et par glisser à la souris.'],

@@ -77,7 +77,7 @@ export function betaCatalog(profile, { notation = "international", full = false 
         title:
           scope.kind === "string"
             ? scope.title + " : vos repères"
-            : "Votre nouvelle zone",
+            : scope.kind === "zone" ? "Votre nouvelle zone" : scope.title + " : vos repères",
         subtitle: scope.subtitle,
         phase: "natural",
         activityIds: [],

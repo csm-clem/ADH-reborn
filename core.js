@@ -81,7 +81,7 @@ export function score(answers) {
 
 export function fitNeck(g,width,height){const scale=Math.max(.01,Math.min((width-2)/g.width,(height-2)/g.height));return {scale,width:g.width*scale,height:g.height*scale};}
 
-/** Screen-space fret geometry for a scrollable full-length gameplay neck only. */
+/** Screen-space fret geometry shared by continuous full-length exercises and courses. */
 export function scrollingNeckGeometry(strings,lastFret=24,{startFret=0,height=220,minFretWidth=44}={}){
  const g=neckGeometry(strings,lastFret,648,{gameplay:true,startFret}),scale=Math.max(1,height-14)/g.height;
  const widths=g.visibleFrets.map(f=>Math.max(minFretWidth,(g.bounds(f)[1]-g.bounds(f)[0])*scale));

@@ -72,9 +72,9 @@ export class PilotController{
  emit(){this.host.showPilot();}
  bind(root){
   root.addEventListener('click',e=>{const b=e.target.closest('[data-pilot-action]');if(!b)return;e.preventDefault();e.stopPropagation();this.action(b.dataset.pilotAction,b);});
-  root.addEventListener('pointerdown',e=>{const lesson=e.target.closest('[data-lesson-string]');if(lesson){e.preventDefault();this.lessonTap(Number(lesson.dataset.lessonString),Number(lesson.dataset.lessonFret));return;}if(!e.target.closest('#pilot-neck')||this.scrollNeck)return;if(e.button!==0||this.paused||this.entering||this.count)return;const hit=e.target.closest('[data-pilot-string]');if(!hit)return;e.preventDefault();this.neckTap(Number(hit.dataset.pilotString),Number(hit.dataset.pilotFret));});
+  root.addEventListener('pointerdown',e=>{const lesson=e.target.closest('[data-lesson-string]');if(lesson&&!lesson.closest('.course-page')){e.preventDefault();this.lessonTap(Number(lesson.dataset.lessonString),Number(lesson.dataset.lessonFret));return;}if(!e.target.closest('#pilot-neck')||this.scrollNeck)return;if(e.button!==0||this.paused||this.entering||this.count)return;const hit=e.target.closest('[data-pilot-string]');if(!hit)return;e.preventDefault();this.neckTap(Number(hit.dataset.pilotString),Number(hit.dataset.pilotFret));});
   bindScrollableNeck(root,{canTap:()=>!this.paused&&!this.entering&&!this.count,onTap:(string,fret)=>this.neckTap(string,fret)});
-  root.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key))return;const lesson=e.target.closest('[data-lesson-string]');if(lesson){e.preventDefault();this.lessonTap(Number(lesson.dataset.lessonString),Number(lesson.dataset.lessonFret));return;}const cell=e.target.closest('[data-pilot-string]');if(!cell)return;e.preventDefault();this.neckTap(Number(cell.dataset.pilotString),Number(cell.dataset.pilotFret));});
+  root.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key))return;const lesson=e.target.closest('[data-lesson-string]');if(lesson&&!lesson.closest('.course-page')){e.preventDefault();this.lessonTap(Number(lesson.dataset.lessonString),Number(lesson.dataset.lessonFret));return;}const cell=e.target.closest('[data-pilot-string]');if(!cell)return;e.preventDefault();this.neckTap(Number(cell.dataset.pilotString),Number(cell.dataset.pilotFret));});
 
  }
  home(){return betaHome(this);}

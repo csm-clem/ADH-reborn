@@ -30,6 +30,7 @@ export function betaCourses(profile, catalog, notation = "international") {
       tuning: profile.tuning,
       notation,
       zone: catalog.byScope.get(scopeId)?.zone,
+      strings: catalog.byScope.get(scopeId)?.plan.strings,
     });
   const features = [
     ["neck", "manche", "Voici le manche."],
@@ -367,7 +368,9 @@ export function betaCourses(profile, catalog, notation = "international") {
   for (const scope of catalog.scopes) {
     if (scope.id !== "z1") {
       const target = at(profile, scope.strings?.[0] ?? 0, scope.zone.start),
-        isString = scope.kind === "string";
+        isString = scope.kind === "string",
+        isZone = scope.kind === "zone",
+        lastString = scope.plan.strings.at(-1);
       const pages = isString
         ? [
             {
@@ -383,7 +386,7 @@ export function betaCourses(profile, catalog, notation = "international") {
             {
               id: "line",
               title: `Une seule corde, jusqu’à la case ${scope.zone.end}`,
-              text: "Le manche reste continu. À l’horizontale, les cases sont plus faciles à toucher.",
+              text: scope.zone.end > 12 ? "Glissez le manche pour voir la suite. Toutes les cordes restent visibles ; seule la corde en couleur est demandée." : "Suivez la corde en couleur. Toutes les cordes restent visibles.",
               visual: "neck",
               points: [target, at(profile, target.string, scope.zone.end)],
               showNames: true,
@@ -403,8 +406,8 @@ export function betaCourses(profile, catalog, notation = "international") {
         : [
             {
               id: "boundary",
-              title: `Votre nouvelle zone : ${scope.zone.start} à ${scope.zone.end}`,
-              text: scope.zone.start ? `La case ${scope.zone.start} reste la même place dans les deux dessins.` : "Retrouvez les cordes à vide, puis suivez leurs cases.",
+              title: isZone ? `Votre nouvelle zone : ${scope.zone.start} à ${scope.zone.end}` : scope.title,
+              text: isZone ? (scope.zone.start ? `La case ${scope.zone.start} reste la même place dans les deux dessins.` : "Retrouvez les cordes à vide, puis suivez leurs cases.") : scope.kind === "duo" ? "Deux cordes voisines. Regardez le numéro demandé avant de toucher une case." : "Toutes les cordes jouent. Le numéro vous indique laquelle chercher.",
               visual: scope.zone.start ? "boundary" : "neck",
               points: [target],
             },
@@ -419,10 +422,10 @@ export function betaCourses(profile, catalog, notation = "international") {
                 option(String(scope.zone.start), scope.zone.start ? "Case " + scope.zone.start : "À vide"),
               ]),
             },
-            ...[target, at(profile, n - 1, scope.zone.end)].map(
+            ...[target, at(profile, lastString, scope.zone.end)].map(
               (target, i) => ({
                 id: "address-" + i,
-                title: `Corde ${n - target.string} · case ${target.fret}`,
+                title: `Corde ${n - target.string} · ${target.fret ? "case " + target.fret : "à vide"}`,
                 text: "Retrouvez ce croisement.",
                 visual: "neck",
                 points: [],
@@ -432,7 +435,7 @@ export function betaCourses(profile, catalog, notation = "international") {
           ];
       add(
         scope.id + "-entry",
-        isString ? scope.title + " : vos repères" : "Votre nouvelle zone",
+        isString ? scope.title + " : vos repères" : isZone ? "Votre nouvelle zone" : scope.title + " : vos repères",
         "Lire les coordonnées du nouveau périmètre.",
         pages,
         scope.id,
@@ -461,10 +464,13 @@ export function betaCourses(profile, catalog, notation = "international") {
         ).values(),
       ];
       const id = scope.id + (alteredOnly ? "-altered-octaves" : "-co");
-      const explained = new Set();
+      const explained = new Set(), compared = new Set();
       const pages = unique.flatMap((pair, i) => {
-        const steps = Math.abs(pair[1].midi - pair[0].midi) / 12,
-          key = "oct-" + steps,
+        const steps = Math.abs(pair[1].midi - pair[0].midi) / 12;
+        const relation = `${pair[0].midi % 12}:${steps}`;
+        if (compared.has(relation)) return [];
+        compared.add(relation);
+        const key = "oct-" + steps,
           answer =
             steps === 0
               ? "Même hauteur"
@@ -566,8 +572,9 @@ export function coursePage(course, record) {
       zone = p.zone ||
         course.zone || { start: 0, end: course.id.startsWith("cs") ? 12 : 4 };
     p.quiz.target = { ...t };
-    if (!course.id.startsWith("cs") && t.fret === zone.start) {
-      p.quiz.target.string = (t.string + variant) % (course.stringCount || 6);
+    const strings = p.strings || course.strings || Array.from({ length: course.stringCount || 6 }, (_, i) => i);
+    if (strings.length > 1 && t.fret === zone.start) {
+      p.quiz.target.string = strings[(strings.indexOf(t.string) + variant) % strings.length];
     } else
       p.quiz.target.fret =
         zone.start +

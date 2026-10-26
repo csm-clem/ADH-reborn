@@ -42,6 +42,7 @@ jobs:
           ADH_QA_OUTPUT=work/ci python tools/qa/technical-v030.py
           node tools/qa/roadmap-foundations.mjs
           python tools/qa/full-curriculum.py
+          python tools/qa/course-curriculum.py
           python tools/qa/scroll-neck.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
@@ -56,4 +57,5 @@ jobs:
             downloads/*.json
             work/ci
             work/roadmap
+            work/scroll-neck
             /tmp/dft-server.log

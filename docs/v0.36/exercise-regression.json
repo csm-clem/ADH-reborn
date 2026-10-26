@@ -1,0 +1,29 @@
+{
+  "layouts": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "native_pan": true,
+  "mouse_grab": true,
+  "no_drag_answers": true,
+  "optional_buttons": true,
+  "direct_neck_tap": true,
+  "mixed_optional_grid": true,
+  "naming_stimulus_visible": true,
+  "no_change_0_12": true,
+  "errors": []
+}

@@ -1196,3 +1196,12 @@
 #main-content.is-scroll-neck .pilot-position-buttons{grid-column:1;grid-row:2;min-height:0;margin:0}
 
 @media(min-aspect-ratio:4/3){#main-content.is-scroll-neck .game-body{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr);grid-template-rows:minmax(0,1fr)}#main-content.is-scroll-neck .neck-panel{min-height:160px}}
+
+/* The same continuous 0–24 neck in preparatory courses, with optional controls. */
+.course-neck-frame{position:relative;max-width:100%;min-width:0}
+.course-neck-scroll{overflow-x:scroll;overflow-y:hidden;max-width:100%;touch-action:pan-x pan-y;cursor:grab;scrollbar-width:auto;scrollbar-color:var(--muted) var(--surface-soft);overscroll-behavior-x:contain}
+.course-neck-scroll .shared-neck{max-width:none!important;max-height:none!important;min-height:0;touch-action:pan-x pan-y}
+.course-neck-scroll.is-grabbing{cursor:grabbing;user-select:none}
+.course-neck-frame:has(.course-neck-scroll:not([data-scroll-end=true]))::after{content:'';position:absolute;right:0;top:0;bottom:16px;width:24px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg))}
+.course-content .course-scroll-hint{font-size:13px;margin:8px auto;color:var(--muted)}
+.course-neck-scroll .neck-point{pointer-events:none}
