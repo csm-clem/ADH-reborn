@@ -2,8 +2,23 @@ name: Vérification DFT
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
+concurrency:
+  group: dft-verification-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+      - run: npm test
+      - run: npm run verify:release
   beta-and-production:
+    needs: source-checks
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

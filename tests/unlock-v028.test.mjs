@@ -8,6 +8,7 @@ import {AchievementsController} from '../achievements-ui.js';
 import {initialState} from '../state.js';
 import {questionsFor} from '../pilot.js';
 import {renderAchievementUnlock} from '../achievement-unlock.js';
+import {collectJavaScriptFiles} from '../tools/check-syntax.mjs';
 const profile=makeProfile('guitar6');
 function pilot(){return new PilotController({getState:()=>({...initialState(),profile}),icon:()=>'',showPilot(){}});}
 test('An actual finished activity exposes only its newly earned cards, with real titles and real destinations',()=>{
@@ -30,5 +31,6 @@ test('Wood decoration is shared vector markup below the strings, without expensi
  assert.match(svg,/<pattern id="test-grain"/);assert.ok(!svg.includes('feTurbulence'));assert.ok(!svg.includes('<image'));assert.ok(!svg.includes('data-pilot-string'));
 });
 test('New celebration module is syntax checked, packaged and precached',async()=>{
- for(const f of ['sw.js','tools/package.mjs','package.json'])assert.ok((await readFile(new URL('../'+f,import.meta.url),'utf8')).includes('achievement-unlock.js'),f);
+ assert.ok((await collectJavaScriptFiles()).includes('achievement-unlock.js'));
+ for(const f of ['sw.js','tools/package.mjs'])assert.ok((await readFile(new URL('../'+f,import.meta.url),'utf8')).includes('achievement-unlock.js'),f);
 });
