@@ -1,8 +1,8 @@
-name: Déployer DFT v0.36 sur o2switch
+name: Déployer DFT v0.37 sur o2switch
 on:
   workflow_dispatch:
   push:
-    branches: [deploy/dft-v0.36]
+    branches: [deploy/dft-v0.37]
 permissions:
   contents: read
 concurrency:
@@ -44,12 +44,12 @@ jobs:
           def get(path):
               req=urllib.request.Request(base+path,headers={'Cache-Control':'no-cache'})
               return urllib.request.urlopen(req,timeout=45).read()
-          assert json.loads(get('update.json'))['version']=='0.36'
-          assert b'0.36' in get('release.js')
+          assert json.loads(get('update.json'))['version']=='0.37.0'
+          assert b'0.37.0' in get('release.js')
           assert b'Daily Fretboard Trainer' in get('index.html')
           assert b'RELEASE_HISTORY' in get('changelog.js')
           for texture in ['paper','brushed','engraved']:
               assert b'<svg' in get('achievement-finishes/'+texture+'.svg')
           assert b'is-album' in get('achievements.css')
-          print('HTTPS, accueil, version 0.36 et journal accessibles.')
+          print('HTTPS, accueil, version 0.37.0 et journal accessibles.')
           PY

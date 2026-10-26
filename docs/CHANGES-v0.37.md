@@ -1,4 +1,4 @@
-# v0.36 — Recette des cours étendus
+# v0.37.0 — Recette des cours étendus
 
 Les cours préparatoires des duos utilisent exclusivement leurs cordes physiques. Les nouveaux essais après une erreur restent sur les cordes du périmètre, y compris sur une corde jusqu’à la case 24 et dans les accordages réentrants. Le titre des duos et mélanges ne les présente plus comme une nouvelle zone.
 
@@ -16,3 +16,5 @@ Lorsqu’un ancien cours inachevé arrive à la fin de sa nouvelle version plus 
 - Régression des exercices 0–24 et 0–12 vérifiée séparément.
 
 Le catalogue étendu reste en prévisualisation avec `?curriculum=full`. Cette livraison corrige les défauts repérés pendant la recette ; elle ne constitue ni une validation humaine sur téléphone physique, ni la validation globale du parcours V1. Les finales musicales et la fidélité de leurs références restent un chantier distinct.
+
+Le numéro à trois composantes est désormais vérifié avant toute livraison. Le saut vers 0.37.0 permet aussi aux navigateurs ayant chargé la préversion 0.36 de détecter la mise à jour.

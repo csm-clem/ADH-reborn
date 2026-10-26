@@ -98,3 +98,8 @@ test('Syntax discovery includes a new nested module and tooling, without relying
  const errors=checkJavaScriptFiles(await collectJavaScriptFiles(f.root),f.root);
  assert.equal(errors.length,1);assert.equal(errors[0].file,'new-module/nested/fresh.js');
 });
+
+test('Release validation rejects versions that old installed PWAs cannot discover',async t=>{
+ const f=await fixture(t);
+ await assert.rejects(f.verify({version:'0.36'}),/trois nombres/);
+});

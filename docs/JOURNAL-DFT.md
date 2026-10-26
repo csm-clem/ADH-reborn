@@ -4,7 +4,7 @@
 
 Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
-## v0.36 — Des cours plus courts et mieux cadrés
+## v0.37 — Des cours plus courts et mieux cadrés
 
 - 🐛 Les exemples et les nouveaux essais restent sur les cordes du duo ou de l’activité choisie.
 - ⚙️ Les cours jusqu’à la case 24 proposent un manche continu défilable, avec les boutons de réponse en option.

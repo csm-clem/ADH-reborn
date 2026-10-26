@@ -1,0 +1,9 @@
+{
+  "actual_previous_zip": "v0.28",
+  "target": "0.37.0",
+  "refusal_keeps_old_version": true,
+  "prompt_returns_next_launch": true,
+  "accept_activates_new_worker": true,
+  "progress_identical": true,
+  "errors": []
+}

@@ -35,7 +35,7 @@ with sync_playwright() as p:
   state=current(q,'c24s1-entry');assert state['record']['variants']['address-0']==1;assert state['page']['quiz']['target']['string']==0
   t=state['page']['quiz']['target'];q.locator(f'[data-lesson-string="{t["string"]}"][data-lesson-fret="{t["fret"]}"] rect').click()
   assert 'address-0' in current(q,'c24s1-entry')['record']['correct']
-  q.screenshot(path=f'docs/v0.36/course24-{width}.png')
+  q.screenshot(path=f'docs/v0.37/course24-{width}.png')
   checks.append({'viewport':[width,height],'mouse':'no answer','touch':'no answer','retry':'same physical string','directTap':'passed'})
  # Complete representative entry lessons entirely via their visible controls.
  for instrument,course in [('guitar6','duo1-entry'),('guitar8','c24s8-entry'),('bass4','mix24-entry'),('bass5','z6-entry')]:
@@ -52,5 +52,5 @@ with sync_playwright() as p:
   assert current(q,course)['record']['completed']
   checks.append({'instrument':instrument,'course':course,'completed':True})
  assert not errors,errors
- Path('docs/v0.36/course-browser.json').write_text(json.dumps({'checks':checks,'errors':errors},indent=2));b.close()
+ Path('docs/v0.37/course-browser.json').write_text(json.dumps({'checks':checks,'errors':errors},indent=2));b.close()
  print('Course input checks passed:',len(checks))

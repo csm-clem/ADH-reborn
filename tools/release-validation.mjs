@@ -6,6 +6,7 @@ import {checkJavaScriptFiles} from './check-syntax.mjs';
 
 /** Verify source or the actual package, including transformed production modules. */
 export async function verifyRelease({root,version,packagePath=resolve(root,'package.json'),production=false}){
+ if(!/^\d+\.\d+\.\d+$/.test(version||''))throw Error('Format de version invalide : trois nombres sont requis pour les mises à jour.');
  root=resolve(root);
  const read=file=>readFile(resolve(root,file),'utf8');
  const display=file=>relative(root,file).split(sep).join('/');
