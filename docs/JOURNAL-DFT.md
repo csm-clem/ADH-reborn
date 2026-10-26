@@ -4,6 +4,12 @@
 
 Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
+## v0.34 — Des sauvegardes mieux protégées
+
+- 🐛 Les préférences illisibles ou issues d’un format futur sont conservées, sans remplacement silencieux. Une restauration valide rétablit la sauvegarde.
+- ⚙️ Vérification automatique des nouveaux modules JavaScript et de toutes les ressources nécessaires au mode hors ligne.
+- ⚙️ Préparation technique du parcours étendu ; le parcours courant reste inchangé en attendant la recette de l’affichage 0–24.
+
 ## v0.33 — Votre collection, en poche
 
 - ⭐️ Vue Album à trois cartes par ligne, avec ouverture interactive en grand.

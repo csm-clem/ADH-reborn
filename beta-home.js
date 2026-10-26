@@ -313,10 +313,10 @@ export function betaHome(c) {
     } else {
       title = "Pratique ciblée";
       text = "Choisissez ce que vous voulez travailler.";
-      cards = ["zone", "string"]
+      cards = ["zone", "string", "duo", "mixed"]
         .map(
           (kind) =>
-            `<section><h2>${kind === "zone" ? "Par zone" : "Par corde"}</h2><div class="route-grid">${catalog.scopes
+            `<section><h2>${({zone:"Par zone",string:"Par corde",duo:"Par duo de cordes",mixed:"Cordes mélangées"})[kind]}</h2><div class="route-grid">${catalog.scopes
               .filter((s) => s.kind === kind)
               .map((s) => {
                 const e = evidence.scopes.get(s.id);

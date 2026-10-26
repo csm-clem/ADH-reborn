@@ -20,6 +20,7 @@ export function simulatedCompletion(profile,plan,{version=RELEASE,now=Date.now()
  }
  for(const activity of activities)for(const stage of ['discovery','practice','motif'])for(let i=0;i<3;i++){const q={mode:activity.mode,answerKind:['family','opens'].includes(activity.kind)?'pitch':'class'},help=introductionFor(activity,stage,q,seen,activity.id,music.get(activity.id));if(help)seen.push(help.key);}
  store.profiles[profile.key]={profile,attempts,later:[],session:null,diagnostic:null,discoveredModules:[...new Set(activities.map(a=>a.baseId))],seenInstructions:seen};
+ for(const record of Object.values(store.profiles))record.attempts=record.attempts.slice(-1000);
  return validatePilotStore(store);
 }
 
@@ -37,5 +38,6 @@ export function simulatedBetaCompletion(profile,catalog,{now=Date.now()}={}){
  data.seenInstructions=[...new Set([...data.seenInstructions,'name-pitch',...catalog.discoveries.map(a=>'family-'+(a.scopeId!=='z1'?a.scopeId+'-':'')+a.pitchClass)])];
  preserveLearningProofs(catalog,data);preserveAchievementEvidence(catalog,data);
  store.achievements.push(...evaluateAchievements({profile,catalog,data,existing:store.achievements,entry:{at:now}}));
+ for(const record of Object.values(store.profiles))record.attempts=record.attempts.slice(-1000);
  return validatePilotStore(store);
 }

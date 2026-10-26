@@ -7,7 +7,7 @@ import {
 } from "./pilot.js";
 
 /** Canonical targeted chapters. Guided stages only refer to these same objects. */
-export function betaCatalog(profile, { notation = "international" } = {}) {
+export function betaCatalog(profile, { notation = "international", full = false } = {}) {
   const scopes = [
     {
       id: "z1",
@@ -43,6 +43,13 @@ export function betaCatalog(profile, { notation = "international" } = {}) {
       kind: "string",
     })),
   ];
+  if(full){
+    for(const [i,start] of [12,16,20].entries())scopes.push({id:'z'+(i+4),title:'Zone '+['IV','V','VI'][i],subtitle:`Cases ${start} → ${start+4}`,zone:{start,end:start+4},prefix:'z'+(i+4)+'-',kind:'zone'});
+    for(let string=3;string<profile.tuning.length;string++)scopes.push({id:'cs'+(string+1),title:'Corde '+(profile.tuning.length-string),subtitle:'À vide → case 12',zone:{start:0,end:12},prefix:'cs'+(string+1)+'-',strings:[string],kind:'string'});
+    for(let string=0;string<profile.tuning.length;string++)scopes.push({id:'c24s'+(string+1),title:'Corde '+(profile.tuning.length-string),subtitle:'À vide → case 24',zone:{start:0,end:24},prefix:'c24s'+(string+1)+'-',strings:[string],kind:'string'});
+    for(let string=0;string<profile.tuning.length-1;string++)scopes.push({id:'duo'+(string+1),title:`Cordes ${profile.tuning.length-string} et ${profile.tuning.length-string-1}`,subtitle:'À vide → case 12',zone:{start:0,end:12},prefix:'duo'+(string+1)+'-',strings:[string,string+1],kind:'duo'});
+    for(const end of [12,24])scopes.push({id:'mix'+end,title:'Toutes les cordes',subtitle:`À vide → case ${end}`,zone:{start:0,end},prefix:'mix'+end+'-',kind:'mixed'});
+  }
   const chapters = [],
     activities = [],
     discoveries = [];

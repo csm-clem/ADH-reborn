@@ -1,0 +1,29 @@
+{
+  "checks": [
+    [
+      "guitar6",
+      "z2-note-4-find"
+    ],
+    [
+      "guitar8",
+      "z6-note-4-find"
+    ],
+    [
+      "bass5",
+      "cs5-mix-11"
+    ],
+    [
+      "guitar6",
+      "c24s6-note-4-find"
+    ],
+    [
+      "guitar6",
+      "duo1-mix-4-find"
+    ],
+    [
+      "bass6",
+      "mix24-mix-10-find"
+    ]
+  ],
+  "errors": []
+}

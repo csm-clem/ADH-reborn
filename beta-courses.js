@@ -382,13 +382,13 @@ export function betaCourses(profile, catalog, notation = "international") {
             },
             {
               id: "line",
-              title: "Une seule corde, jusqu’à la case 12",
+              title: `Une seule corde, jusqu’à la case ${scope.zone.end}`,
               text: "Le manche reste continu. À l’horizontale, les cases sont plus faciles à toucher.",
               visual: "neck",
-              points: [target, at(profile, target.string, 12)],
+              points: [target, at(profile, target.string, scope.zone.end)],
               showNames: true,
             },
-            ...[0, 6, 12].map((fret) => ({
+            ...[0, Math.floor(scope.zone.end/2), scope.zone.end].map((fret) => ({
               id: "address-" + fret,
               title: `Corde ${n - target.string} · ${fret ? "case " + fret : "à vide"}`,
               text: "Touchez sa place. Les boutons restent disponibles.",
@@ -404,19 +404,19 @@ export function betaCourses(profile, catalog, notation = "international") {
             {
               id: "boundary",
               title: `Votre nouvelle zone : ${scope.zone.start} à ${scope.zone.end}`,
-              text: `La case ${scope.zone.start} reste la même place dans les deux dessins.`,
-              visual: "boundary",
+              text: scope.zone.start ? `La case ${scope.zone.start} reste la même place dans les deux dessins.` : "Retrouvez les cordes à vide, puis suivez leurs cases.",
+              visual: scope.zone.start ? "boundary" : "neck",
               points: [target],
             },
             {
               id: "start",
               title: "Où commence cette zone ?",
-              text: "La première case affichée n’est pas une corde à vide.",
+              text: scope.zone.start ? "La première case affichée n’est pas une corde à vide." : "Le départ des cordes se trouve avant le sillet.",
               visual: "neck",
               points: [],
               quiz: choice(String(scope.zone.start), [
-                option("0", "À vide"),
-                option(String(scope.zone.start), "Case " + scope.zone.start),
+                option(scope.zone.start ? "0" : "1", scope.zone.start ? "À vide" : "Case 1"),
+                option(String(scope.zone.start), scope.zone.start ? "Case " + scope.zone.start : "À vide"),
               ]),
             },
             ...[target, at(profile, n - 1, scope.zone.end)].map(

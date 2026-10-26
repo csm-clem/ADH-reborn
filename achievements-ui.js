@@ -58,7 +58,7 @@ export class AchievementsController{
    if(action==='try'){
     this.stop();let target=def.target,profile=null;
     if(def.music&&def.obtained){
-     const u=def.obtained,record=this.pilot.store.profiles[u.profileKey],source=record?.profile||this.pilot.profile,catalog=source.key===this.pilot.profile.key?this.pilot.catalog:betaCatalog(source),assigned=[...catalogMelodies(catalog)].find(([,m])=>m.id===def.music.id);
+     const u=def.obtained,record=this.pilot.store.profiles[u.profileKey],source=record?.profile||this.pilot.profile,catalog=source.key===this.pilot.profile.key?this.pilot.catalog:betaCatalog(source,{full:!!this.pilot.host.fullCurriculum}),assigned=[...catalogMelodies(catalog)].find(([,m])=>m.id===def.music.id);
      if(!assigned){this.notice='Ce défi musical n’est plus proposé sur l’accordage d’origine. Votre carte reste conservée.';this.host.render();return;}
      target={kind:'activity',id:assigned[0]};if(source.key!==this.pilot.profile.key)profile=source;
     }

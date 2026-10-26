@@ -1,12 +1,12 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.33.0** — finitions des cartes v0.32 intégrées, Album mobile interactif et gestes tactiles corrigés.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.34.0** — sauvegardes protégées et garde-fous de livraison renforcés.
 
-[Archive FTP v0.33](downloads/daily-fretboard-trainer-v0.33.zip) · [Rapport de livraison](docs/CHANGES-v0.33.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+[Archive FTP v0.34](downloads/daily-fretboard-trainer-v0.34.zip) · [Rapport de livraison](docs/CHANGES-v0.34.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
 
 ## Priorités de développement
 
-La [roadmap V1 / V2 / V3](docs/ROADMAP-GENERALE.md) est la référence actuelle : V1 avec le parcours complet des notes appuyées et le paiement, puis tests utilisateurs et ajustements, marketing et publicité ; V2 conditionnée aux premiers résultats commerciaux ; V3 pour compléter les fonctions avancées. Les huit anciennes phases restent des documents de conception historiques.
+Le [tableau de bord partagé](https://daily-fretboard-roadmap.quirkybison9.chatgpt.site/) est la référence à consulter et mettre à jour à chaque intervention. La [roadmap V1 / V2 / V3](docs/ROADMAP-GENERALE.md) en conserve le contexte : V1 avec le parcours complet des notes appuyées et le paiement, puis tests utilisateurs et ajustements, marketing et publicité ; V2 conditionnée aux premiers résultats commerciaux ; V3 pour compléter les fonctions avancées. Les huit anciennes phases restent des documents de conception historiques.
 
 ## Lancer et vérifier
 
@@ -114,3 +114,7 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 `npm run release` prépare la bêta, ses tests et son ZIP. `npm run release:production` produit une archive séparée sans simulation. Voir le [rapport v0.33](docs/CHANGES-v0.33.md). Le workflow GitHub vérifie également les parcours, la migration et le hors-ligne.
 
 [Journal des modifications DFT](docs/JOURNAL-DFT.md) — également accessible dans les Paramètres de l’application.
+
+## Prévisualisation du parcours V1
+
+Le catalogue étendu se teste avec `?curriculum=full`. Cette prévisualisation conserve les anciennes données et identifiants ; elle reste hors du parcours par défaut tant que la contrainte tactile 0–24 n’est pas tranchée et recettée. Suivi : V1-06 à V1-09 dans le tableau de bord.

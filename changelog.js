@@ -1,6 +1,10 @@
 /** Player-facing history, curated from docs/CHANGES-v*.md. No planned features. */
 export const CHANGE_TYPES=Object.freeze({feature:['⭐️','Nouveautés'],improvement:['⚙️','Améliorations'],bug:['🐛','Corrections'],event:['🎉','Événements']});
 export const RELEASE_HISTORY=Object.freeze([
+ ['0.34','Des sauvegardes mieux protégées',[
+ ['bug','Les préférences illisibles ou issues d’un format futur sont conservées, sans remplacement silencieux. Une restauration valide rétablit la sauvegarde.'],
+ ['improvement','Vérification automatique des nouveaux modules JavaScript et de toutes les ressources nécessaires au mode hors ligne.'],
+ ['improvement','Préparation technique du parcours étendu ; le parcours courant reste inchangé en attendant la recette de l’affichage 0–24.']]],
  ['0.33','Votre collection, en poche',[
  ['feature','Vue Album à trois cartes par ligne, avec ouverture interactive en grand.'],
  ['improvement','Les cinq finitions de la v0.32 habillent aussi les couvertures de l’Album.'],
