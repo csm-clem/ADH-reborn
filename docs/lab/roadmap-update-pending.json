@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-27",
+  "site": "https://daily-fretboard-roadmap.quirkybison9.chatgpt.site/",
+  "source_schema": "lib/roadmap-base.json + API /api/project + D1 revisions",
+  "source_commit_observed": "3736f7bd601be9f9a327e11a867e785f7c60cc9e",
+  "database_read": "Sites native read: DB/revisions, no rows at time of inspection",
+  "write_status": "blocked_by_network_policy",
+  "reason": "API hostname denied by network proxy (CONNECT 403). No D1 write or stale baseline overwrite attempted.",
+  "updates": [
+    {
+      "task": "OPS-06",
+      "note": "Correction de la boucle de mise à jour ; recette cache HTTP 24h et réparation du worker périmé. Progrès sandbox/live conservés. Page repair.html indépendante."
+    },
+    {
+      "task": "V1-12",
+      "note": "Debug premier panneau, version lab visible, balayage gauche parent testé avec événements tactiles ; défilement du manche conservé sur quatre tailles."
+    },
+    {
+      "task": "V1-10",
+      "note": "Trois corrections de partitions et retour Immigrant Song, riff saturé et appel vocal superposé ; source et limites documentées."
+    },
+    {
+      "task": "V1-15",
+      "note": "La validation humaine de fidélité musicale et des droits demeure ouverte. Transcription secondaire, aucune validation automatique revendiquée."
+    }
+  ],
+  "evidence": "docs/lab/verification; docs/lab/v0.38-update-navigation-music.md"
+}

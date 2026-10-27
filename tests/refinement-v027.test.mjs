@@ -47,14 +47,14 @@ test('Collection defaults to all, retains old preferences, and provides an album
  const c=new AchievementsController({pilot,getState:()=>({...initialState(),profile}),icon:()=>''});const html=c.render();assert.match(html,/data-value="all"/);assert.ok(html.includes('data-success-action="layout"'));assert.ok(!html.includes('is-list'));
 });
 test('Retired Christmas sleeve never gets assigned again; new island has a distinct stable number, preserved old proof',()=>{
- const catalog=betaCatalog(profile),assigned=[...catalogMelodies(catalog).values()];assert.ok(assigned.some(m=>m.id==='feel-good-inc'));assert.ok(!assigned.some(m=>m.id==='christmas-song'||m.id==='cantaloupe-island'||m.id==='immigrant-song'));
+ const catalog=betaCatalog(profile),assigned=[...catalogMelodies(catalog).values()];assert.ok(assigned.some(m=>m.id==='feel-good-inc'));assert.ok(!assigned.some(m=>m.id==='christmas-song'||m.id==='cantaloupe-island'));
  assert.equal(MUSIC_CARD_NUMBERS['christmas-song'],'M009');assert.equal(MUSIC_CARD_NUMBERS['cantaloupe-island'],'M027');
  const old={id:'music-christmas-song',musicId:'christmas-song',scope:'global',profileKey:profile.key,activity:'note-3-find',shift:0,at:123,version:1};
  const card=achievementContext({profile,catalog,data:{attempts:[]},existing:[old]}).definitions.find(d=>d.music?.id==='christmas-song');assert.equal(card.obtained.at,123);
- assert.equal(rewardFor(melodyById('immigrant-song')),null);
+ assert.ok(rewardFor(melodyById('immigrant-song')).hasHarmony);
 });
 test('Revised musical timelines retain exact bar totals, register and requested tempo',()=>{
- const seven=rewardFor(melodyById('seven-nation'));assert.deepEqual(seven.events.map(e=>e.start),[0,1.5,2,2.75,3.5,4,6]);assert.equal(seven.totalBeats,8);
+ const seven=rewardFor(melodyById('seven-nation'));seven.events.forEach((e,i)=>assert.ok(Math.abs(e.start-[0,1.5,2,2+2/3,2+4/3,4,6][i])<1e-10));assert.equal(seven.totalBeats,8);
  const around=rewardFor(melodyById('around-world'));assert.equal(around.totalBeats,16);assert.equal(around.events[0].midi,33);assert.equal(around.events[6].start,4);assert.equal(around.events[12].start,8);assert.equal(around.events[16].start,12);
  const island=rewardFor(melodyById('cantaloupe-island'));assert.equal(island.totalBeats,13);assert.deepEqual(island.events.slice(0,5).map(e=>e.start),[0,.5,3,3.5,4]);assert.equal(rewardFor(melodyById('rainbow')).step,60/156);
 });

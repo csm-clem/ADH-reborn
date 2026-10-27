@@ -45,3 +45,30 @@ export function reviewRecommendation(catalog, data, route, now = Date.now()) {
     };
   return null;
 }
+
+/** A left swipe ascends one page; instrument gestures and controls keep priority. */
+export function parentNavigation(nav={}) {
+ if(nav.chapter)return {...nav,branch:nav.branch||branchForRoute(nav.route),chapter:null};
+ if(nav.route)return {...nav,branch:nav.branch||branchForRoute(nav.route),route:null,chapter:null};
+ if(nav.branch)return {branch:null,route:null,chapter:null};
+ return null;
+}
+export function bindParentSwipe(root,{enabled,back}) {
+ let start=null,consumeUntil=0;
+ const excluded='input,select,textarea,summary,[role="slider"],.neck-viewport,.position-grid,.answer-wheel,.pilot-wheel,[data-pilot-action="note"],.pilot-position-buttons,.achievement-card,.mobile-nav,svg,dialog';
+ root.addEventListener('pointerdown',e=>{
+  consumeUntil=0;start=null;if(e.pointerType==='mouse'||!e.isPrimary||!enabled()||e.target.closest(excluded)||document.querySelector('dialog[open]'))return;
+  start={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now()};
+ });
+ root.addEventListener('touchmove',e=>{
+  if(!start||e.touches.length!==1)return;const touch=e.touches[0],dx=touch.clientX-start.x,dy=touch.clientY-start.y;
+  if(dx < -12&&Math.abs(dx)>Math.abs(dy)*1.7&&e.cancelable)e.preventDefault();
+ },{passive:false});
+ root.addEventListener('pointerup',e=>{
+  const from=start;start=null;if(!from||from.id!==e.pointerId||!enabled())return;
+  const dx=e.clientX-from.x,dy=e.clientY-from.y;
+  if(dx < -70&&Math.abs(dx)>Math.abs(dy)*1.7&&performance.now()-from.time<900){consumeUntil=performance.now()+400;back();}
+ });
+ root.addEventListener('pointercancel',()=>{start=null;});
+ root.addEventListener('click',e=>{if(performance.now()<consumeUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
+}

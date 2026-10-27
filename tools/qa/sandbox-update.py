@@ -22,7 +22,7 @@ class Handler(SimpleHTTPRequestHandler):
  def __init__(self,*a,**kw):super().__init__(*a,directory=str(root),**kw)
  def log_message(self,*a):pass
  def do_GET(self):requests.append(self.path);super().do_GET()
- def end_headers(self):self.send_header('Cache-Control','no-store');super().end_headers()
+ def end_headers(self):self.send_header('Cache-Control','public,max-age=86400');super().end_headers()
 server=ThreadingHTTPServer(('127.0.0.1',4183),Handler);Thread(target=server.serve_forever,daemon=True).start()
 with sync_playwright()as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context();q=c.new_page();errors=[];q.on('pageerror',lambda e:errors.append(str(e)));q.goto('http://127.0.0.1:4183/');q.evaluate('navigator.serviceWorker.ready');q.wait_for_function('navigator.serviceWorker.controller!==null')
@@ -32,6 +32,12 @@ with sync_playwright()as p:
  assert q.evaluate('localStorage.getItem("fretboard-trainer:sandbox:pilot:stable")')==before
  assert q.evaluate('localStorage.getItem("fretboard-trainer:settings")')=='LIVE-SETTINGS';assert q.evaluate('localStorage.getItem("fretboard-trainer:pilot:stable")')=='LIVE-PROGRESS'
  assert q.evaluate('import("./release.js").then(m=>m.RELEASE)')==pending['target_release'];assert not any('/latest.json' in path for path in requests)
+ # Reproduce an already-installed worker containing an old release.js. Repair must
+ # replace this stale offline copy without deleting any browser storage.
+ q.evaluate('''async old=>{const r=await navigator.serviceWorker.ready;const key=(await caches.keys()).find(k=>k.endsWith(':'+r.scope));const cache=await caches.open(key);await cache.put(new URL('./release.js',location.href),new Response(old,{headers:{'Content-Type':'text/javascript'}}));}''',(folders[0]/'release.js').read_text())
+ q.goto('http://127.0.0.1:4183/repair.html');q.wait_for_url('http://127.0.0.1:4183/');q.wait_for_function('version=>import("./release.js").then(m=>m.UPDATE_VERSION===version)',arg=new_version)
+ assert q.evaluate('localStorage.getItem("fretboard-trainer:sandbox:pilot:stable")')==before
+ assert not q.locator('.update-dialog[open]').count()
  assert not errors,errors
- (out/'sandbox-update.json').write_text(json.dumps({'from':'0.0.101','to':new_version,'same_candidate_release':True,'refusal_and_next_launch':True,'sandbox_progress_preserved':True,'live_settings_and_progress_untouched':True,'no_parent_update_check':True,'errors':errors},indent=2));b.close()
+ (out/'sandbox-update.json').write_text(json.dumps({'from':'0.0.101','to':new_version,'same_candidate_release':True,'refusal_and_next_launch':True,'sandbox_progress_preserved':True,'live_settings_and_progress_untouched':True,'no_parent_update_check':True,'long_lived_http_cache':True,'stale_active_worker_repaired':True,'errors':errors},indent=2));b.close()
 server.shutdown();print('Sandbox iteration update passed without touching live data.')

@@ -16,9 +16,9 @@ test('Collection separates untouched, underway and earned, including a retained 
  assert.ok(defs.every(d=>matchesCollectionFilter(d,'all')));
  assert.equal(preferences({collection:{filter:'started'}}).collection.filter,'started');
 });
-test('Supplied Seven Nation rhythm includes dotted eighth, sixteenth and the eighth rest',()=>{
+test('Seven Nation follows the revised equal staccato triplet',()=>{
  const r=rewardFor(melodyById('seven-nation'));
- assert.deepEqual(r.events.map(e=>[e.start,e.beats]),[[0,1.5],[1.5,.5],[2,.75],[2.75,.25],[3.5,.5],[4,2],[6,1]]);
+ const starts=[0,1.5,2,2+2/3,2+4/3,4,6];r.events.forEach((e,i)=>assert.ok(Math.abs(e.start-starts[i])<1e-10));assert.deepEqual(r.events.slice(2,5).map(e=>e.beats),[1/3,1/3,1/3]);
  assert.equal(r.totalBeats,8);
 });
 test('Around the World descent is detached without shifting its onsets',()=>{
