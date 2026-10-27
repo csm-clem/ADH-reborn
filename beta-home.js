@@ -48,8 +48,8 @@ export function currentChapter(c) {
     BEGINNER_CHAPTERS.find((ch) => ch.id === c.data.navigation?.chapter)
   );
 }
-export function routeChapters(c) {
-  const route = c.data.navigation?.route;
+export function routeChapters(c, routeId) {
+  const route = routeId ?? c.data.navigation?.route;
   return route === "beginner"
     ? BEGINNER_CHAPTERS
     : route === "guided"
@@ -71,15 +71,16 @@ export function navigateBeta(c, action, id) {
       chapter: null,
     };
   if (action === "chapter") c.data.navigation.chapter = id;
+  if(action==='route') {c.data.studyRoute=id;const scope=c.catalog.byScope.get(id);if(scope)c.data.catalogKind=scope.kind;}
+  if(action==='chapter'){c.data.studyRoute=c.data.navigation.route;c.data.studyChapter=id;}
   c.save();
   c.host.home();
 }
-export function chapterNext(c, chapter = currentChapter(c)) {
+export function chapterNext(c, chapter = currentChapter(c), evidence = betaEvidence(c.catalog,c.data)) {
   if (!chapter) return null;
   if (chapter.kind === "course")
     return { kind: "course", id: chapter.courseId };
-  const evidence = betaEvidence(c.catalog, c.data),
-    discovered = c.data.discoveredModules || [];
+  const discovered = c.data.discoveredModules || [];
   if (
     chapter.discoveryId &&
     !discovered.includes(
@@ -119,6 +120,7 @@ export function startChapter(c, id) {
   if (!chapter) return;
   c.data.navigation ||= { route: chapter.scopeId || "beginner" };
   c.data.navigation.chapter = id;
+  c.data.studyRoute=c.data.navigation.route; c.data.studyChapter=id;
   const saved = c.data.session;
   if (
     saved &&
@@ -164,8 +166,8 @@ export function betaHome(c) {
     `<div class="page-heading"><div><h1>${esc(title)}</h1>${text ? `<p>${esc(text)}</p>` : ""}</div></div>`;
   const back = (text, action, id = "") =>
     `<button class="text-button beta-back" data-pilot-action="${action}" data-id="${id}">← ${esc(text)}</button>`;
-  const row = (ch) =>
-    `<button class="lesson-row ${status(ch) ? "is-complete" : ""}" data-pilot-action="beta-chapter" data-id="${ch.id}"><span class="lesson-symbol ${status(ch) ? "complete" : ""}">${status(ch) ? "✓" : "›"}</span><span class="lesson-copy"><strong>${esc(ch.title)}</strong><small>${esc(ch.subtitle)}</small></span><span class="pilot-status">${status(ch) ? "Validé" : ch.kind === "course" ? "Cours visuel" : ""}</span></button>`;
+  const recommended=nextStudy(c,evidence);
+  const row = (ch) => {const state=chapterState(c,ch,evidence);return `<button class="lesson-row ${state.key==='complete'?'is-complete':''} ${recommended?.chapter.id===ch.id?'is-recommended':''}" data-pilot-action="beta-chapter" data-id="${ch.id}"><span class="lesson-symbol ${state.key==='complete'?'complete':''}" aria-hidden="true">${state.symbol}</span><span class="lesson-copy"><strong>${esc(ch.title)}</strong><small>${esc(ch.subtitle)}</small></span><span class="chapter-state state-${state.key}">${state.symbol} ${state.label}</span>${recommended?.chapter.id===ch.id?'<span class="recommended-label">Prochaine séance</span>':''}</button>`;};
   const warning = c.storageError
     ? '<p class="notice" role="alert">Sauvegarde indisponible : exportez vos progrès avant de fermer.</p>'
     : "";
@@ -178,7 +180,7 @@ export function betaHome(c) {
   if (chapter) {
     const scope = catalog.byScope.get(chapter.scopeId),
       record = evidence.chapters.get(chapter.id),
-      next = chapterNext(c, chapter);
+      next = chapterNext(c, chapter, evidence);
     const resume =
       saved &&
       (chapter.activityIds?.includes(saved.activity) ||
@@ -211,7 +213,7 @@ export function betaHome(c) {
     return (
       warning +
       back(
-        "Les chapitres",
+        "Retour à « "+routeLabel(c,nav.route || scope?.id || "beginner")+" »",
         "beta-route",
         nav.route || scope?.id || "beginner",
       ) +
@@ -274,7 +276,7 @@ export function betaHome(c) {
     return (
       warning +
       back(
-        "Les parcours",
+        "Retour à « "+branchLabel(nav.branch || branchForRoute(nav.route))+" »",
         "beta-branch",
         nav.branch || branchForRoute(nav.route),
       ) +
@@ -313,22 +315,14 @@ export function betaHome(c) {
     } else {
       title = "Pratique ciblée";
       text = "Choisissez ce que vous voulez travailler.";
-      cards = ["zone", "string", "duo", "mixed"]
-        .map(
-          (kind) =>
-            `<section><h2>${({zone:"Par zone",string:"Par corde",duo:"Par duo de cordes",mixed:"Cordes mélangées"})[kind]}</h2><div class="route-grid">${catalog.scopes
-              .filter((s) => s.kind === kind)
-              .map((s) => {
-                const e = evidence.scopes.get(s.id);
-                return tile(s.id, s.title, s.subtitle, e.chapters, e.total);
-              })
-              .join("")}</div></section>`,
-        )
-        .join("");
+      const categories=[['zone','Zones'],['string','Cordes'],['duo','Duos'],['mixed','Mélanges']].filter(([kind])=>catalog.scopes.some(s=>s.kind===kind));
+      const kind=categories.some(([k])=>k===data.catalogKind)?data.catalogKind:categories[0]?.[0];
+      cards=`<div class="catalogue-tabs" role="tablist" aria-label="Type de pratique">${categories.map(([k,label])=>`<button class="button quiet-button" role="tab" id="catalogue-tab-${k}" aria-controls="catalogue-results" aria-selected="${k===kind}" tabindex="${k===kind?0:-1}" data-pilot-action="beta-filter" data-kind="${k}">${label}</button>`).join('')}</div><section id="catalogue-results" role="tabpanel" aria-labelledby="catalogue-tab-${kind}" tabindex="0"><h2>${esc(categories.find(([k])=>k===kind)?.[1]||'Parcours')}</h2><div class="route-grid">${catalog.scopes.filter(s=>s.kind===kind).map(s=>{const e=evidence.scopes.get(s.id);return tile(s.id,s.title,s.subtitle,e.chapters,e.total);}).join('')}</div></section>`;
+
     }
     return (
       warning +
-      back("Les branches", "beta-catalog") +
+      back("Retour aux parcours", "beta-catalog") +
       heading(title, text) +
       `<div class="branch-paths">${cards}</div>`
     );
@@ -355,7 +349,8 @@ export function betaHome(c) {
   ];
   return (
     warning +
-    heading("À vous de jouer.", "Choisissez votre chemin.") +
+    heading("Parcours", "Choisissez votre chemin.") +
+    studyCard(c,{next:recommended}) +
     `<div class="branch-stack">${entries
       .map(([id, title, text, cta]) => {
         const here =
@@ -381,4 +376,41 @@ export function guidedSummary(c, evidence) {
       return `<div><strong>${esc(s.title)} <span>${e.complete ? "✓" : ""}</span></strong><span>${e.coverage} / ${total} positions vérifiées</span><progress max="${total}" value="${e.coverage}" aria-label="${e.coverage} positions vérifiées sur ${total}"></progress><button class="text-button" data-pilot-action="beta-route" data-id="${id}">${e.complete ? "Consolider" : "Continuer"} →</button></div>`;
     })
     .join("")}</div></details>`;
+}
+
+export const branchLabel=id=>({beginner:'Grand Débutant',guided:'Progression guidée',targeted:'Pratique ciblée'})[id]||'Parcours';
+export function routeLabel(c,id){return id==='beginner'?'Les bases du manche':id==='guided'?'Niveau 1 : Débutant':c.catalog.byScope.get(id)?.title||'Parcours';}
+export function navigationTrail(c){
+ const n=c.data.navigation||{},trail=[{label:'Parcours',action:'beta-catalog'}];
+ if(n.branch||n.route)trail.push({label:branchLabel(n.branch||branchForRoute(n.route)),action:'beta-branch',id:n.branch||branchForRoute(n.route)});
+ if(n.route)trail.push({label:routeLabel(c,n.route),action:'beta-route',id:n.route});
+ if(n.chapter){const ch=currentChapter(c);if(ch)trail.push({label:ch.title,action:'beta-chapter',id:ch.id});}
+ return trail;
+}
+export function chapterState(c,ch,evidence=betaEvidence(c.catalog,c.data)){
+ const course=c.data.courses?.[ch.courseId],complete=ch.kind==='course'?course?.completed:evidence.chapters.get(ch.id)?.complete;
+ if(complete)return {key:'complete',label:'Terminé',symbol:'✓'};
+ const ids=[...(ch.activityIds||[]),ch.discoveryId].filter(Boolean),discovery=c.catalog.discoveries.find(d=>d.id===ch.discoveryId);
+ const started=ch.kind==='opens'&&(c.data.discoveredModules||[]).includes('opens')||course?.visited?.length||course?.index>0||ids.includes(c.data.session?.activity)||(c.data.attempts||[]).some(a=>ids.includes(a.activity))||(discovery&&(c.data.discoveredModules||[]).includes(discovery.baseId));
+ return started?{key:'started',label:'En cours',symbol:'◐'}:{key:'new',label:'À commencer',symbol:'○'};
+}
+/** A shortcut into the existing curriculum, not a new order of branches or lessons. */
+export function nextStudy(c,evidence=betaEvidence(c.catalog,c.data)){
+ const saved=c.data.session&&!c.data.session.completed&&c.resolve(c.data.session.activity)?c.data.session:null;
+ const latest=c.data.attempts?.at(-1),lastScope=latest&&c.resolve(latest.activity)?.scopeId;
+ let route=saved?.originRoute||c.data.studyRoute||c.data.navigation?.route||lastScope||'guided';
+ if(!['guided','beginner'].includes(route)&&!c.catalog.byScope.has(route))route='guided';
+ if(saved){const scope=c.resolve(saved.activity)?.scopeId;if(route==='beginner'||(route==='guided'&&!['z1','cs1','cs2'].includes(scope))||(route!=='guided'&&scope!==route))route=scope;}
+ let chapters=routeChapters(c,route);
+ const review=!saved&&reviewRecommendation(c.catalog,c.data,route);
+ const chapter=(review&&chapters.find(ch=>ch.activityIds?.includes(review.activity)))||(saved&&chapters.find(ch=>ch.activityIds?.includes(saved.activity)||ch.discoveryId===saved.activity))||chapters.find(ch=>ch.id===c.data.studyChapter&&chapterState(c,ch,evidence).key!=='complete')||chapters.find(ch=>chapterState(c,ch,evidence).key!=='complete');
+ if(!chapter)return null;
+ const next=saved?{id:saved.activity,kind:'activity'}:chapterNext(c,chapter,evidence);
+ return {route,chapter,next,review,resume:!!saved,activity:next?.kind==='activity'?c.resolve(next.id):null};
+}
+export function resumeStudy(c){const next=nextStudy(c);if(!next)return;c.data.navigation={branch:branchForRoute(next.route),route:next.route,chapter:next.chapter.id};c.save();if(next.review)c.action('beta-review',{dataset:{id:next.review.activity}});else startChapter(c,next.chapter.id);}
+export function studyCard(c,{progress=false,next=nextStudy(c)}={}){
+ if(!next)return progress?'<section class="panel study-card"><h2>Ce parcours est terminé</h2><p>Retrouvez vos chapitres dans Parcours pour consolider vos repères.</p><button class="button quiet-button" data-pilot-action="beta-catalog">Voir mes parcours</button></section>':'';
+ const previous=(c.data.attempts||[]).filter(a=>a.passed&&a.finished).at(-1),last=previous&&c.resolve(previous.activity);
+ return `<section class="panel study-card" aria-label="Votre prochaine séance"><div><p class="eyebrow">${next.review?'Revoir vos repères':next.resume?'Votre séance vous attend':'Votre prochaine séance'}</p><h2>${esc(next.chapter.title)}</h2><p>${esc(next.activity?.subtitle||next.chapter.subtitle||'Cours visuel')} · ${esc(routeLabel(c,next.route))}</p>${progress&&last?`<p class="last-practice"><span aria-hidden="true">✓</span> Dernière activité réussie : <strong>${esc(last.title)} · ${esc(last.subtitle||'')}</strong></p>`:''}</div><button class="button primary" data-pilot-action="study-next">${next.review?'Revoir ces notes':next.resume?'Reprendre ma séance':'Commencer la séance'} →</button></section>`;
 }

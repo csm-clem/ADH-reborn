@@ -41,3 +41,9 @@
 
 /* One shared glyph treatment for every double check in the application. */
 .double-check{display:inline-block;letter-spacing:var(--double-check-spacing);padding-inline-end:calc(-1 * var(--double-check-spacing));white-space:nowrap}
+
+/* Approved UX 01–03: distinct surfaces and text contrast, shared by every page. */
+:root{--bg:#f3f5f8;--surface:#fff;--surface-soft:#eaf0f6;--nav-surface:#e9eef5;--line:#c7d0dc;--ink:#34445f;--muted:#58657a;--brand:#b83b22;--purple:#a93620;--button_gradient_top_color:#bb4d00;--button_gradient_bottom_color:#c33232;--button-hover-top:#23799b;--button-hover-bottom:#27339e;--secondary-fill:linear-gradient(90deg,#596770,#374052)}
+:root[data-theme=dark]{--bg:#131a24;--surface:#212a37;--surface-soft:#2b3749;--nav-surface:#192331;--line:#66768d;--ink:#edf1f6;--muted:#c4cfdf;--brand:#f6b38c;--purple:#f6b38c;--button_gradient_top_color:#ad4c13;--button_gradient_bottom_color:#b73044;--button-hover-top:#246d8a;--button-hover-bottom:#353b88;--secondary-fill:linear-gradient(90deg,#4f6072,#364356)}
+:root[data-theme=accessible]{--bg:#eff1f3;--surface:#fff;--surface-soft:#e5efff;--nav-surface:#e1e8ef;--ink:#111827;--muted:#344256;--line:#64748b;--brand:#003e8a;--purple:#003e8a;--secondary-fill:#111827}
+:root[data-theme=paper]{--bg:#ededed;--surface:#fff;--surface-soft:#e5e5e5;--nav-surface:#e1e1e1;--ink:#222;--muted:#505050;--line:#858585;--brand:#222;--purple:#2b2b2b;--secondary-fill:#555}

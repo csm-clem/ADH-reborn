@@ -20,3 +20,5 @@
 @import url('./achievements.css') layer(pages);
 
 @import url("./beta.css") layer(pages);
+
+@import url('./navigation.css') layer(pages);

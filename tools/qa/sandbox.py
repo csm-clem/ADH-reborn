@@ -13,10 +13,13 @@ with sync_playwright()as p:
  assert q.evaluate("()=>[localStorage.getItem('fretboard-trainer:settings'),localStorage.getItem('fretboard-trainer:pilot:stable')]")==live
  assert q.evaluate('''async()=>{const {storageService}=await import('./services/storage-service.js');return Object.keys(storageService.readPilot().value.profiles).length===0}''')
  q.evaluate('''async()=>{const {storageService}=await import('./services/storage-service.js'),{initialState}=await import('./state.js'),{makeProfile}=await import('./core.js');storageService.saveSettings({...initialState(),profile:makeProfile('guitar6'),sound:false,beginnerGuide:true});}''');q.reload()
- q.locator('[data-pilot-action=beta-branch][data-id=targeted]').click();assert q.locator('.route-card').count()==25
- assert q.locator('[data-pilot-action=beta-route][data-id=duo5]').count()==1
- assert q.locator('[data-pilot-action=beta-route][data-id=mix24]').count()==1
- q.locator('[data-action=settings]:visible').first.click();assert 'Bac à sable' in q.locator('h2').all_text_contents().__str__()
+ q.locator('[data-pilot-action=beta-branch][data-id=targeted]').click();total=0
+ for kind in ['zone','string','duo','mixed']:
+  q.locator(f'[role=tab][data-kind={kind}]').click();total+=q.locator('.route-card').count()
+  if kind=='duo':assert q.locator('[data-pilot-action=beta-route][data-id=duo5]').count()==1
+  if kind=='mixed':assert q.locator('[data-pilot-action=beta-route][data-id=mix24]').count()==1
+ assert total==25
+ q.locator('[data-action=settings]:visible').first.click();assert 'Bac à sable' in q.locator('.version-label').inner_text()
  q.locator('[data-action=changelog]').click();count=q.locator('.change-release').count();assert count>10
  versions=q.locator('.change-release summary strong').all_text_contents();expected=q.evaluate('''async()=>{const {LIVE_RELEASES}=await import('./release-history.js');return LIVE_RELEASES.map(e=>'v'+e.version)}''');assert versions==expected
  assert q.evaluate('''async()=>{const m=await import('./release.js');return m.DISPLAY_VERSION==='v'+m.UPDATE_VERSION&&m.UPDATE_VERSION.startsWith(m.RELEASE.split('.').slice(0,2).join('.')+'.')}''')

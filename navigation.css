@@ -1,0 +1,37 @@
+/* Approved navigation UI only. Gameplay layout and instruction placement are unchanged. */
+.shell .sidebar,.shell .mobile-nav{background:var(--nav-surface)}
+.shell .sidebar{border-right:1px solid var(--line)}
+.shell .topbar{background:var(--surface);border-bottom:1px solid var(--line);height:auto;min-height:64px;display:flex;align-items:center;gap:16px;padding-block:8px;flex-wrap:wrap}
+.shell .sandbox-label{font-size:12px;white-space:nowrap}
+.breadcrumbs{min-width:0;flex:1}.breadcrumbs ol{display:flex;gap:8px;align-items:center;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+.breadcrumbs li{display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}.breadcrumbs li+li:before{content:'›';color:var(--muted)}
+.breadcrumbs [aria-current=page]{font-weight:700;color:var(--ink)}.breadcrumbs .text-button{padding:4px 2px;min-height:40px;text-align:left}
+.mobile-location{display:none}.current-section{font-weight:700}
+.shell .nav-item.active{box-shadow:inset 4px 0 0 var(--brand)}
+.shell .mobile-nav button.active{background:var(--surface);color:var(--ink);box-shadow:inset 0 3px 0 var(--brand);border-radius:12px;font-weight:750}
+.shell .page-heading h1{font-size:clamp(32px,3.2vw,44px);line-height:1.15;margin-bottom:10px}
+.shell .page-heading p{max-width:64ch;line-height:1.55;color:var(--muted)}
+.shell .panel h2,.shell .branch-paths h2{font-size:23px;line-height:1.25}
+.shell .branch-copy strong{font-size:clamp(23px,2.3vw,28px);max-width:none}
+.shell .route-card>strong{font-size:23px}.shell .lesson-copy strong{font-size:18px}.shell .lesson-copy small{font-size:14px}
+.shell .branch-stack{margin-inline:0;max-width:none}.shell .branch-jumbo{min-height:145px}
+.study-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;border-left:4px solid var(--brand)}
+.study-card h2{margin:0 0 6px}.study-card p{margin:0 0 6px}.study-card .eyebrow{font-size:12px;letter-spacing:.06em;font-weight:750;margin-bottom:8px}
+.study-card .last-practice{font-size:14px;margin-top:12px;color:var(--muted)}.study-card .last-practice strong{font-weight:650;color:var(--ink)}
+.catalogue-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.shell .route-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px}
+.chapter-state{font-size:12px;font-weight:700;white-space:nowrap;border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:var(--surface-soft)}
+.chapter-state.state-complete{background:var(--success-soft);color:var(--success);border-color:currentColor}
+.recommended-label{font-size:12px;font-weight:700;color:var(--purple);display:block}.lesson-row.is-recommended{box-shadow:inset 3px 0 0 var(--brand);padding-left:14px}
+.shell .lesson-row .lesson-copy{min-width:150px;flex:1}.shell .lesson-row{gap:12px}.shell .lesson-symbol{flex-shrink:0}
+.shell .beta-back{justify-content:flex-start;text-align:left;margin-bottom:14px}
+.shell .content{max-width:1450px}.shell .panel{box-shadow:none}.shell .content>.panel,.shell .help-panel{max-width:1100px}
+.shell .appearance-panel legend{font-size:23px;font-family:var(--font-heading);font-weight:700;margin-bottom:14px}.shell .appearance-panel .theme-choices{margin:0}
+.shell .help-panel h3{font-size:19px;margin:26px 0 12px}.shell .help-panel>button{margin-bottom:8px}.shell .version-label{font-weight:700}
+.shell details>summary{cursor:pointer}.shell .setting-row label small,.shell .theme-choice small{color:var(--muted)}
+@media(min-width:900px){.shell .settings-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.shell .settings-content>.page-heading,.shell .settings-content>.debug-panel,.shell .settings-content>.appearance-panel{grid-column:1/-1}.shell .settings-content>.panel{margin:0}.shell .theme-choices{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.shell .beta-back{display:none}.breadcrumbs{display:none}.mobile-location{display:block;flex:1;min-width:0;font-size:14px}.mobile-location .text-button{justify-content:flex-start;text-align:left}.shell .topbar{min-height:55px;gap:4px 12px;padding-inline:18px}.shell .topbar .sandbox-label{font-size:11px}.shell .mobile-nav button{min-width:0;flex:1;margin-inline:2px}.study-card{grid-template-columns:1fr;gap:12px}.study-card .button{justify-self:start}.shell .route-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}.shell .lesson-row .lesson-copy{min-width:140px}.chapter-state{margin-left:auto}.recommended-label{width:100%;padding-left:42px}.catalogue-tabs{gap:6px}.catalogue-tabs .button{padding:9px 12px}}
+
+@media(min-width:900px) and (max-width:1200px){.settings-content .setting-row:has(.voice-controls){flex-direction:column;align-items:stretch;gap:10px}.settings-content .voice-controls{width:100%}.settings-content .voice-controls select{max-width:none}}
+
+.shell .route-summary strong{font-size:28px}

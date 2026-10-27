@@ -51,6 +51,71 @@
       "id": "update-large-assets-body-drain",
       "type": "bug",
       "text": "Les mises à jour ne se bloquent plus pendant le téléchargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progrès."
+    },
+    {
+      "id": "ux-01-surfaces",
+      "type": "improvement",
+      "text": "Les fonds, cartes et surfaces de navigation se distinguent dans les quatre thèmes."
+    },
+    {
+      "id": "ux-02-readable-actions",
+      "type": "improvement",
+      "text": "Les textes secondaires et les libellés blancs sur les dégradés gagnent en contraste."
+    },
+    {
+      "id": "ux-03-type-hierarchy",
+      "type": "improvement",
+      "text": "Les titres de page, de section et de chapitre suivent une hiérarchie commune."
+    },
+    {
+      "id": "ux-04-real-breadcrumbs",
+      "type": "feature",
+      "text": "Un fil d’Ariane réel sur ordinateur et un retour parent explicite sur mobile indiquent votre position."
+    },
+    {
+      "id": "ux-05-browser-history",
+      "type": "feature",
+      "text": "Le retour et l’avance du navigateur suivent les pages visitées dans l’application."
+    },
+    {
+      "id": "ux-06-direct-session",
+      "type": "feature",
+      "text": "L’accueil propose un accès direct à la séance à reprendre ou à la prochaine activité."
+    },
+    {
+      "id": "ux-07-consistent-destinations",
+      "type": "improvement",
+      "text": "Parcours, Progrès, Succès et Réglages portent les mêmes noms sur chaque appareil ; l’onglet actif se repère aussi par sa forme."
+    },
+    {
+      "id": "ux-09-compact-catalogue",
+      "type": "feature",
+      "text": "La pratique ciblée se parcourt par Zones, Cordes, Duos et Mélanges."
+    },
+    {
+      "id": "ux-10-view-memory",
+      "type": "improvement",
+      "text": "Les retours restaurent le défilement et les sections ouvertes du parcours."
+    },
+    {
+      "id": "ux-11-laptop-layout",
+      "type": "improvement",
+      "text": "Les choix et réglages utilisent des grilles adaptées aux ordinateurs, avec une lecture confortable."
+    },
+    {
+      "id": "ux-14-progress-next-step",
+      "type": "feature",
+      "text": "La page Progrès présente la prochaine étape et la dernière activité réussie avant la carte du manche."
+    },
+    {
+      "id": "ux-15-settings-by-purpose",
+      "type": "improvement",
+      "text": "Les réglages sont regroupés par instrument, jeu et son, apparence, sauvegardes et aide."
+    },
+    {
+      "id": "ux-16-chapter-states",
+      "type": "feature",
+      "text": "Les chapitres affichent À commencer, En cours ou Terminé, avec texte et symbole, et signalent la prochaine séance."
     }
   ]
 }

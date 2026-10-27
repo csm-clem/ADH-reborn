@@ -39,6 +39,7 @@ export function progressView(
     zone = { start: 0, end: 24 },
     strings = profile.tuning.map((_, s) => s),
     evidence = null,
+    summaryHTML = "",
   } = {},
 ) {
   const frets = Array.from(
@@ -94,7 +95,7 @@ export function progressView(
       }),
       { total: 0, correct: 0 },
     );
-  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div><section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["perfect", "worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["perfect", "worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
+  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div>${summaryHTML}<section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["perfect", "worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["perfect", "worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
     .slice()
     .reverse()
     .map(
