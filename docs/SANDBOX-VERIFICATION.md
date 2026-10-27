@@ -9,3 +9,9 @@
 - Promotion locale simulée de l’archive complète et contrôle de ses 133 ressources et 50 modules. Aucun transfert live de cette simulation.
 
 La vérification ne constitue pas une recette sur téléphone physique. La copie sandbox fonctionne avec les données statiques et le son synthétisé de l’application actuelle ; les API PHP demeurent exclues des transferts automatiques.
+
+## Numérotation release / essai — 27 octobre 2026
+
+Les libellés publics utilisent v0.x ; les essais utilisent v0.x.y. Le numéro d’essai est réservé par release, puis réutilisé lors d’une relance du même build ; il ne dépend pas du compteur global GitHub. Les copies interrompues ne peuvent pas réutiliser le numéro d’un autre essai. L’ancien premier essai reçoit le libellé v0.38.1 dans l’historique, sans modifier son archive.
+
+14 tests Python vérifient désormais notamment le cas v0.45 → v0.46.10 → v0.46, la remise à 1 pour v0.47, les relances et réservations, ainsi que les garde-fous de promotion. Le rendu du journal après une promotion locale est vérifié : v0.38 visible, 0.38.0 conservé dans les métadonnées techniques. La mise à jour depuis la numérotation initiale 0.0.N vers 0.38.y conserve les données sandbox et laisse le live intact.

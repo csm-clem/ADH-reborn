@@ -2,9 +2,9 @@
 
 PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis.
 
-- **Live : 0.37.0**, https://media.lecompositeur.com/DFT/ — publication uniquement après validation explicite d’un essai.
+- **Live : v0.37**, https://media.lecompositeur.com/DFT/ — publication uniquement après validation explicite d’un essai.
 - **Bac à sable :** https://media.lecompositeur.com/DFT/lab/ — tous les parcours implémentés sont visibles ; chaque essai déployé est conservé sous `lab/builds/<identifiant>/`.
-- **Candidat en cours : 0.38.0.** Le journal public reste celui des versions live, sans afficher les étapes intermédiaires.
+- **Prochaine release : v0.38.** Les essais sont nommés v0.38.1, v0.38.2, etc. Le journal public reste celui des versions live, sans afficher les étapes intermédiaires.
 
 [Environnements et publication](docs/ENVIRONNEMENTS.md) · [Changements en cours](pending-changes.json) · [Rapport du candidat](docs/CHANGES-v0.38.md)
 

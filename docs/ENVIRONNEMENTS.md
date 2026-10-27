@@ -13,14 +13,16 @@ Les copies sont disponibles via leurs URL, avec `noindex,nofollow` pour le bac �
 ## Développer un essai
 
 1. Modifier le code et ajouter les changements dans `pending-changes.json`, chacun avec un identifiant inédit et un type : `feature`, `improvement`, `bug`, `event`.
-2. Vérifier les tests. Pousser le commit testé sur `main` et sur `sandbox/dft` ; cette dernière branche déclenche uniquement le déploiement sandbox.
+2. Vérifier les tests. Pousser le commit testé sur `sandbox/dft`, qui déclenche uniquement le déploiement sandbox. Une mise à jour de `main` est indépendante et n’est pas nécessaire pour tester ou promouvoir un essai.
 3. Le workflow génère un identifiant comme `b000001-0123456789ab`, prépare l’archive déterministe et sa SHA-256, puis vérifie les données, le journal, les filtres et le fonctionnement hors ligne dans Chromium.
 4. Il publie l’essai sous `lab/builds/<identifiant>/` puis la copie courante sous `lab/`. Aucun fichier à la racine du live n’est écrit. Le manifeste live est comparé avant et après le transfert.
 5. Le workflow vérifie en HTTPS les deux copies et le live inchangé. Les archives sont aussi conservées comme artefacts GitHub Actions et sont téléchargeables via `lab/builds/<identifiant>/application.zip`.
 
 Dans les Paramètres du bac à sable, **Historique des essais** ouvre la liste des copies conservées.
 
-Le numéro interne de mise à jour sandbox (`0.0.N`) est indépendant du candidat live (`0.38.0`, par exemple). Il avance avec les essais, sans produire une entrée dans le journal public. Recharger une ancienne copie archivée permet de l’examiner ; sa progression partage volontairement le compartiment sandbox. Pour une comparaison avec des données anciennes, utiliser les sauvegardes exportées ou un profil de navigateur distinct.
+Les releases sont nommées **v0.x** et les essais qui préparent la suivante **v0.x.y**. Exemple : live v0.45, essais v0.46.1 à v0.46.10, puis publication v0.46. Le compteur y avance à chaque nouvel essai et repart à 1 pour la release suivante. Le numéro global du workflow et l’identifiant technique de l’archive ne déterminent pas ce compteur. Une relance du même build conserve sa version.
+
+Le mécanisme PWA conserve trois nombres pour la comparaison et les caches : une release affichée v0.46 utilise 0.46.0 ; un essai v0.46.10 utilise 0.46.10. Ces canaux restent séparés. La migration du premier essai au format interne 0.0.1 est prise en charge sans modifier son archive ; la liste lui attribue le libellé v0.38.1. Recharger une ancienne copie archivée permet de l’examiner ; sa progression partage volontairement le compartiment sandbox. Pour une comparaison avec des données anciennes, utiliser les sauvegardes exportées ou un profil de navigateur distinct.
 
 ## Isoler les données et les mises à jour
 
@@ -35,7 +37,7 @@ Le numéro interne de mise à jour sandbox (`0.0.N`) est indépendant du candida
 
 L’assistant attend une instruction explicite désignant l’essai à publier. Il ne déclenche pas de promotion à la suite d’un simple « continue ».
 
-Le workflow **Publier un essai DFT en live** est manuel uniquement : il reçoit l’identifiant, le numéro final, le titre et la chaîne `PUBLIER <identifiant>`. Cette chaîne est un garde-fou d’exécution ; lorsque Clément a déjà autorisé la publication de cet essai, elle ne justifie pas de lui redemander son autorisation.
+Le workflow **Publier un essai DFT en live** est manuel uniquement : il reçoit l’identifiant, le numéro final à deux composantes (par exemple `0.38`), le titre et la chaîne `PUBLIER <identifiant>`. Cette chaîne est un garde-fou d’exécution ; lorsque Clément a déjà autorisé la publication de cet essai, elle ne justifie pas de lui redemander son autorisation.
 
 La promotion :
 
@@ -56,3 +58,14 @@ Dans l’application : bouton **Filtrer les changements**, types Nouveautés / A
 ## Limites de déploiement
 
 Le serveur propose un transfert atomique par fichier, pas un remplacement atomique de toute l’application. Les ressources passent avant l’accueil et le worker ; l’activation de la mise à jour reste soumise au choix du joueur. L’essai immuable est conservé pour comparaison et préparation d’une reprise. Aucun retour arrière de live n’est déclenché automatiquement.
+
+## Vocabulaire
+
+- **Commit** : enregistrement d’un ensemble de modifications du code.
+- **Branche** : ligne de travail dans Git (`main`, `sandbox/dft`, etc.).
+- **Merge** : fusion des changements de deux branches.
+- **Build** : application construite depuis un commit précis ; un essai du lab est un build de préversion.
+- **Release** : version officiellement publiée après validation d’un essai.
+- **Déploiement** : transfert d’un build vers le bac à sable ou vers le live.
+
+La convention choisie distingue les releases et leurs itérations de préparation. Elle ne correspond pas au sens strict de Semantic Versioning, où le troisième nombre désigne une correction publiée.

@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       version:
-        description: Version live (trois nombres)
+        description: Version live, par exemple 0.38
         required: true
         type: string
       title:
@@ -57,9 +57,10 @@ jobs:
         run: |
           python - <<'PY'
           import json,os,urllib.request
+          from tools.environments import normalize_release
           def get(p):return json.load(urllib.request.urlopen('https://media.lecompositeur.com/DFT/'+p,timeout=45))
-          assert get('update.json')['version']==os.environ['EXPECTED_VERSION']
-          assert get('release-ledger.json')['live_version']==os.environ['EXPECTED_VERSION']
+          assert get('update.json')['version']==normalize_release(os.environ['EXPECTED_VERSION'])
+          assert get('release-ledger.json')['live_version']==normalize_release(os.environ['EXPECTED_VERSION'])
           assert get('promotion-receipt.json')['promoted_from']==os.environ['EXPECTED_BUILD']
           print('Version, journal live et origine de la promotion vérifiés.')
           PY

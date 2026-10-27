@@ -8,3 +8,5 @@ export const DATA_EPOCH=dataEpoch(RELEASE);
 export const STORAGE_PREFIX='fretboard-trainer';
 export const STATE_KEY=`${STORAGE_PREFIX}:settings`;
 export const PILOT_KEY=`${STORAGE_PREFIX}:pilot:${DATA_EPOCH}`;
+export const releaseLabel=value=>'v'+String(value).replace(/^v/,'').split('.').slice(0,2).join('.');
+export const DISPLAY_VERSION=CHANNEL==='sandbox'?'v'+UPDATE_VERSION:releaseLabel(RELEASE);

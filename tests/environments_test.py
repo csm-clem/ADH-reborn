@@ -1,9 +1,9 @@
 from pathlib import Path
-import sys,tempfile,json,unittest,os,io,ftplib,zipfile
+import sys,tempfile,json,unittest,os,io,ftplib,zipfile,urllib.error
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parent.parent
 sys.path.insert(0,str(ROOT/'tools'));sys.path.insert(0,str(ROOT/'tools/deploy'))
-from environments import make_sandbox,promote,files_from_zip,archive_files
+from environments import make_sandbox,promote,files_from_zip,archive_files,next_iteration,normalize_release,lab_version,remote_iteration
 from ftps import deploy,prefixes
 class FTP:
  def __init__(self):self.files={'update.json':b'{"version":"0.37.0"}','index.html':b'LIVE'};self.folder=''
@@ -27,7 +27,7 @@ class EnvironmentTests(unittest.TestCase):
  def build(self):return make_sandbox(self.source,1,'a'*40,self.ledger,self.pending,self.root/'sandbox')
  def test_reproducible_isolated_build_and_unpublished_history(self):
   archive,meta=self.build();first=archive.read_bytes();self.build();self.assertEqual(first,archive.read_bytes())
-  f=files_from_zip(archive);self.assertIn(b'"sandbox"',f['release.js']);self.assertIn(b'fretboard-trainer:sandbox',f['release.js']);self.assertEqual(json.loads(f['update.json'])['version'],'0.0.1');self.assertEqual(json.loads(f['release-ledger.json']),self.ledger);self.assertNotIn(b'First intermediate change',f['release-history.js'])
+  f=files_from_zip(archive);self.assertIn(b'"sandbox"',f['release.js']);self.assertIn(b'fretboard-trainer:sandbox',f['release.js']);self.assertEqual(json.loads(f['update.json'])['version'],'0.38.1');self.assertEqual(json.loads(f['release-ledger.json']),self.ledger);self.assertNotIn(b'First intermediate change',f['release-history.js'])
  def test_promotion_requires_exact_approval_and_fresh_live(self):
   archive,meta=self.build()
   with self.assertRaisesRegex(ValueError,'confirmation'):promote(archive,meta,self.ledger,'0.38.0','Release','',self.root/'live')
@@ -35,7 +35,7 @@ class EnvironmentTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'live a changé'):promote(archive,meta,changed,'0.38.0','Release','PUBLIER '+meta['build_id'],self.root/'live')
  def test_promotion_uses_tested_code_and_aggregates_intermediate_changes_once(self):
   archive,meta=self.build();(self.source/'app.js').write_text('// later unreviewed code')
-  live,result=promote(archive,meta,self.ledger,'0.38.0','Release','PUBLIER '+meta['build_id'],self.root/'live');f=files_from_zip(live)
+  live,result=promote(archive,meta,self.ledger,'v0.38','Release','PUBLIER '+meta['build_id'],self.root/'live');f=files_from_zip(live)
   self.assertEqual(f['app.js'],b'// code from the approved sandbox');self.assertIn(b'"live"',f['release.js']);self.assertNotIn(b'fretboard-trainer:sandbox',f['release.js']);self.assertEqual(json.loads(f['release-ledger.json'])['history'][0]['items'],[['feature','First intermediate change'],['bug','Second intermediate change']]);self.assertEqual(result['promotion']['sandbox_sha256'],meta['sha256'])
  def test_sandbox_upload_never_writes_live_and_snapshots_are_immutable(self):
   archive,meta=self.build();ftp=FTP();before=dict(ftp.files);deploy(ftp,archive,meta,'sandbox');self.assertTrue(all(k in before or k.startswith('lab/') for k in ftp.files));self.assertTrue(all(ftp.files[k]==v for k,v in before.items()))
@@ -54,13 +54,38 @@ class EnvironmentTests(unittest.TestCase):
   first,m1=self.build();ftp=FTP();deploy(ftp,first,m1,'sandbox')
   second,m2=make_sandbox(self.source,2,'b'*40,self.ledger,self.pending,self.root/'sandbox');deploy(ftp,second,m2,'sandbox')
   with self.assertRaisesRegex(ValueError,'ancien'):deploy(ftp,first,m1,'sandbox')
-  self.assertEqual(json.loads(ftp.files['lab/update.json'])['version'],'0.0.2')
+  self.assertEqual(json.loads(ftp.files['lab/update.json'])['version'],'0.38.2')
  def test_paths_and_digests_are_checked(self):
   archive,meta=self.build();archive.write_bytes(b'wrong')
   with self.assertRaisesRegex(ValueError,'Empreinte'):promote(archive,meta,self.ledger,'0.38.0','Release','PUBLIER '+meta['build_id'],self.root/'live')
   bad=self.root/'bad.zip'
   with zipfile.ZipFile(bad,'w')as z:z.writestr('../index.html','bad')
   with self.assertRaises(ValueError):files_from_zip(bad)
+ def test_iteration_is_per_upcoming_release_and_legacy_trial_is_counted(self):
+  history={'builds':[{'version':'0.45.0','update_version':'0.45.30'},{'version':'0.46.0','update_version':'0.46.9'}]}
+  self.assertEqual(next_iteration('0.46.0',history),10)
+  self.assertEqual(next_iteration('0.47.0',history),1)
+  legacy={'version':'0.38.0','update_version':'0.0.1'}
+  self.assertEqual(lab_version(legacy),'0.38.1');self.assertEqual(next_iteration('0.38.0',{'builds':[legacy]}),2)
+ def test_build_sequence_is_independent_of_trial_number(self):
+  pending={**self.pending,'target_release':'0.46.0'}
+  archive,meta=make_sandbox(self.source,58,'c'*40,self.ledger,pending,self.root/'sandbox',iteration=10)
+  self.assertEqual(meta['lab_version'],'0.46.10');self.assertEqual(meta['update_version'],'0.46.10');self.assertTrue(meta['build_id'].startswith('b000058-'))
+  self.assertEqual(json.loads(files_from_zip(archive)['candidate.json'])['iteration'],10)
+ def test_retry_reuses_published_identity_without_incrementing(self):
+  _,meta=self.build()
+  with patch('environments.get_json',return_value=meta):self.assertEqual(remote_iteration('0.38',1,'a'*40),1)
+ def test_retry_recovers_a_reservation_after_interrupted_upload(self):
+  _,meta=self.build()
+  missing=urllib.error.HTTPError('https://example.test/build.json',404,'Missing',{},None)
+  with patch('environments.get_json',side_effect=[missing,{'builds':[{**meta,'status':'preparing'}]}]):self.assertEqual(remote_iteration('0.38',1,'a'*40),1)
+ def test_two_different_builds_cannot_publish_the_same_trial_version(self):
+  first,m1=self.build();ftp=FTP();deploy(ftp,first,m1,'sandbox')
+  second,m2=make_sandbox(self.source,2,'b'*40,self.ledger,self.pending,self.root/'sandbox',iteration=1)
+  with self.assertRaisesRegex(ValueError,'réservé'):deploy(ftp,second,m2,'sandbox')
+ def test_live_release_has_two_visible_parts_and_no_trial_suffix(self):
+  self.assertEqual(normalize_release('v0.46'),'0.46.0')
+  with self.assertRaises(ValueError):normalize_release('0.46.10')
  def test_live_workflow_has_no_push_trigger(self):
   text=(ROOT/'.github/workflows/deploy-dft.yml').read_text();self.assertIn('workflow_dispatch:',text);self.assertNotIn('\n  push:',text)
 if __name__=='__main__':unittest.main()

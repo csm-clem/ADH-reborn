@@ -3,7 +3,7 @@ import argparse,ftplib,os,zipfile,json,hashlib,io,re,sys,html
 from pathlib import Path,PurePosixPath
 from tls_chain import verified_context
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from environments import files_from_zip,BUILD_RE,semver
+from environments import files_from_zip,BUILD_RE,semver,lab_version,release_name
 ALLOWED={'.js','.css','.html','.json','.svg','.png','.webp','.ttf','.woff','.woff2','.webmanifest','.txt'}
 def prefixes(meta,channel):
  if meta.get('channel')!=channel:raise ValueError('Canal de l’archive incorrect')
@@ -43,6 +43,15 @@ def deploy(ftp,archive,meta,channel):
  if channel=='sandbox':
   current=read_remote(ftp,'lab/update.json')
   if current and semver(json.loads(current)['version'])>semver(meta['update_version']):raise ValueError('Cet essai est ancien : ouvrir sa copie archivée, sans remplacer le bac à sable courant')
+  raw=read_remote(ftp,'lab/versions.json');history=json.loads(raw) if raw else {'schema':1,'builds':[]}
+  if history.get('schema')!=1 or not isinstance(history.get('builds'),list):raise ValueError('Historique des essais illisible')
+  for item in history['builds']:
+   if item['build_id']==meta['build_id']:
+    if item['sha256']!=meta['sha256']:raise ValueError('Un essai archivé ne peut pas être modifié')
+   elif lab_version(item)==lab_version(meta):raise ValueError('Ce numéro d’essai est déjà réservé')
+  # Reserve before transfer so an interrupted job cannot reuse a trial number.
+  history['builds']=[{**meta,'status':'preparing'}]+[x for x in history['builds'] if x['build_id']!=meta['build_id']]
+  upload(ftp,'lab','versions.json',json.dumps(history,indent=2).encode())
  for prefix in targets:
   if channel=='sandbox' and prefix.startswith('lab/builds/'):
    ftp.cwd('/');existing=read_remote(ftp,prefix+'/build.json')
@@ -59,8 +68,8 @@ def deploy(ftp,archive,meta,channel):
   if history.get('schema')!=1 or not isinstance(history.get('builds'),list):raise ValueError('Historique des essais illisible : arrêt sans remplacement')
   for item in history['builds']:
    if not BUILD_RE.fullmatch(item.get('build_id','')):raise ValueError('Identifiant d’historique invalide')
-  history['builds']=[meta]+[x for x in history['builds'] if x['build_id']!=meta['build_id']]
-  rows=''.join('<li><a class="button secondary" href="./builds/'+item['build_id']+'/">Essai '+str(int(item['build_id'].split('-')[0][1:]))+' · '+html.escape(item['build_id'])+'</a><p>Candidat '+html.escape(item['version'])+'</p></li>' for item in history['builds'])
+  history['builds']=[{**meta,'status':'ready'}]+[x for x in history['builds'] if x['build_id']!=meta['build_id']]
+  rows=''.join('<li><a class="button secondary" href="./builds/'+item['build_id']+'/">v'+html.escape(lab_version(item))+'</a><p>Prochaine release v'+html.escape(release_name(item['version']))+' · <small>'+html.escape(item['build_id'])+'</small></p></li>' for item in history['builds'] if item.get('status','ready')=='ready')
   page='<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>DFT · Historique des essais</title><link rel="stylesheet" href="./tokens.css"><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./components.css"></head><body><main class="content" style="max-width:900px;margin:auto"><h1>Historique des essais</h1><p>Chaque lien ouvre une copie conservée du bac à sable. Le live reste indépendant.</p><p><a class="button primary" href="./">Bac à sable courant</a></p><ul style="list-style:none;padding:0;display:grid;gap:16px">'+rows+'</ul></main></body></html>'
   upload(ftp,'lab','versions.json',json.dumps(history,indent=2).encode());upload(ftp,'lab','versions.html',page.encode())
   ftp.cwd('/')

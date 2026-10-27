@@ -33,7 +33,7 @@ jobs:
           mkdir -p work
           python tools/environments.py sandbox --number "$SANDBOX_NUMBER" --commit "$SOURCE_COMMIT" > work/sandbox-build.json
           node tools/verify-release.mjs --sandbox
-          python -c 'import json,os; p=json.load(open("work/sandbox-build.json")); open(os.environ["GITHUB_ENV"],"a").write("DFT_ARCHIVE="+p["archive"]+"\nDFT_BUILD="+p["build_id"]+"\nDFT_LIVE_BEFORE="+json.load(open(p["metadata"]))["base_live_version"]+"\n")'
+          python -c 'import json,os; p=json.load(open("work/sandbox-build.json")); open(os.environ["GITHUB_ENV"],"a").write("DFT_ARCHIVE="+p["archive"]+"\nDFT_BUILD="+p["build_id"]+"\nDFT_LAB_VERSION="+p["lab_version"]+"\nDFT_LIVE_BEFORE="+json.load(open(p["metadata"]))["base_live_version"]+"\n")'
       - name: Préparer la recette navigateur
         run: |
           pip install playwright==1.56.0
@@ -60,6 +60,8 @@ jobs:
           for path in ['lab/','lab/builds/'+os.environ['DFT_BUILD']+'/']:
               assert get(path+'build.json')['build_id']==os.environ['DFT_BUILD']
               assert get(path+'update.json')['channel']=='sandbox'
+              assert get(path+'update.json')['version']==os.environ['DFT_LAB_VERSION']
+              assert get(path+'build.json')['lab_version']==os.environ['DFT_LAB_VERSION']
           assert get('update.json')['version']==os.environ['DFT_LIVE_BEFORE']
           print('Bac à sable, essai archivé et version live inchangée vérifiés.')
           PY

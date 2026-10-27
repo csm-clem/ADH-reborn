@@ -19,6 +19,7 @@ with sync_playwright()as p:
  q.locator('[data-action=settings]:visible').first.click();assert 'Bac à sable' in q.locator('h2').all_text_contents().__str__()
  q.locator('[data-action=changelog]').click();count=q.locator('.change-release').count();assert count>10
  versions=q.locator('.change-release summary strong').all_text_contents();expected=q.evaluate('''async()=>{const {LIVE_RELEASES}=await import('./release-history.js');return LIVE_RELEASES.map(e=>'v'+e.version)}''');assert versions==expected
+ assert q.evaluate('''async()=>{const m=await import('./release.js');return m.DISPLAY_VERSION==='v'+m.UPDATE_VERSION&&m.UPDATE_VERSION.startsWith(m.RELEASE.split('.').slice(0,2).join('.')+'.')}''')
  q.locator('[data-change-action=expand]').click();assert q.locator('.change-release[open]').count()==count
  q.locator('[data-change-action=collapse]').click();assert q.locator('.change-release[open]').count()==0
  q.locator('[data-change-action=filters]').click();assert q.locator('#change-filters').is_visible()

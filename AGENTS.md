@@ -9,3 +9,7 @@ Décision de Clément du 27 octobre 2026 : la v0 est l’environnement bêta d�
 Les développements se déploient dans le bac à sable `/DFT/lab/`, avec des essais immuables sous `/DFT/lab/builds/`. Ne pas publier en live sans instruction explicite de Clément approuvant un essai précis. Le workflow live est manuel uniquement. Garder les données, mises à jour et identités PWA du bac à sable séparées du live. Les changements non publiés vont dans `pending-changes.json` ; seul un essai promu alimente le journal live.
 
 Chaque modification destinée à une future publication doit ajouter un identifiant inédit dans `pending-changes.json`. Ne pas ajouter une version intermédiaire au journal live. Après une promotion vérifiée, récupérer le registre live et retirer les changements déjà inclus avant de préparer le prochain candidat. Ne jamais recopier le code courant à la place de l’archive précise approuvée.
+
+Numérotation validée le 27 octobre 2026 : releases affichées `v0.x`, essais préparatoires `v0.x.y`. Le compteur y avance à chaque essai et repart à 1 pour la prochaine release. Les identifiants techniques de builds restent immuables ; les métadonnées PWA conservent trois composantes numériques pour les mises à jour.
+
+Les déploiements de développement se font par la branche `sandbox/dft`. Il n’est pas nécessaire de pousser vers `main` pour publier un essai ; une intégration dans la branche principale se traite séparément.
