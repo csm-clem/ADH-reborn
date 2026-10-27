@@ -55,5 +55,16 @@
     "docs/ux-navigation/verification/browser.json",
     "docs/ux-navigation/verification/gameplay-unchanged.json"
   ],
-  "real_phone_validation": false
+  "real_phone_validation": false,
+  "additional_user_confirmation": {
+    "point": 16,
+    "status": "approved_and_implemented"
+  },
+  "additional_explanations_requested": [
+    17,
+    18,
+    19,
+    20,
+    21
+  ]
 }

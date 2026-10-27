@@ -62,3 +62,47 @@ Recommandation : conserver la disposition actuelle. Si le point 13 est validé e
 ## Références et suivi
 
 Roadmap : V1-13 pour le polissage et l’accessibilité ; V1-12 pour les régressions ; V1-11 pour les entrées/sorties des chapitres ; OPS-06 pour l’essai isolé. L’API du tableau de bord reste bloquée par la politique réseau de cette session. Les preuves sont conservées localement pour une mise à jour ultérieure par l’API, sans écraser sa base persistante.
+
+## Complément demandé — points 17 à 21, non implémentés
+
+Le point 16 est confirmé à nouveau par Clément : son état visuel est inclus dans le lot. Les cinq propositions ci-dessous sont expliquées pour décision, sans étendre leur réalisation.
+
+### 17 — Expliquer les boutons désactivés
+
+Un bouton grisé signale qu’il est indisponible, mais ne dit ni pourquoi ni comment le rendre actif. Sur téléphone, une infobulle au survol n’aide pas.
+
+Exemple adapté à la découverte : sous « J’essaie sans les noms », afficher « Encore 2 emplacements à trouver ». Le nombre est calculé à partir de l’exercice, pas fixé à six cordes : cela doit aussi fonctionner pour une basse, une guitare à huit cordes ou une famille de notes. À zéro, le bouton retrouve son état actif. Ce texte indique la condition, sans révéler où sont les réponses.
+
+Recommandation : un motif court, visible à proximité du bouton et mis à jour lorsque c’est utile. Aucun nouveau clic, aucune nouvelle condition pédagogique, aucun compte à rebours ajouté. Le texte disparaît ou devient inutile quand le bouton est disponible.
+
+### 18 — Clarifier les commandes de séance
+
+Pause, son, plein écran et dièses/bémols ont des fonctions différentes malgré leurs icônes de poids comparable. Les distinguer visuellement peut aider à trouver la pause rapidement.
+
+Une option limitée garde les commandes à leur place et donne plus de présence à Pause, avec des icônes et libellés accessibles cohérents. Une option plus compacte rangerait des commandes secondaires dans un menu « … », mais ajouterait un clic et ne gagne pas forcément de place s’il remplace un unique bouton.
+
+Recommandation : commencer par la distinction visuelle. Garder Pause et Son directement accessibles, y compris pendant la pause. Le sélecteur ♯/♭ a été explicitement demandé à côté de Pause : ne pas le déplacer sans accord supplémentaire. Ne créer un menu que si un encombrement réel justifie ce compromis. Cela ne réintroduit pas une mention textuelle permanente « son coupé ».
+
+### 19 — Montrer graphiquement où agir
+
+Le point 12 explique le type d’activité au moment de le choisir. Le point 19 indique la zone à utiliser lors de la première découverte : la roue, le manche ou les commandes d’exploration.
+
+Exemple « Nommer » : un petit schéma relie le point sur le manche à une réponse dans la roue. Exemple « Retrouver » : le nom demandé est relié au manche avec la courte consigne « Touchez sa place ». L’exemple se trouve dans l’introduction, reste accessible à nouveau depuis l’aide et ne se répète pas à chaque question.
+
+Recommandation : faire ce travail dans les introductions existantes, avec un exemple distinct des questions évaluées. Pendant une véritable question, un signal peut désigner le manche entier ou la corde demandée ; il ne doit pas montrer la case correcte. Préserver le passage fluide découverte → jeu, sans multiplier les écrans obligatoires. Ce point n’autorise pas à déplacer les blocs du jeu, sujet du point 13.
+
+### 20 — Rendre le clavier cohérent dans toute l’application
+
+Le manche dispose déjà de commandes clavier et les nouveaux onglets du catalogue suivent leur fonctionnement clavier habituel. Le point 20 est une recette plus large : vérifier tout le trajet avec Tab, Maj+Tab, Entrée et Échap, puis le retour du focus après une fenêtre ou un changement de page.
+
+Exemples : après avoir fermé Pause, retrouver un contrôle utile ; en ouvrant une fenêtre, ne pas laisser le focus derrière ; dans Progrès, pouvoir atteindre une note et consulter son détail ; voir nettement la cible active dans les quatre thèmes.
+
+Recommandation : sécuriser d’abord les comportements natifs et documenter les touches déjà fonctionnelles. Ne pas afficher des raccourcis fictifs et ne pas détourner les touches du navigateur ou celles d’un champ de texte. Ajouter d’éventuels raccourcis rapides ensuite, avec leurs tests. Ce n’est ni un nouveau mode d’exercice ni un remplacement du tactile.
+
+### 21 — Adapter le jeu à la largeur et à la hauteur réellement disponibles
+
+Le point 11 améliore l’usage de la largeur dans les menus et réglages sur laptop. Le point 21 concerne surtout le jeu dans les cas contraints : laptop peu haut, téléphone paysage, barres Safari visibles, agrandissement du texte ou taille de fenêtre réduite.
+
+L’objectif est que la consigne, la réponse, la progression et les commandes essentielles restent utilisables, sans agrandir artificiellement le manche ni l’écraser pour tout faire tenir. Les commandes d’interface doivent conserver des cibles confortables, idéalement autour de 44 px. Le manche demande un compromis propre au nombre de cases et de cordes : treize cases ne peuvent pas toutes offrir 44 px de largeur sur un écran étroit.
+
+Recommandation : revoir d’abord les marges et les informations secondaires, puis tester chaque configuration. Conserver les décisions existantes : pas de rotation automatique ; 0–12 ajusté comme aujourd’hui ; 0–24 sur une bande continue défilable, avec boutons de réponse facultatifs. Ce point ne signifie pas « imposer le paysage », « ajouter du défilement partout » ou « rapprocher questions et réponses ». Une recette sur de vrais téléphones reste nécessaire avant de le déclarer validé.

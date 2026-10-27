@@ -13,8 +13,11 @@ with sync_playwright() as p:
  page.keyboard.press('Enter');assert helpers['snap'](page)['session']['index']==1
  assert page.locator('#pilot-neck [tabindex="0"]').count()==1
  page.goto('http://localhost:4173/');page.evaluate('localStorage.clear()');page.reload()
- button=page.locator('#setup-form button[type=submit]');day=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert '255, 56, 57' in day and '255, 178, 48' in day
- page.screenshot(path=str(out/'sunrise-jour.png'));button.hover();hover=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert '39, 51, 158' in hover and '81, 187, 232' in hover
- page.screenshot(path=str(out/'sunrise-hover.png'));page.mouse.move(0,0);page.evaluate('document.documentElement.dataset.theme="dark"');night=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert night!=day;page.screenshot(path=str(out/'sunrise-nuit.png'))
+ button=page.locator('#setup-form button[type=submit]')
+ def contrast():
+  return button.evaluate(r'''e=>{const s=getComputedStyle(e),rgb=c=>c.match(/[0-9.]+/g).slice(0,3).map(Number),luma=c=>rgb(c).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0),ink=luma(s.color);return Math.min(...(s.backgroundImage.match(/rgba?\([^)]*\)/g)||[s.backgroundColor]).map(c=>{const bg=luma(c);return (Math.max(ink,bg)+.05)/(Math.min(ink,bg)+.05)}));}''')
+ day=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert 'linear-gradient' in day;assert contrast()>=4.5
+ page.screenshot(path=str(out/'sunrise-jour.png'));button.hover();hover=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert 'linear-gradient' in hover and hover!=day;assert contrast()>=4.5
+ page.screenshot(path=str(out/'sunrise-hover.png'));page.mouse.move(0,0);page.evaluate('document.documentElement.dataset.theme="dark"');night=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert night!=day;assert contrast()>=4.5;page.screenshot(path=str(out/'sunrise-nuit.png'))
  assert not errors,errors
  (out/'keyboard-palette.json').write_text(json.dumps({'single_tab_stop':True,'arrow_navigation':True,'home_end':True,'enter_answers':True,'day':day,'hover':hover,'night':night,'errors':errors},indent=2));b.close()
