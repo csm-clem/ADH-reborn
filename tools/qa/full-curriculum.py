@@ -2,7 +2,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 import json
 h={};exec(Path('tools/qa/beta-browser.py').read_text().split('with sync_playwright()')[0].replace('betaCatalog(profile)','betaCatalog(profile,{full:true})'),h)
-h['BASE']='http://localhost:4173/?curriculum=full'
+h['BASE']='http://localhost:4173/'
 out=Path('work/roadmap');out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context(service_workers='block',viewport={'width':844,'height':390},is_mobile=True,has_touch=True);page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)))

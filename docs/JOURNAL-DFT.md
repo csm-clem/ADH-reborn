@@ -2,7 +2,7 @@
 
 ⭐️ Nouveautés · ⚙️ Améliorations · 🐛 Corrections · 🎉 Événements
 
-Les entrées décrivent chaque version à sa livraison. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
+Les entrées décrivent uniquement les versions publiées en live. Les essais intermédiaires restent dans le bac à sable et sont regroupés lors de leur promotion. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
 ## v0.37 — Des cours plus courts et mieux cadrés
 

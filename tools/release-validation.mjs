@@ -5,14 +5,15 @@ import {runInNewContext} from 'node:vm';
 import {checkJavaScriptFiles} from './check-syntax.mjs';
 
 /** Verify source or the actual package, including transformed production modules. */
-export async function verifyRelease({root,version,packagePath=resolve(root,'package.json'),production=false}){
+export async function verifyRelease({root,version,packagePath=resolve(root,'package.json'),production=false,updateVersion=version}){
  if(!/^\d+\.\d+\.\d+$/.test(version||''))throw Error('Format de version invalide : trois nombres sont requis pour les mises à jour.');
+ if(!/^\d+\.\d+\.\d+$/.test(updateVersion||''))throw Error('Version de mise à jour invalide.');
  root=resolve(root);
  const read=file=>readFile(resolve(root,file),'utf8');
  const display=file=>relative(root,file).split(sep).join('/');
  const sw=await read('sw.js'),release=await read('release.js'),update=JSON.parse(await read('update.json'));
  if(JSON.parse(await readFile(packagePath,'utf8')).version!==version)throw Error('Version package.json incohérente.');
- if(release.match(/\bexport\s+const\s+RELEASE\s*=\s*['"]([^'"]+)['"]/)?.[1]!==version||sw.match(/\bconst\s+WORKER_RELEASE\s*=\s*['"]([^'"]+)['"]/)?.[1]!==version||update.version!==version)throw Error('Versions incohérentes : livraison interrompue.');
+ if(release.match(/\bexport\s+const\s+RELEASE\s*=\s*['"]([^'"]+)['"]/)?.[1]!==version||sw.match(/\bconst\s+WORKER_RELEASE\s*=\s*['"]([^'"]+)['"]/)?.[1]!==updateVersion||update.version!==updateVersion)throw Error('Versions incohérentes : livraison interrompue.');
  const literal=sw.match(/\bconst\s+ASSETS\s*=\s*(\[[\s\S]*?\]);/)?.[1];
  if(!literal)throw Error('Liste de précache ASSETS introuvable.');
  // Evaluate only the checked-in array expression, never the worker or browser modules.

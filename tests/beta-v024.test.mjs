@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { INSTRUMENTS, makeProfile, neckGeometry } from "../core.js";
-import { betaCatalog, betaEvidence } from "../beta-catalog.js";
+import { betaCatalog as buildBetaCatalog, betaEvidence } from "../beta-catalog.js";
 import { betaCourses, courseCompleted } from "../beta-courses.js";
 import {
   questionsFor,
@@ -16,11 +16,13 @@ import { continueLearning, routeChapters } from "../beta-home.js";
 import { PilotController } from "../pilot-ui.js";
 import { initialState } from "../state.js";
 import { AchievementsController } from "../achievements-ui.js";
+// Explicit historical fixture: keep validating the original six-scope beta.
+const betaCatalog = (profile, options = {}) => buildBetaCatalog(profile, { ...options, full: false });
 const profile = makeProfile("guitar6");
 const rng = (seed) => () =>
   ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 
-test("The entire beta has three exact zones, three physical strings, four primer chapters and a shared guided path", () => {
+test("The historical beta fixture has three exact zones, three physical strings, four primer chapters and a shared guided path", () => {
   for (const instrument of INSTRUMENTS) {
     const p = makeProfile(instrument.id),
       catalog = betaCatalog(p),

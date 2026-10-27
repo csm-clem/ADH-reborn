@@ -7,7 +7,7 @@ import {
 } from "./pilot.js";
 
 /** Canonical targeted chapters. Guided stages only refer to these same objects. */
-export function betaCatalog(profile, { notation = "international", full = false } = {}) {
+export function betaCatalog(profile, { notation = "international", full = true } = {}) {
   const scopes = [
     {
       id: "z1",

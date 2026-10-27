@@ -16,6 +16,7 @@ jobs:
           node-version: 22
       - run: npm run check
       - run: npm test
+      - run: python3 tests/environments_test.py
       - run: npm run verify:release
   beta-and-production:
     needs: source-checks
@@ -44,6 +45,10 @@ jobs:
           python tools/qa/full-curriculum.py
           python tools/qa/course-curriculum.py
           python tools/qa/scroll-neck.py
+          python tools/environments.py sandbox --number 999999 --ledger release-ledger.json --output work/sandbox/artifacts
+          node tools/verify-release.mjs --sandbox
+          python tools/qa/sandbox.py
+          python tools/qa/sandbox-update.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production
@@ -58,4 +63,5 @@ jobs:
             work/ci
             work/roadmap
             work/scroll-neck
+            work/sandbox
             /tmp/dft-server.log

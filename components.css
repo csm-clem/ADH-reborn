@@ -59,3 +59,5 @@ select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
 .button-count{font-size:12px;font-variant-numeric:tabular-nums}
 
 .button.primary,.button.secondary{border:0;box-shadow:none;text-shadow:none}
+
+.change-toolbar,.change-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.change-filters{padding-top:12px}.change-filters[hidden],.change-release[hidden],[data-change-type][hidden]{display:none!important}.change-filters [aria-pressed=true]{background:var(--ink);color:var(--surface)}.change-count{margin:10px 0 0;font-size:14px;color:var(--muted)}.change-count:empty{display:none}.sandbox-label{color:var(--brand)}

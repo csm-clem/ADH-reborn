@@ -90,6 +90,7 @@ test('Syntax discovery includes a new nested module and tooling, without relying
  const f=await fixture(t);
  for(const path of ['new-module/nested/fresh.js','tools/fresh.mjs','tests/fresh.test.mjs'])await f.put(path,'export {};');
  for(const path of ['docs/historical.js','downloads/old.js','dist/built.js','work/fixture.js','node_modules/vendor/index.js'])await f.put(path,'deliberately invalid (');
+ await f.put('dist-sandbox/generated.js','export const broken = ;');
  const files=await collectJavaScriptFiles(f.root);
  for(const path of ['new-module/nested/fresh.js','tools/fresh.mjs','tests/fresh.test.mjs'])assert.ok(files.includes(path));
  assert.ok(files.every(path=>! /^(?:docs|downloads|dist|work|node_modules)\//.test(path)));

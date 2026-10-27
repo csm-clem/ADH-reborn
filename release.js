@@ -1,6 +1,10 @@
 export const APP_NAME='Daily Fretboard Trainer';
-export const RELEASE='0.37.0';
+export const RELEASE='0.38.0';
+export const CHANNEL='live';
+export const BUILD_ID='source';
+export const UPDATE_VERSION='0.38.0';
 export const dataEpoch=version=>'stable';
 export const DATA_EPOCH=dataEpoch(RELEASE);
-export const STATE_KEY='fretboard-trainer:settings';
-export const PILOT_KEY=`fretboard-trainer:pilot:${DATA_EPOCH}`;
+export const STORAGE_PREFIX='fretboard-trainer';
+export const STATE_KEY=`${STORAGE_PREFIX}:settings`;
+export const PILOT_KEY=`${STORAGE_PREFIX}:pilot:${DATA_EPOCH}`;

@@ -4,7 +4,7 @@ import {resolve,relative,sep} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
 const projectRoot=fileURLToPath(new URL('../',import.meta.url));
-const excluded=new Set(['.git','node_modules','dist','work','downloads','docs']);
+const excluded=new Set(['.git','node_modules','dist','dist-sandbox','work','downloads','docs']);
 
 /** Include new modules, services, tests and tools without a manual file list. */
 export async function collectJavaScriptFiles(root=projectRoot){

@@ -30,7 +30,7 @@ export class PilotController{
  }
  get profile(){return this.host.getState().profile;}
  get notation(){return notationFor(this.host.getState());}
- get catalog(){const key=`${this.profile.key}:${JSON.stringify(this.notation)}`;if(this.catalogKey!==key){this.cachedCatalog=betaCatalog(this.profile,{notation:this.notation,full:!!this.host.fullCurriculum});this.catalogKey=key;const d=this.store.profiles[this.profile.key];if(d?.courses)for(const [id,course]of betaCourses(this.profile,this.cachedCatalog,this.notation))if(d.courses[id]?.completed&&!courseCompleted(course,d.courses[id])){const r=d.courses[id];r.completed=false;r.index=Math.max(0,course.pages.findIndex(p=>p.quiz?!r.correct.includes(p.id):!r.visited.includes(p.id)));r.extended=true;}}return this.cachedCatalog;}
+ get catalog(){const key=`${this.profile.key}:${JSON.stringify(this.notation)}`;if(this.catalogKey!==key){this.cachedCatalog=betaCatalog(this.profile,{notation:this.notation,full:true});this.catalogKey=key;const d=this.store.profiles[this.profile.key];if(d?.courses)for(const [id,course]of betaCourses(this.profile,this.cachedCatalog,this.notation))if(d.courses[id]?.completed&&!courseCompleted(course,d.courses[id])){const r=d.courses[id];r.completed=false;r.index=Math.max(0,course.pages.findIndex(p=>p.quiz?!r.correct.includes(p.id):!r.visited.includes(p.id)));r.extended=true;}}return this.cachedCatalog;}
  get plan(){return this.catalog.byScope.get(this.module?.scopeId||this.data.navigation?.route)?.plan||this.catalog.byScope.get('z1').plan;}
  get data(){const p=this.profile;const d=this.store.profiles[p.key]||={profile:p,attempts:[],later:[],session:null,diagnostic:null};return d;}
  get activities(){return this.catalog.activities;}

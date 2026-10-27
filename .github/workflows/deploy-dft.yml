@@ -1,55 +1,72 @@
-name: Déployer DFT v0.37 sur o2switch
+name: Publier un essai DFT en live
 on:
   workflow_dispatch:
-  push:
-    branches: [deploy/dft-v0.37]
+    inputs:
+      sandbox_build:
+        description: Identifiant exact de l’essai validé
+        required: true
+        type: string
+      version:
+        description: Version live (trois nombres)
+        required: true
+        type: string
+      title:
+        description: Titre de la publication
+        required: true
+        type: string
+      confirmation:
+        description: PUBLIER suivi de l’identifiant exact de l’essai
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
   group: dft-o2switch
   cancel-in-progress: false
 jobs:
-  deploy:
+  promote:
     if: github.repository == 'csm-clem/ADH-reborn'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Vérifier le code et la livraison avant transfert
+      - name: Préparer la copie exacte de l’essai approuvé
+        env:
+          DFT_BUILD: ${{ inputs.sandbox_build }}
+          DFT_VERSION: ${{ inputs.version }}
+          DFT_TITLE: ${{ inputs.title }}
+          DFT_CONFIRM: ${{ inputs.confirmation }}
         run: |
-          npm run check
-          npm test
-          npm run verify:release
-      - name: Transfert FTPS vérifié, fichiers statiques uniquement
+          mkdir -p work
+          python tools/environments.py promote --build "$DFT_BUILD" --version "$DFT_VERSION" --title "$DFT_TITLE" --confirmation "$DFT_CONFIRM" --output downloads/promoted > work/promotion.json
+          python -c 'import json,os; p=json.load(open("work/promotion.json")); open(os.environ["GITHUB_ENV"],"a").write("DFT_ARCHIVE="+p["archive"]+"\n")'
+      - name: Publier uniquement la promotion confirmée
         env:
           DFT_FTP_HOST: ${{ secrets.DFT_FTP_HOST }}
           DFT_FTP_USERNAME: ${{ secrets.DFT_FTP_USERNAME }}
           DFT_FTP_PASSWORD: ${{ secrets.DFT_FTP_PASSWORD }}
-        run: python tools/deploy/ftps.py
-      - name: Diagnostic public du certificat FTPS
-        if: failure()
-        run: |
-          timeout 20 openssl s_client -connect gout.o2switch.net:21 -starttls ftp -servername gout.o2switch.net -showcerts </dev/null
-      - name: Vérifier le site publié
+          DFT_CONFIRM_PROMOTION: ${{ inputs.confirmation }}
+        run: python tools/deploy/ftps.py --channel live --archive "$DFT_ARCHIVE"
+      - name: Vérifier le live et son journal
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
+          EXPECTED_BUILD: ${{ inputs.sandbox_build }}
         run: |
           python - <<'PY'
-          import urllib.request,json
-          base='https://media.lecompositeur.com/DFT/'
-          def get(path):
-              req=urllib.request.Request(base+path,headers={'Cache-Control':'no-cache'})
-              return urllib.request.urlopen(req,timeout=45).read()
-          assert json.loads(get('update.json'))['version']=='0.37.0'
-          assert b'0.37.0' in get('release.js')
-          assert b'Daily Fretboard Trainer' in get('index.html')
-          assert b'RELEASE_HISTORY' in get('changelog.js')
-          for texture in ['paper','brushed','engraved']:
-              assert b'<svg' in get('achievement-finishes/'+texture+'.svg')
-          assert b'is-album' in get('achievements.css')
-          print('HTTPS, accueil, version 0.37.0 et journal accessibles.')
+          import json,os,urllib.request
+          def get(p):return json.load(urllib.request.urlopen('https://media.lecompositeur.com/DFT/'+p,timeout=45))
+          assert get('update.json')['version']==os.environ['EXPECTED_VERSION']
+          assert get('release-ledger.json')['live_version']==os.environ['EXPECTED_VERSION']
+          assert get('promotion-receipt.json')['promoted_from']==os.environ['EXPECTED_BUILD']
+          print('Version, journal live et origine de la promotion vérifiés.')
           PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dft-live-promotion
+          path: |
+            downloads/promoted
+            work/promotion.json

@@ -3,7 +3,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 import json
 h={};exec(Path('tools/qa/beta-browser.py').read_text().split('with sync_playwright()')[0],h)
-h['BASE']='http://localhost:4173/?curriculum=full'
+h['BASE']='http://localhost:4173/'
 checks=[];errors=[]
 def open_course(q,course,instrument='guitar6',index=0):
  h['seed'](q,instrument)

@@ -1,5 +1,5 @@
 import {makeProfile,pitchLabel} from './core.js';
-import {DATA_EPOCH,STATE_KEY,PILOT_KEY} from './release.js';
+import {DATA_EPOCH,STATE_KEY,PILOT_KEY,CHANNEL} from './release.js';
 export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',accidentals:'sharp',sound:true,voice:'auto',theme:'light',positionButtons:false,beginnerGuide:false,collection:{category:'all',filter:'all',layout:'album',sort:'path'}};}
 export function preferences(value){
  const state=initialState();if(!value||typeof value!=='object')return state;
@@ -21,7 +21,7 @@ export function validateState(value){
  const valid=preferences(value);if(value.profile&&!valid.profile)throw new Error('Instrument invalide dans la sauvegarde.');return valid;
 }
 export function loadState(storage){
- let raw=storage.getItem(STATE_KEY)||storage.getItem('adh-reborn:state:v1'),state;
+ let raw=storage.getItem(STATE_KEY)||(CHANNEL==='live'?storage.getItem('adh-reborn:state:v1'):null),state;
  try{state=preferences(JSON.parse(raw));}catch{state=initialState();}
  storage.setItem(STATE_KEY,JSON.stringify(state));return state;
 }

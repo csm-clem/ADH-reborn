@@ -1,7 +1,7 @@
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 import json,os
-h={};exec(Path('tools/qa/beta-browser.py').read_text().split('with sync_playwright()')[0].replace('betaCatalog(profile)','betaCatalog(profile,{full:true})'),h);h['BASE']='http://localhost:4173/?curriculum=full'
+h={};exec(Path('tools/qa/beta-browser.py').read_text().split('with sync_playwright()')[0].replace('betaCatalog(profile)','betaCatalog(profile,{full:true})'),h);h['BASE']='http://localhost:4173/'
 out=Path(os.environ.get('ADH_SCROLL_QA_OUTPUT','work/scroll-neck'));out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context(service_workers='block',has_touch=True,is_mobile=True,viewport={'width':390,'height':844});q=c.new_page();q.on('pageerror',lambda e:errors.append(str(e)))

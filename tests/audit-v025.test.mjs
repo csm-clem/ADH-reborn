@@ -89,7 +89,9 @@ test("Durable chapter proofs, statistics and same-exercise records survive journ
     stats,
     "must not double-count old attempts",
   );
-  const original = data.attempts.find((a) => a.activity === "opens");
+  // The extended debug journal has rotated its earliest legacy attempts.
+  const original = simulatedBetaCompletion(profile, betaCatalog(profile, {full:false})).profiles[profile.key].attempts.find((a) => a.activity === "opens");
+  assert.ok(original);
   for (let i = 0; i < 1100; i++) {
     data.attempts.push({ ...original, id: "new-" + i, at: Date.now() + i });
     preserveLearningProofs(catalog, data);
@@ -172,7 +174,7 @@ test("Only three branch tiles appear at root; every path is nested and the guide
   c.data.navigation = { branch: "targeted" };
   assert.equal(
     (betaHome(c).match(/class="panel route-card"/g) || []).length,
-    6,
+    25,
   );
   c.data.navigation = { branch: "guided", route: "guided" };
   const route = betaHome(c);

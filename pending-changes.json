@@ -1,0 +1,10 @@
+{
+  "target_release": "0.38.0",
+  "title": "Toute la bêta, un journal plus pratique",
+  "changes": [
+    {"id":"all-beta-paths","type":"feature","text":"Tous les parcours implémentés sont accessibles dès l’ouverture : zones jusqu’à la case 24, chaque corde, duos voisins et cordes mélangées."},
+    {"id":"single-beta-catalogue","type":"improvement","text":"Le catalogue ne dépend plus d’un lien de prévisualisation ; les résultats existants restent conservés."},
+    {"id":"changelog-type-filters","type":"feature","text":"Le journal permet de filtrer les nouveautés, améliorations, corrections et événements."},
+    {"id":"changelog-expand-collapse","type":"improvement","text":"Dépliez ou repliez toutes les versions du journal en un geste."}
+  ]
+}

@@ -5,3 +5,7 @@ work/
 dist/
 __pycache__/
 *.pyc
+dist-sandbox/
+downloads/sandbox/
+downloads/promoted/
+downloads/*candidate*

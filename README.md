@@ -1,8 +1,12 @@
 # Daily Fretboard Trainer
 
-PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis. Version bêta actuelle : **0.37.0** — cours étendus corrigés et raccourcis ; manche 0–24 défilable dans les cours et les exercices de la prévisualisation.
+PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis.
 
-[Archive FTP v0.37](downloads/daily-fretboard-trainer-v0.37.zip) · [Rapport de livraison](docs/CHANGES-v0.37.md) · [Spécification révisée](docs/beta-v0.24/SPECIFICATION-UTILISATEUR.md)
+- **Live : 0.37.0**, https://media.lecompositeur.com/DFT/ — publication uniquement après validation explicite d’un essai.
+- **Bac à sable :** https://media.lecompositeur.com/DFT/lab/ — tous les parcours implémentés sont visibles ; chaque essai déployé est conservé sous `lab/builds/<identifiant>/`.
+- **Candidat en cours : 0.38.0.** Le journal public reste celui des versions live, sans afficher les étapes intermédiaires.
+
+[Environnements et publication](docs/ENVIRONNEMENTS.md) · [Changements en cours](pending-changes.json) · [Rapport du candidat](docs/CHANGES-v0.38.md)
 
 ## Priorités de développement
 
@@ -27,14 +31,14 @@ Ouvrir `http://localhost:4173`. Sur un téléphone distant, utiliser l’héberg
 
 - Guitares 6/7/8 cordes et basses 4/5/6 cordes, bibliothèque de 32 accordages et éditeur sonore par demi-ton. Configuration initiale contenue dans l’écran, avec pagination des cordes sur écran court.
 - Six images WebP fournies par le porteur du projet, intégrées localement et disponibles hors ligne.
-- Parcours par familles calculé depuis les hauteurs réelles : accordage, chaque famille isolée, puis son mélange avec les positions déjà apprises. 214 activités évaluées pour la guitare six cordes standard, plus 72 découvertes de familles et les cours courts ; le nombre dépend des hauteurs réellement disponibles. Les cas sans discrimination sont travaillés en mélange plutôt que dans une roue à une seule réponse.
+- Parcours par familles calculé depuis les hauteurs réelles : accordage, chaque famille isolée, puis son mélange avec les positions déjà apprises. Le nombre d’activités évaluées, de découvertes et de cours est calculé pour chaque instrument et chaque périmètre ; le nombre dépend des hauteurs réellement disponibles. Les cas sans discrimination sont travaillés en mélange plutôt que dans une roue à une seule réponse.
 - **20 à 30 questions maximum**, un seul type de réponse par exercice. Séries mélangées et équilibrées ; les grandes listes répartissent leurs positions dans cette limite. Les exercices « retrouver » conservent une courte suite musicale finale, pour un maximum de 30 réponses en tout.
 - Roue de hauteurs (E2/E3/E4…) pour les familles isolées ; roue de sept notes naturelles pour les mélanges ; altérations utiles dans un second anneau intérieur. Choix dièses/bémols dans les Paramètres et pendant le jeu.
 - Révisions cumulatives : au moins 30 % de questions sur la nouvelle famille dans ses mélanges ; exercices isolés réellement limités à leur famille.
 - Accès libre à toutes les activités disponibles ; ordre recommandé sans verrou. Repère de réussite à **90 % de premières réponses correctes**, sans condition de vitesse. Une correction ne remplace pas la première erreur. Défi facultatif : cinq étoiles à 100 % et moyenne ≤ 1 seconde.
 - Exemples graphiques à la première rencontre de chaque format et micro-leçons sur les noms et positions des notes. Les instructions ne consomment pas le temps de réponse.
 - Corrections à hauteur exacte : E2 et E4 ne sont pas confondus. Démonstration distincte des essais de l’élève.
-- Manche horizontal, entièrement cadré sans glissement pour répondre. Les exercices par zone gardent deux panneaux en paysage, empilés en portrait. Une corde entière reste continue, avec paysage conseillé ; en portrait, des boutons de cases prennent le relais si les cibles sont trop étroites. Corde physique 1 en haut.
+- Manche horizontal : affichage cadré jusqu’à la case 12, continu défilable pour les activités à vide–24. Les boutons de réponse restent facultatifs. Les exercices par zone gardent deux panneaux en paysage, empilés en portrait. Corde physique 1 en haut.
 - Préparation plein écran d’une seconde (« À vous de jouer ! »), exclue du chronométrage, question suivante immédiatement disponible après chaque réponse, corrections sur la seule cible, indépendantes et superposables, pause floutée avec Muet accessible, plein écran.
 - Guitare électrique clean par défaut et basse électrique automatique pour les basses, par synthèse locale. Sélecteur acoustique / électrique clean / basse clean dans les Paramètres. Questions et erreurs silencieuses ; son uniquement après une bonne réponse. Écoute des exemples dans les introductions, notation CDE ou Do–Ré–Mi, charte Le Compositeur, installation et mode hors ligne.
 
@@ -117,4 +121,4 @@ Les interfaces et exemples graphiques sont originaux ; les images des instrument
 
 ## Prévisualisation du parcours V1
 
-Le catalogue étendu se teste avec `?curriculum=full`. Cette prévisualisation conserve les anciennes données et identifiants ; elle reste hors du parcours par défaut tant que la recette du parcours complet n’est pas terminée. Le choix tactile est confirmé : manche continu défilable pour 0–24, boutons optionnels. Suivi : V1-06 à V1-09 dans le tableau de bord.
+Le catalogue complet implémenté est accessible sur l’URL normale, sans paramètre de prévisualisation. Les anciennes données et identifiants sont conservés ; les nouveaux parcours apparaissent sans validation automatique de leurs acquis. Le choix tactile est confirmé : manche continu défilable pour 0–24, boutons optionnels. Suivi : V1-06 à V1-09 dans le tableau de bord.
