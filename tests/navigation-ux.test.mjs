@@ -24,3 +24,10 @@ test('Targeted categories expose only their own real scopes and retain the selec
  const c=controller();c.data.navigation={branch:'targeted',route:null,chapter:null};
  for(const kind of ['zone','string','duo','mixed']){c.data.catalogKind=kind;const html=betaHome(c);assert.equal((html.match(/class="panel route-card"/g)||[]).length,c.catalog.scopes.filter(s=>s.kind===kind).length);assert.match(html,new RegExp(`aria-selected="true"[^>]+data-kind="${kind}"`));}
 });
+
+test('Revision shortcut describes the activity actually being revised',()=>{
+ const c=controller(),activity=c.catalog.activities.find(a=>a.id==='opens-find');c.data.studyRoute='guided';
+ c.data.attempts=[{id:'failed-for-review',activity:activity.id,finished:true,passed:false,at:Date.now(),events:[{mode:'find',target:activity.pool[0],correct:false,ms:1000,at:Date.now(),aids:[],retry:false}]}];
+ const next=nextStudy(c);assert.equal(next.review.kind,'errors');assert.equal(next.next.id,activity.id);assert.equal(next.activity.subtitle,activity.subtitle);
+ let chosen;c.action=(action,button)=>chosen=[action,button.dataset.id];resumeStudy(c);assert.deepEqual(chosen,['beta-review',activity.id]);
+});

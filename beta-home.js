@@ -405,7 +405,7 @@ export function nextStudy(c,evidence=betaEvidence(c.catalog,c.data)){
  const review=!saved&&reviewRecommendation(c.catalog,c.data,route);
  const chapter=(review&&chapters.find(ch=>ch.activityIds?.includes(review.activity)))||(saved&&chapters.find(ch=>ch.activityIds?.includes(saved.activity)||ch.discoveryId===saved.activity))||chapters.find(ch=>ch.id===c.data.studyChapter&&chapterState(c,ch,evidence).key!=='complete')||chapters.find(ch=>chapterState(c,ch,evidence).key!=='complete');
  if(!chapter)return null;
- const next=saved?{id:saved.activity,kind:'activity'}:chapterNext(c,chapter,evidence);
+ const next=saved?{id:saved.activity,kind:'activity'}:review?{id:review.activity,kind:'activity'}:chapterNext(c,chapter,evidence);
  return {route,chapter,next,review,resume:!!saved,activity:next?.kind==='activity'?c.resolve(next.id):null};
 }
 export function resumeStudy(c){const next=nextStudy(c);if(!next)return;c.data.navigation={branch:branchForRoute(next.route),route:next.route,chapter:next.chapter.id};c.save();if(next.review)c.action('beta-review',{dataset:{id:next.review.activity}});else startChapter(c,next.chapter.id);}

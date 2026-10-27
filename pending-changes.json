@@ -116,6 +116,11 @@
       "id": "ux-16-chapter-states",
       "type": "feature",
       "text": "Les chapitres affichent À commencer, En cours ou Terminé, avec texte et symbole, et signalent la prochaine séance."
+    },
+    {
+      "id": "ux-06-revision-shortcut-label",
+      "type": "bug",
+      "text": "Le raccourci de révision affiche le nom de l’activité qu’il lance réellement."
     }
   ]
 }
