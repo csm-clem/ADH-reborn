@@ -20,7 +20,7 @@ import {PilotController} from './pilot-ui.js';
 import {OnboardingController} from './onboarding.js';
 const ROOT=document.querySelector('#app');
 bindChangelog(ROOT);
-if(CHANNEL==='sandbox'){document.title='DFT · Bac à sable · '+DISPLAY_VERSION;const badge=document.createElement('span');badge.className='lab-version-badge';badge.textContent='LAB · '+DISPLAY_VERSION;badge.setAttribute('aria-label','Bac à sable '+DISPLAY_VERSION);document.body.append(badge);}
+if(CHANNEL==='sandbox')document.title='DFT · Bac à sable · '+DISPLAY_VERSION;
 appStore.initialize();
 audioService.configure({getState:appStore.getState});
 const {unlockAudio,stopAudio,playNote,playSequence,playArrangement}=audioService;

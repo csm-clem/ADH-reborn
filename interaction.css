@@ -44,4 +44,3 @@
 #app[data-view="home"] .content {touch-action:pan-y pinch-zoom;}
 #app[data-view="course"] .game-header, #app[data-view="course"] .course-content > h1, #app[data-view="course"] .course-content > p, #app[data-view="pilot"] .game-header {touch-action:pan-y pinch-zoom;}
 
-.lab-version-badge{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(3px,env(safe-area-inset-bottom));z-index:80;font:700 10px/1.2 system-ui;padding:3px 6px;border-radius:5px;background:var(--surface,#fff);color:var(--text,#333638);border:1px solid currentColor;pointer-events:none;opacity:.85}
