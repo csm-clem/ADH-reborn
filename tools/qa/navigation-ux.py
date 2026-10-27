@@ -6,6 +6,13 @@ h={};exec(Path('tools/qa/beta-browser.py').read_text().split('with sync_playwrig
 out=Path('work/navigation-ux');out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context(service_workers='block',viewport={'width':390,'height':844},has_touch=True);q=c.new_page();q.on('pageerror',lambda e:errors.append(str(e)))
+ # A cold PWA entry into a saved chapter must go to its parents before leaving.
+ fresh=b.new_context(service_workers='block',viewport={'width':390,'height':844});deep=fresh.new_page();deep.on('pageerror',lambda e:errors.append(str(e)))
+ h['seed'](deep,'guitar6','note-4-find');assert deep.locator('.chapter-overview').count()==1
+ deep.go_back();deep.wait_for_selector('.lesson-row');assert h['snap'](deep)['navigation']['chapter'] is None
+ deep.go_back();deep.wait_for_selector('.catalogue-tabs');assert h['snap'](deep)['navigation']['route'] is None
+ deep.go_back();deep.wait_for_selector('.branch-jumbo');assert h['snap'](deep)['navigation']=={'branch':None,'route':None,'chapter':None}
+ fresh.close();checks.append('cold reopened chapter returns through its real parents')
  h['seed'](q);assert q.locator('.branch-jumbo').count()==3;assert q.locator('[data-pilot-action=study-next]').count()==1
  q.locator('[data-pilot-action=beta-branch][data-id=targeted]').click();q.locator('[role=tab][data-kind=string]').click();assert q.locator('.route-card').count()==12
  q.locator('.route-card[data-id=c24s6]').click();q.locator('.lesson-row').last.scroll_into_view_if_needed();q.wait_for_timeout(180);scroll=q.evaluate('scrollY');q.locator('.lesson-row').last.click();title=q.locator('h1').inner_text();q.go_back();q.wait_for_selector('.lesson-row');q.wait_for_timeout(200);assert abs(q.evaluate('scrollY')-scroll)<5,(scroll,q.evaluate('scrollY'));checks.append('browser back restores route scroll')

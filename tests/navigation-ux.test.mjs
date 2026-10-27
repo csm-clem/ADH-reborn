@@ -1,3 +1,4 @@
+import {initialHistoryStates} from '../services/navigation-service.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PilotController} from '../pilot-ui.js';
@@ -30,4 +31,14 @@ test('Revision shortcut describes the activity actually being revised',()=>{
  c.data.attempts=[{id:'failed-for-review',activity:activity.id,finished:true,passed:false,at:Date.now(),events:[{mode:'find',target:activity.pool[0],correct:false,ms:1000,at:Date.now(),aids:[],retry:false}]}];
  const next=nextStudy(c);assert.equal(next.review.kind,'errors');assert.equal(next.next.id,activity.id);assert.equal(next.activity.subtitle,activity.subtitle);
  let chosen;c.action=(action,button)=>chosen=[action,button.dataset.id];resumeStudy(c);assert.deepEqual(chosen,['beta-review',activity.id]);
+});
+
+test('A fresh chapter entry has real parents, without trapping root or duplicating refresh history',()=>{
+ const state={profile:'guitar6',screen:'home',nav:{branch:'targeted',route:'z1',chapter:'opens'},course:null,activity:null};
+ const chain=initialHistoryStates(state,null);
+ assert.deepEqual(chain.map(s=>s.nav),[{branch:null,route:null,chapter:null},{branch:'targeted',route:null,chapter:null},{branch:'targeted',route:'z1',chapter:null},state.nav]);
+ assert.ok(chain.every(s=>s.profile===state.profile));
+ assert.equal(initialHistoryStates(state,{...state,screen:'settings'}).length,1);
+ assert.equal(initialHistoryStates({...state,nav:{branch:null,route:null,chapter:null}},null).length,1);
+ assert.equal(initialHistoryStates({...state,screen:'stats'},null).length,1);
 });

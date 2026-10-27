@@ -121,6 +121,11 @@
       "id": "ux-06-revision-shortcut-label",
       "type": "bug",
       "text": "Le raccourci de révision affiche le nom de l’activité qu’il lance réellement."
+    },
+    {
+      "id": "ux-05-cold-parent-history",
+      "type": "bug",
+      "text": "Après réouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l’historique."
     }
   ]
 }
