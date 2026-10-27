@@ -47,3 +47,6 @@
 :root[data-theme=dark]{--bg:#131a24;--surface:#212a37;--surface-soft:#2b3749;--nav-surface:#192331;--line:#66768d;--ink:#edf1f6;--muted:#c4cfdf;--brand:#f6b38c;--purple:#f6b38c;--button_gradient_top_color:#ad4c13;--button_gradient_bottom_color:#b73044;--button-hover-top:#246d8a;--button-hover-bottom:#353b88;--secondary-fill:linear-gradient(90deg,#4f6072,#364356)}
 :root[data-theme=accessible]{--bg:#eff1f3;--surface:#fff;--surface-soft:#e5efff;--nav-surface:#e1e8ef;--ink:#111827;--muted:#344256;--line:#64748b;--brand:#003e8a;--purple:#003e8a;--secondary-fill:#111827}
 :root[data-theme=paper]{--bg:#ededed;--surface:#fff;--surface-soft:#e5e5e5;--nav-surface:#e1e1e1;--ink:#222;--muted:#505050;--line:#858585;--brand:#222;--purple:#2b2b2b;--secondary-fill:#555}
+/* Realistic wood is shaded independently from the interface's light/dark mode. */
+:root{--neck-grain-opacity:.09;--neck-highlight:.16;--neck-shadow:.12}
+:root[data-theme=dark]{--wood:#594330;--neck-grain-opacity:.11;--neck-highlight:.08;--neck-shadow:.24}

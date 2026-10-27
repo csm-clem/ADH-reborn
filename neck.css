@@ -12,6 +12,6 @@
 
 /* A few static vector fibres, shared by every diagram. No images, noise filter or animation. */
 .neck-finish,.neck-grain{pointer-events:none}
-.neck-grain{opacity:.05}
-:root[data-theme=dark] .neck-grain{opacity:.04}
+.neck-grain{opacity:var(--neck-grain-opacity)}
+:root[data-theme=dark] .neck-grain{opacity:var(--neck-grain-opacity)}
 :root[data-theme=accessible] .neck-grain,:root[data-theme=accessible] .neck-finish,:root[data-theme=paper] .neck-grain,:root[data-theme=paper] .neck-finish{display:none}

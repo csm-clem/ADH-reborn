@@ -213,10 +213,7 @@
 .pilot-game.is-long-string .neck-viewport {
   grid-row: 1;
 }
-.pilot-game.is-long-string.is-touch .game-body {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(85px, 0.7fr) minmax(0, 1fr);
-}
+
 .pilot-game.is-long-string.is-touch .answer-workspace {
   overflow: hidden;
 }
@@ -270,9 +267,7 @@
   padding: 0 4px 6px;
   font-size: 13px;
 }
-.pilot-game.is-long-string.uses-position-pad .game-body {
-  grid-template-rows: minmax(100px, 0.5fr) minmax(0, 1fr);
-}
+
 .pilot-game.is-long-string.uses-position-pad .pilot-answer.is-discovery {
   overflow: auto;
   gap: 8px;
@@ -653,10 +648,7 @@
   .pilot-game.is-long-string {
     grid-template-rows: auto 4px minmax(0, 1fr);
   }
-  .pilot-game.is-long-string.is-touch .game-body {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(90px, 1fr) minmax(90px, 1fr);
-  }
+
   .pilot-game.is-long-string.is-touch .answer-workspace {
     display: flex !important;
     flex-direction: column;
@@ -1177,7 +1169,7 @@
 }
 
 /* 0–24 only: keep a continuous neck with comfortable frets, never shrink to fit. */
-#main-content.is-scroll-neck .game-body{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(180px,38svh) minmax(0,1fr);gap:10px;min-height:0}
+
 #main-content.is-scroll-neck .neck-panel{min-height:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;position:relative;padding:0;overflow:hidden}
 #main-content.is-scroll-neck #pilot-neck{overflow-x:scroll;overflow-y:hidden;touch-action:pan-x pan-y;scrollbar-width:auto;scrollbar-color:var(--muted) var(--surface-soft);cursor:grab;overscroll-behavior-x:contain}
 #main-content.is-scroll-neck #pilot-neck::-webkit-scrollbar{height:12px}
@@ -1195,7 +1187,7 @@
 #main-content.is-scroll-neck .position-grid-heading,#main-content.is-scroll-neck .position-grid-row{grid-template-columns:38px repeat(var(--position-columns),minmax(44px,1fr))}
 #main-content.is-scroll-neck .pilot-position-buttons{grid-column:1;grid-row:2;min-height:0;margin:0}
 
-@media(min-aspect-ratio:4/3){#main-content.is-scroll-neck .game-body{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr);grid-template-rows:minmax(0,1fr)}#main-content.is-scroll-neck .neck-panel{min-height:160px}}
+
 
 /* The same continuous 0–24 neck in preparatory courses, with optional controls. */
 .course-neck-frame{position:relative;max-width:100%;min-width:0}
@@ -1205,3 +1197,55 @@
 .course-neck-frame:has(.course-neck-scroll:not([data-scroll-end=true]))::after{content:'';position:absolute;right:0;top:0;bottom:16px;width:24px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg))}
 .course-content .course-scroll-hint{font-size:13px;margin:8px auto;color:var(--muted)}
 .course-neck-scroll .neck-point{pointer-events:none}
+
+/* Instruction-first layout. The palm can cover the board or wheel, not the task. */
+#main-content.pilot-game .game-body>.question-copy{grid-column:1/-1;grid-row:1;padding:2px 8px!important;text-align:center;min-width:0}
+#main-content.pilot-game .game-body>.question-copy h1{font-size:clamp(20px,2.4vw,30px)!important;margin:0 0 2px}
+#main-content.pilot-game .game-body>.question-copy p{margin:0;font-size:14px}
+#main-content.pilot-game .game-body>.neck-panel{grid-column:1;grid-row:2;height:auto;min-height:0}
+#main-content.pilot-game .game-body>.answer-workspace{grid-column:1;grid-row:3;height:auto;padding:0 4px;min-height:0}
+#main-content.pilot-game .game-body{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(115px,.7fr) minmax(0,1fr)}
+#main-content.pilot-game.is-practice .pilot-answer{display:flex;flex-direction:column;min-height:0;overflow:auto}
+#main-content.pilot-game.is-practice .pilot-response-stage{flex:1;min-height:156px;max-width:100%;width:100%}
+#main-content.pilot-game .pilot-answer>.text-button{flex:none;min-height:44px;margin:0}
+#main-content.pilot-game .touch-prompt{display:none}
+#main-content.pilot-game.is-touch.is-practice .pilot-response-stage{min-height:0;flex:0}
+.disabled-reason{font-size:13px;line-height:1.4;color:var(--muted);margin:4px auto 8px;max-width:38ch}
+.interaction-cue{font-size:14px;font-weight:700;color:var(--ink);margin:0 0 14px}
+#main-content.pilot-game .neck-viewport:has([data-scroll-start=false]){isolation:isolate}
+#main-content.pilot-game.is-paused .game-body>.question-copy{filter:blur(16px) saturate(0);pointer-events:none}
+/* Keyboard focus is local, distinct from note feedback, and never a pointer ripple. */
+#main-content.pilot-game .fret-hit:focus-visible rect{stroke:var(--neck-ink)!important;stroke-width:1!important;stroke-dasharray:2 1;fill:transparent!important}
+:where(button,a,input,select,textarea,summary,[tabindex="0"]):focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(orientation:landscape){
+ #main-content.pilot-game .game-body{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+ #main-content.pilot-game .game-body>.neck-panel{grid-column:1;grid-row:2}
+ #main-content.pilot-game .game-body>.answer-workspace{grid-column:2;grid-row:2;display:flex!important;overflow:auto}
+ #main-content.pilot-game .pilot-answer{display:flex!important;flex-direction:column}
+}
+@media(orientation:portrait) and (max-height:650px){
+ #main-content.pilot-game .game-body{grid-template-rows:auto minmax(100px,.5fr) minmax(0,1fr);gap:4px}
+ #main-content.pilot-game .game-body>.question-copy h1{font-size:20px!important}
+ #main-content.pilot-game .game-body>.question-copy p{font-size:12px}
+}
+@media(max-height:420px) and (orientation:landscape){
+ #main-content.pilot-game{gap:3px;padding-block:4px}
+ #main-content.pilot-game .game-body{gap:4px}
+ #main-content.pilot-game .game-body>.question-copy h1{font-size:19px!important;display:inline;margin-right:10px}
+ #main-content.pilot-game .game-body>.question-copy p{display:inline;font-size:13px}
+ #main-content.pilot-game .pilot-answer>.text-button{min-height:44px}
+ #main-content.pilot-game.is-practice .pilot-response-stage{min-height:148px}
+}
+/* Touch activities need the board, not an empty answer panel. */
+#main-content.pilot-game.is-touch .game-body>.answer-workspace{align-self:start;flex:none;height:auto;max-height:46dvh}
+#main-content.pilot-game.is-touch .game-body>.answer-workspace:has(.pilot-answer>.text-button:only-child){align-self:end}
+#main-content.pilot-game .neck-panel{align-self:stretch;max-height:none}
+#main-content.pilot-game .neck-panel .neck-viewport{max-height:100%;align-self:center;width:100%}
+@media(orientation:portrait){#main-content.pilot-game.is-touch .game-body{grid-template-rows:auto minmax(0,1fr) auto}}
+#main-content.pilot-game .neck-panel{height:100%}
+#main-content.pilot-game .neck-panel .neck-viewport{align-self:center}
+/* Frame the instrument itself; spare row height is breathing room, not a giant card. */
+#main-content.pilot-game .neck-panel{background:transparent;border:0}
+#main-content.pilot-game.is-scroll-neck .neck-panel::after,#main-content.pilot-game.is-scroll-neck .neck-panel::before{position:absolute;top:var(--neck-top,0);height:var(--neck-view-height,0);width:22px;pointer-events:none;z-index:2}
+#main-content.pilot-game.is-scroll-neck .neck-panel:has(#pilot-neck[data-scroll-end=false])::after{content:'';right:0;background:linear-gradient(90deg,transparent,var(--bg))}
+#main-content.pilot-game.is-scroll-neck .neck-panel:has(#pilot-neck[data-scroll-start=false])::before{content:'';left:0;background:linear-gradient(90deg,var(--bg),transparent)}

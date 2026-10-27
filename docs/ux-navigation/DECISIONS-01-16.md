@@ -106,3 +106,20 @@ Le point 11 améliore l’usage de la largeur dans les menus et réglages sur la
 L’objectif est que la consigne, la réponse, la progression et les commandes essentielles restent utilisables, sans agrandir artificiellement le manche ni l’écraser pour tout faire tenir. Les commandes d’interface doivent conserver des cibles confortables, idéalement autour de 44 px. Le manche demande un compromis propre au nombre de cases et de cordes : treize cases ne peuvent pas toutes offrir 44 px de largeur sur un écran étroit.
 
 Recommandation : revoir d’abord les marges et les informations secondaires, puis tester chaque configuration. Conserver les décisions existantes : pas de rotation automatique ; 0–12 ajusté comme aujourd’hui ; 0–24 sur une bande continue défilable, avec boutons de réponse facultatifs. Ce point ne signifie pas « imposer le paysage », « ajouter du défilement partout » ou « rapprocher questions et réponses ». Une recette sur de vrais téléphones reste nécessaire avant de le déclarer validé.
+
+## Nouvelle décision de Clément — correctifs après v0.38.8
+
+Cette décision remplace les mentions « en attente » ci-dessus : 12, 13, 17, 19, 20 et 21 sont autorisés. 08 et 18 sont rejetés. Les quatre filtres du catalogue (09) sont annulés : toutes les sections restent visibles ensemble. Le maintien de l’ancienne géométrie du jeu n’est plus une contrainte : la consigne précède la surface tactile pour rester lisible lorsque la main la couvre.
+
+- 12 : consignes courtes dans le choix d’activité, sans écran de lancement ajouté.
+- 13 : consigne au-dessus du manche et des réponses ; en paysage deux colonnes sous cette consigne. Corde demandée explicite. La main peut masquer la cible touchée sans cacher la question.
+- 17 : condition visible et calculée pour le bouton de découverte ; motif visible pour l’écoute coupée ; retrait du bouton « Terminer la séquence », obsolète depuis la fin automatique.
+- 19 : repère graphique d’action dans les introductions existantes, distinct des réponses évaluées ; aide existante toujours accessible dans Réglages.
+- 20 : focus local visible, Échap pause/reprise, Mute accessible en pause, navigation par flèches dans Progrès et défilement vers la case focalisée sur le manche long ; touches réellement disponibles documentées dans Aide.
+- 21 : cadrage explicite borné par la place disponible, cibles de roue conservées, pas de rotation forcée, manche 24 cases continu défilable et boutons facultatifs.
+- Manche : un seul moteur de dessin `neckBase`; l’échelle du mode défilant s’applique aux traits et aux inlays comme aux coordonnées. Le cadrage est calé sur celui du manche court. Les règles CSS qui changeaient la disposition par longueur de corde sont retirées/remplacées.
+- Gestes : droite = précédent, gauche = suivant déjà visité, pas exercice pédagogique suivant automatique.
+- Chapitres : ＋ / ▶ / ✓ et texte. Une réussite d’activité seule ne remplace pas les critères de couverture d’un chapitre.
+- Navigation : même surface active sur les deux formats ; mobile sur toute la hauteur, sans petits rectangles arrondis flottants.
+
+Les anciennes preuves `gameplay-unchanged.json` concernent uniquement le lot précédent. Ce lot modifie volontairement la géométrie. Les nouvelles preuves se trouvent dans les artefacts `work/gameplay-ux` et `work/navigation-ux`. Les essais sur de vrais téléphones restent à faire.

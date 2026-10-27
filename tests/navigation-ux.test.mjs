@@ -21,9 +21,9 @@ test('Trail uses the chosen guided or targeted parents and actual chapter title'
  assert.deepEqual(navigationTrail(c).map(t=>t.label),['Parcours','Progression guidée','Niveau 1 : Débutant',ch.title]);
  c.data.navigation={branch:'targeted',route:'z1',chapter:ch.id};assert.equal(navigationTrail(c)[1].label,'Pratique ciblée');
 });
-test('Targeted categories expose only their own real scopes and retain the selected category',()=>{
+test('The full directory shows every category and every scope at once',()=>{
  const c=controller();c.data.navigation={branch:'targeted',route:null,chapter:null};
- for(const kind of ['zone','string','duo','mixed']){c.data.catalogKind=kind;const html=betaHome(c);assert.equal((html.match(/class="panel route-card"/g)||[]).length,c.catalog.scopes.filter(s=>s.kind===kind).length);assert.match(html,new RegExp(`aria-selected="true"[^>]+data-kind="${kind}"`));}
+ const html=betaHome(c);assert.equal((html.match(/class="panel route-card"/g)||[]).length,c.catalog.scopes.length);assert.equal((html.match(/class="catalogue-section"/g)||[]).length,4);assert.doesNotMatch(html,/role="tablist"/);
 });
 
 test('Revision shortcut describes the activity actually being revised',()=>{
@@ -42,4 +42,15 @@ test('A fresh chapter entry has real parents, without trapping root or duplicati
  assert.equal(initialHistoryStates(state,{...state,screen:'settings',historyVersion:1}).length,1);
  assert.equal(initialHistoryStates({...state,nav:{branch:null,route:null,chapter:null}},null).length,1);
  assert.equal(initialHistoryStates({...state,screen:'stats'},null).length,1);
+});
+import {interactionCue} from '../learning-help.js';
+import {NavigationController} from '../services/navigation-service.js';
+test('First-use cues name the actual interaction surface and the melody order',()=>{
+ assert.match(interactionCue({kind:'name'},{}),/roue/);
+ assert.match(interactionCue({kind:'mix'},{mode:'find'}),/manche/);
+ assert.match(interactionCue({kind:'motif'},{}),/1 → 2 → 3/);
+});
+test('History gestures only follow existing entries and never fabricate a next lesson',()=>{
+ const calls=[],c=Object.create(NavigationController.prototype);c.win={history:{back:()=>calls.push('back'),forward:()=>calls.push('forward')}};c.index=0;c.maximum=0;
+ assert.equal(c.back(),false);assert.equal(c.forward(),false);c.index=2;c.maximum=3;assert.equal(c.back(),true);assert.equal(c.forward(),true);assert.deepEqual(calls,['back','forward']);c.index=3;assert.equal(c.forward(),false);
 });

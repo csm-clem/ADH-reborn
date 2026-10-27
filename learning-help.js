@@ -30,3 +30,11 @@ export function helpGraphic(help,module,profile,notation='international'){
  const exact=module.demoQuestion?.answerKind==='pitch'||module.kind==='family'||module.kind==='opens'&&module.demoQuestion?.answerKind!=='class',names=exact?[...new Set(module.pool.map(p=>p.midi))]:module.choices||[0,2,4,5,7,9,11];
  return `<div class="help-name-example">${neck}<span aria-hidden="true" class="help-arrow">→</span><div class="help-note-options">${names.map(n=>`<span class="help-note ${n===(exact?target.midi:target.midi%12)?'example-correct':''}">${esc(exact?pitchLabel(n,notation):noteName(n,notation))}</span>`).join('')}</div></div>`;
 }
+
+/** First-use cue: indicates the interaction surface, never the assessed answer. */
+export function interactionCue(help,module){
+ if(help.kind==='name'||help.kind==='mix'&&module.mode==='name')return '● Regardez le point → choisissez dans la roue';
+ if(help.kind==='find'||help.kind==='mix')return 'Nom + corde → touchez le manche';
+ if(help.kind==='motif')return '1 → 2 → 3 · Touchez les notes dans l’ordre';
+ return '☝ Touchez le manche pour explorer';
+}

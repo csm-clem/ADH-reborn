@@ -126,6 +126,61 @@
       "id": "ux-05-cold-parent-history",
       "type": "bug",
       "text": "Après réouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l’historique."
+    },
+    {
+      "id": "ux-instruction-before-touch",
+      "type": "improvement",
+      "text": "La consigne reste au-dessus du manche et des réponses, visible pendant l’appui ; les écrans étroits et peu hauts conservent les commandes utiles."
+    },
+    {
+      "id": "ux-activity-purpose",
+      "type": "improvement",
+      "text": "Les activités Nommer et Retrouver expliquent le geste attendu avant le lancement, sans étape obligatoire supplémentaire."
+    },
+    {
+      "id": "ux-disabled-condition",
+      "type": "improvement",
+      "text": "La découverte explique le nombre d’emplacements restant à trouver avant de poursuivre ; l’écoute coupée indique comment la réactiver."
+    },
+    {
+      "id": "ux-first-use-action-cues",
+      "type": "improvement",
+      "text": "Les introductions montrent graphiquement où regarder et où répondre, sans indiquer la réponse évaluée."
+    },
+    {
+      "id": "ux-keyboard-roundtrip",
+      "type": "improvement",
+      "text": "Le clavier permet de naviguer sur le manche et dans Progrès, de mettre en pause avec Échap et de retrouver le focus après une fenêtre ; les touches sont documentées."
+    },
+    {
+      "id": "ux-swipe-history-directions",
+      "type": "improvement",
+      "text": "Un balayage vers la droite revient à la page précédente ; vers la gauche, il retrouve une page déjà visitée. Le manche et les cartes gardent leurs gestes propres."
+    },
+    {
+      "id": "neck-unified-render-scale",
+      "type": "bug",
+      "text": "Les manches longs partagent les proportions graphiques du manche court : cordes, frettes, inlays, marges et fondus de défilement."
+    },
+    {
+      "id": "neck-grain-realistic-night",
+      "type": "improvement",
+      "text": "Les fibres de l’Érable miel et de Studio nuit sont légèrement renforcées ; Studio nuit retrouve un bois brun et un relief plus naturel."
+    },
+    {
+      "id": "ux-full-directory-restored",
+      "type": "improvement",
+      "text": "Le catalogue affiche à nouveau simultanément Zones, Cordes, Duos et Mélanges, sans onglets filtrants."
+    },
+    {
+      "id": "ux-distinct-chapter-symbols",
+      "type": "improvement",
+      "text": "Les chapitres se distinguent par ＋ À commencer, ▶ En cours et ✓ Terminé, avec leur libellé."
+    },
+    {
+      "id": "ux-active-navigation-consistent",
+      "type": "improvement",
+      "text": "La destination active adopte la même surface contrastée sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre."
     }
   ]
 }

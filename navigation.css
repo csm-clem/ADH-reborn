@@ -35,3 +35,11 @@
 @media(min-width:900px) and (max-width:1200px){.settings-content .setting-row:has(.voice-controls){flex-direction:column;align-items:stretch;gap:10px}.settings-content .voice-controls{width:100%}.settings-content .voice-controls select{max-width:none}}
 
 .shell .route-summary strong{font-size:28px}
+/* Directory: every section stays visible and reachable without selecting a filter. */
+.catalogue-section+.catalogue-section{margin-top:32px}.activity-instruction{color:var(--muted);font-size:15px}
+.shell .chapter-state.state-started{border-style:dashed;font-weight:800}.shell .lesson-symbol{border-radius:8px}
+/* The active destination uses the same filled surface on laptop and phone. */
+.shell .nav-item.active,.shell .mobile-nav button.active{background:var(--ink);color:var(--surface);box-shadow:none}
+.shell .mobile-nav{align-items:stretch;padding-top:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+.shell .mobile-nav button{margin:0;align-self:stretch;min-height:64px;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.shell .mobile-nav button.active{border-radius:0}

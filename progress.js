@@ -124,6 +124,13 @@ export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){
 }
 /** Details live outside the scroll viewport, so the selected note never opens a clipped popover. */
 export function bindProgress(root) {
+  root.addEventListener('keydown',e=>{
+    const summary=e.target.closest('.progress-cell>summary');if(!summary||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;
+    const cell=summary.parentElement,map=cell.closest('.progress-map'),s=Number(cell.dataset.progressString),f=Number(cell.dataset.progressFret),cells=[...map.querySelectorAll('.progress-cell')];
+    const row=cells.filter(c=>Number(c.dataset.progressString)===s).sort((a,b)=>Number(a.dataset.progressFret)-Number(b.dataset.progressFret));
+    const next=e.key==='Home'?row[0]:e.key==='End'?row.at(-1):cells.find(c=>Number(c.dataset.progressString)===s+(e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0)&&Number(c.dataset.progressFret)===f+(e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0));
+    e.preventDefault();next?.querySelector('summary')?.focus({preventScroll:true});next?.scrollIntoView({block:'nearest',inline:'nearest'});
+  });
   // Desktop grab-to-scroll: a click still opens a note; only a deliberate drag
   // captures the pointer. Touch keeps native scrolling and the slider is retained.
   let drag=null,suppressClick=null;

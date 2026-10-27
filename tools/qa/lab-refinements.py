@@ -8,7 +8,7 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context(service_workers='block',is_mobile=True,has_touch=True,viewport={'width':390,'height':844});q=c.new_page();q.on('pageerror',lambda e:errors.append(str(e)))
  h['seed'](q,'guitar6','note-4-find')
  def nav():return h['snap'](q)['navigation']
- def swipe(selector='h1',dx=-200,dy=0):
+ def swipe(selector='h1',dx=200,dy=0):
   box=q.locator(selector).first.bounding_box();y=max(45,box['y']+min(25,box['height']/2));x=300 if dx<0 else 80
   s=c.new_cdp_session(q);s.send('Input.dispatchTouchEvent',{'type':'touchStart','touchPoints':[{'x':x,'y':y}]})
   for i in range(1,9):
@@ -20,7 +20,7 @@ with sync_playwright() as p:
  swipe('.lesson-row');assert nav()['route'] is None and nav()['branch']=='targeted';checks.append('route to branch over a button')
  swipe();assert nav()=={'branch':None,'route':None,'chapter':None};checks.append('branch to root')
  swipe();assert nav()=={'branch':None,'route':None,'chapter':None};checks.append('root unchanged')
- q.locator('[data-pilot-action=beta-branch][data-id=targeted]').click();before=nav();swipe(dx=200);assert nav()==before;checks.append('right swipe unchanged')
+ swipe(dx=-200);assert nav()['branch']=='targeted';checks.append('left swipe follows forward history')
  q.locator('[data-action=settings]:visible').first.click();assert q.locator('.content > .panel').first.get_attribute('class')=='panel debug-panel';checks.append('debug first panel')
  q.screenshot(path='work/sandbox/debug-first-mobile.png',full_page=True)
  h['launch'](q,'note-4-find');assert q.locator('.pilot-game').count()

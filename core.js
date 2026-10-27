@@ -83,12 +83,12 @@ export function fitNeck(g,width,height){const scale=Math.max(.01,Math.min((width
 
 /** Screen-space fret geometry shared by continuous full-length exercises and courses. */
 export function scrollingNeckGeometry(strings,lastFret=24,{startFret=0,height=220,minFretWidth=44}={}){
- const g=neckGeometry(strings,lastFret,648,{gameplay:true,startFret}),scale=Math.max(1,height-14)/g.height;
+ const g=neckGeometry(strings,lastFret,648,{gameplay:true,startFret}),scale=Math.max(1,height)/g.height;
  const widths=g.visibleFrets.map(f=>Math.max(minFretWidth,(g.bounds(f)[1]-g.bounds(f)[0])*scale));
  let x=8;const frets=[...g.frets];
  for(const [i,f]of g.visibleFrets.entries()){if(f===0)frets[0]=x+widths[i];else{frets[f-1]=x;frets[f]=x+widths[i];}x+=widths[i];}
  frets[lastFret+1]=x+minFretWidth;
  const nut=startFret?8:frets[0],bounds=f=>f===0?[8,nut]:[frets[f-1],frets[f]],centers=[...g.centers],labelXs=[...g.labelXs];
  for(const f of g.visibleFrets){const [a,b]=bounds(f);centers[f]=a+(b-a)*2/3;labelXs[f]=a+(b-a)/3;}
- return {...g,height,frets,nut,openStart:8,openWidth:widths[0],bounds,centers,labelXs,ys:g.ys.map(y=>y*scale),width:x+minFretWidth*.5,fadeStart:x,inlays:g.inlays.filter(p=>p.fret<=lastFret).map(p=>({...p,x:(frets[p.fret-1]+frets[p.fret])/2,y:p.y*scale}))};
+ return {...g,visualScale:scale,height,frets,nut,openStart:8,openWidth:widths[0],bounds,centers,labelXs,ys:g.ys.map(y=>y*scale),width:x+minFretWidth*.5,fadeStart:x,inlays:g.inlays.filter(p=>p.fret<=lastFret).map(p=>({...p,x:(frets[p.fret-1]+frets[p.fret])/2,y:p.y*scale}))};
 }

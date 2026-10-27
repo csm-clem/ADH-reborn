@@ -172,9 +172,9 @@ test("Only three branch tiles appear at root; every path is nested and the guide
   assert.equal((root.match(/class="branch-jumbo"/g) || []).length, 3);
   assert.doesNotMatch(root, /class="panel route-card"/);
   c.data.navigation = { branch: "targeted" };
-  let count=0;
-  for(const kind of ['zone','string','duo','mixed']){c.data.catalogKind=kind;const html=betaHome(c);count+=(html.match(/class="panel route-card"/g)||[]).length;assert.match(html,/role="tablist"/);}
-  assert.equal(count,25);
+  const directory=betaHome(c);
+  assert.equal((directory.match(/class="panel route-card"/g)||[]).length,25);
+  assert.equal((directory.match(/class="catalogue-section"/g)||[]).length,4);
   c.data.navigation = { branch: "guided", route: "guided" };
   const route = betaHome(c);
   assert.match(route, /Vos repères du Niveau 1/);

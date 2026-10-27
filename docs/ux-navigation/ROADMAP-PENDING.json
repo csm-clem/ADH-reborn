@@ -1,33 +1,16 @@
 {
   "date": "2026-10-27",
-  "scope": "UX 01–07, 09–11, 14–16",
+  "scope": "Correctifs après v0.38.8 : UX 12,13,17,19,20,21 et demandes graphiques/navigation",
   "approved": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    9,
-    10,
-    11,
-    14,
-    15,
-    16
-  ],
-  "awaiting_explanation_and_decision": [
-    8,
     12,
-    13
-  ],
-  "waiting": [
+    13,
     17,
-    18,
     19,
     20,
     21
   ],
+  "awaiting_explanation_and_decision": [],
+  "waiting": [],
   "roadmap_url": "https://daily-fretboard-roadmap.quirkybison9.chatgpt.site/",
   "roadmap_source": "API /api/project + D1 revisions",
   "remote_write_status": "blocked_by_network_policy",
@@ -39,7 +22,7 @@
     },
     {
       "id": "V1-12",
-      "scope": "Scénarios de régression navigateur/historique et conservation du layout gameplay."
+      "scope": "Régressions navigateur, historique, tactile, clavier, proportions communes 4/24 cases ; géométrie du jeu volontairement révisée."
     },
     {
       "id": "V1-11",
@@ -53,18 +36,21 @@
   "evidence": [
     "docs/ux-navigation/DECISIONS-01-16.md",
     "docs/ux-navigation/verification/browser.json",
-    "docs/ux-navigation/verification/gameplay-unchanged.json"
+    "docs/ux-navigation/verification/gameplay-unchanged.json",
+    "tools/qa/gameplay-ux.py",
+    "docs/ux-navigation/ROADMAP-UPDATE.md"
   ],
   "real_phone_validation": false,
   "additional_user_confirmation": {
     "point": 16,
     "status": "approved_and_implemented"
   },
-  "additional_explanations_requested": [
-    17,
-    18,
-    19,
-    20,
-    21
+  "additional_explanations_requested": [],
+  "rejected": [
+    8,
+    18
+  ],
+  "reverted": [
+    9
   ]
 }

@@ -46,14 +46,14 @@ export function reviewRecommendation(catalog, data, route, now = Date.now()) {
   return null;
 }
 
-/** A left swipe ascends one page; instrument gestures and controls keep priority. */
+/** A right swipe returns; a left swipe follows existing forward history; instrument gestures and controls keep priority. */
 export function parentNavigation(nav={}) {
  if(nav.chapter)return {...nav,branch:nav.branch||branchForRoute(nav.route),chapter:null};
  if(nav.route)return {...nav,branch:nav.branch||branchForRoute(nav.route),route:null,chapter:null};
  if(nav.branch)return {branch:null,route:null,chapter:null};
  return null;
 }
-export function bindParentSwipe(root,{enabled,back}) {
+export function bindParentSwipe(root,{enabled,back,forward=()=>{}}) {
  let start=null,consumeUntil=0;
  const excluded='input,select,textarea,summary,[role="slider"],.neck-viewport,.position-grid,.answer-wheel,.pilot-wheel,[data-pilot-action="note"],.pilot-position-buttons,.achievement-card,.mobile-nav,svg,dialog';
  root.addEventListener('pointerdown',e=>{
@@ -62,12 +62,12 @@ export function bindParentSwipe(root,{enabled,back}) {
  });
  root.addEventListener('touchmove',e=>{
   if(!start||e.touches.length!==1)return;const touch=e.touches[0],dx=touch.clientX-start.x,dy=touch.clientY-start.y;
-  if(dx < -12&&Math.abs(dx)>Math.abs(dy)*1.7&&e.cancelable)e.preventDefault();
+  if(Math.abs(dx) > 12&&Math.abs(dx)>Math.abs(dy)*1.7&&e.cancelable)e.preventDefault();
  },{passive:false});
  root.addEventListener('pointerup',e=>{
   const from=start;start=null;if(!from||from.id!==e.pointerId||!enabled())return;
   const dx=e.clientX-from.x,dy=e.clientY-from.y;
-  if(dx < -70&&Math.abs(dx)>Math.abs(dy)*1.7&&performance.now()-from.time<900){consumeUntil=performance.now()+400;back();}
+  if(Math.abs(dx) > 70&&Math.abs(dx)>Math.abs(dy)*1.7&&performance.now()-from.time<900){consumeUntil=performance.now()+400;if(dx>0)back();else forward();}
  });
  root.addEventListener('pointercancel',()=>{start=null;});
  root.addEventListener('click',e=>{if(performance.now()<consumeUntil){e.preventDefault();e.stopImmediatePropagation();}},true);

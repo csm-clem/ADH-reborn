@@ -87,9 +87,6 @@ with sync_playwright() as p:
   # Navigate via the actual route and chapter card.
   route='beginner' if course_id.startswith('gd-') else course_id.split('-')[0]
   page.locator(f'[data-pilot-action=beta-branch][data-id="{"beginner" if route=="beginner" else "targeted"}"]').click()
-  if route!='beginner':
-   kind='string' if route.startswith(('cs','c24s')) else 'duo' if route.startswith('duo') else 'mixed' if route.startswith('mix') else 'zone'
-   page.locator(f'[role=tab][data-kind="{kind}"]').click()
   page.locator(f'[data-pilot-action=beta-route][data-id="{route}"]').click()
   page.locator(f'[data-pilot-action=beta-chapter][data-id="{course_id}"]').click()
   page.locator('[data-pilot-action=beta-course]').click()

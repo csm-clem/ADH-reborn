@@ -204,10 +204,10 @@ export function betaHome(c) {
         ? status(chapter)
           ? `<button class="text-button" data-pilot-action="beta-course" data-id="${chapter.courseId}">Revoir le cours</button>`
           : ""
-        : `<details class="chapter-options"><summary>Choisir une activité</summary><div class="chapter-activities">${chapter.discoveryId ? `<button class="lesson-row" data-pilot-action="start" data-module="${chapter.discoveryId}"><span class="lesson-symbol">◉</span><span class="lesson-copy"><strong>Découvrir les positions</strong><small>Écouter et chercher librement</small></span></button>` : ""}${chapter.activityIds
+        : `<details class="chapter-options"><summary>Choisir une activité</summary><div class="chapter-activities">${chapter.discoveryId ? `<button class="lesson-row" data-pilot-action="start" data-module="${chapter.discoveryId}"><span class="lesson-symbol">◉</span><span class="lesson-copy"><strong>Découvrir les positions</strong><small>Touchez, écoutez, repérez.</small></span></button>` : ""}${chapter.activityIds
             .map((id) => {
               const a = c.resolve(id);
-              return `<button class="lesson-row" data-pilot-action="start" data-module="${id}"><span class="lesson-symbol ${evidence.passed(id) ? "complete" : ""}">${evidence.passed(id) ? "✓" : "›"}</span><span class="lesson-copy"><strong>${esc(a.subtitle)}</strong><small>${evidence.passed(id) ? "Réussi · rejouer" : "20–24 questions"}</small></span></button>`;
+              return `<button class="lesson-row" data-pilot-action="start" data-module="${id}"><span class="lesson-symbol ${evidence.passed(id) ? "complete" : ""}">${evidence.passed(id) ? "✓" : "›"}</span><span class="lesson-copy"><strong>${esc(a.subtitle)}</strong><small>${esc(a.mode==='name'?'Regardez le point. Choisissez son nom.':'Lisez la note. Touchez sa place.')} · ${evidence.passed(id)?"Réussi · rejouer":"20–24 questions"}</small></span></button>`;
             })
             .join("")}</div></details>`;
     return (
@@ -225,7 +225,7 @@ export function betaHome(c) {
             ? "Reconnaître et retrouver vos cordes."
             : "Apprendre ses places, puis les retrouver parmi vos repères.",
       ) +
-      `<section class="panel chapter-overview"><p class="chapter-context">${esc(scope ? scope.title + " · " + scope.subtitle : "Les bases · facultatif")}</p><h2>${resume ? "Votre séance vous attend" : status(chapter) ? "Chapitre validé" : "Votre prochaine activité"}</h2>${activityName ? `<p>${esc(activityName)}</p>` : ""}<p>${chapter.kind === "course" ? "Regardez, puis essayez. Sans chronomètre." : record?.missing?.length ? `${record.missing.length} emplacement${record.missing.length > 1 ? "s" : ""} à confirmer dans les deux sens.` : "Vos positions ont été vérifiées dans les deux sens."}</p>${primary}</section>${list}`
+      `<section class="panel chapter-overview"><p class="chapter-context">${esc(scope ? scope.title + " · " + scope.subtitle : "Les bases · facultatif")}</p><h2>${resume ? "Votre séance vous attend" : status(chapter) ? "Chapitre validé" : "Votre prochaine activité"}</h2>${activityName ? `<p>${esc(activityName)}</p><p class="activity-instruction">${esc(c.resolve(resume?saved.activity:next?.id)?.mode==='name'?'Regardez le point. Choisissez son nom.':'Lisez la note. Touchez sa place.')}</p>` : ""}<p>${chapter.kind === "course" ? "Regardez, puis essayez. Sans chronomètre." : record?.missing?.length ? `${record.missing.length} emplacement${record.missing.length > 1 ? "s" : ""} à confirmer dans les deux sens.` : "Vos positions ont été vérifiées dans les deux sens."}</p>${primary}</section>${list}`
     );
   }
   if (nav.route) {
@@ -316,8 +316,7 @@ export function betaHome(c) {
       title = "Pratique ciblée";
       text = "Choisissez ce que vous voulez travailler.";
       const categories=[['zone','Zones'],['string','Cordes'],['duo','Duos'],['mixed','Mélanges']].filter(([kind])=>catalog.scopes.some(s=>s.kind===kind));
-      const kind=categories.some(([k])=>k===data.catalogKind)?data.catalogKind:categories[0]?.[0];
-      cards=`<div class="catalogue-tabs" role="tablist" aria-label="Type de pratique">${categories.map(([k,label])=>`<button class="button quiet-button" role="tab" id="catalogue-tab-${k}" aria-controls="catalogue-results" aria-selected="${k===kind}" tabindex="${k===kind?0:-1}" data-pilot-action="beta-filter" data-kind="${k}">${label}</button>`).join('')}</div><section id="catalogue-results" role="tabpanel" aria-labelledby="catalogue-tab-${kind}" tabindex="0"><h2>${esc(categories.find(([k])=>k===kind)?.[1]||'Parcours')}</h2><div class="route-grid">${catalog.scopes.filter(s=>s.kind===kind).map(s=>{const e=evidence.scopes.get(s.id);return tile(s.id,s.title,s.subtitle,e.chapters,e.total);}).join('')}</div></section>`;
+      cards=categories.map(([kind,label])=>`<section class="catalogue-section" aria-label="${label}"><h2>${label}</h2><div class="route-grid">${catalog.scopes.filter(s=>s.kind===kind).map(s=>{const e=evidence.scopes.get(s.id);return tile(s.id,s.title,s.subtitle,e.chapters,e.total);}).join('')}</div></section>`).join('');
 
     }
     return (
@@ -392,7 +391,7 @@ export function chapterState(c,ch,evidence=betaEvidence(c.catalog,c.data)){
  if(complete)return {key:'complete',label:'Terminé',symbol:'✓'};
  const ids=[...(ch.activityIds||[]),ch.discoveryId].filter(Boolean),discovery=c.catalog.discoveries.find(d=>d.id===ch.discoveryId);
  const started=ch.kind==='opens'&&(c.data.discoveredModules||[]).includes('opens')||course?.visited?.length||course?.index>0||ids.includes(c.data.session?.activity)||(c.data.attempts||[]).some(a=>ids.includes(a.activity))||(discovery&&(c.data.discoveredModules||[]).includes(discovery.baseId));
- return started?{key:'started',label:'En cours',symbol:'◐'}:{key:'new',label:'À commencer',symbol:'○'};
+ return started?{key:'started',label:'En cours',symbol:'▶'}:{key:'new',label:'À commencer',symbol:'＋'};
 }
 /** A shortcut into the existing curriculum, not a new order of branches or lessons. */
 export function nextStudy(c,evidence=betaEvidence(c.catalog,c.data)){
