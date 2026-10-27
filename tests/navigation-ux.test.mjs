@@ -38,7 +38,8 @@ test('A fresh chapter entry has real parents, without trapping root or duplicati
  const chain=initialHistoryStates(state,null);
  assert.deepEqual(chain.map(s=>s.nav),[{branch:null,route:null,chapter:null},{branch:'targeted',route:null,chapter:null},{branch:'targeted',route:'z1',chapter:null},state.nav]);
  assert.ok(chain.every(s=>s.profile===state.profile));
- assert.equal(initialHistoryStates(state,{...state,screen:'settings'}).length,1);
+ assert.equal(initialHistoryStates(state,{...state}).length,4,'Older history entries also gain their missing parents once');
+ assert.equal(initialHistoryStates(state,{...state,screen:'settings',historyVersion:1}).length,1);
  assert.equal(initialHistoryStates({...state,nav:{branch:null,route:null,chapter:null}},null).length,1);
  assert.equal(initialHistoryStates({...state,screen:'stats'},null).length,1);
 });

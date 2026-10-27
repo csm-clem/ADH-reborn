@@ -1,7 +1,7 @@
 import {parentNavigation} from '../navigation-rules.js';
 /** Reopening a chapter provides its real ancestors once; refresh never duplicates them. */
 export function initialHistoryStates(state,existing){
- if(existing?.profile===state.profile||state.screen!=='home')return [state];
+ if((existing?.profile===state.profile&&existing.historyVersion===1)||state.screen!=='home')return [state];
  const chain=[state];let nav=state.nav||{};
  while((nav=parentNavigation(nav)))chain.unshift({...state,nav,course:null,activity:null});
  return chain;
@@ -12,7 +12,7 @@ export class NavigationController {
  key(s){return JSON.stringify([s.profile,s.screen,s.nav?.branch,s.nav?.route,s.nav?.chapter,s.course,s.activity]);}
  capture(){if(!this.current)return;const details=[...this.root.querySelectorAll('details')].map((el,i)=>({key:el.dataset.memoryKey||el.id||String(i),open:el.open}));const focus=this.root.contains(this.win.document.activeElement)?this.win.document.activeElement:null;this.views.set(this.key(this.current),{scroll:this.win.scrollY,details,focus:focus?.id||null});}
  beforeRender(){this.capture();}
- afterRender(){const state=this.read();if(!state.profile)return;const changed=!this.current||this.key(state)!==this.key(this.current);if(!this.restoring){if(!this.current){const states=initialHistoryStates(state,this.win.history.state?.dftNavigation);this.win.history.replaceState({...this.win.history.state,dftNavigation:states[0]},'');for(const s of states.slice(1))this.win.history.pushState({dftNavigation:s},'');}else if(changed)this.win.history.pushState({dftNavigation:state},'');}this.current=structuredClone(state);const memory=this.views.get(this.key(state));if(memory){for(const [i,el]of [...this.root.querySelectorAll('details')].entries()){const item=memory.details.find(d=>d.key===(el.dataset.memoryKey||el.id||String(i)));if(item)el.open=item.open;}}
+ afterRender(){const state=this.read();if(!state.profile)return;const changed=!this.current||this.key(state)!==this.key(this.current);if(!this.restoring){if(!this.current){const states=initialHistoryStates(state,this.win.history.state?.dftNavigation);this.win.history.replaceState({...this.win.history.state,dftNavigation:{...states[0],historyVersion:1}},'');for(const s of states.slice(1))this.win.history.pushState({dftNavigation:{...s,historyVersion:1}},'');}else if(changed)this.win.history.pushState({dftNavigation:{...state,historyVersion:1}},'');}this.current=structuredClone(state);const memory=this.views.get(this.key(state));if(memory){for(const [i,el]of [...this.root.querySelectorAll('details')].entries()){const item=memory.details.find(d=>d.key===(el.dataset.memoryKey||el.id||String(i)));if(item)el.open=item.open;}}
   const restoreFocus=this.restoring;this.win.cancelAnimationFrame(this.frame);this.frame=this.win.requestAnimationFrame(()=>{this.win.scrollTo(0,memory?.scroll||0);if(restoreFocus&&memory?.focus)this.win.document.getElementById(memory.focus)?.focus({preventScroll:true});});
  }
 }
