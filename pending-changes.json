@@ -46,6 +46,11 @@
       "id": "music-triplet-bass-vocal-revision",
       "type": "bug",
       "text": "Corrections rythmiques de Seven Nation Army et Feel Good Inc., montée d’Around the World et retour d’Immigrant Song avec son appel vocal sur le riff saturé."
+    },
+    {
+      "id": "update-large-assets-body-drain",
+      "type": "bug",
+      "text": "Les mises à jour ne se bloquent plus pendant le téléchargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progrès."
     }
   ]
 }

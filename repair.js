@@ -12,7 +12,7 @@ async function repair(){
    const timer=setTimeout(()=>finish(new Error('Téléchargement interrompu. Réessayez avec une connexion stable.')),60000);
    const finish=error=>{clearTimeout(timer);navigator.serviceWorker.removeEventListener('controllerchange',activated);error?reject(error):resolve();};
    const activated=()=>finish();navigator.serviceWorker.addEventListener('controllerchange',activated);
-   const worker=registration.waiting||registration.installing;
+   const worker=registration.installing||registration.waiting;
    if(!worker){finish(new Error('Installation non démarrée. Réessayez.'));return;}
    const check=()=>{if(worker.state==='installed')worker.postMessage({type:'ACTIVATE_UPDATE'});if(worker.state==='redundant')finish(new Error('Les fichiers ne sont pas encore tous disponibles. Réessayez dans un instant.'));};
    worker.addEventListener('statechange',check);check();

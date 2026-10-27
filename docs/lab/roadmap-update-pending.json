@@ -9,7 +9,7 @@
   "updates": [
     {
       "task": "OPS-06",
-      "note": "Correction de la boucle de mise à jour ; recette cache HTTP 24h et réparation du worker périmé. Progrès sandbox/live conservés. Page repair.html indépendante."
+      "note": "Correction de la boucle de mise à jour ; recette cache HTTP 24h et réparation du worker périmé. Progrès sandbox/live conservés. Page repair.html indépendante. Migration réelle v0.28 → actuelle vérifiée après correction des corps HTTP non consommés."
     },
     {
       "task": "V1-12",

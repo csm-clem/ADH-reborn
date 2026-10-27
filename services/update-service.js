@@ -8,8 +8,7 @@ export class UpdateController{
  async checkRelease(){for(const path of (CHANNEL==='sandbox'?['./update.json']:['./update.json','../latest.json'])){try{const manifestURL=new URL(path,location.href),res=await fetch(manifestURL,{cache:'no-store'});if(!res.ok)continue;const target=updateTarget(await res.json(),manifestURL,location.href);if(target){this.pending=target;this.offer();return;}}catch{}}}
  async installVersion(version){
   const r=this.registration=await navigator.serviceWorker.register('./sw.js?release='+encodeURIComponent(version)+'&repair='+Date.now(),{updateViaCache:'none'});
-  if(r.waiting){r.waiting.postMessage({type:'ACTIVATE_UPDATE'});return;}
-  const worker=r.installing;
+  const worker=r.installing||r.waiting;
   if(!worker)throw new Error('La mise à jour n’a pas pu démarrer. Réessayez ; vos progrès sont conservés.');
   await new Promise((resolve,reject)=>{const timer=setTimeout(()=>{worker.removeEventListener('statechange',check);reject(new Error('Téléchargement interrompu. Vos progrès sont conservés ; réessayez.'));},30000);const check=()=>{if(worker.state==='installed'){clearTimeout(timer);worker.removeEventListener('statechange',check);worker.postMessage({type:'ACTIVATE_UPDATE'});resolve();}else if(worker.state==='redundant'){clearTimeout(timer);worker.removeEventListener('statechange',check);reject(new Error('La nouvelle version n’est pas encore complète. Réessayez plus tard.'));}};worker.addEventListener('statechange',check);check();});
  }
