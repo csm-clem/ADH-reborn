@@ -1,3 +1,5 @@
+> Décision du 28 octobre 2026 : les roues ovales proposées ci-dessous sont rejetées. La nouvelle expérimentation conserve les roues rondes et concentriques, avec des boutons de 40 px en paysage et des cases longues de 40 px. Voir [le lot suivant](../lab/2026-10-28-v039-refinements.md).
+
 # Exercices 0–24 sur mobile — analyse et proposition
 
 État : corrections de cadrage implémentées ; refonte des roues et loupe tactile proposées, pas encore implémentées.
