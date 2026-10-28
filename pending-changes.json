@@ -71,6 +71,11 @@
       "id": "approved-common-engravings",
       "type": "improvement",
       "text": "Les cinq cartes communes adoptent leurs illustrations validées : gravures musicales, cuivre mat, papier chaud et encre pétrole, en SVG légers et disponibles hors ligne."
+    },
+    {
+      "id": "success-remove-material-context",
+      "type": "improvement",
+      "text": "Les cartes Succès retirent les mentions de matière et de contexte pour mettre en avant leur titre, leur progression et leurs actions."
     }
   ]
 }

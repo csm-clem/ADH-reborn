@@ -28,9 +28,7 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 :is(.achievement-card,.album-thumbnail).is-earned{--card-finish:1}
 .is-tilting .card-reflection{opacity:.22}.is-tilting .card-foil{opacity:calc(var(--foil-strength) * .9 * var(--card-finish,.55))}
 .achievement-copy{padding:14px 16px 12px;display:flex;flex-direction:column;flex:1;gap:0;min-width:0}
-.achievement-material{font-size:9px;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 7px;color:var(--card-muted);line-height:1.4}
 .achievement-copy h2{font-size:clamp(21px,2vw,27px);line-height:1.1;letter-spacing:-.6px;font-weight:700;margin:0 0 9px;overflow-wrap:break-word;text-wrap:pretty}
-.achievement-context{font-size:13px;line-height:1.5;margin:0 0 16px;color:var(--card-muted)}
 .achievement-progress{font:inherit;text-align:left;display:block;width:100%;background:transparent;border:0;padding:7px 0;color:var(--card-ink,var(--ink));cursor:pointer;border-radius:5px;margin-top:auto;touch-action:manipulation}
 .achievement-progress:hover{opacity:.8}.achievement-progress:focus-visible{outline:3px solid var(--brand);outline-offset:4px}
 .achievement-progress-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}.achievement-progress-heading strong{font-size:14px;font-variant-numeric:tabular-nums}
@@ -65,7 +63,7 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 :root[data-theme=dark] .rarity-epic{--card-body:linear-gradient(130deg,#384455,#43465a 35%,#373f53 60%,#48445b);--card-sheen:linear-gradient(115deg,#c9e0ee14,transparent 25%,#ddd7fa12 54%,transparent 70%,#bdb2f41a)}
 :root[data-theme=dark] .rarity-legendary{--card-body:linear-gradient(135deg,#493c25,#49381d 38%,#554225 66%,#44371f);--card-sheen:linear-gradient(118deg,#fce7a412,transparent 32%,#ffdda417 53%,transparent 75%)}
 :root[data-theme=dark] .achievement-front,:root[data-theme=dark] .achievement-back{box-shadow:0 6px 12px #0003,inset 0 0 0 1px #ffffff28}
-:root[data-theme=accessible] .collection-stage{--stage-bg:#eff2f4;border-color:#333638}:root[data-theme=accessible] :is(.achievement-card,.album-thumbnail){--card-accent:#003e8a}:root[data-theme=accessible] .achievement-front,:root[data-theme=accessible] .achievement-back{border:2px solid #333638;box-shadow:none}:root[data-theme=accessible] .card-foil,:root[data-theme=accessible] .card-reflection{display:none}:root[data-theme=accessible] .achievement-art{border-color:#333638}:root[data-theme=accessible] .is-earned .achievement-art{outline:2px solid var(--brand);outline-offset:-3px}:root[data-theme=accessible] .achievement-progress small,:root[data-theme=accessible] .achievement-context{font-size:14px}:root[data-theme=accessible] .achievement-rarity{font-size:13px}
+:root[data-theme=accessible] .collection-stage{--stage-bg:#eff2f4;border-color:#333638}:root[data-theme=accessible] :is(.achievement-card,.album-thumbnail){--card-accent:#003e8a}:root[data-theme=accessible] .achievement-front,:root[data-theme=accessible] .achievement-back{border:2px solid #333638;box-shadow:none}:root[data-theme=accessible] .card-foil,:root[data-theme=accessible] .card-reflection{display:none}:root[data-theme=accessible] .achievement-art{border-color:#333638}:root[data-theme=accessible] .is-earned .achievement-art{outline:2px solid var(--brand);outline-offset:-3px}:root[data-theme=accessible] .achievement-progress small{font-size:14px}:root[data-theme=accessible] .achievement-rarity{font-size:13px}
 :root[data-theme=accessible] :is(.achievement-card,.album-thumbnail){--card-ink:var(--ink);--card-body:linear-gradient(var(--card-matte),var(--card-matte));--card-sheen:none;--card-decoration:none;--card-muted:var(--muted)}
 :root[data-theme=accessible] .rarity-rare .achievement-art::after,:root[data-theme=paper] .rarity-rare .achievement-art::after{display:none}
 :root[data-theme=paper] .collection-stage{--stage-bg:#e9e9e9}:root[data-theme=paper] :is(.achievement-card,.album-thumbnail){--card-accent:#222;--card-frame:linear-gradient(#888,#222);filter:grayscale(1)}:root[data-theme=paper] .card-foil,:root[data-theme=paper] .card-reflection{display:none}
@@ -81,10 +79,10 @@ progress::-webkit-progress-bar{background:var(--progress-empty)}.collection-over
 :is(.achievement-card,.album-thumbnail).is-missing{--card-frame:linear-gradient(135deg,#777,#e4e4e4 28%,#969696 62%,#666);--card-accent:var(--muted);--card-ink:var(--ink);--card-body:linear-gradient(var(--surface-soft),var(--surface));--card-sheen:none;--card-decoration:none;--card-muted:var(--muted)}
 :root[data-theme] :is(.achievement-card,.album-thumbnail).is-missing{--card-ink:var(--ink);--card-body:linear-gradient(var(--surface-soft),var(--surface));--card-sheen:none;--card-decoration:none;--card-muted:var(--muted)}
 .is-missing .achievement-art::after{display:none}
-.is-missing .achievement-art,.is-missing .achievement-rarity,.is-missing .achievement-progress,.is-missing .achievement-material,.is-missing .criterion-marker{filter:grayscale(1)}
+.is-missing .achievement-art,.is-missing .achievement-rarity,.is-missing .achievement-progress,.is-missing .criterion-marker{filter:grayscale(1)}
 .is-missing .card-foil{display:none}
 .collection-tabs .button{flex:1 1 100px}
-.is-missing .achievement-card-header,.is-missing .achievement-copy>h2,.is-missing .achievement-context,.is-missing .achievement-number,.is-missing .achievement-actions>:not(.challenge-action),.is-missing .achievement-back>header,.is-missing .achievement-back>h2,.is-missing .achievement-criteria-body{filter:grayscale(1)}
+.is-missing .achievement-card-header,.is-missing .achievement-copy>h2,.is-missing .achievement-number,.is-missing .achievement-actions>:not(.challenge-action),.is-missing .achievement-back>header,.is-missing .achievement-back>h2,.is-missing .achievement-criteria-body{filter:grayscale(1)}
 /* A touch reveals a visible specular band immediately, including on common cards. */
 .card-reflection{background:linear-gradient(115deg,transparent 27%,#fff0 38%,#fff9 48%,#fff1 54%,transparent 65%);background-size:240% 160%;background-position:var(--light-x,50%) var(--light-y,50%)}
 :is(.achievement-card,.album-thumbnail).is-revealed{outline:3px solid var(--brand);outline-offset:6px;border-radius:20px}
