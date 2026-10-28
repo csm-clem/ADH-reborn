@@ -16,8 +16,20 @@ with sync_playwright() as p:
  button=page.locator('#setup-form button[type=submit]')
  def contrast():
   return button.evaluate(r'''e=>{const s=getComputedStyle(e),rgb=c=>c.match(/[0-9.]+/g).slice(0,3).map(Number),luma=c=>rgb(c).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0),ink=luma(s.color);return Math.min(...(s.backgroundImage.match(/rgba?\([^)]*\)/g)||[s.backgroundColor]).map(c=>{const bg=luma(c);return (Math.max(ink,bg)+.05)/(Math.min(ink,bg)+.05)}));}''')
- day=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert 'linear-gradient' in day;assert contrast()>=4.5
- page.screenshot(path=str(out/'sunrise-jour.png'));button.hover();hover=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert 'linear-gradient' in hover and hover!=day;assert contrast()>=4.5
- page.screenshot(path=str(out/'sunrise-hover.png'));page.mouse.move(0,0);page.evaluate('document.documentElement.dataset.theme="dark"');night=button.evaluate('e=>getComputedStyle(e).backgroundImage');assert night!=day;assert contrast()>=4.5;page.screenshot(path=str(out/'sunrise-nuit.png'))
+ # The current user-specified warm palette is exact, and its contrast is recorded
+ # honestly rather than treated as AA. Dedicated contrast themes retain AA checks.
+ day=button.evaluate('e=>getComputedStyle(e).backgroundImage');day_contrast=contrast()
+ assert 'linear-gradient' in day and 'rgb(248, 167, 68)' in day and 'rgb(233, 70, 71)' in day,day
+ page.screenshot(path=str(out/'sunrise-jour.png'));button.hover();hover=button.evaluate('e=>getComputedStyle(e).backgroundImage');hover_contrast=contrast()
+ assert 'linear-gradient' in hover and 'rgb(248, 167, 68)' in hover and 'rgb(32, 41, 128)' in hover,hover
+ page.screenshot(path=str(out/'sunrise-hover.png'));page.mouse.move(0,0);page.evaluate('document.documentElement.dataset.theme="dark"');night=button.evaluate('e=>getComputedStyle(e).backgroundImage');night_contrast=contrast()
+ assert 'linear-gradient' in night and 'rgb(248, 167, 68)' in night and 'rgb(233, 70, 71)' in night,night
+ page.screenshot(path=str(out/'sunrise-nuit.png'))
+ accessible={}
+ for theme in ['accessible','paper']:
+  page.evaluate('theme=>document.documentElement.dataset.theme=theme',theme)
+  assert contrast()>=4.5,(theme,contrast())
+  button.hover();assert contrast()>=4.5,(theme,'hover',contrast())
+  accessible[theme]=contrast();page.mouse.move(0,0)
  assert not errors,errors
- (out/'keyboard-palette.json').write_text(json.dumps({'single_tab_stop':True,'arrow_navigation':True,'home_end':True,'enter_answers':True,'day':day,'hover':hover,'night':night,'errors':errors},indent=2));b.close()
+ (out/'keyboard-palette.json').write_text(json.dumps({'single_tab_stop':True,'arrow_navigation':True,'home_end':True,'enter_answers':True,'day':day,'hover':hover,'night':night,'gradient_contrast':{'day':day_contrast,'hover':hover_contrast,'night':night_contrast},'requested_gradient_below_AA':min(day_contrast,hover_contrast,night_contrast)<4.5,'contrast_themes':accessible,'errors':errors},indent=2));b.close()
