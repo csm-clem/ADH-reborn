@@ -66,6 +66,11 @@
       "id": "success-category-title-only",
       "type": "improvement",
       "text": "Les boutons Tout, Repères, Fluidité et Musiques affichent uniquement leur titre, sans compteur de cartes."
+    },
+    {
+      "id": "approved-common-engravings",
+      "type": "improvement",
+      "text": "Les cinq cartes communes adoptent leurs illustrations validées : gravures musicales, cuivre mat, papier chaud et encre pétrole, en SVG légers et disponibles hors ligne."
     }
   ]
 }

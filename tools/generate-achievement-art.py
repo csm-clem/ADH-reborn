@@ -82,6 +82,9 @@ cards += [{**c,'id':c['id']+'-'+zone} for c in list(cards) if c['id'] in ['perfe
 originals={'first-session':'01-commune','first-family':'02-inhabituelle','one-second':'04-epique','beta-atlas':'05-legendaire'}
 for c in cards:
  id=c['id'];level=c['level']
+ # Approved common engravings are authored SVGs; regeneration must preserve them exactly.
+ if id in ['first-session','opens-named','diagram-check','first-discovery','first-chain']:
+  svg=(root/'docs/art/common-proposals'/f'{id}.svg').read_text();E.fromstring(svg);(out/f'{id}.svg').write_text(svg);continue
  if id in originals:
   f=(root/'docs/succes-direction-artistique/svg'/f'{originals[id]}.svg').read_text()
   defs=re.search(r'<defs>.*?</defs>',f,re.S).group()
