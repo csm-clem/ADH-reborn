@@ -1290,3 +1290,7 @@
  #main-content.pilot-game .is-discovery .discovery-direction{font-size:13px;line-height:1.35;margin:4px 0}
  #main-content.pilot-game .is-discovery>.button{margin:4px 0;align-self:center;flex-shrink:0}
 }
+@media(max-height:430px){
+ #main-content.pilot-game .game-body{grid-template-rows:auto var(--neck-slot) minmax(200px,1fr)}
+ #main-content.pilot-game.is-touch .game-body{grid-template-rows:auto var(--neck-slot) auto}
+}

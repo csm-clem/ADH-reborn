@@ -200,7 +200,7 @@ export class CourseController {
       zone = page.zone || scope?.zone || { start: 0, end: 4 },
       strings = page.strings || scope?.plan.strings;
     const neck = (points = page.points || [], opts = {}) => {
-      const scrollable = (opts.lastFret ?? zone.end) - (opts.startFret ?? zone.start) > 12;
+      const scrollable = (opts.lastFret ?? zone.end) - (opts.startFret ?? zone.start) >= 8;
       const diagram = miniatureNeck(this.profile, {
         id: "course-" + page.id,
         lastFret: zone.end,
@@ -211,6 +211,7 @@ export class CourseController {
         showNames: !!page.showNames,
         lesson: true,
         scrollable,
+        scrollFrame:false,
         interactive: page.quiz?.kind === "position",
         activeString: strings?.length === 1 ? strings[0] : page.id === "link" ? page.points?.[0]?.string : null,
         ...opts,

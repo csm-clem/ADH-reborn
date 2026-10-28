@@ -92,3 +92,10 @@ export function scrollingNeckGeometry(strings,lastFret=24,{startFret=0,height=22
  for(const f of g.visibleFrets){const [a,b]=bounds(f);centers[f]=a+(b-a)*2/3;labelXs[f]=a+(b-a)/3;}
  return {...g,visualScale:scale,height,frets,nut,openStart:8,openWidth:widths[0],bounds,centers,labelXs,ys:g.ys.map(y=>y*scale),width:x+minFretWidth*.5,fadeStart:x,inlays:g.inlays.filter(p=>p.fret<=lastFret).map(p=>({...p,x:(frets[p.fret-1]+frets[p.fret])/2,y:p.y*scale}))};
 }
+
+/** Hit regions use the same scale and outer margins as the drawing. */
+export function neckHitBox(g,string){
+ const rows=g.visibleStrings||g.ys.map((_,s)=>s),u=g.visualScale||1,y=g.ys[string],half=rows.length===1?16*u:Math.abs(g.ys[rows[0]]-g.ys[rows[1]])/2;
+ const top=Math.max(0,y-half),bottom=Math.min(g.height-10*u,y+half);
+ return {y:top,height:Math.max(.5,bottom-top)};
+}

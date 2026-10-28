@@ -17,3 +17,7 @@ test('Every neck uses the same scaled frets, inlays and strings, not only shared
   const short=neckGeometry(n,4,648,{gameplay:true});assert.ok(Math.abs((g.ys[0]-g.ys[1])/u-(short.ys[0]-short.ys[1]))<1e-8);
  }
 });
+import {neckHitBox} from '../core.js';
+test('Every string keeps a positive hit region when a scrolling diagram is reduced in height',()=>{
+ for(const count of [4,5,6,7,8])for(const height of [32,40,46,80,104,240]){const g=scrollingNeckGeometry(count,24,{height});for(const string of g.visibleStrings){const box=neckHitBox(g,string);assert.ok(box.height>0);assert.ok(box.y<=g.ys[string]);assert.ok(box.y+box.height>=g.ys[string]-.01);}}
+});
