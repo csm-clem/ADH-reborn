@@ -34,7 +34,7 @@ test('Plucked string has a decaying envelope, pitch periodicity, and bounded fin
 test('All positions fit without horizontal panning and outer string margins stay narrow',()=>{
  for(const strings of [4,5,6,7,8])for(const last of [0,1,2,3,4])for(const [w,h] of [[140,180],[320,140],[410,220],[900,700]]){
   const g=neckGeometry(strings,last),f=fitNeck(g,w,h);assert.ok(f.width<=w&&f.height<=h);
-  assert.equal(g.width,g.frets[last]+(g.frets[last+1]-g.frets[last])*.5);assert.ok(Math.min(...g.ys)<=5);assert.ok(g.height-Math.max(...g.ys)<=12);
+  assert.equal(g.width,g.frets[last]+(g.frets[last+1]-g.frets[last])*.5);assert.ok(Math.min(...g.ys)<=6);assert.ok(g.height-10-Math.max(...g.ys)===Math.min(...g.ys)-2);
   for(const x of g.centers)for(const y of g.ys){assert.ok(x*f.scale>=0&&x*f.scale<f.width);assert.ok(y*f.scale>=0&&y*f.scale<f.height);}
  }
 });

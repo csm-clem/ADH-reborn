@@ -54,6 +54,7 @@ jobs:
           python tools/qa/gameplay-ux.py
           python tools/qa/ux-next.py
           python tools/qa/neck-settings-v039.py
+          python tools/qa/round-wheel-v039.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production

@@ -54,3 +54,10 @@ test('History gestures only follow existing entries and never fabricate a next l
  const calls=[],c=Object.create(NavigationController.prototype);c.win={history:{back:()=>calls.push('back'),forward:()=>calls.push('forward')}};c.index=0;c.maximum=0;
  assert.equal(c.back(),false);assert.equal(c.forward(),false);c.index=2;c.maximum=3;assert.equal(c.back(),true);assert.equal(c.forward(),true);assert.deepEqual(calls,['back','forward']);c.index=3;assert.equal(c.forward(),false);
 });
+import {navigateBeta} from '../beta-home.js';
+test('A one-activity chapter opens its activity directly and retains its parent route',()=>{
+ const c=controller();let opened,home=0;c.host.openCourse=id=>{opened=id;};c.host.home=()=>{home++;};c.start=id=>{opened=id;};
+ const ch={id:'single-test',scopeId:'z1',activityIds:['opens'],kind:'note'};
+ c.catalog.byChapter.set(ch.id,ch);c.data.navigation={branch:'targeted',route:'z1',chapter:null};
+ navigateBeta(c,'chapter',ch.id);assert.equal(opened,'opens');assert.equal(home,0);assert.equal(c.data.navigation.chapter,ch.id);assert.equal(c.data.studyRoute,'z1');
+});

@@ -1,6 +1,6 @@
 import {makeProfile,pitchLabel} from './core.js';
 import {DATA_EPOCH,STATE_KEY,PILOT_KEY,CHANNEL} from './release.js';
-export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',accidentals:'sharp',sound:true,voice:'auto',theme:'light',positionButtons:false,beginnerGuide:false,collection:{category:'all',filter:'all',layout:'album',sort:'path'}};}
+export function initialState(){return {version:1,epoch:DATA_EPOCH,profile:null,notation:'international',accidentals:'sharp',sound:true,voice:'auto',theme:'light',positionButtons:false,beginnerGuide:false,collection:{category:'all',filter:'all',layout:'list',sort:'path'}};}
 export function preferences(value){
  const state=initialState();if(!value||typeof value!=='object')return state;
  if(['international','latin'].includes(value.notation))state.notation=value.notation;

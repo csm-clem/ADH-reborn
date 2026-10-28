@@ -35,7 +35,7 @@ test('Gameplay preserves v0.23 proportions rather than filling the viewport heig
   const expected=(52+(n-6)*7)*1.65;
   for(const [w,h]of [[340,240],[620,650],[480,150]]){
    const g=neckGeometry(n,4,648,{gameplay:true,availableWidth:w,availableHeight:h}),fit=fitNeck(g,w,h);
-   assert.equal(g.height,expected+14);assert.equal(g.ys.at(-1),5);assert.ok(Math.abs(g.ys[0]-expected-2)<1e-10);assert.ok(fit.width<=w&&fit.height<=h);
+   assert.equal(g.height,expected+14);assert.equal(g.ys.at(-1),6);assert.ok(Math.abs(g.ys[0]-expected)<1e-10);assert.ok(fit.width<=w&&fit.height<=h);
   }
  }
  assert.equal(neckGeometry(6).height,66);

@@ -32,7 +32,7 @@ with sync_playwright() as p:
  fill=button.evaluate('e=>getComputedStyle(e).backgroundImage')
  # Secondary appearance stays shared. Check the primary gradient on the help install action.
  colors=q.evaluate('''()=>{const s=getComputedStyle(document.documentElement);return ['--button_gradient_top_color','--button_gradient_bottom_color','--button-hover-top','--button-hover-bottom'].map(k=>s.getPropertyValue(k).trim())}''')
- assert colors==['#f8a744','#e94647','#f8a744','#202980'],colors
+ assert colors==['#f8a744','#e94647','#57abcf','#202980'],colors
  q.screenshot(path=str(out/'settings.png'));checks.append({'shared_button_palette':colors})
  for activity in ['cs1-note-9-discover','c24s1-note-9-discover']:
   h['seed'](q,'guitar6',activity);q.evaluate('''()=>{const k='fretboard-trainer:pilot:stable',s=JSON.parse(localStorage.getItem(k));Object.values(s.profiles)[0].seenInstructions=[];localStorage.setItem(k,JSON.stringify(s));}''');q.reload();q.locator('.chapter-options summary').click();q.locator(f'[data-module="{activity}"]').click();q.wait_for_timeout(150)

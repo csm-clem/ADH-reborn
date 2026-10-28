@@ -26,6 +26,41 @@
       "id": "physical-neck-end-at-24",
       "type": "bug",
       "text": "Le manche s’arrête après la 24e frette, sans fausse case ni fondu, avec une terminaison légèrement arrondie."
+    },
+    {
+      "id": "neck-40px-targets",
+      "type": "improvement",
+      "text": "Les manches longs utilisent des cases de 40 pixels ; le défilement disparaît lorsque toutes les positions tiennent dans la fenêtre."
+    },
+    {
+      "id": "neck-balanced-edges-and-left-fade",
+      "type": "improvement",
+      "text": "Le manche équilibre les marges des cordes extrêmes, espace les numéros des cibles à vide et ajoute un fondu à gauche aux zones recadrées."
+    },
+    {
+      "id": "neck-strings-inlays-discovery",
+      "type": "improvement",
+      "text": "Cordes graves plus marquées, repères de touche brun foncé, surlignage de corde à épaisseur constante et découverte élargie sur ordinateur."
+    },
+    {
+      "id": "round-wheel-compact-task-band",
+      "type": "improvement",
+      "text": "Les roues restent rondes et concentriques dans les deux orientations ; en paysage, leurs boutons mesurent 40 pixels et les consignes sont plus compactes."
+    },
+    {
+      "id": "single-activity-direct-entry",
+      "type": "improvement",
+      "text": "Les chapitres ne contenant qu’une seule activité ouvrent directement le cours ou l’exercice."
+    },
+    {
+      "id": "collection-detail-default",
+      "type": "improvement",
+      "text": "La collection des succès s’ouvre par défaut en vue détaillée ; la vue Album reste disponible."
+    },
+    {
+      "id": "hover-blue-and-smaller-dialog-headings",
+      "type": "improvement",
+      "text": "Le survol des boutons utilise le dégradé bleu demandé et les titres des fenêtres de dialogue sont plus discrets."
     }
   ]
 }

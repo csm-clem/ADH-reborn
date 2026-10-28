@@ -75,6 +75,10 @@ export function navigateBeta(c, action, id) {
   if(action==='route') {c.data.studyRoute=id;const scope=c.catalog.byScope.get(id);if(scope)c.data.catalogKind=scope.kind;}
   if(action==='chapter'){c.data.studyRoute=c.data.navigation.route;c.data.studyChapter=id;}
   c.save();
+  if(action==='chapter'){
+    const chapter=currentChapter(c),ids=[...(chapter?.discoveryId?[chapter.discoveryId]:[]),...(chapter?.activityIds||[])];
+    if(chapter?.kind==='course'||ids.length===1){startChapter(c,id);return;}
+  }
   c.host.home();
 }
 export function chapterNext(c, chapter = currentChapter(c), evidence = betaEvidence(c.catalog,c.data)) {

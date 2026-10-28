@@ -21,7 +21,7 @@ with sync_playwright() as p:
  day=button.evaluate('e=>getComputedStyle(e).backgroundImage');day_contrast=contrast()
  assert 'linear-gradient' in day and 'rgb(248, 167, 68)' in day and 'rgb(233, 70, 71)' in day,day
  page.screenshot(path=str(out/'sunrise-jour.png'));button.hover();hover=button.evaluate('e=>getComputedStyle(e).backgroundImage');hover_contrast=contrast()
- assert 'linear-gradient' in hover and 'rgb(248, 167, 68)' in hover and 'rgb(32, 41, 128)' in hover,hover
+ assert 'linear-gradient' in hover and 'rgb(87, 171, 207)' in hover and 'rgb(32, 41, 128)' in hover,hover
  page.screenshot(path=str(out/'sunrise-hover.png'));page.mouse.move(0,0);page.evaluate('document.documentElement.dataset.theme="dark"');night=button.evaluate('e=>getComputedStyle(e).backgroundImage');night_contrast=contrast()
  assert 'linear-gradient' in night and 'rgb(248, 167, 68)' in night and 'rgb(233, 70, 71)' in night,night
  page.screenshot(path=str(out/'sunrise-nuit.png'))

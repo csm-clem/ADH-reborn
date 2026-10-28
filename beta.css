@@ -1303,3 +1303,35 @@
  #main-content.pilot-game .game-body{grid-template-rows:auto var(--neck-slot) minmax(200px,1fr)}
  #main-content.pilot-game.is-touch .game-body{grid-template-rows:auto var(--neck-slot) auto}
 }
+
+/* v0.39: compact task band, round wheels and balanced instrument frame. */
+#main-content.pilot-game .neck-viewport{border:0;box-shadow:none}
+#main-content.pilot-game .answer-area{padding-block:8px}
+#main-content.pilot-game .discovery-progress progress{height:8px}
+#main-content.pilot-game .pilot-answer.is-discovery{padding-bottom:8px}
+#main-content.pilot-game .game-header{gap:6px}
+#main-content.pilot-game .game-header strong{font-size:clamp(13px,1.5vw,18px)}
+#main-content.pilot-game .game-header small{font-size:12px}
+#main-content.pilot-game .orientation-suggestion{display:none}
+#main-content.pilot-game .question-copy{padding-block:0!important}
+#main-content.pilot-game:has(.is-discovery) .neck-panel{width:100%}
+@media(orientation:landscape) and (max-height:600px){
+ #main-content.pilot-game{padding-top:4px;gap:3px;--neck-target:104px;--neck-slot:112px}
+ #main-content.pilot-game .game-header .icon-button{width:44px;height:44px;min-width:44px;min-height:44px}
+ #main-content.pilot-game .game-header{min-height:44px}
+ #main-content.pilot-game .question-copy h1{display:inline;font-size:18px!important;margin-right:8px}
+ #main-content.pilot-game .question-copy p{display:inline;font-size:12px}
+ #main-content.pilot-game .game-body{gap:3px;grid-template-rows:auto var(--neck-slot) auto}
+ #main-content.pilot-game .pilot-response-stage{min-height:218px!important;height:218px;flex:none!important}
+ #main-content.pilot-game .answer-workspace{min-height:0}
+ #main-content.pilot-game .pilot-answer{overflow:visible}
+ #main-content.pilot-game .answer-area{padding-block:4px}
+ #main-content.pilot-game .pilot-answer>.text-button{min-height:40px}
+}
+#main-content.pilot-game{grid-template-rows:auto 4px minmax(0,1fr)}
+#main-content.pilot-game>.game-header{grid-row:1}
+#main-content.pilot-game>.game-progress{grid-row:2}
+#main-content.pilot-game>.game-body{grid-row:3}
+#main-content.pilot-game .discovery-progress progress{appearance:none;display:block;height:8px;border:0;border-radius:8px;overflow:hidden;background:var(--progress-empty)}
+#main-content.pilot-game .discovery-progress progress::-webkit-progress-value{background:var(--brand);border-radius:8px}
+#main-content.pilot-game .discovery-progress progress::-moz-progress-bar{background:var(--brand);border-radius:8px}

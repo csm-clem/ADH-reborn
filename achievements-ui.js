@@ -9,9 +9,9 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 export function matchesCollectionFilter(def,filter){return filter==='all'||(filter==='earned'?!!def.obtained:!def.obtained&&(filter==='started'?def.progress.percent>0:filter==='missing'?def.progress.percent===0:false));}
 const categories=[['all','Tout'],['landmarks','Repères'],['fluency','Fluidité'],['music','Musiques']];
 export class AchievementsController{
- constructor(host){this.host=host;this.playing=null;this.ready=false;this.epoch=0;this.flipped=new Set();}
+ constructor(host){this.host=host;this.playing=null;this.ready=false;this.epoch=0;this.flipped=new Set();this.layout='list';}
  get pilot(){return this.host.pilot;}
- get preferences(){return this.host.getState().collection;}
+ get preferences(){return {...this.host.getState().collection,layout:this.layout};}
  get catalogue(){return this.context?.definitions||achievementContext({profile:this.pilot.profile,catalog:this.pilot.catalog,data:this.pilot.data,existing:this.pilot.store.achievements,notation:notationFor(this.host.getState())}).definitions;}
  target(def){return def.target;}
  reveal(id){this.expanded=id;this.revealed=id;this.flipped.delete(id);this.host.setPreferences({...this.preferences,category:'all',filter:'all',sort:'recent'});}
@@ -49,7 +49,7 @@ export class AchievementsController{
   root.addEventListener('cancel',e=>{if(e.target.matches('.collection-dialog')){e.preventDefault();this.closeExpanded();}},true);
   this.motion=bindAchievementMotion(root);
   root.addEventListener('click',e=>{const b=e.target.closest('[data-success-action]');if(!b)return;e.preventDefault();const action=b.dataset.successAction;
-   if(action==='layout'){this.expanded=null;this.update({layout:this.preferences.layout==='album'?'list':'album'});return;}
+   if(action==='layout'){this.expanded=null;this.layout=this.layout==='album'?'list':'album';this.update({layout:this.layout});return;}
    if(action==='expand'){this.expanded=b.dataset.id;this.flipped.delete(this.expanded);this.host.render();return;}
    if(action==='collapse'){this.closeExpanded();return;}
    if(action==='flip'){this.flip(b);return;}

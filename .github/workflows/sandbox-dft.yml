@@ -48,6 +48,7 @@ jobs:
           python tools/qa/gameplay-ux.py
           python tools/qa/ux-next.py
           python tools/qa/neck-settings-v039.py
+          python tools/qa/round-wheel-v039.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py
