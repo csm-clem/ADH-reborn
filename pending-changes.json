@@ -61,6 +61,11 @@
       "id": "hover-blue-and-smaller-dialog-headings",
       "type": "improvement",
       "text": "Le survol des boutons utilise le dégradé bleu demandé et les titres des fenêtres de dialogue sont plus discrets."
+    },
+    {
+      "id": "success-category-title-only",
+      "type": "improvement",
+      "text": "Les boutons Tout, Repères, Fluidité et Musiques affichent uniquement leur titre, sans compteur de cartes."
     }
   ]
 }
