@@ -29,11 +29,13 @@ with sync_playwright() as p:
   for width,height in [(320,568),(390,844),(844,390),(1024,768),(1366,768),(1440,900)]:
    q.set_viewport_size({'width':width,'height':height});q.wait_for_timeout(200)
    assert q.evaluate('document.documentElement.scrollWidth<=innerWidth'),(theme,width,'overflow')
-   # Measure actual rendered theme tokens. White labels must remain readable even
-   # at the lightest endpoint of each shared action gradient.
+   # Measure body text in every theme and action labels in the dedicated contrast themes.
+   # The explicitly requested orange gradient is retained in light/dark and logged
+   # separately: its white labels are not represented as meeting AA.
    ratios=q.evaluate('''()=>{const s=getComputedStyle(document.documentElement),rgb=c=>{const x=document.createElement('span');x.style.color=c;document.body.append(x);const values=getComputedStyle(x).color.match(/[0-9.]+/g).slice(0,3).map(Number);x.remove();return values;},l=c=>rgb(c).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0),ratio=(a,b)=>{const x=l(a),y=l(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)},v=n=>s.getPropertyValue(n).trim(),day=['light','dark'].includes(document.documentElement.dataset.theme);return {body:ratio(v('--ink'),v('--surface')),muted:ratio(v('--muted'),v('--surface')),mutedOnBackground:ratio(v('--muted'),v('--bg')),primary:day?Math.min(ratio('#fff',v('--button_gradient_top_color')),ratio('#fff',v('--button_gradient_bottom_color'))):ratio('#fff',v('--action-fill')),hover:day?Math.min(ratio('#fff',v('--button-hover-top')),ratio('#fff',v('--button-hover-bottom'))):ratio('#fff',v('--action-fill'))}}''')
-   assert min(ratios.values())>=4.5,(theme,width,ratios)
-   checks.append({'theme':theme,'viewport':[width,height],'minimum_text_contrast':round(min(ratios.values()),2)})
+   required={k:v for k,v in ratios.items() if theme not in ['light','dark'] or k not in ['primary','hover']}
+   assert min(required.values())>=4.5,(theme,width,ratios)
+   checks.append({'theme':theme,'viewport':[width,height],'minimum_required_text_contrast':round(min(required.values()),2),'button_label_contrast':{k:round(ratios[k],2) for k in ['primary','hover']},'requested_gradient_below_AA':theme in ['light','dark'] and min(ratios['primary'],ratios['hover'])<4.5})
    if width in [390,1366]:q.screenshot(path=str(out/f'settings-{theme}-{width}.png'),full_page=True)
  q.set_viewport_size({'width':1366,'height':768});q.locator('[data-action=home]:visible').first.click();q.locator('[data-action=home]:visible').first.click();q.locator('[data-pilot-action=beta-branch][data-id=targeted]').click();q.locator('.route-card[data-id=cs1]').click();assert 'Pratique ciblée' in q.locator('.breadcrumbs').inner_text();assert 'Corde 6' in q.locator('.breadcrumbs').inner_text();q.screenshot(path=str(out/'route-desktop.png'),full_page=True);checks.append('full directory and real clickable breadcrumb')
  q.locator('.breadcrumbs [data-pilot-action=beta-branch]').click();assert q.locator('.route-card').count()==25;checks.append('full directory visible after parent return')

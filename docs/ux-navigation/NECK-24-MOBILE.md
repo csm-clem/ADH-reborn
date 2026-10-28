@@ -41,3 +41,7 @@ Retirer l’aide permanente « Faites glisser… » du jeu après sa première e
 - Introductions 12/24 cases ouvertes sur la largeur disponible, hauteur de manche 240 px.
 - Palette des boutons #f8a744 → #e94647, puis #f8a744 → #202980 au survol.
 - Fin physique à la case 24 : pas de demi-case colorée ni de fondu ; petit arrondi à droite. Le fondu des autres zones continue d’indiquer une vraie continuation.
+
+## Limite de contraste de la palette demandée
+
+Le fond orange #f8a744 donne un contraste d’environ 1,98:1 avec du texte blanc. La palette exacte demandée est conservée pour Atelier et Studio Nuit ; ces boutons ne sont donc pas annoncés conformes AA. Les thèmes Inclusif et Papier gardent leurs aplats contrastés. Les contrôles mesurent toujours les textes de l’interface dans tous les thèmes, et les boutons dans les thèmes contrastés ; les ratios des dégradés sont enregistrés séparément.
