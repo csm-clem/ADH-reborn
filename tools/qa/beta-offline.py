@@ -35,7 +35,7 @@ with sync_playwright() as p:
  page.locator('.mobile-location [data-pilot-action=beta-branch]').click();page.locator('.mobile-location [data-pilot-action=beta-catalog]').click()
  page.locator('[data-pilot-action=beta-branch][data-id=beginner]').click();page.locator('[data-pilot-action=beta-route][data-id=beginner]').click()
  page.locator('[data-pilot-action=beta-chapter][data-id=gd-01]').click()
- page.locator('[data-pilot-action=beta-course]').click()
+ assert page.locator('.course-page').count(),'Single-activity course opens directly offline'
  assert page.locator('.course-page').count()==1
  page.locator('[data-course-action=skip]').click()
  course=page.evaluate("()=>Object.values(JSON.parse(localStorage.getItem('fretboard-trainer:pilot:stable')).profiles)[0].courses['gd-01']")

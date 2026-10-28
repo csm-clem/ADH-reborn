@@ -93,7 +93,7 @@ with sync_playwright() as p:
   page.locator(f'[data-pilot-action=beta-branch][data-id="{"beginner" if route=="beginner" else "targeted"}"]').click()
   page.locator(f'[data-pilot-action=beta-route][data-id="{route}"]').click()
   page.locator(f'[data-pilot-action=beta-chapter][data-id="{course_id}"]').click()
-  page.locator('[data-pilot-action=beta-course]').click()
+  assert page.locator('.course-page').count(),'Single-activity course should open directly'
   for index,card in enumerate(data['pages']):
    if card.get('quiz'):
     q=card['quiz']

@@ -28,8 +28,8 @@ with sync_playwright() as p:
  swipe('.game-header');assert not q.locator('.pilot-game').count();assert nav()['chapter'];checks.append('activity to chapter')
  # A visual course similarly closes to its chapter.
  q.locator('[data-action=home]:visible').first.click();q.locator('[data-pilot-action=beta-branch][data-id=beginner]').click()
- q.locator('[data-pilot-action=beta-route][data-id=beginner]').click();q.locator('[data-pilot-action=beta-chapter]').first.click();q.locator('[data-pilot-action=beta-course]').first.click()
- swipe('.course-content h1');assert not q.locator('.course-page').count();assert nav()['chapter'];checks.append('course to chapter')
+ q.locator('[data-pilot-action=beta-route][data-id=beginner]').click();q.locator('[data-pilot-action=beta-chapter]').first.click();assert q.locator('.course-page').count(),'Single-activity course should open directly'
+ swipe('.course-content h1');assert not q.locator('.course-page').count();assert nav()['route']=='beginner' and not nav().get('chapter');checks.append('single-activity course returns to its chapter list')
  assert not errors,errors
  Path('work/sandbox/parent-swipe.json').write_text(json.dumps({'checks':checks,'errors':errors},indent=2));b.close()
 print('Parent swipe and debug layout passed.')
