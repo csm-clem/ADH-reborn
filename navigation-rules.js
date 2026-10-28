@@ -58,7 +58,7 @@ export function bindParentSwipe(root,{enabled,back,forward=()=>{}}) {
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clear=node=>{if(!node)return;node.classList.remove('page-swipe-track');node.classList.add('page-swipe-settle');node.style.transform='';setTimeout(()=>node?.classList.remove('page-swipe-settle'),220);};
  root.addEventListener('pointermove',e=>{if(!start||e.pointerId!==start.id||reduced())return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.7)return;start.node?.classList.add('page-swipe-track');if(start.node)start.node.style.transform=`translate3d(${Math.sign(dx)*Math.min(Math.abs(dx)*.62,160)}px,0,0)`;},{passive:true});
- const excluded='input,select,textarea,summary,[role="slider"],.neck-viewport,.position-grid,.answer-wheel,.pilot-wheel,[data-pilot-action="note"],.pilot-position-buttons,.achievement-card,.mobile-nav,svg,dialog';
+ const excluded='input,select,textarea,summary,[role="slider"],.neck-viewport,.lesson-neck-scroll,.course-neck-scroll,.progress-map,.position-grid,.answer-wheel,.pilot-wheel,[data-pilot-action="note"],.pilot-position-buttons,.achievement-card,.mobile-nav,svg,dialog';
  root.addEventListener('pointerdown',e=>{
   consumeUntil=0;start=null;if(e.pointerType==='mouse'||!e.isPrimary||!enabled()||e.target.closest(excluded)||document.querySelector('dialog[open]'))return;
   start={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now(),node:root.querySelector('.content')||root.querySelector('.course-page')||root.querySelector('.pilot-game')};

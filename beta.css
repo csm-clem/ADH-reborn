@@ -1279,3 +1279,14 @@
 .lesson-neck-scroll{overflow-x:scroll;overflow-y:hidden;width:100%;min-height:240px;touch-action:pan-x pan-y;cursor:grab;scrollbar-width:auto}
 .lesson-neck-frame:has(.lesson-neck-scroll:not([data-scroll-end=true]))::after{content:'';position:absolute;right:0;top:0;bottom:16px;width:20px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg))}
 .lesson-neck-scroll.is-grabbing{cursor:grabbing}
+/* Small discovery screens keep the progression action inside the visible answer panel. */
+@media(max-height:650px){
+ #main-content.pilot-game:has(.is-discovery){--neck-target:clamp(104px,20dvh,135px)}
+ #main-content.pilot-game .pilot-answer.is-discovery{gap:0;min-height:0;overflow:auto}
+ #main-content.pilot-game .is-discovery .discovery-progress{margin-bottom:4px}
+ #main-content.pilot-game .is-discovery .discovery-progress>strong{font-size:26px}
+ #main-content.pilot-game .is-discovery .discovery-progress progress{margin-top:4px}
+ #main-content.pilot-game .is-discovery .disabled-reason{font-size:12px;margin:2px auto 4px}
+ #main-content.pilot-game .is-discovery .discovery-direction{font-size:13px;line-height:1.35;margin:4px 0}
+ #main-content.pilot-game .is-discovery>.button{margin:4px 0;align-self:center;flex-shrink:0}
+}

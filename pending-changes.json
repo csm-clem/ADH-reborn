@@ -241,6 +241,11 @@
       "id": "focus-only-after-tab",
       "type": "improvement",
       "text": "Les repères de focus ne s’affichent qu’après utilisation de Tab, tout en conservant les commandes accessibles au clavier."
+    },
+    {
+      "id": "small-discovery-action-fit",
+      "type": "bug",
+      "text": "La découverte conserve son bouton de poursuite visible sur les petits écrans, avec des espacements adaptés."
     }
   ]
 }

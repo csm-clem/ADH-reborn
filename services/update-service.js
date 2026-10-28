@@ -5,7 +5,8 @@ export function updateTarget(data,manifestURL,currentURL,currentVersion=UPDATE_V
 export class UpdateController{
  constructor({beforeUpdate,canPrompt=()=>true}){this.beforeUpdate=beforeUpdate;this.canPrompt=canPrompt;this.deferred=false;this.registration=null;this.progress=null;}
  async start(){if(!('serviceWorker' in navigator))return;try{
-  const r=this.registration=await navigator.serviceWorker.register('./sw.js?release='+UPDATE_VERSION,{updateViaCache:'none'});
+  const existing=await navigator.serviceWorker.getRegistration('./');
+  const r=this.registration=existing&&existing.scope===new URL('./',location.href).href&&await this.workerVersion(existing.active)===UPDATE_VERSION?existing:await navigator.serviceWorker.register('./sw.js?release='+UPDATE_VERSION,{updateViaCache:'none'});
   r.addEventListener('updatefound',()=>{const w=r.installing;w?.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)this.offerWorker();});});
   navigator.serviceWorker.addEventListener('message',e=>{if(e.data?.type==='UPDATE_PROGRESS'){this.progress=e.data;this.paintProgress();}});
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(this.accepted&&!this.reloading){this.reloading=true;location.reload();}});
