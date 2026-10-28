@@ -10,6 +10,8 @@ export async function shareResult({title,subtitle,profileLabel,metrics,stars}){
  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1080;const c=canvas.getContext('2d');if(!c)throw new Error('Partage indisponible sur ce navigateur.');
  c.fillStyle='#fff';c.fillRect(0,0,1080,1080);c.fillStyle='#44516b';c.textAlign='center';c.font='bold 38px sans-serif';c.fillText(APP_NAME,540,100);c.font='bold 48px sans-serif';c.fillText(title,540,220,950);c.font='30px sans-serif';c.fillText(subtitle,540,270,950);c.font='bold 180px sans-serif';c.fillText(`${metrics.correct}/${metrics.total}`,540,505);c.fillStyle='#ad933b';c.font='45px sans-serif';c.fillText('★'.repeat(stars)+'☆'.repeat(5-stars),540,585);c.fillStyle='#44516b';c.font='35px sans-serif';c.fillText(`${Math.round(metrics.accuracy*100)} % de bonnes réponses`,540,700);c.fillText(`Temps moyen : ${seconds(metrics.meanMs)}`,540,765);c.font='28px sans-serif';c.fillText(profileLabel,540,925,950);
  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('Image de partage indisponible.');const file=new File([blob],'daily-fretboard-trainer-resultat.png',{type:'image/png'});
- if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file],title:APP_NAME});return 'shared';}
- const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return 'downloaded';
+ // Desktop sharing support is inconsistent; always offer the PNG download there.
+ const touch=globalThis.matchMedia?.('(pointer: coarse)').matches;
+ if(touch&&navigator.share){try{if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:APP_NAME});return 'shared';}}catch(error){if(error.name==='AbortError')throw error;}}
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=file.name;a.hidden=true;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);return 'downloaded';
 }

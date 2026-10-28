@@ -76,6 +76,16 @@
       "id": "success-remove-material-context",
       "type": "improvement",
       "text": "Les cartes Succès retirent les mentions de matière et de contexte pour mettre en avant leur titre, leur progression et leurs actions."
+    },
+    {
+      "id": "desktop-result-share-download",
+      "type": "bug",
+      "text": "Sur ordinateur, le partage du résultat télécharge une image PNG ; sur mobile, un échec du partage natif propose le téléchargement."
+    },
+    {
+      "id": "sunrise-achievement-celebration",
+      "type": "improvement",
+      "text": "La célébration des succès adopte des accents orange et corail sunrise, avec des surfaces de lecture adaptées au thème."
     }
   ]
 }

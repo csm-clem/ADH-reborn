@@ -61,3 +61,9 @@
 @media(orientation:portrait) and (max-height:650px){.redesigned-result:has(.achievement-unlock) .result-layout{gap:8px}}
 :root[data-theme=accessible] .unlock-description{font-size:13px}
 :root[data-theme=accessible] .unlock-event{font-size:11px}
+
+/* Sunrise stays in the frame and light; reading surfaces retain theme contrast. */
+.achievement-celebration{border-color:#e68a45;background:linear-gradient(125deg,color-mix(in srgb,#f8a744 15%,var(--surface)),color-mix(in srgb,#e94647 8%,var(--surface)))}
+.achievement-celebration .unlock-halo{border-color:#f8a744;box-shadow:0 0 18px #e9464733}
+.achievement-celebration::after{background:linear-gradient(110deg,transparent 20%,#f8a74430 42%,#e9464720 55%,transparent 75%)}
+:root[data-theme=accessible] .achievement-celebration,:root[data-theme=paper] .achievement-celebration{background:var(--surface);border-color:var(--ink)}
