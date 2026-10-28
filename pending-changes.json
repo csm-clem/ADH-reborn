@@ -181,6 +181,66 @@
       "id": "ux-active-navigation-consistent",
       "type": "improvement",
       "text": "La destination active adopte la même surface contrastée sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre."
+    },
+    {
+      "id": "pwa-verified-cache-reuse",
+      "type": "improvement",
+      "text": "Les mises à jour réutilisent les fichiers inchangés à partir de leurs empreintes vérifiées ; elles évitent une seconde installation de réparation et affichent la préparation."
+    },
+    {
+      "id": "pwa-respect-update-choice",
+      "type": "bug",
+      "text": "Le téléchargement du nouveau service worker attend l’accord du joueur ; refuser garde la version courante et la proposition revient au prochain démarrage."
+    },
+    {
+      "id": "settings-help-backup-separators",
+      "type": "improvement",
+      "text": "Aide et Sauvegardes et mises à jour utilisent les mêmes séparations fines que les autres réglages."
+    },
+    {
+      "id": "game-one-column-everywhere",
+      "type": "improvement",
+      "text": "Le manche se place au-dessus des réponses sur tous les écrans, avec une hauteur proportionnelle d’environ 250 px sur un écran FHD."
+    },
+    {
+      "id": "navigation-follows-finger",
+      "type": "improvement",
+      "text": "Le contenu suit le balayage de la page et la transition de retour ou d’avance se termine par un mouvement court, désactivé si les animations sont réduites."
+    },
+    {
+      "id": "collection-touch-damping",
+      "type": "improvement",
+      "text": "Le mouvement tactile des cartes utilise un amortissement régulier et une translation plus mesurée pour des reflets fluides."
+    },
+    {
+      "id": "readable-long-teaching-necks",
+      "type": "bug",
+      "text": "Les manches longs des introductions et leçons conservent une hauteur lisible et défilent horizontalement sans déplacer les consignes."
+    },
+    {
+      "id": "recent-twenty-position-progress",
+      "type": "feature",
+      "text": "Les pourcentages du manche reflètent les vingt dernières réponses à chaque emplacement ; les validations et succès restent conservés."
+    },
+    {
+      "id": "discovery-then-cumulative-pair",
+      "type": "improvement",
+      "text": "Chaque famille de notes enchaîne Découvrir, Nommer les notes et Retrouver les notes, avec les notes précédemment apprises."
+    },
+    {
+      "id": "simpler-activity-labels",
+      "type": "improvement",
+      "text": "Les présentations d’activités retirent les mentions du nombre de questions et le mot mélangées."
+    },
+    {
+      "id": "sunrise-logo-and-blue-lab",
+      "type": "improvement",
+      "text": "Le logo reprend le dégradé sunrise ; le lab utilise sa variante bleue, y compris pour ses icônes PWA."
+    },
+    {
+      "id": "focus-only-after-tab",
+      "type": "improvement",
+      "text": "Les repères de focus ne s’affichent qu’après utilisation de Tab, tout en conservant les commandes accessibles au clavier."
     }
   ]
 }

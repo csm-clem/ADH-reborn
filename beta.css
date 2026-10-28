@@ -1249,3 +1249,33 @@
 #main-content.pilot-game.is-scroll-neck .neck-panel::after,#main-content.pilot-game.is-scroll-neck .neck-panel::before{position:absolute;top:var(--neck-top,0);height:var(--neck-view-height,0);width:22px;pointer-events:none;z-index:2}
 #main-content.pilot-game.is-scroll-neck .neck-panel:has(#pilot-neck[data-scroll-end=false])::after{content:'';right:0;background:linear-gradient(90deg,transparent,var(--bg))}
 #main-content.pilot-game.is-scroll-neck .neck-panel:has(#pilot-neck[data-scroll-start=false])::before{content:'';left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+/* One column on every device. A 1080px-tall screen gives a 250px instrument slot. */
+#main-content.pilot-game{--neck-slot:clamp(140px,23.15dvh,340px)}
+#main-content.pilot-game .game-body{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,var(--neck-slot)) minmax(0,1fr);gap:8px}
+#main-content.pilot-game .game-body>.question-copy{grid-column:1;grid-row:1}
+#main-content.pilot-game .game-body>.neck-panel{grid-column:1;grid-row:2;align-self:stretch;height:100%;max-height:none}
+#main-content.pilot-game .game-body>.answer-workspace{grid-column:1;grid-row:3;align-self:stretch;height:100%;max-height:none;display:flex!important;justify-content:flex-start!important}
+#main-content.pilot-game.is-touch .game-body{grid-template-rows:auto minmax(0,var(--neck-slot)) minmax(0,1fr)}
+#main-content.pilot-game .game-body>.answer-workspace .pilot-answer{flex:1;min-height:0;display:flex!important;flex-direction:column}
+#main-content.pilot-game .pilot-response-stage{min-height:156px;flex:1}
+#main-content.pilot-game.is-touch .pilot-response-stage{min-height:0;flex:0}
+#main-content.pilot-game.is-practice .game-body>.answer-workspace{max-width:700px;justify-self:center}
+@media(max-height:650px){#main-content.pilot-game{--neck-slot:clamp(104px,23.15dvh,150px)}#main-content.pilot-game .game-body{gap:4px}}
+@media(max-height:430px){#main-content.pilot-game{overflow:auto;max-height:none;height:auto;min-height:100dvh}#main-content.pilot-game .game-body{overflow:visible;grid-template-rows:auto minmax(104px,23.15dvh) minmax(200px,1fr)}#main-content.pilot-game.is-touch .game-body{grid-template-rows:auto minmax(104px,23.15dvh) auto}#main-content.pilot-game .answer-workspace{overflow:visible}}
+/* Long first-use necks retain a readable physical height and scroll horizontally. */
+.instruction-page:has(svg[data-neck-scroll=true]){grid-template-columns:minmax(0,1100px)}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-content{max-width:1100px;grid-template-columns:minmax(0,1fr)}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-heading,.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual,.instruction-page:has(svg[data-neck-scroll=true]) .instruction-summary{grid-column:1;grid-row:auto}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual{overflow-x:auto;overflow-y:hidden;max-width:100%;min-height:240px;cursor:grab;touch-action:pan-x pan-y;scrollbar-width:auto}
+.instruction-page:has(svg[data-neck-scroll=true]) .shared-neck{height:240px!important;min-height:240px!important;max-height:none!important;max-width:none!important;touch-action:pan-x pan-y}
+.instruction-page:has(svg[data-neck-scroll=true]) .lesson-actions{width:100%;justify-self:center}
+#main-content.pilot-game .neck-panel .neck-viewport{justify-self:center}
+#main-content.pilot-game{--neck-target:clamp(140px,23.15dvh,340px);--neck-slot:calc(var(--neck-target) + 54px)}
+#main-content.pilot-game .neck-panel .neck-viewport{max-height:var(--neck-target)}
+@media(max-height:650px){#main-content.pilot-game{--neck-target:clamp(104px,23.15dvh,150px);--neck-slot:calc(var(--neck-target) + 54px)}}
+#main-content.pilot-game.is-name .game-body>.answer-workspace{max-height:460px;align-self:start}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual{overflow:visible;cursor:default}
+.lesson-neck-frame{width:100%;min-width:0;position:relative}
+.lesson-neck-scroll{overflow-x:scroll;overflow-y:hidden;width:100%;min-height:240px;touch-action:pan-x pan-y;cursor:grab;scrollbar-width:auto}
+.lesson-neck-frame:has(.lesson-neck-scroll:not([data-scroll-end=true]))::after{content:'';position:absolute;right:0;top:0;bottom:16px;width:20px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg))}
+.lesson-neck-scroll.is-grabbing{cursor:grabbing}

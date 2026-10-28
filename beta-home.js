@@ -1,3 +1,4 @@
+import {noteName} from './core.js';
 import { branchForRoute, reviewRecommendation } from "./navigation-rules.js";
 import { betaEvidence } from "./beta-catalog.js";
 const esc = (v) =>
@@ -204,10 +205,10 @@ export function betaHome(c) {
         ? status(chapter)
           ? `<button class="text-button" data-pilot-action="beta-course" data-id="${chapter.courseId}">Revoir le cours</button>`
           : ""
-        : `<details class="chapter-options"><summary>Choisir une activité</summary><div class="chapter-activities">${chapter.discoveryId ? `<button class="lesson-row" data-pilot-action="start" data-module="${chapter.discoveryId}"><span class="lesson-symbol">◉</span><span class="lesson-copy"><strong>Découvrir les positions</strong><small>Touchez, écoutez, repérez.</small></span></button>` : ""}${chapter.activityIds
+        : `<details class="chapter-options"><summary>Choisir une activité</summary><div class="chapter-activities">${chapter.discoveryId ? `<button class="lesson-row" data-pilot-action="start" data-module="${chapter.discoveryId}"><span class="lesson-symbol">◉</span><span class="lesson-copy"><strong>Découvrir les positions de ${esc(noteName(chapter.pitchClass,c.notation))}</strong><small>Touchez, écoutez, repérez.</small></span></button>` : ""}${chapter.activityIds
             .map((id) => {
               const a = c.resolve(id);
-              return `<button class="lesson-row" data-pilot-action="start" data-module="${id}"><span class="lesson-symbol ${evidence.passed(id) ? "complete" : ""}">${evidence.passed(id) ? "✓" : "›"}</span><span class="lesson-copy"><strong>${esc(a.subtitle)}</strong><small>${esc(a.mode==='name'?'Regardez le point. Choisissez son nom.':'Lisez la note. Touchez sa place.')} · ${evidence.passed(id)?"Réussi · rejouer":"20–24 questions"}</small></span></button>`;
+              return `<button class="lesson-row" data-pilot-action="start" data-module="${id}"><span class="lesson-symbol ${evidence.passed(id) ? "complete" : ""}">${evidence.passed(id) ? "✓" : "›"}</span><span class="lesson-copy"><strong>${esc(a.subtitle)}</strong><small>${esc(a.mode==='name'?'Regardez le point. Choisissez son nom.':'Lisez la note. Touchez sa place.')} · ${evidence.passed(id)?"Réussi · rejouer":""}</small></span></button>`;
             })
             .join("")}</div></details>`;
     return (

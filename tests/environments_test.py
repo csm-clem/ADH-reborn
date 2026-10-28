@@ -25,6 +25,17 @@ class EnvironmentTests(unittest.TestCase):
   self.ledger={'schema':1,'live_version':'0.37.0','history':[{'version':'0.37','title':'Live','items':[['bug','Published correction']]}],'included_change_ids':[]}
   self.pending={'target_release':'0.38.0','title':'Next release','changes':[{'id':'one','type':'feature','text':'First intermediate change'},{'id':'two','type':'bug','text':'Second intermediate change'}]}
  def build(self):return make_sandbox(self.source,1,'a'*40,self.ledger,self.pending,self.root/'sandbox')
+ def test_channel_identity_and_hashes_follow_the_final_assets(self):
+  from environments import environment
+  import hashlib
+  files={name:p.read_bytes() for p in self.source.rglob('*') if p.is_file() for name in [p.relative_to(self.source).as_posix()]}
+  files.update({'icons/live.svg':b'warm','icons/lab.svg':b'cool'})
+  files['sw.js']=b"const WORKER_RELEASE='0.38.0';const CACHE=`fretboard-trainer-v${WORKER_RELEASE}:scope`;const ASSETS=['./release.js','./index.html','./icons/icon.svg'];const ASSET_HASHES={};"
+  for channel,icon in [('sandbox',b'cool'),('live',b'warm')]:
+   out=environment(files,channel,'0.38.0','0.38.1','b000001-aaaaaaaaaaaa',self.ledger)
+   self.assertEqual(out['icons/icon.svg'],icon)
+   self.assertIn(hashlib.sha256(icon).hexdigest(),out['sw.js'].decode())
+   self.assertIn(hashlib.sha256(out['release.js']).hexdigest(),out['sw.js'].decode())
  def test_reproducible_isolated_build_and_unpublished_history(self):
   archive,meta=self.build();first=archive.read_bytes();self.build();self.assertEqual(first,archive.read_bytes())
   f=files_from_zip(archive);self.assertIn(b'"sandbox"',f['release.js']);self.assertIn(b'fretboard-trainer:sandbox',f['release.js']);self.assertEqual(json.loads(f['update.json'])['version'],'0.38.1');self.assertEqual(json.loads(f['release-ledger.json']),self.ledger);self.assertNotIn(b'First intermediate change',f['release-history.js'])

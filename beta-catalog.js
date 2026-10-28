@@ -52,7 +52,7 @@ export function betaCatalog(profile, { notation = "international", full = true }
   }
   const chapters = [],
     activities = [],
-    discoveries = [];
+    discoveries = [], legacyActivities=[];
   for (const scope of scopes) {
     const plan = pilotPlan(profile, {
       notation,
@@ -111,19 +111,8 @@ export function betaCatalog(profile, { notation = "international", full = true }
           (m) => m.kind === "family" && m.pitchClass === pc,
         ),
         mix = plan.modules.find((m) => m.kind === "mix" && m.pitchClass === pc);
-      const discriminate = new Set(family.pool.map((p) => p.midi)).size > 1;
-      const graded = practiceActivities({
-        modules: [...(discriminate ? [family] : []), mix],
-      }).filter(
-        (a) =>
-          a.kind !== "mix" ||
-          (a.pool.some(
-            (p) => !family.pool.some((f) => positionKey(f) === positionKey(p)),
-          ) &&
-            new Set(
-              a.pool.map((p) => (a.mode === "name" ? p.midi % 12 : p.midi)),
-            ).size > 1),
-      );
+      legacyActivities.push(...practiceActivities({modules:[family]}));
+      const graded=practiceActivities({modules:[mix]});
       const discovery = {
         ...family,
         id: family.id + "-discover",
@@ -238,6 +227,7 @@ export function betaCatalog(profile, { notation = "international", full = true }
     chapters,
     activities,
     discoveries,
+    legacyActivities,
     guided,
     byScope,
     byChapter,

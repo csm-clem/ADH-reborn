@@ -46,6 +46,7 @@ jobs:
           python tools/qa/sandbox.py
           python tools/qa/sandbox-update.py
           python tools/qa/gameplay-ux.py
+          python tools/qa/ux-next.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py
@@ -78,5 +79,6 @@ jobs:
             work/sandbox-build.json
             work/sandbox
             work/gameplay-ux
+            work/ux-next
             work/navigation-ux
             work/scroll-neck

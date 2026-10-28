@@ -52,6 +52,7 @@ jobs:
           python tools/qa/lab-refinements.py
           python tools/qa/navigation-ux.py
           python tools/qa/gameplay-ux.py
+          python tools/qa/ux-next.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production
@@ -68,5 +69,6 @@ jobs:
             work/scroll-neck
             work/navigation-ux
             work/gameplay-ux
+            work/ux-next
             work/sandbox
             /tmp/dft-server.log

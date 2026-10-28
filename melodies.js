@@ -39,7 +39,7 @@ const catalogueMusic=new WeakMap();
 export function catalogMelodies(catalog){
  if(!catalogueMusic.has(catalog)){
   const assigned=new Map(),used=new Set(),available=new Set(catalog.activities.map(a=>a.id));
-  for(const s of catalog.scopes)for(const [id,m]of melodiesForPlan(s.plan))if(available.has(id)&&!used.has(m.id)){assigned.set(id,m);used.add(m.id);}
+  for(const s of catalog.scopes)for(const [id,m]of melodiesForPlan({...s.plan,modules:s.plan.modules.filter(m=>available.has(m.id+'-find'))}))if(available.has(id)&&!used.has(m.id)){assigned.set(id,m);used.add(m.id);}
   catalogueMusic.set(catalog,assigned);
  }
  return catalogueMusic.get(catalog);

@@ -33,10 +33,14 @@ export function learningProofs(catalog, data) {
   };
   const records = Object.assign(Object.create(null), previous.records),
     stats = structuredClone(previous.stats || {}),
+    recent = structuredClone(previous.recent || {}),
     processed = new Set(previous.processed || []),
     modules = new Map(catalog.activities.map((a) => [a.id, a]));
   for (const a of data.attempts || []) {
-    if (processed.has(a.id)) continue;
+    if (processed.has(a.id)) {
+      if(!previous.recent)for(const e of a.events||[])if(!e.retry&&coverage[e.mode]){const list=(recent[key(e.target)]||=[]);list.push({mode:e.mode,correct:!!e.correct});if(list.length>20)list.shift();}
+      continue;
+    }
     processed.add(a.id);
     for (const e of a.events || []) {
       if (coverage[e.mode] && autonomousAnswer(e))
@@ -46,6 +50,7 @@ export function learningProofs(catalog, data) {
           name: { total: 0, correct: 0 },
           find: { total: 0, correct: 0 },
         });
+        const list=(recent[key(e.target)]||=[]);list.push({mode:e.mode,correct:!!e.correct});if(list.length>20)list.shift();
         cell[e.mode].total++;
         cell[e.mode].correct += Number(e.correct);
       }
@@ -95,6 +100,7 @@ export function learningProofs(catalog, data) {
     coverage: { name: [...coverage.name], find: [...coverage.find] },
     records,
     stats,
+    recent,
     processed: [...processed].slice(-1000),
   };
 }

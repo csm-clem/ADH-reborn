@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import {APP_NAME,RELEASE} from '../release.js';
 import {mkdir,copyFile,cp,rm,writeFile,readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
@@ -30,3 +31,6 @@ les changements intermédiaires sont regroupés dans une seule entrée du journa
 Les API PHP sont exclues des transferts automatiques, comme pour les versions précédentes.
 `);
 console.log('Fichiers prêts pour FTP : '+dest);
+
+// Fingerprints describe the exact final files, including production transformations.
+{const file=resolve(dest,'sw.js');let sw=await readFile(file,'utf8');const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1].replaceAll("'",'"')),hashes={};for(const path of assets){const bytes=await readFile(resolve(dest,path==='./'?'index.html':path));hashes[path]=createHash('sha256').update(bytes).digest('hex');}sw=sw.replace(/const ASSET_HASHES=[^;]+;/,'const ASSET_HASHES='+JSON.stringify(hashes)+';');await writeFile(file,sw);}

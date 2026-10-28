@@ -15,7 +15,7 @@ const rows=[
  ['diagram-check','Le manche a un sens',1,'landmarks','Réussir les vérifications du cours « Lire le diagramme ».'],
  ['beginner-route','Permis de manche',2,'landmarks','Réussir les vérifications des quatre chapitres Grand Débutant.'],
  ['first-discovery','Il y a du monde sous les doigts',1,'landmarks','Retrouver tous les emplacements d’une famille pendant sa découverte.'],
- ['first-family','Réunion de famille',2,'landmarks','Valider les activités isolées et les mélanges d’une même famille.'],
+ ['first-family','Réunion de famille',2,'landmarks','Découvrir les positions d’une note, puis réussir Nommer et Retrouver les notes.'],
  ['first-cumulative','La bande s’agrandit',2,'landmarks','Valider un mélange d’au moins deux noms, en nommant et en retrouvant.'],
  ['natural-map','Le naturel revient au galop',3,'landmarks','Valider les deux bilans naturels de zone I et couvrir toutes ses positions naturelles.'],
  ['full-map','Le manche dans la poche',4,'landmarks','Valider les deux bilans complets de zone I et couvrir toutes ses positions.'],

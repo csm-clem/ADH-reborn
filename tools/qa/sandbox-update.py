@@ -27,11 +27,13 @@ server=ThreadingHTTPServer(('127.0.0.1',4183),Handler);Thread(target=server.serv
 with sync_playwright()as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);c=b.new_context();q=c.new_page();errors=[];q.on('pageerror',lambda e:errors.append(str(e)));q.goto('http://127.0.0.1:4183/');q.evaluate('navigator.serviceWorker.ready');q.wait_for_function('navigator.serviceWorker.controller!==null')
  q.evaluate('''async()=>{const {storageService}=await import('./services/storage-service.js'),{initialState}=await import('./state.js'),{makeProfile}=await import('./core.js'),{initialPilotStore}=await import('./pilot.js');const profile=makeProfile('guitar6');storageService.saveSettings({...initialState(),profile,sound:false,beginnerGuide:true});const s=initialPilotStore();s.profiles[profile.key]={profile,attempts:[],later:[],navigation:{branch:'targeted',route:'z1',chapter:null}};storageService.savePilot(s);localStorage.setItem('fretboard-trainer:settings','LIVE-SETTINGS');localStorage.setItem('fretboard-trainer:pilot:stable','LIVE-PROGRESS');}''');q.reload();before=q.evaluate('localStorage.getItem("fretboard-trainer:sandbox:pilot:stable")')
- root=folders[1];q.reload();q.wait_for_selector('.update-dialog[open]');q.locator('[data-update=later]').click();assert q.evaluate('import("./release.js").then(m=>m.UPDATE_VERSION)')=='0.0.101'
+ update_start=len(requests);root=folders[1];q.reload();q.wait_for_selector('.update-dialog[open]');q.locator('[data-update=later]').click();assert q.evaluate('import("./release.js").then(m=>m.UPDATE_VERSION)')=='0.0.101'
  q.close();q=c.new_page();q.goto('http://127.0.0.1:4183/');q.wait_for_selector('.update-dialog[open]');q.locator('[data-update=now]').click();q.wait_for_function('version=>import("./release.js").then(m=>m.UPDATE_VERSION===version)',arg=new_version)
  assert q.evaluate('localStorage.getItem("fretboard-trainer:sandbox:pilot:stable")')==before
  assert q.evaluate('localStorage.getItem("fretboard-trainer:settings")')=='LIVE-SETTINGS';assert q.evaluate('localStorage.getItem("fretboard-trainer:pilot:stable")')=='LIVE-PROGRESS'
  assert q.evaluate('import("./release.js").then(m=>m.RELEASE)')==pending['target_release'];assert not any('/latest.json' in path for path in requests)
+ reused_fonts=not any(path.split('?')[0].endswith(('/fonts/jost.ttf','/fonts/open-sans.ttf')) for path in requests[update_start:]);assert reused_fonts
+ assert not any('sw.js?' in path and 'repair=' in path for path in requests[update_start:])
  # Reproduce an already-installed worker containing an old release.js. Repair must
  # replace this stale offline copy without deleting any browser storage.
  q.evaluate('''async old=>{const r=await navigator.serviceWorker.ready;const key=(await caches.keys()).find(k=>k.endsWith(':'+r.scope));const cache=await caches.open(key);await cache.put(new URL('./release.js',location.href),new Response(old,{headers:{'Content-Type':'text/javascript'}}));}''',(folders[0]/'release.js').read_text())
@@ -39,5 +41,5 @@ with sync_playwright()as p:
  assert q.evaluate('localStorage.getItem("fretboard-trainer:sandbox:pilot:stable")')==before
  assert not q.locator('.update-dialog[open]').count()
  assert not errors,errors
- (out/'sandbox-update.json').write_text(json.dumps({'from':'0.0.101','to':new_version,'same_candidate_release':True,'refusal_and_next_launch':True,'sandbox_progress_preserved':True,'live_settings_and_progress_untouched':True,'no_parent_update_check':True,'long_lived_http_cache':True,'stale_active_worker_repaired':True,'errors':errors},indent=2));b.close()
+ (out/'sandbox-update.json').write_text(json.dumps({'from':'0.0.101','to':new_version,'unchanged_fonts_reused_from_verified_cache':reused_fonts,'no_duplicate_repair_install':True,'same_candidate_release':True,'refusal_and_next_launch':True,'sandbox_progress_preserved':True,'live_settings_and_progress_untouched':True,'no_parent_update_check':True,'long_lived_http_cache':True,'stale_active_worker_repaired':True,'errors':errors},indent=2));b.close()
 server.shutdown();print('Sandbox iteration update passed without touching live data.')

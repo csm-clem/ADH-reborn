@@ -4,7 +4,8 @@ import {makeProfile,INSTRUMENTS} from '../core.js';
 import {pilotPlan,practiceActivities,questionsFor,pilotCorrect,validatePilotStore,initialPilotStore} from '../pilot.js';
 import {evaluateAchievements,collectionScope} from '../achievement-rules.js';
 import {validateAchievements} from '../achievement-data.js';
-import {melodiesForPlan} from '../melodies.js';
+import {betaCatalog} from '../beta-catalog.js';
+import {melodiesForPlan,catalogMelodies} from '../melodies.js';
 import {rewardFor} from '../reward-music.js';
 import {createStorageService} from '../services/storage-service.js';
 import {initialState} from '../state.js';
@@ -21,17 +22,17 @@ test('Every instrument assigns a work at most once per zone, using only the exac
 test('Open strings require both exercise directions; deterministic awards never duplicate',()=>{
  const a=attempt('opens'),b=attempt('opens-find');assert.ok(!evaluate(a).some(u=>u.id==='open-strings'));const unlocked=evaluate(b,[a,b]);assert.ok(unlocked.some(u=>u.id==='open-strings'));assert.deepEqual(evaluate(b,[a,b],unlocked),[]);assert.ok(unlocked.filter(u=>u.scope!=='global').every(u=>u.scope===collectionScope(profile)));
 });
-test('A family requires its isolated and cumulative exercises in both directions',()=>{
- const set=['note-4','note-4-find','mix-4','mix-4-find'].map(id=>attempt(id));assert.ok(!evaluate(set[2],set.slice(0,3)).some(u=>u.id==='first-family'));assert.ok(evaluate(set[3],set).some(u=>u.id==='first-family'));
+test('A family requires discovery and the two cumulative exercise directions',()=>{
+ const set=['mix-4','mix-4-find'].map(id=>attempt(id));assert.ok(!evaluate(set[1],set).some(u=>u.id==='first-family'));assert.ok(evaluateAchievements({profile,data:{attempts:set,discoveredModules:['note-4']},entry:set[1]}).some(u=>u.id==='first-family'));
 });
 test('Fluidity compares the same exercise, without aids, at an equal or higher precision',()=>{
  const old=attempt('opens',{ms:1200,at:1}),newer=attempt('opens',{ms:900,at:2});assert.ok(evaluate(newer,[old,newer]).some(u=>u.id==='personal-fluidity'));assert.ok(!evaluate(newer,[attempt('mix-4',{ms:1500,at:1}),newer]).some(u=>u.id==='personal-fluidity'));const aided=attempt('opens',{ms:500,aids:['open-names'],at:3});assert.ok(!evaluate(aided,[old,aided]).some(u=>u.category==='fluency'||u.id==='personal-fluidity'||u.id==='one-second'));
 });
 test('Incomplete music never unlocks a sleeve; a completed chain keeps its own arrangement proof',()=>{
- const [activity,music]=[...melodiesForPlan(plan)][0],entry=attempt(activity,{music}),incomplete={...entry,motifCompleted:false};assert.ok(!evaluate(incomplete).some(u=>u.musicId));const first=evaluate(entry),sleeve=first.find(u=>u.musicId);assert.equal(sleeve.musicId,music.id);assert.equal(sleeve.shift,music.shift);assert.equal(sleeve.scope,'global');assert.ok(!evaluate({...entry,id:'another-transposition',music:{shift:12}},[entry],first).some(u=>u.musicId));
+ const [activity,music]=[...catalogMelodies(betaCatalog(profile))][0],entry=attempt(activity,{music}),incomplete={...entry,motifCompleted:false};assert.ok(!evaluate(incomplete).some(u=>u.musicId));const first=evaluate(entry),sleeve=first.find(u=>u.musicId);assert.equal(sleeve.musicId,music.id);assert.equal(sleeve.shift,music.shift);assert.equal(sleeve.scope,'global');assert.ok(!evaluate({...entry,id:'another-transposition',music:{shift:12}},[entry],first).some(u=>u.musicId));
 });
 test('Success collection survives validation, export/import, and rejects malformed or duplicated evidence',()=>{
- const [activity,music]=[...melodiesForPlan(plan)][0],entry=attempt(activity,{music}),store=initialPilotStore();store.profiles[profile.key]={profile,attempts:[entry],later:[],session:null};store.achievements=evaluate(entry);
+ const [activity,music]=[...catalogMelodies(betaCatalog(profile))][0],entry=attempt(activity,{music}),store=initialPilotStore();store.profiles[profile.key]={profile,attempts:[entry],later:[],session:null};store.achievements=evaluate(entry);
  const data=new Map(),backend={getItem:k=>data.get(k)||null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)},storage=createStorageService({getStorage:()=>backend});const backup=JSON.parse(storage.backup({...initialState(),profile},store));const restored=storage.restoreBackup(backup);assert.deepEqual(restored.pilot.achievements,store.achievements);assert.deepEqual(validatePilotStore(restored.pilot).achievements,store.achievements);assert.throws(()=>validateAchievements([...store.achievements,store.achievements[0]]));assert.throws(()=>validateAchievements([{...store.achievements[0],at:-1}]));assert.throws(()=>validateAchievements([{...store.achievements[0],at:1e99}]));
 });
 test('A different instrument has no inherited landmark awards; music remains a global collection',()=>{

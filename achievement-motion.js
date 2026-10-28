@@ -1,20 +1,21 @@
 /** One delegated pointer controller for the whole album. No render on pointer movement. */
 export function bindAchievementMotion(root){
- let active=null,bounds=null,artBounds=null,pointer=null,frame=0,latest=null,suppress=null;
+ let active=null,bounds=null,artBounds=null,pointer=null,frame=0,latest=null,suppress=null,current=null,lastTime=0;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
  const clamp=(v,max)=>Math.max(-max,Math.min(max,v));
  function clear(card){if(!card)return;card.classList.remove('is-tilting','is-dragging');const node=card.querySelector('.achievement-tilt');for(const p of ['--tilt-x','--tilt-y','--drag-x','--light-x','--light-y'])node?.style.removeProperty(p);}
- function reset(){cancelAnimationFrame(frame);frame=0;latest=null;clear(active);if(pointer&&active?.hasPointerCapture?.(pointer.id))active.releasePointerCapture(pointer.id);active=null;pointer=null;bounds=null;artBounds=null;}
+ function reset(){cancelAnimationFrame(frame);frame=0;latest=null;current=null;lastTime=0;clear(active);if(pointer&&active?.hasPointerCapture?.(pointer.id))active.releasePointerCapture(pointer.id);active=null;pointer=null;bounds=null;artBounds=null;}
  function start(card){if(active!==card)reset();active=card;bounds=card.getBoundingClientRect();artBounds=card.querySelector('.achievement-art').getBoundingClientRect();}
- function paint(){
+ function paint(time){
   frame=0;if(!active||!latest||!bounds)return;
   const node=active.querySelector('.achievement-tilt'),art=artBounds;
   // A thumb moves over the artwork, not the entire (often very tall) card.
-  const touch=!!pointer,dx=touch?(latest.x-pointer.x)*2:0,dy=touch?(latest.y-pointer.y)*1.4:0,
+  const touch=!!pointer,dx=touch?(latest.x-pointer.x)*.35:0,dy=touch?(latest.y-pointer.y)*.2:0,
    nx=clamp((latest.x-art.left+dx)/art.width*2-1,1),ny=clamp((latest.y-art.top+dy)/art.height*2-1,1);
-  node.style.setProperty('--tilt-x',`${-ny*7}deg`);node.style.setProperty('--tilt-y',`${nx*8}deg`);
-  node.style.setProperty('--light-x',`${(nx+1)*50}%`);node.style.setProperty('--light-y',`${(ny+1)*50}%`);
-  node.style.setProperty('--drag-x',`${pointer?.claimed?clamp(latest.x-pointer.x,24):0}px`);active.classList.add('is-tilting');
+  const target={x:nx,y:ny,drag:pointer?.claimed?clamp((latest.x-pointer.x)*.2,18):0};if(!current)current={x:0,y:0,drag:0};const alpha=1-Math.exp(-Math.min(40,time-(lastTime||time-16))/(touch?65:35));lastTime=time;for(const k of ['x','y','drag'])current[k]+=(target[k]-current[k])*alpha;
+  node.style.setProperty('--tilt-x',`${-current.y*7}deg`);node.style.setProperty('--tilt-y',`${current.x*8}deg`);
+  node.style.setProperty('--light-x',`${(current.x+1)*50}%`);node.style.setProperty('--light-y',`${(current.y+1)*50}%`);
+  node.style.setProperty('--drag-x',`${current.drag}px`);active.classList.add('is-tilting');if(Math.abs(target.x-current.x)+Math.abs(target.y-current.y)+Math.abs(target.drag-current.drag)>.01)frame=requestAnimationFrame(paint);
  }
  function queue(e){latest={x:e.clientX,y:e.clientY};if(!frame)frame=requestAnimationFrame(paint);}
  root.addEventListener('pointerover',e=>{if(reduced.matches||!fine.matches||e.pointerType!=='mouse')return;const card=e.target.closest('.achievement-card');if(!card||card.contains(e.relatedTarget))return;start(card);queue(e);});

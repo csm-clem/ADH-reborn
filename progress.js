@@ -11,7 +11,7 @@ const esc = (v) =>
 export function positionProgress(events, string, fret, aggregate = null) {
   const first = events.filter(
       (e) => !e.retry && e.target.string === string && e.target.fret === fret,
-    ),
+    ).slice(-20),
     metrics = resultMetrics(first);
   const part = (mode) =>
     aggregate
@@ -51,20 +51,14 @@ export function progressView(
   const pending = attempts
     .filter((a) => !processed.has(a.id))
     .flatMap((a) => a.events);
-  const cumulative = (string, fret) => {
-    if (!evidence?.stats) return null;
-    const base = structuredClone(
-      evidence.stats[`${string}:${fret}`] || {
-        name: { total: 0, correct: 0 },
-        find: { total: 0, correct: 0 },
-      },
-    );
-    for (const e of pending)
-      if (!e.retry && e.target.string === string && e.target.fret === fret) {
-        base[e.mode].total++;
-        base[e.mode].correct += Number(e.correct);
-      }
-    return base;
+  const cumulative = (string,fret)=>{
+    const k=`${string}:${fret}`;
+    const stored=evidence?.recent?.[k];
+    const known=stored||raw.filter(e=>!e.retry&&e.target.string===string&&e.target.fret===fret&&processed.has(attempts.find(a=>a.events.includes(e))?.id)).map(e=>({mode:e.mode,correct:!!e.correct}));
+    const fresh=pending.filter(e=>!e.retry&&e.target.string===string&&e.target.fret===fret).map(e=>({mode:e.mode,correct:!!e.correct}));
+    const last=[...known,...fresh].slice(-20);
+    if(!last.length)return evidence?.stats?.[k]||null;
+    return Object.fromEntries(['name','find'].map(mode=>{const part=last.filter(e=>e.mode===mode);return [mode,{total:part.length,correct:part.filter(e=>e.correct).length}];}));
   };
   const cells = strings
     .flatMap((string) =>
@@ -109,7 +103,7 @@ export function progressView(
     )
     .join(
       "",
-    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["perfect", "worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Travaillée : plus de 85 % de bonnes réponses. Parfait : 100 %, avec au moins 3 réponses dans chaque sens à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
+    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["perfect", "worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Les pourcentages portent sur les 20 dernières réponses à chaque emplacement, Nommer et Retrouver réunis. Les anciens compteurs restent visibles jusqu’à vos nouvelles réponses. Travaillée : plus de 85 % de bonnes réponses. Parfait : 100 %, avec au moins 3 réponses dans chaque sens à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
     ["name", "Nommer les notes"],
     ["find", "Retrouver les positions"],
   ]

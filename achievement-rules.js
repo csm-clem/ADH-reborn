@@ -54,7 +54,7 @@ export function achievementContext({profile,catalog=defaultCatalog(profile),data
  const scopeCheck=id=>{const r=beta.scopes.get(id);return check(catalog.byScope.get(id).title+' · chapitres et couverture',r?.chapters||0,r?.total||1,nextScope(id));};
  const naturalChecks=['z1','z2','z3'].flatMap(id=>synthesis(id,true));
  const families=catalog.chapters.filter(ch=>ch.kind==='family'&&ch.activityIds.length),pairs=catalog.scopes.flatMap(s=>s.plan.modules.filter(m=>m.kind==='mix'&&new Set(m.pool.map(p=>p.midi%12)).size>=2).map(m=>[m.id,m.id+'-find'].filter(id=>modules.has(id)))).filter(ids=>ids.length===2);
- const familyChecks=ch=>ch.activityIds.map(id=>done(modules.get(id).subtitle,passed(id),activity(id)));
+ const familyChecks=ch=>[done('Découvrir les positions',!!data.discoveredModules?.includes(catalog.discoveries.find(d=>d.id===ch.discoveryId)?.baseId),activity(ch.discoveryId)),...ch.activityIds.map(id=>done(modules.get(id).subtitle,passed(id),activity(id)))];
  const best=groups=>groups.slice().sort((a,b)=>(sum(b)/Math.max(1,total(b)))-(sum(a)/Math.max(1,total(a))))[0]||[check('Terminer une famille',0,1,nextScope('z1'))];
  const recs=[...modules].map(([id,m])=>({id,m,r:record(id)})).filter(x=>x.r),fallback=activity(catalog.activities[0]?.id||'opens');
  const perfect=(mode=null)=>{const rs=recs.filter(x=>!mode||x.m.mode===mode),p=rs.find(x=>x.r.perfect);return done('100 % sans aide · au moins 20 questions',!!p,activity(p?.id||rs[0]?.id||catalog.activities.find(a=>!mode||a.mode===mode)?.id));};

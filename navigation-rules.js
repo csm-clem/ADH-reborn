@@ -55,20 +55,23 @@ export function parentNavigation(nav={}) {
 }
 export function bindParentSwipe(root,{enabled,back,forward=()=>{}}) {
  let start=null,consumeUntil=0;
+ const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const clear=node=>{if(!node)return;node.classList.remove('page-swipe-track');node.classList.add('page-swipe-settle');node.style.transform='';setTimeout(()=>node?.classList.remove('page-swipe-settle'),220);};
+ root.addEventListener('pointermove',e=>{if(!start||e.pointerId!==start.id||reduced())return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.7)return;start.node?.classList.add('page-swipe-track');if(start.node)start.node.style.transform=`translate3d(${Math.sign(dx)*Math.min(Math.abs(dx)*.62,160)}px,0,0)`;},{passive:true});
  const excluded='input,select,textarea,summary,[role="slider"],.neck-viewport,.position-grid,.answer-wheel,.pilot-wheel,[data-pilot-action="note"],.pilot-position-buttons,.achievement-card,.mobile-nav,svg,dialog';
  root.addEventListener('pointerdown',e=>{
   consumeUntil=0;start=null;if(e.pointerType==='mouse'||!e.isPrimary||!enabled()||e.target.closest(excluded)||document.querySelector('dialog[open]'))return;
-  start={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now()};
+  start={id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now(),node:root.querySelector('.content')||root.querySelector('.course-page')||root.querySelector('.pilot-game')};
  });
  root.addEventListener('touchmove',e=>{
   if(!start||e.touches.length!==1)return;const touch=e.touches[0],dx=touch.clientX-start.x,dy=touch.clientY-start.y;
   if(Math.abs(dx) > 12&&Math.abs(dx)>Math.abs(dy)*1.7&&e.cancelable)e.preventDefault();
  },{passive:false});
  root.addEventListener('pointerup',e=>{
-  const from=start;start=null;if(!from||from.id!==e.pointerId||!enabled())return;
+  const from=start;start=null;clear(from?.node);if(!from||from.id!==e.pointerId||!enabled())return;
   const dx=e.clientX-from.x,dy=e.clientY-from.y;
-  if(Math.abs(dx) > 70&&Math.abs(dx)>Math.abs(dy)*1.7&&performance.now()-from.time<900){consumeUntil=performance.now()+400;if(dx>0)back();else forward();}
+  if(Math.abs(dx) > 70&&Math.abs(dx)>Math.abs(dy)*1.7&&performance.now()-from.time<900){consumeUntil=performance.now()+400;root.dataset.navigationMotion=dx>0?'back':'forward';const moved=dx>0?back():forward();if(moved===false)delete root.dataset.navigationMotion;}
  });
- root.addEventListener('pointercancel',()=>{start=null;});
+ root.addEventListener('pointercancel',()=>{clear(start?.node);start=null;});
  root.addEventListener('click',e=>{if(performance.now()<consumeUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
 }

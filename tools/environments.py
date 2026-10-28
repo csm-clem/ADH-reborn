@@ -100,6 +100,13 @@ def environment(files,channel,version,update_version,build_id,history):
  if channel=='sandbox':html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">',1)
  else:html=html.replace('<meta name="robots" content="noindex,nofollow">','')
  f['index.html']=html.encode()
+ role='lab' if channel=='sandbox' else 'live'
+ for target,source in [('icon.svg',role+'.svg'),('icon-192.png',role+'-192.png'),('icon-512.png',role+'-512.png'),('maskable-512.png',role+'-maskable-512.png')]:
+  if 'icons/'+source in f:f['icons/'+target]=f['icons/'+source]
+ sw=f['sw.js'].decode()
+ if 'const ASSET_HASHES=' in sw:
+  assets=json.loads(re.search(r'const ASSETS=(\[[^;]+\]);',sw)[1].replace("'",'"'));hashes={path:hashlib.sha256(f['index.html' if path=='./' else path.removeprefix('./')]).hexdigest() for path in assets}
+  sw=re.sub(r'const ASSET_HASHES=[^;]+;',lambda _: 'const ASSET_HASHES='+json.dumps(hashes)+';',sw);f['sw.js']=sw.encode()
  return f
 
 def archive_files(files,path):
