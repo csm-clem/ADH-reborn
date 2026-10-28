@@ -4,6 +4,59 @@
 
 Les entrées décrivent uniquement les versions publiées en live. Les essais intermédiaires restent dans le bac à sable et sont regroupés lors de leur promotion. Historique rédigé depuis les rapports du dépôt ; aucune date non corroborée n’est ajoutée.
 
+## v0.38 — Un jeu plus fluide et un parcours plus direct
+
+- ⭐️ Tous les parcours implémentés sont accessibles dès l’ouverture : zones jusqu’à la case 24, chaque corde, duos voisins et cordes mélangées.
+- ⚙️ Le catalogue ne dépend plus d’un lien de prévisualisation ; les résultats existants restent conservés.
+- ⭐️ Le journal permet de filtrer les nouveautés, améliorations, corrections et événements.
+- ⚙️ Dépliez ou repliez toutes les versions du journal en un geste.
+- ⚙️ Les releases sont nommées v0.x et leurs essais v0.x.y, avec un compteur indépendant pour chaque prochaine release.
+- 🐛 La mise à jour du bac à sable retélécharge les fichiers cohérents sans effacer les progrès ; une page de réparation récupère les anciennes installations bloquées.
+- ⚙️ La version v0.x.y reste visible dans le lab et le mode débug apparaît en premier dans les paramètres.
+- ⭐️ Un balayage vers la gauche remonte d’un niveau dans Parcours, sans détourner les gestes sur le manche.
+- 🐛 Corrections rythmiques de Seven Nation Army et Feel Good Inc., montée d’Around the World et retour d’Immigrant Song avec son appel vocal sur le riff saturé.
+- 🐛 Les mises à jour ne se bloquent plus pendant le téléchargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progrès.
+- ⚙️ Les fonds, cartes et surfaces de navigation se distinguent dans les quatre thèmes.
+- ⚙️ Les textes secondaires et les libellés blancs sur les dégradés gagnent en contraste.
+- ⚙️ Les titres de page, de section et de chapitre suivent une hiérarchie commune.
+- ⭐️ Un fil d’Ariane réel sur ordinateur et un retour parent explicite sur mobile indiquent votre position.
+- ⭐️ Le retour et l’avance du navigateur suivent les pages visitées dans l’application.
+- ⭐️ L’accueil propose un accès direct à la séance à reprendre ou à la prochaine activité.
+- ⚙️ Parcours, Progrès, Succès et Réglages portent les mêmes noms sur chaque appareil ; l’onglet actif se repère aussi par sa forme.
+- ⭐️ La pratique ciblée se parcourt par Zones, Cordes, Duos et Mélanges.
+- ⚙️ Les retours restaurent le défilement et les sections ouvertes du parcours.
+- ⚙️ Les choix et réglages utilisent des grilles adaptées aux ordinateurs, avec une lecture confortable.
+- ⭐️ La page Progrès présente la prochaine étape et la dernière activité réussie avant la carte du manche.
+- ⚙️ Les réglages sont regroupés par instrument, jeu et son, apparence, sauvegardes et aide.
+- ⭐️ Les chapitres affichent À commencer, En cours ou Terminé, avec texte et symbole, et signalent la prochaine séance.
+- 🐛 Le raccourci de révision affiche le nom de l’activité qu’il lance réellement.
+- 🐛 Après réouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l’historique.
+- ⚙️ La consigne reste au-dessus du manche et des réponses, visible pendant l’appui ; les écrans étroits et peu hauts conservent les commandes utiles.
+- ⚙️ Les activités Nommer et Retrouver expliquent le geste attendu avant le lancement, sans étape obligatoire supplémentaire.
+- ⚙️ La découverte explique le nombre d’emplacements restant à trouver avant de poursuivre ; l’écoute coupée indique comment la réactiver.
+- ⚙️ Les introductions montrent graphiquement où regarder et où répondre, sans indiquer la réponse évaluée.
+- ⚙️ Le clavier permet de naviguer sur le manche et dans Progrès, de mettre en pause avec Échap et de retrouver le focus après une fenêtre ; les touches sont documentées.
+- ⚙️ Un balayage vers la droite revient à la page précédente ; vers la gauche, il retrouve une page déjà visitée. Le manche et les cartes gardent leurs gestes propres.
+- 🐛 Les manches longs partagent les proportions graphiques du manche court : cordes, frettes, inlays, marges et fondus de défilement.
+- ⚙️ Les fibres de l’Érable miel et de Studio nuit sont légèrement renforcées ; Studio nuit retrouve un bois brun et un relief plus naturel.
+- ⚙️ Le catalogue affiche à nouveau simultanément Zones, Cordes, Duos et Mélanges, sans onglets filtrants.
+- ⚙️ Les chapitres se distinguent par ＋ À commencer, ▶ En cours et ✓ Terminé, avec leur libellé.
+- ⚙️ La destination active adopte la même surface contrastée sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre.
+- ⚙️ Les mises à jour réutilisent les fichiers inchangés à partir de leurs empreintes vérifiées ; elles évitent une seconde installation de réparation et affichent la préparation.
+- 🐛 Le téléchargement du nouveau service worker attend l’accord du joueur ; refuser garde la version courante et la proposition revient au prochain démarrage.
+- ⚙️ Aide et Sauvegardes et mises à jour utilisent les mêmes séparations fines que les autres réglages.
+- ⚙️ Le manche se place au-dessus des réponses sur tous les écrans, avec une hauteur proportionnelle d’environ 250 px sur un écran FHD.
+- ⚙️ Le contenu suit le balayage de la page et la transition de retour ou d’avance se termine par un mouvement court, désactivé si les animations sont réduites.
+- ⚙️ Le mouvement tactile des cartes utilise un amortissement régulier et une translation plus mesurée pour des reflets fluides.
+- 🐛 Les manches longs des introductions et leçons conservent une hauteur lisible et défilent horizontalement sans déplacer les consignes.
+- ⭐️ Les pourcentages du manche reflètent les vingt dernières réponses à chaque emplacement ; les validations et succès restent conservés.
+- ⚙️ Chaque famille de notes enchaîne Découvrir, Nommer les notes et Retrouver les notes, avec les notes précédemment apprises.
+- ⚙️ Les présentations d’activités retirent les mentions du nombre de questions et le mot mélangées.
+- ⚙️ Le logo reprend le dégradé sunrise ; le lab utilise sa variante bleue, y compris pour ses icônes PWA.
+- ⚙️ Les repères de focus ne s’affichent qu’après utilisation de Tab, tout en conservant les commandes accessibles au clavier.
+- 🐛 La découverte conserve son bouton de poursuite visible sur les petits écrans, avec des espacements adaptés.
+- 🐛 Toutes les cordes des manches réduits conservent une zone tactile valide ; les schémas longs utilisent une seule zone de défilement.
+
 ## v0.37 — Des cours plus courts et mieux cadrés
 
 - 🐛 Les exemples et les nouveaux essais restent sur les cordes du duo ou de l’activité choisie.

@@ -1,8 +1,8 @@
 export const APP_NAME='Daily Fretboard Trainer';
-export const RELEASE='0.38.0';
+export const RELEASE='0.39.0';
 export const CHANNEL='live';
 export const BUILD_ID='source';
-export const UPDATE_VERSION='0.38.0';
+export const UPDATE_VERSION='0.39.0';
 export const dataEpoch=version=>'stable';
 export const DATA_EPOCH=dataEpoch(RELEASE);
 export const STORAGE_PREFIX='fretboard-trainer';

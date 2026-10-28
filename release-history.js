@@ -1,6 +1,212 @@
 // Published live releases only. Updated when a sandbox build is promoted.
 export const LIVE_RELEASES=[
   {
+    "version": "0.38",
+    "title": "Un jeu plus fluide et un parcours plus direct",
+    "items": [
+      [
+        "feature",
+        "Tous les parcours implémentés sont accessibles dès l’ouverture : zones jusqu’à la case 24, chaque corde, duos voisins et cordes mélangées."
+      ],
+      [
+        "improvement",
+        "Le catalogue ne dépend plus d’un lien de prévisualisation ; les résultats existants restent conservés."
+      ],
+      [
+        "feature",
+        "Le journal permet de filtrer les nouveautés, améliorations, corrections et événements."
+      ],
+      [
+        "improvement",
+        "Dépliez ou repliez toutes les versions du journal en un geste."
+      ],
+      [
+        "improvement",
+        "Les releases sont nommées v0.x et leurs essais v0.x.y, avec un compteur indépendant pour chaque prochaine release."
+      ],
+      [
+        "bug",
+        "La mise à jour du bac à sable retélécharge les fichiers cohérents sans effacer les progrès ; une page de réparation récupère les anciennes installations bloquées."
+      ],
+      [
+        "improvement",
+        "La version v0.x.y reste visible dans le lab et le mode débug apparaît en premier dans les paramètres."
+      ],
+      [
+        "feature",
+        "Un balayage vers la gauche remonte d’un niveau dans Parcours, sans détourner les gestes sur le manche."
+      ],
+      [
+        "bug",
+        "Corrections rythmiques de Seven Nation Army et Feel Good Inc., montée d’Around the World et retour d’Immigrant Song avec son appel vocal sur le riff saturé."
+      ],
+      [
+        "bug",
+        "Les mises à jour ne se bloquent plus pendant le téléchargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progrès."
+      ],
+      [
+        "improvement",
+        "Les fonds, cartes et surfaces de navigation se distinguent dans les quatre thèmes."
+      ],
+      [
+        "improvement",
+        "Les textes secondaires et les libellés blancs sur les dégradés gagnent en contraste."
+      ],
+      [
+        "improvement",
+        "Les titres de page, de section et de chapitre suivent une hiérarchie commune."
+      ],
+      [
+        "feature",
+        "Un fil d’Ariane réel sur ordinateur et un retour parent explicite sur mobile indiquent votre position."
+      ],
+      [
+        "feature",
+        "Le retour et l’avance du navigateur suivent les pages visitées dans l’application."
+      ],
+      [
+        "feature",
+        "L’accueil propose un accès direct à la séance à reprendre ou à la prochaine activité."
+      ],
+      [
+        "improvement",
+        "Parcours, Progrès, Succès et Réglages portent les mêmes noms sur chaque appareil ; l’onglet actif se repère aussi par sa forme."
+      ],
+      [
+        "feature",
+        "La pratique ciblée se parcourt par Zones, Cordes, Duos et Mélanges."
+      ],
+      [
+        "improvement",
+        "Les retours restaurent le défilement et les sections ouvertes du parcours."
+      ],
+      [
+        "improvement",
+        "Les choix et réglages utilisent des grilles adaptées aux ordinateurs, avec une lecture confortable."
+      ],
+      [
+        "feature",
+        "La page Progrès présente la prochaine étape et la dernière activité réussie avant la carte du manche."
+      ],
+      [
+        "improvement",
+        "Les réglages sont regroupés par instrument, jeu et son, apparence, sauvegardes et aide."
+      ],
+      [
+        "feature",
+        "Les chapitres affichent À commencer, En cours ou Terminé, avec texte et symbole, et signalent la prochaine séance."
+      ],
+      [
+        "bug",
+        "Le raccourci de révision affiche le nom de l’activité qu’il lance réellement."
+      ],
+      [
+        "bug",
+        "Après réouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l’historique."
+      ],
+      [
+        "improvement",
+        "La consigne reste au-dessus du manche et des réponses, visible pendant l’appui ; les écrans étroits et peu hauts conservent les commandes utiles."
+      ],
+      [
+        "improvement",
+        "Les activités Nommer et Retrouver expliquent le geste attendu avant le lancement, sans étape obligatoire supplémentaire."
+      ],
+      [
+        "improvement",
+        "La découverte explique le nombre d’emplacements restant à trouver avant de poursuivre ; l’écoute coupée indique comment la réactiver."
+      ],
+      [
+        "improvement",
+        "Les introductions montrent graphiquement où regarder et où répondre, sans indiquer la réponse évaluée."
+      ],
+      [
+        "improvement",
+        "Le clavier permet de naviguer sur le manche et dans Progrès, de mettre en pause avec Échap et de retrouver le focus après une fenêtre ; les touches sont documentées."
+      ],
+      [
+        "improvement",
+        "Un balayage vers la droite revient à la page précédente ; vers la gauche, il retrouve une page déjà visitée. Le manche et les cartes gardent leurs gestes propres."
+      ],
+      [
+        "bug",
+        "Les manches longs partagent les proportions graphiques du manche court : cordes, frettes, inlays, marges et fondus de défilement."
+      ],
+      [
+        "improvement",
+        "Les fibres de l’Érable miel et de Studio nuit sont légèrement renforcées ; Studio nuit retrouve un bois brun et un relief plus naturel."
+      ],
+      [
+        "improvement",
+        "Le catalogue affiche à nouveau simultanément Zones, Cordes, Duos et Mélanges, sans onglets filtrants."
+      ],
+      [
+        "improvement",
+        "Les chapitres se distinguent par ＋ À commencer, ▶ En cours et ✓ Terminé, avec leur libellé."
+      ],
+      [
+        "improvement",
+        "La destination active adopte la même surface contrastée sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre."
+      ],
+      [
+        "improvement",
+        "Les mises à jour réutilisent les fichiers inchangés à partir de leurs empreintes vérifiées ; elles évitent une seconde installation de réparation et affichent la préparation."
+      ],
+      [
+        "bug",
+        "Le téléchargement du nouveau service worker attend l’accord du joueur ; refuser garde la version courante et la proposition revient au prochain démarrage."
+      ],
+      [
+        "improvement",
+        "Aide et Sauvegardes et mises à jour utilisent les mêmes séparations fines que les autres réglages."
+      ],
+      [
+        "improvement",
+        "Le manche se place au-dessus des réponses sur tous les écrans, avec une hauteur proportionnelle d’environ 250 px sur un écran FHD."
+      ],
+      [
+        "improvement",
+        "Le contenu suit le balayage de la page et la transition de retour ou d’avance se termine par un mouvement court, désactivé si les animations sont réduites."
+      ],
+      [
+        "improvement",
+        "Le mouvement tactile des cartes utilise un amortissement régulier et une translation plus mesurée pour des reflets fluides."
+      ],
+      [
+        "bug",
+        "Les manches longs des introductions et leçons conservent une hauteur lisible et défilent horizontalement sans déplacer les consignes."
+      ],
+      [
+        "feature",
+        "Les pourcentages du manche reflètent les vingt dernières réponses à chaque emplacement ; les validations et succès restent conservés."
+      ],
+      [
+        "improvement",
+        "Chaque famille de notes enchaîne Découvrir, Nommer les notes et Retrouver les notes, avec les notes précédemment apprises."
+      ],
+      [
+        "improvement",
+        "Les présentations d’activités retirent les mentions du nombre de questions et le mot mélangées."
+      ],
+      [
+        "improvement",
+        "Le logo reprend le dégradé sunrise ; le lab utilise sa variante bleue, y compris pour ses icônes PWA."
+      ],
+      [
+        "improvement",
+        "Les repères de focus ne s’affichent qu’après utilisation de Tab, tout en conservant les commandes accessibles au clavier."
+      ],
+      [
+        "bug",
+        "La découverte conserve son bouton de poursuite visible sur les petits écrans, avec des espacements adaptés."
+      ],
+      [
+        "bug",
+        "Toutes les cordes des manches réduits conservent une zone tactile valide ; les schémas longs utilisent une seule zone de défilement."
+      ]
+    ]
+  },
+  {
     "version": "0.37",
     "title": "Des cours plus courts et mieux cadrés",
     "items": [

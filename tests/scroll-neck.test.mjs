@@ -21,3 +21,12 @@ import {neckHitBox} from '../core.js';
 test('Every string keeps a positive hit region when a scrolling diagram is reduced in height',()=>{
  for(const count of [4,5,6,7,8])for(const height of [32,40,46,80,104,240]){const g=scrollingNeckGeometry(count,24,{height});for(const string of g.visibleStrings){const box=neckHitBox(g,string);assert.ok(box.height>0);assert.ok(box.y<=g.ys[string]);assert.ok(box.y+box.height>=g.ys[string]-.01);}}
 });
+test('The physical 24th fret ends without a faded extra cell, in every shared renderer',()=>{
+ for(const make of [n=>neckGeometry(n,24),n=>scrollingNeckGeometry(n,24,{height:240})])for(const count of [4,6,8]){
+  const g=make(count),html=neckBase({tuning:Array(count).fill(40)},{g,id:'end-test'}),drawing=html.match(/<g class="neck-drawing"[^>]*>/)[0];
+  assert.equal(g.terminal,true);assert.equal(g.width-g.frets[24],4);assert.equal(g.fadeStart,g.width);
+  assert.match(drawing,/clip-path/);assert.doesNotMatch(drawing,/mask=/);assert.match(html,/<clipPath id="end-test-end">/);
+ }
+ const g=neckGeometry(6,4),drawing=neckBase({tuning:Array(6).fill(40)},{g}).match(/<g class="neck-drawing"[^>]*>/)[0];
+ assert.equal(g.terminal,false);assert.ok(g.fadeStart<g.width);assert.match(drawing,/mask=/);
+});
