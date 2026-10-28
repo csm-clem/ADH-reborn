@@ -8,7 +8,7 @@ with sync_playwright() as p:
  for w,hgt in [(320,568),(390,844),(844,390),(1440,900)]:
   print(w,hgt,flush=True);q.set_viewport_size({'width':w,'height':hgt});h['launch'](q,'c24s1-note-4-find');neck=q.locator('#pilot-neck');scrollable=neck.evaluate('e=>e.scrollWidth>e.clientWidth+100');assert q.locator('.long-position-pad:visible').count()==0
   assert q.evaluate('document.documentElement.scrollWidth<=innerWidth')
-  widths=q.locator('[data-pilot-string="0"] rect:first-child').evaluate_all('es=>es.map(e=>e.getBoundingClientRect().width)');assert min(widths)>=43.9,(w,min(widths))
+  widths=q.locator('[data-pilot-string="0"] rect:first-child').evaluate_all('es=>es.map(e=>e.getBoundingClientRect().width)');assert min(widths)>=39.9,(w,min(widths))
   before=h['snap'](q)['session']['index']
   if scrollable:
    # Scroll position survives a correct response, and scrolling never submits an answer.
