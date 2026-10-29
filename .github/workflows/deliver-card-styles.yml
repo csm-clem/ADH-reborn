@@ -1,0 +1,33 @@
+name: Livrer les propositions de styles des cartes Succès
+on:
+  push:
+    branches: [assets/dft-card-styles-2026-10-29]
+permissions:
+  contents: write
+concurrency:
+  group: dft-card-styles-delivery
+  cancel-in-progress: false
+jobs:
+  publish-graphics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Réassembler, vérifier et préparer la sélection SVG
+        run: python3 tools/assemble-archive.py
+      - name: Publier les propositions graphiques sans déployer DFT
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          DESIGN_TAG: card-styles-2026-10-29
+          DESIGN_COMMIT: ${{ github.sha }}
+        run: |
+          if gh release view "$DESIGN_TAG" >/dev/null 2>&1; then
+            mkdir -p existing
+            gh release download "$DESIGN_TAG" --pattern DFT-styles-cartes-succes-25-variantes.zip --dir existing
+            cmp delivery/DFT-styles-cartes-succes-25-variantes.zip existing/DFT-styles-cartes-succes-25-variantes.zip
+          else
+            gh release create "$DESIGN_TAG" delivery/DFT-styles-cartes-succes-25-variantes.zip delivery/DFT-styles-cartes-succes-25-variantes.zip.sha256 delivery/DFT-selection-5-cartes-svg.zip delivery/DFT-selection-5-cartes-svg.zip.sha256 --target "$DESIGN_COMMIT" --title "DFT — 25 styles de cartes Succès et 5 SVG sélectionnés" --notes-file README.md --prerelease
+          fi
