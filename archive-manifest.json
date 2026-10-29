@@ -1,0 +1,267 @@
+{
+  "filename": "DFT-artworks-png-collection-complete.zip",
+  "size": 213992291,
+  "sha256": "ae388b1cfe9e7eb32d641f14f9c21ad81c1e6d839272128f08042fc438783256",
+  "parts": [
+    {
+      "path": "collection.zip.part-000",
+      "size": 4194304,
+      "sha256": "caf00324a3f599b96ffb6a7c5435b73aad98bec4b7e3999aafb6ea03ce74fc4e"
+    },
+    {
+      "path": "collection.zip.part-001",
+      "size": 4194304,
+      "sha256": "652dca6a6f284452ae43b466f0e9e4b8b62184d1da778bfd3dc4bb74070fabdb"
+    },
+    {
+      "path": "collection.zip.part-002",
+      "size": 4194304,
+      "sha256": "a671da0d9a892fa9b78216c19fb7bd9512804bbb41dff508e8da2e130201c5ff"
+    },
+    {
+      "path": "collection.zip.part-003",
+      "size": 4194304,
+      "sha256": "d52a02a366c03da7f99efc48aeb3e725c72b6019e55dce211da5a0d2f60c48d5"
+    },
+    {
+      "path": "collection.zip.part-004",
+      "size": 4194304,
+      "sha256": "d8d586215d38230987fbcdf3d225e423d4463d8cff193286b47c892cda0f5fcd"
+    },
+    {
+      "path": "collection.zip.part-005",
+      "size": 4194304,
+      "sha256": "d4e8e9c6a1fe9991487882a746599b354d56ae18db01c1b835b1c74e305ee4c5"
+    },
+    {
+      "path": "collection.zip.part-006",
+      "size": 4194304,
+      "sha256": "5babe0ad6b9262bfdc82e8fa93f82129a6cc268dda99f0db1d927fd16ae79c08"
+    },
+    {
+      "path": "collection.zip.part-007",
+      "size": 4194304,
+      "sha256": "b253aa423598d87389da2df171f5e63d8a90a4a5a2f0cec2d36f033aa58f2806"
+    },
+    {
+      "path": "collection.zip.part-008",
+      "size": 4194304,
+      "sha256": "26b275e484e77e7531d64b4310f62e03365eb5e40bbd5d7dc26c85d51d10a7e1"
+    },
+    {
+      "path": "collection.zip.part-009",
+      "size": 4194304,
+      "sha256": "9b2289178d5ff713e33309871efa909f398a6f7afd0baeb49ba0a1d9d27f16e0"
+    },
+    {
+      "path": "collection.zip.part-010",
+      "size": 4194304,
+      "sha256": "127b2017121e0712b988d28e9d12972f9ffe738d5f62cb3fb6146728eabe8b0d"
+    },
+    {
+      "path": "collection.zip.part-011",
+      "size": 4194304,
+      "sha256": "9ec1709b4de46e6bd21ebf81fbe314db918daeb5fd8a47f328c2f39ee567a2b0"
+    },
+    {
+      "path": "collection.zip.part-012",
+      "size": 4194304,
+      "sha256": "15385b971be75a6fab73d0aab75a3ebe7e15b373588947cb7e2553c67be4f1b0"
+    },
+    {
+      "path": "collection.zip.part-013",
+      "size": 4194304,
+      "sha256": "832c733a0b79e77c9ed19a88aeae855cb5406cdd1af117bbf62f5936ee1efb7a"
+    },
+    {
+      "path": "collection.zip.part-014",
+      "size": 4194304,
+      "sha256": "34ce3e01289cd69b2cdd76225a2f864948e4091852580386c7ec65c088d7478c"
+    },
+    {
+      "path": "collection.zip.part-015",
+      "size": 4194304,
+      "sha256": "a02011ed8f6ed6b9790f8580aae9da05957da415bce0db1b77134183440876a5"
+    },
+    {
+      "path": "collection.zip.part-016",
+      "size": 4194304,
+      "sha256": "cb13e11c8a0694388274b4d1193e90c9237077ca45bbafa0e4e19144c2758585"
+    },
+    {
+      "path": "collection.zip.part-017",
+      "size": 4194304,
+      "sha256": "96256caae60e6501ec149cdc96cdbaa4b6809504452b20bc829cfa305bb9495b"
+    },
+    {
+      "path": "collection.zip.part-018",
+      "size": 4194304,
+      "sha256": "0fbd16d64065a54407ba367ac930939190b5ca6cbc49756526a4842f42077c81"
+    },
+    {
+      "path": "collection.zip.part-019",
+      "size": 4194304,
+      "sha256": "9d4d3236027bae2917bbd6ac7f75937cbd472f1c9791a734c415ea2d7723699e"
+    },
+    {
+      "path": "collection.zip.part-020",
+      "size": 4194304,
+      "sha256": "3b39c1b674dd236238cf8ca39935146fb604fc9b4b95df0f433478ad652fff60"
+    },
+    {
+      "path": "collection.zip.part-021",
+      "size": 4194304,
+      "sha256": "b48bce0e9599740eaaa79ae7cdb704fdf5493e8a378a125b258741af36349a9c"
+    },
+    {
+      "path": "collection.zip.part-022",
+      "size": 4194304,
+      "sha256": "251e10ab2e3fcc94d9deeceee9b5726cbf014fb45dbb9fc9371f597dad46439a"
+    },
+    {
+      "path": "collection.zip.part-023",
+      "size": 4194304,
+      "sha256": "7403c48f7c01f54e8f8a3b92bb5eb2b9fae886723690dab5299382374c50dabb"
+    },
+    {
+      "path": "collection.zip.part-024",
+      "size": 4194304,
+      "sha256": "a98689fc6922102672435b7427662616101a6f7499eed08e75150362eda0b486"
+    },
+    {
+      "path": "collection.zip.part-025",
+      "size": 4194304,
+      "sha256": "6d054c97e622c9c3151a5fe680d6bab1b1fef0ab1220caa877e65f1e006fe012"
+    },
+    {
+      "path": "collection.zip.part-026",
+      "size": 4194304,
+      "sha256": "8a47b7ad7070502db523aa72c714a98ff32e85d1627574cd06abb430f5a915eb"
+    },
+    {
+      "path": "collection.zip.part-027",
+      "size": 4194304,
+      "sha256": "028edaf45298c12295826fe4abaa06fc379d18eaf6cc4dc8c19248b495d67e13"
+    },
+    {
+      "path": "collection.zip.part-028",
+      "size": 4194304,
+      "sha256": "15be427f0f866ea8851a307e9ed7efd27eb2d58adf698299718fe6b865f4abac"
+    },
+    {
+      "path": "collection.zip.part-029",
+      "size": 4194304,
+      "sha256": "104b960d625f1c529d5ff528843414152b41eb4f41282fc55ce9055f472ad272"
+    },
+    {
+      "path": "collection.zip.part-030",
+      "size": 4194304,
+      "sha256": "de362fe737a6244e1acdde557a94122a245dc716d499f49de5b8669235f801e9"
+    },
+    {
+      "path": "collection.zip.part-031",
+      "size": 4194304,
+      "sha256": "cf4fef6333099764fd7e868ff2d1e649b3dfad1c45882aed3c613ad037475a66"
+    },
+    {
+      "path": "collection.zip.part-032",
+      "size": 4194304,
+      "sha256": "19ebcf9cea0cfbc64742b79e40e2ffe3c58595a39436f1230bd85e8734b54e6a"
+    },
+    {
+      "path": "collection.zip.part-033",
+      "size": 4194304,
+      "sha256": "e0bc613e92be1e71811ed04acadbbd7e4369c2eab65446c25fb8cc846298eeb2"
+    },
+    {
+      "path": "collection.zip.part-034",
+      "size": 4194304,
+      "sha256": "2b4d8e5de7d48e8c275d2e4c6ed93fce6c1145830d5b12bad2c0d435322b2baa"
+    },
+    {
+      "path": "collection.zip.part-035",
+      "size": 4194304,
+      "sha256": "c6fc93a7a9a894ccc6e62e6e4667479b1854a0c35d1937f17b5e25c83e85c56b"
+    },
+    {
+      "path": "collection.zip.part-036",
+      "size": 4194304,
+      "sha256": "94f62a220bc9fd991e7baa9d76e4252665303316442e0837c94717c9c0450407"
+    },
+    {
+      "path": "collection.zip.part-037",
+      "size": 4194304,
+      "sha256": "2c61b6dbd468e566aad572b3aaccfb9c10052c9bfe2c50564d5e4b5c2792ea4f"
+    },
+    {
+      "path": "collection.zip.part-038",
+      "size": 4194304,
+      "sha256": "ac259642ad82154321f83fc6eef5866450583e45abc6dbb57eaf7b39546e8b37"
+    },
+    {
+      "path": "collection.zip.part-039",
+      "size": 4194304,
+      "sha256": "555291e3ac800d6157d0f08978368f8da3006d6455ffb7cd62a88f615d15df87"
+    },
+    {
+      "path": "collection.zip.part-040",
+      "size": 4194304,
+      "sha256": "afe5960f5e22bdef1f8d0cb9ec3ee8e3ca1fc323cb1ff511dcd0e5ccdb37f475"
+    },
+    {
+      "path": "collection.zip.part-041",
+      "size": 4194304,
+      "sha256": "0cde30580e622b83112796ac3d06f0be7d8d38d362ac27b23c40b9859d888496"
+    },
+    {
+      "path": "collection.zip.part-042",
+      "size": 4194304,
+      "sha256": "8d68907716bb355088b6fe7c208dcd7f41e5260c5b9c6b18d27d52fb7ff5bcb9"
+    },
+    {
+      "path": "collection.zip.part-043",
+      "size": 4194304,
+      "sha256": "b4b31c506881a544b19032845aa637e245a2ffb57f4d81fcd8eabbf7854a5d1b"
+    },
+    {
+      "path": "collection.zip.part-044",
+      "size": 4194304,
+      "sha256": "5cf261510ed81aac32afb9c93b3516582d03ea68d64f4cb2de95f18527d27812"
+    },
+    {
+      "path": "collection.zip.part-045",
+      "size": 4194304,
+      "sha256": "faeae5354258549dc79871662456e76ef2ec51526a941b7b74337e7db96c9166"
+    },
+    {
+      "path": "collection.zip.part-046",
+      "size": 4194304,
+      "sha256": "0644a96d29326a81234ba7b28f01fb75831dfefab56978e42e098e6014280965"
+    },
+    {
+      "path": "collection.zip.part-047",
+      "size": 4194304,
+      "sha256": "512caac4774adf3220298afb4afb616b046f138a5f242512d073b1463e0b9d5f"
+    },
+    {
+      "path": "collection.zip.part-048",
+      "size": 4194304,
+      "sha256": "4edf27779e613f2df698bdeddfbe1db93a317805b8d480ef79b1bf8d1f53db85"
+    },
+    {
+      "path": "collection.zip.part-049",
+      "size": 4194304,
+      "sha256": "615af53ebe7cf7bd6165c3eb3028b85736e63bfb05936c227fd6cec5c69cd808"
+    },
+    {
+      "path": "collection.zip.part-050",
+      "size": 4194304,
+      "sha256": "ecff2c5d2efaea0cfde64b8e68f6c21f975f0a18d874b4632754f48ad288e726"
+    },
+    {
+      "path": "collection.zip.part-051",
+      "size": 82787,
+      "sha256": "5a8d0108538f202e3edd2046b64555ee3e0888b2f32bb2ec9e402e93d39f5cac"
+    }
+  ]
+}

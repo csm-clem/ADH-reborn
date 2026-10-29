@@ -1,4 +1,0 @@
-from pilot_support import *
-def practice(page,activity='mix-4',instrument='guitar6'):
- seed(page,instrument,activity)
- page.evaluate('''async({key,activity})=>{const {practiceActivities,pilotPlan,questionsFor}=await import('./pilot.js'),s=JSON.parse(localStorage.getItem(key)),d=Object.values(s.profiles)[0],m=practiceActivities(pilotPlan(d.profile)).find(m=>m.id===activity);d.discoveredModules=[...(d.discoveredModules||[]),m.baseId];d.seenInstructions=['name','find','mix-intro','motif','melody-'+m.baseId];d.session={id:'qa-current',activity,stage:'practice',queue:questionsFor(m),events:[],index:0,motifIndex:0,motifErrors:0,startedAt:1};localStorage.setItem(key,JSON.stringify(s))}''',{'key':KEY,'activity':activity});page.reload();page.locator('[data-pilot-action="resume"]').click();dismiss_help(page)

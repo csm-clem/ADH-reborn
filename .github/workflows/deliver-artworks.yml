@@ -1,0 +1,43 @@
+name: Livrer la collection PNG des Succès
+
+on:
+  push:
+    branches: [assets/dft-artworks-png-2026-10-29]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dft-artworks-png-delivery
+  cancel-in-progress: false
+
+jobs:
+  publish-graphics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Réassembler et vérifier le ZIP original
+        run: python3 tools/assemble-archive.py
+      - name: Publier les illustrations sans déployer l’application
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ART_TAG: artworks-png-2026-10-29
+          ART_COMMIT: ${{ github.sha }}
+        run: |
+          if gh release view "$ART_TAG" >/dev/null 2>&1; then
+            mkdir -p existing
+            gh release download "$ART_TAG" --pattern DFT-artworks-png-collection-complete.zip --dir existing
+            cmp delivery/DFT-artworks-png-collection-complete.zip existing/DFT-artworks-png-collection-complete.zip
+          else
+            gh release create "$ART_TAG" \\
+              delivery/DFT-artworks-png-collection-complete.zip \\
+              delivery/DFT-artworks-png-collection-complete.zip.sha256 \\
+              --target "$ART_COMMIT" \\
+              --title "DFT — 59 illustrations PNG (livraison graphique)" \\
+              --notes-file README.md \\
+              --prerelease
+          fi
