@@ -89,21 +89,7 @@ export function progressView(
       }),
       { total: 0, correct: 0 },
     );
-  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div>${summaryHTML}<section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["perfect", "worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["perfect", "worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p><div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
-    .slice()
-    .reverse()
-    .map(
-      (string) =>
-        `<tr><th scope="row"><span class="progress-string-label">${profile.tuning.length - string}</span></th>${frets
-          .map((fret) => {
-            const p = cells.find((p) => p.string === string && p.fret === fret);
-            return `<td class="progress-fret-${fret}"><details name="progress-position" class="progress-cell ${p.status}" data-progress-string="${string}" data-progress-fret="${fret}"><summary aria-label="${esc(pitchLabel(p.midi, notation))}, corde ${profile.tuning.length - string}, ${fret ? "case " + fret : "à vide"} : ${label[p.status]}"><strong>${esc(noteName(p.midi, notation))}</strong><span>${p.accuracy === null ? symbol[p.status] : Math.round(p.accuracy * 100) + "% " + symbol[p.status]}</span></summary></details></td>`;
-          })
-          .join("")}</tr>`,
-    )
-    .join(
-      "",
-    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script><div class="progress-key">${["perfect", "worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Les pourcentages portent sur les 20 dernières réponses à chaque emplacement, Nommer et Retrouver réunis. Les anciens compteurs restent visibles jusqu’à vos nouvelles réponses. Travaillée : plus de 85 % de bonnes réponses. Parfait : 100 %, avec au moins 3 réponses dans chaque sens à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
+  return `<div class="page-heading"><div><h1>Votre manche,<br><em>vos repères.</em></h1><p>Toutes les cordes · à vide jusqu’à la case 24</p></div></div>${summaryHTML}<section class="panel progress-overview"><h2>Votre carte du manche</h2><div class="progress-counts">${["perfect", "worked", "review", "new"].map((status) => `<div class="progress-count ${status}"><strong>${counts[status]}</strong><span>${label[status]}${status === "worked" ? "s" : ""}</span></div>`).join("")}</div><div class="progress-track">${["perfect", "worked", "review", "new"].map((s) => `<i class="${s}" style="width:${(counts[s] / cells.length) * 100}%"></i>`).join("")}</div><p class="progress-instruction">Touchez une note pour voir vos résultats. Faites glisser pour explorer le manche →</p>${positionMap(profile,cells,notation,{frets,strings,label,symbol})}<div class="progress-key">${["perfect", "worked", "review", "new"].map((s) => `<span class="${s}"><b aria-hidden="true">${symbol[s]}</b> ${label[s]}</span>`).join("")}</div><p class="progress-footnote">Les pourcentages portent sur les 20 dernières réponses à chaque emplacement, Nommer et Retrouver réunis. Les anciens compteurs restent visibles jusqu’à vos nouvelles réponses. Travaillée : plus de 85 % de bonnes réponses. Parfait : 100 %, avec au moins 3 réponses dans chaque sens à cet emplacement. Ce repère ne remplace pas la validation d’un chapitre.</p></section><section class="progress-skills">${[
     ["name", "Nommer les notes"],
     ["find", "Retrouver les positions"],
   ]
@@ -113,6 +99,39 @@ export function progressView(
     })
     .join("")}</section>`;
 }
+
+/** Shared position map for learning progress and Arcade response-time results. */
+export function positionMap(profile,cells,notation,{frets,strings,label={},symbol={}}){
+ return `<div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
+    .slice()
+    .reverse()
+    .map(
+      (string) =>
+        `<tr><th scope="row"><span class="progress-string-label">${profile.tuning.length - string}</span></th>${frets
+          .map((fret) => {
+            const p = cells.find((p) => p.string === string && p.fret === fret);
+            return `<td class="progress-fret-${fret}"><details name="progress-position" class="progress-cell ${p.status}" ${p.meanMs!==undefined&&p.meanMs!==null?`style="--response-color:${responseTimeColor(p.meanMs)}"`:""} data-progress-string="${string}" data-progress-fret="${fret}"><summary aria-label="${esc(pitchLabel(p.midi, notation))}, corde ${profile.tuning.length - string}, ${fret ? "case " + fret : "à vide"} : ${p.meanMs!==undefined?(p.meanMs===null?"Aucun temps disponible":(p.meanMs/1000).toFixed(2)+" secondes"):label[p.status]}"><strong>${esc(noteName(p.midi, notation))}</strong><span>${p.meanMs!==undefined?(p.meanMs===null?"—":(p.meanMs/1000).toFixed(2)+" s"):p.accuracy === null ? symbol[p.status] : Math.round(p.accuracy * 100) + "% " + symbol[p.status]}</span></summary></details></td>`;
+          })
+          .join("")}</tr>`,
+    )
+    .join(
+      "",
+    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script>`;
+}
+export function responseTimeColor(ms){
+ if(ms===null)return null;
+ const t=Math.max(0,Math.min(1,(ms-500)/3500));
+ return `hsl(${Math.round(120*(1-t))} 72% 26%)`;
+}
+export function responseTimeMap(profile,positions,notation='international'){
+ const frets=Array.from({length:25},(_,i)=>i),strings=profile.tuning.map((_,i)=>i);
+ const cells=strings.flatMap(string=>frets.map(fret=>{
+  const p=positions[`${string}:${fret}`],meanMs=p?.correct&&Number.isFinite(p.timeSum)?p.timeSum/p.correct:null;
+  return {string,fret,midi:profile.tuning[string]+fret,status:'new',total:p?.total||0,correct:p?.correct||0,meanMs,label:pitchLabel(profile.tuning[string]+fret,notation)};
+ }));
+ return `<section class="progress-overview response-time-map"><h3>Temps de réponse sur le manche</h3><p>Moyenne des bonnes réponses : vert intense à 0,5 s ou moins, rouge à 4 s. Gris : aucun temps disponible. Touchez une note pour voir son détail.</p>${positionMap(profile,cells,notation,{frets,strings})}</section>`;
+}
+
 export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){
   return Math.min(trackWidth,Math.max(24,trackWidth*viewportWidth/Math.max(1,contentWidth)));
 }
@@ -178,6 +197,10 @@ export function bindProgress(root) {
             p.fret === Number(cell.dataset.progressFret),
         );
       if (!p) return;
+      if(p.meanMs!==undefined){
+       panel.querySelector('.progress-selection').innerHTML=`<strong>${esc(p.label)} · corde ${data.reduce((n,v)=>Math.max(n,v.string+1),0)-p.string} · ${p.fret?'case '+p.fret:'à vide'}</strong><span>Temps moyen : ${p.meanMs===null?'aucun temps disponible':(p.meanMs/1000).toLocaleString('fr-FR',{maximumFractionDigits:3})+' s'}</span><span>${p.correct} bonnes réponses sur ${p.total}</span>`;
+       return;
+      }
       panel.querySelector(".progress-selection").innerHTML =
         `<strong>${esc(p.label)} · corde ${data.reduce((n, p) => Math.max(n, p.string + 1), 0) - p.string} · ${p.fret ? "case " + p.fret : "à vide"}</strong><span>Nommer : ${p.name.total ? p.name.correct + "/" + p.name.total : "pas encore essayé"}</span><span>Retrouver : ${p.find.total ? p.find.correct + "/" + p.find.total : "pas encore essayé"}</span>`;
     },

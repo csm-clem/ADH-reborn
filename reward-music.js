@@ -18,7 +18,14 @@ const PHRASES={...Object.fromEntries([...OCTAVE_MUSIC,DANCE_MUSIC,...EXTRA_RIFFS
 };
 
 // Explicit opening vocal line, not a generated harmonic accompaniment.
-const IMMIGRANT_VOCAL=[{"midi":73,"start":15.0,"beats":0.5,"voice":"guitar-clean","velocity":0.78},{"midi":73,"start":15.5,"beats":0.5,"voice":"guitar-clean","velocity":0.78},{"midi":72,"start":16.0,"beats":4.0,"voice":"guitar-clean","velocity":0.78},{"midi":73,"start":20.0,"beats":1.125,"voice":"guitar-clean","velocity":0.78},{"midi":73,"start":23.0,"beats":0.5,"voice":"guitar-clean","velocity":0.78},{"midi":73,"start":23.5,"beats":0.5,"voice":"guitar-clean","velocity":0.78},{"midi":72,"start":24.0,"beats":3.875,"voice":"guitar-clean","velocity":0.78},{"midi":73,"start":28.0,"beats":1.25,"voice":"guitar-clean","velocity":0.78}];
+const IMMIGRANT_VOCAL=[
+ {midi:66,start:7,beats:.5}, {midi:73,start:7.5,beats:.5},
+ {midi:72,start:8,beats:4}, {midi:73,start:12,beats:1.5},
+ {midi:66,start:15,beats:.5}, {midi:73,start:15.5,beats:.5},
+ {midi:72,start:16,beats:4}, {midi:73,start:20,beats:1.5},
+].map(e=>({...e,voice:'guitar-clean',velocity:.78}));
+// Six measures from the supplied score. Vocal rests/ties are represented by
+// absolute starts and durations; the final sixteenth on “We” is excluded.
 /** One melodic timeline supplies both the exercise excerpt and the complete reward. */
 export function referencePrefix(id,count){const notes=PHRASES[id]?.notes.slice(0,count);if(!notes)throw new Error('Phrase musicale inconnue : '+id);return {notes:notes.map(e=>e[0]),beats:notes.map(e=>e[1]),rests:notes.map(e=>e[2]||0)};}
 export function isCompletePhrase(id){return Boolean(PHRASES[id])&&musicChecked(id);}
@@ -26,6 +33,10 @@ export function rewardFor(melody){
  if(!melody||!isCompletePhrase(melody.id))return null;const p=PHRASES[melody.id],shift=0; // Listening always returns to the source key and register, independently of training adaptation.
  let beat=0;const events=p.notes.map(([midi,beats,restAfter=0])=>{const e={midi:midi+shift,start:beat,beats,velocity:1,voice:p.voice||'guitar-clean'};beat+=beats+restAfter;return e;});
 
- const hasHarmony=melody.id==='immigrant-song';if(hasHarmony){const riff=events.slice();for(let repeat=1;repeat<4;repeat++)events.push(...riff.map(e=>({...e,start:e.start+repeat*8})));events.push(...IMMIGRANT_VOCAL);events.sort((a,b)=>a.start-b.start);beat=32;}
- return {title:melody.title,section:p.section,events,totalBeats:beat,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony,completePhrase:isCompletePhrase(melody.id)};
+ const hasHarmony=melody.id==='immigrant-song';if(hasHarmony){
+  const riff=events.slice();
+  for(let repeat=1;repeat<3;repeat++)events.push(...riff.map(e=>({...e,start:e.start+repeat*8})));
+  events.push(...IMMIGRANT_VOCAL);events.sort((a,b)=>a.start-b.start);beat=24;
+ }
+ return {title:melody.title,section:hasHarmony?'Six mesures : riff et deux appels vocaux, sans la note de « We »':p.section,events,totalBeats:beat,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony,completePhrase:isCompletePhrase(melody.id)};
 }

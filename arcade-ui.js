@@ -3,6 +3,7 @@ import { wheelChoices } from './answer-wheel.js';
 import { noteName, notationFor } from './core.js';
 import { miniatureNeck, layoutMiniature } from './neck-view.js';
 import { ActiveClock } from './clock.js';
+import { responseTimeMap } from './progress.js';
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const labels = {
@@ -27,7 +28,7 @@ export class ArcadeController {
   start(mode) {
     if (!ARCADE_MODES.includes(mode)) return;
     this.leave(); this.run = newArcadeRun(mode); this.record = false; this.details = false; this.popup = null;
-    this.next(); this.schedule();
+    this.phase = 'ready'; this.clock.reset(); this.show(); this.schedule();
   }
   next() {
     this.serial++; this.target = arcadeTarget(this.profile, this.run.mode, this.run.stage, this.run.questions, this.target, this.random);
@@ -41,6 +42,7 @@ export class ArcadeController {
   tick() {
     if (!this.playing || this.paused) return;
     const elapsed = this.clock.elapsed();
+    if (this.phase === 'ready') { if (elapsed >= 1000) this.next(); return; }
     if (this.phase === 'correction') {
       if (elapsed >= 600) { if (this.run.finished) this.finish(); else this.next(); }
       return;
@@ -65,10 +67,11 @@ export class ArcadeController {
     // Lock this question synchronously before updating counters or rendering another one.
     this.phase = 'resolved';
     const bonus = resolveArcade(this.run, this.target, outcome, Math.min(ms, this.duration));
+    if (correct) this.host.playNote(this.target.midi);
     if (bonus.points) {
       this.popup = { id: this.serial, points: bonus.points, lives: bonus.lives };
       this.host.playBonus(bonus.lives);
-    } else if (correct) this.host.playNote(this.target.midi);
+    }
     if (correct) this.next();
     else {
       this.feedback = timeout ? 'Temps écoulé' : 'Réponse incorrecte';
@@ -97,7 +100,7 @@ export class ArcadeController {
     if (!this.playing || !this.paused) return;
     this.paused = false; this.clock.resume('pause'); this.show();
   }
-  leave() { cancelAnimationFrame(this.frame); this.phase = 'menu'; this.paused = false; this.serial++; }
+  leave() { cancelAnimationFrame(this.frame);cancelAnimationFrame(this.scrollFrame); this.phase = 'menu'; this.paused = false; this.serial++; }
   bind(root) {
     root.addEventListener('click', e => {
       const button = e.target.closest('[data-arcade-action],[data-arcade-answer]');
@@ -126,23 +129,41 @@ export class ArcadeController {
     });
   }
   menu() {
-    return `<div class="page-heading"><div><h1>Arcade</h1><p>Un manche, trois vies. Jusqu’où irez-vous ?</p></div></div><p>Choisissez le nom de la note indiquée. Chaque bonne réponse vaut 100 points ; les séries sans erreur rapportent des bonus et des vies. Une erreur ou un temps écoulé retire une vie et remet la série à zéro.</p><div class="arcade-modes">${ARCADE_MODES.map(mode => `<section class="panel"><h2>${labels[mode]}</h2><p>${mode.startsWith('zones') ? 'Deux cordes en zone I, puis toutes les cordes et les six zones cumulées.' : 'Une corde grave jusqu’à la case 12, puis les autres cordes et enfin les 24 cases.'}</p><p>${mode.endsWith('chromatic') ? 'Naturelles et altérées dès le départ.' : 'Notes naturelles uniquement.'}</p><p>Record : <strong>${this.records[mode]?.score?.toLocaleString('fr-FR') || '—'}</strong></p><button class="button primary" data-arcade-action="start" data-mode="${mode}">Jouer</button></section>`).join('')}</div><details class="panel"><summary>Bonus de combo</summary><p>Tous les 10 succès consécutifs : 10 → +100 ; 20 → +200 ; 30 → +300 ; 40 → +400 ; 50 → +500 et +1 UP ; 60 à 90 → +500 ; 100 → +1 000 et +2 UP ; puis +1 000 à chaque dizaine. Les vies gagnées s’ajoutent sans plafond.</p></details>`;
+    return `<div class="page-heading"><div><h1>Arcade</h1><p>Un manche, trois vies. Jusqu’où irez-vous ?</p></div></div><p>Choisissez le nom de la note indiquée. Chaque bonne réponse vaut 100 points ; les séries sans erreur rapportent des bonus et des vies. Une erreur ou un temps écoulé retire une vie et remet la série à zéro.</p><div class="arcade-modes">${ARCADE_MODES.map(mode => `<section class="panel"><h2>${labels[mode]}</h2><p>${mode.startsWith('zones') ? 'Deux cordes en zone I, puis toutes les cordes et les six zones cumulées.' : 'Une corde grave jusqu’à la case 12, puis les autres cordes et enfin les 24 cases.'}</p><p>${mode.endsWith('chromatic') ? 'Naturelles et altérées dès le départ.' : 'Notes naturelles uniquement.'}</p><p>Record : <strong>${this.records[mode]?.score?.toLocaleString('fr-FR') || '—'}</strong></p><button class="button primary" data-arcade-action="start" data-mode="${mode}">Jouer</button></section>`).join('')}</div>`;
   }
   render() {
     if (this.phase === 'result') return this.result();
+    if (this.phase === 'ready') return `<main id="main-content" tabindex="-1" class="arcade-ready"><div><h1>${this.paused?'Pause':'À vous de jouer !'}</h1><p>${labels[this.run.mode]}</p>${this.paused?'<button class="button primary" data-arcade-action="resume">Reprendre</button>':''}</div></main>`;
     const r = this.run, scope = arcadeScope(r.mode, this.profile.tuning.length, r.stage);
     const correcting = this.phase === 'correction';
     const rings = [[0,2,4,5,7,9,11], ...(scope.chromatic ? [[1,3,6,8,10]] : [])];
     const controls = `<button class="icon-button" data-arcade-action="mute" aria-label="${this.state.sound?'Couper':'Activer'} le son" aria-pressed="${!this.state.sound}">${this.host.icon(this.state.sound?'sound':'mute')}</button><button class="icon-button" data-arcade-action="fullscreen" aria-label="Plein écran">${this.host.icon('fullscreen')}</button><button class="icon-button" data-arcade-action="pause" aria-label="Pause">${this.host.icon('pause')}</button>`;
-    // Show a short window around the target while retaining the common neck renderer and physical fret labels.
-    const start = Math.max(0, Math.min(this.target.fret - 2, scope.end - 4));
-    const neck = miniatureNeck(this.profile, { id: 'arcade-neck', points: [{...this.target, color: correcting?'var(--note-correct)':'var(--brand)'}], startFret: start, lastFret: Math.min(scope.end, start + 4), label: 'Note à nommer', showNames: correcting, notation: this.notation });
-    return `<main id="main-content" tabindex="-1" class="arcade-game"><header class="game-header"><button class="icon-button" data-arcade-action="menu" aria-label="Retour à Arcade">${this.host.icon('back')}</button><strong>${labels[r.mode]}</strong><div class="arcade-tools">${controls}</div></header><div class="arcade-hud"><div><strong>${r.correct}</strong><span> bonnes réponses</span></div><div><strong>${r.score.toLocaleString('fr-FR')}</strong> points</div><div aria-label="${r.lives} vies">${r.lives <= 5 ? '♥'.repeat(r.lives) : `♥ × ${r.lives}`}</div><div>Série <strong>${r.streak}</strong></div></div><div data-arcade-timer class="arcade-timer" role="progressbar" aria-label="Temps restant" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div data-arcade-fill data-animation-owned style="transform:scaleX(1)"></div></div><p class="arcade-scope">Palier ${r.stage + 1} · ${scope.zoneCount ? `Zones I${scope.zoneCount > 1 ? ' à '+['I','II','III','IV','V','VI'][scope.zoneCount-1] : ''}` : `Cases 0–${scope.end}`} · ${scope.strings.length} cordes</p><div class="arcade-playfield ${this.paused?'is-paused':''}" ${this.paused?'inert':''}><div class="arcade-neck" data-view-key="arcade-neck">${neck}</div><p class="arcade-feedback" role="status">${correcting ? `${this.feedback} · ${esc(noteName(this.target.midi, this.notation))}` : 'Quelle est cette note ?'}</p><div class="arcade-response"><div class="answer-wheel ${scope.chromatic?'dual-wheel':''}" role="group" aria-label="Choisir le nom de la note"><div class="wheel-orbit" aria-hidden="true"></div>${scope.chromatic?'<div class="wheel-orbit outer" aria-hidden="true"></div>':''}${wheelChoices(rings, {dual: scope.chromatic}).map(({n,x,y}) => `<button data-arcade-answer="${n}" data-note="${n}" data-question="${this.serial}" style="left:${x}%;top:${y}%" ${correcting||this.paused||this.phase==='transition'?'disabled':''}>${esc(noteName(n,this.notation))}</button>`).join('')}</div></div></div>${this.popup ? `<div data-view-key="bonus-${this.popup.id}" class="arcade-bonus" role="status"><strong>+${this.popup.points.toLocaleString('fr-FR')}</strong>${this.popup.lives ? `<span>+${this.popup.lives} UP</span>` : '<span>COMBO !</span>'}</div>` : ''}${this.paused ? `<div class="arcade-pause" role="dialog" aria-modal="true" aria-label="Partie en pause"><div class="panel"><h1>Pause</h1><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="mute">${this.state.sound?'Couper':'Activer'} le son</button><button class="button quiet-button" data-arcade-action="menu">Quitter la partie</button></div></div>` : ''}</main>`;
+    // A single complete neck stays mounted; only its viewport scrolls between questions.
+    const height=globalThis.innerWidth>globalThis.innerHeight&&globalThis.innerHeight<=550?70:Math.min(180,Math.max(85,(globalThis.innerHeight||844)*.19));
+    const minFretWidth=Math.max(40,(Math.min(1100,globalThis.innerWidth||390)-40)/5);
+    const neck = miniatureNeck(this.profile, { height,minFretWidth,id: 'arcade-neck', points: [{...this.target, color: correcting?'var(--note-correct)':'var(--brand)'}], startFret: 0, lastFret: 24, scrollable: true, scrollFrame: false, label: 'Note à nommer', showNames: correcting, notation: this.notation });
+    return `<main id="main-content" tabindex="-1" class="arcade-game"><header class="game-header"><button class="icon-button" data-arcade-action="menu" aria-label="Retour à Arcade">${this.host.icon('back')}</button><strong>${labels[r.mode]}</strong><div class="arcade-tools">${controls}</div></header><div class="arcade-hud"><div><strong>${r.correct}</strong><span> bonnes réponses</span></div><div><strong>${r.score.toLocaleString('fr-FR')}</strong> points</div><div aria-label="${r.lives} vies">${r.lives <= 5 ? '♥'.repeat(r.lives) : `♥ × ${r.lives}`}</div><div>Série <strong>${r.streak}</strong></div></div><div data-arcade-timer class="arcade-timer" role="progressbar" aria-label="Temps restant" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div data-arcade-fill data-animation-owned style="transform:scaleX(1)"></div></div><p class="arcade-scope">Palier ${r.stage + 1} · ${scope.zoneCount ? `Zones I${scope.zoneCount > 1 ? ' à '+['I','II','III','IV','V','VI'][scope.zoneCount-1] : ''}` : `Cases 0–${scope.end}`} · ${scope.strings.length} corde${scope.strings.length>1?'s':''}</p><div class="arcade-playfield ${this.paused?'is-paused':''}" ${this.paused?'inert':''}><div class="arcade-neck-frame"><div class="arcade-neck" data-view-key="arcade-neck" data-layout-owned>${neck}</div><span class="arcade-neck-fade" aria-hidden="true"></span></div><p class="arcade-feedback" role="status">${correcting ? `${this.feedback} · ${esc(noteName(this.target.midi, this.notation))}` : 'Quelle est cette note ?'}</p><div class="arcade-response"><div class="answer-wheel ${scope.chromatic?'dual-wheel':''}" role="group" aria-label="Choisir le nom de la note"><div class="wheel-orbit" aria-hidden="true"></div>${scope.chromatic?'<div class="wheel-orbit outer" aria-hidden="true"></div>':''}${wheelChoices(rings, {dual: scope.chromatic}).map(({n,x,y}) => `<button data-arcade-answer="${n}" data-note="${n}" data-question="${this.serial}" style="left:${x}%;top:${y}%" ${correcting||this.paused||this.phase==='transition'?'disabled':''}>${esc(noteName(n,this.notation))}</button>`).join('')}</div></div></div>${this.popup && !this.paused ? `<div data-view-key="bonus-${this.popup.id}" class="arcade-bonus" role="status"><strong>+${this.popup.points.toLocaleString('fr-FR')}</strong>${this.popup.lives ? `<span>+${this.popup.lives} UP</span>` : '<span>COMBO !</span>'}</div>` : ''}${this.paused ? `<div class="arcade-pause" role="dialog" aria-modal="true" aria-label="Partie en pause"><div class="panel"><h1>Pause</h1><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="mute">${this.state.sound?'Couper':'Activer'} le son</button><button class="button quiet-button" data-arcade-action="menu">Quitter la partie</button></div></div>` : ''}</main>`;
   }
-  layout() { for (const svg of this.host.root.querySelectorAll('.arcade-neck svg')) layoutMiniature(svg, this.profile); }
+  layout() {
+    const viewport=this.host.root.querySelector('.arcade-neck');
+    if(!viewport||!this.target)return;
+    const svg=viewport.querySelector('svg');layoutMiniature(svg,this.profile);
+    const point=svg.querySelector('.neck-point');if(!point)return;
+    const box=point.getBoundingClientRect(),frame=viewport.getBoundingClientRect();
+    const left=Math.max(0,Math.min(viewport.scrollWidth-viewport.clientWidth,viewport.scrollLeft+box.x+box.width/2-frame.x-frame.width/2));
+    const animate=this.neckViewport===viewport&&this.neckSerial!==this.serial&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.neckViewport=viewport;this.neckSerial=this.serial;
+    if(Math.abs(viewport.scrollLeft-left)<1)return;
+    if(this.neckAnimation){this.neckAnimation.cancel();this.neckAnimation=null;}
+    if(animate){
+      const from=viewport.scrollLeft,started=performance.now();
+      const move=()=>{const t=Math.min(1,(performance.now()-started)/80),e=t*t*(3-2*t);viewport.scrollLeft=from+(left-from)*e;if(t<1)this.scrollFrame=requestAnimationFrame(move);};
+      cancelAnimationFrame(this.scrollFrame);this.scrollFrame=requestAnimationFrame(move);
+    }else viewport.scrollLeft=left;
+  }
   result() {
     const r = this.run;
-    const detail = `<section id="arcade-statistics" class="panel"><h2>Statistiques avancées</h2><dl class="arcade-stats"><dt>Précision</dt><dd>${r.correct} / ${r.questions} (${Math.round(r.correct/r.questions*100)} %)</dd><dt>Erreurs</dt><dd>${r.errors}</dd><dt>Temps écoulés</dt><dd>${r.timeouts}</dd><dt>Temps minimum</dt><dd>${seconds(r.timeMin)}</dd><dt>Temps maximum</dt><dd>${seconds(r.timeMax)}</dd><dt>Temps moyen</dt><dd>${seconds(r.correct ? r.timeSum/r.correct : null)}</dd><dt>Points des réponses</dt><dd>${r.correct*100}</dd><dt>Bonus de combo</dt><dd>${r.bonusPoints}</dd><dt>Vies gagnées</dt><dd>${r.earnedLives}</dd><dt>Palier atteint</dt><dd>${r.stage+1}</dd></dl><p>Les temps concernent les bonnes réponses, transitions comprises et pauses exclues.</p><h3>Par emplacement</h3><ul>${Object.entries(r.positions).map(([key,p]) => {const [s,f] = key.split(':').map(Number);return `<li>${esc(noteName(this.profile.tuning[s]+f,this.notation))} · corde ${this.profile.tuning.length-s}, ${f?'case '+f:'à vide'} : ${p.correct}/${p.total}</li>`;}).join('')}</ul></section>`;
+    const detail = `<section id="arcade-statistics" class="panel"><h2>Statistiques avancées</h2><dl class="arcade-stats"><dt>Précision</dt><dd>${r.correct} / ${r.questions} (${Math.round(r.correct/r.questions*100)} %)</dd><dt>Erreurs</dt><dd>${r.errors}</dd><dt>Temps écoulés</dt><dd>${r.timeouts}</dd><dt>Temps minimum</dt><dd>${seconds(r.timeMin)}</dd><dt>Temps maximum</dt><dd>${seconds(r.timeMax)}</dd><dt>Temps moyen</dt><dd>${seconds(r.correct ? r.timeSum/r.correct : null)}</dd><dt>Points des réponses</dt><dd>${r.correct*100}</dd><dt>Bonus de combo</dt><dd>${r.bonusPoints}</dd><dt>Vies gagnées</dt><dd>${r.earnedLives}</dd><dt>Palier atteint</dt><dd>${r.stage+1}</dd></dl><p>Les temps concernent les bonnes réponses, transitions comprises et pauses exclues.</p>${responseTimeMap(this.profile,r.positions,this.notation)}</section>`;
     return `<main id="main-content" tabindex="-1" class="arcade-results"><section class="panel"><p>Partie terminée · ${labels[r.mode]}</p><h1>${r.score.toLocaleString('fr-FR')} <small>points</small></h1>${this.record?'<p class="arcade-record">Nouveau record personnel !</p>':''}<dl class="arcade-stats"><dt>Bonnes réponses</dt><dd>${r.correct}</dd><dt>Combos déclenchés</dt><dd>${r.combos}</dd><dt>Plus long combo</dt><dd>${r.longest}</dd></dl><p class="muted">Un combo est compté à chaque bonus de dix réponses consécutives.</p>${this.host.storageError()?'<p role="alert">Sauvegarde indisponible : ce record n’a pas pu être enregistré.</p>':''}<div class="button-row"><button class="button primary" data-arcade-action="replay">Rejouer</button><button class="button secondary" data-arcade-action="details" aria-expanded="${!!this.details}" aria-controls="arcade-statistics">${this.details?'Masquer':'Voir'} les statistiques</button><button class="button quiet-button" data-arcade-action="menu">Retour à Arcade</button></div></section>${this.details?detail:''}</main>`;
   }
 }

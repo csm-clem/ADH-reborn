@@ -72,3 +72,23 @@ l'expiration, identité des questions, pause et validation des sauvegardes.
 le résultat à 14 500 points, les records après rechargement, le cache hors ligne
 et les roues chromatiques à 320/390/844/1920 pixels. Le confort sur téléphone et
 l'appréciation musicale des jingles restent une recette humaine distincte.
+
+
+## Corrections de confort — 1er novembre 2026
+
+Arcade possède son entrée dans la navigation principale, sur ordinateur et mobile.
+Une préparation « À vous de jouer ! » d'une seconde précède le premier timer.
+Le manche complet reste chargé et conserve le même SVG ; sa fenêtre défile vers
+la cible en 80 ms, temps compris dans le QTE. Les fondus masquent les cases hors
+cadre. La réduction des animations supprime le mouvement de scroll.
+
+La pause cache uniquement le manche, la question et la roue ; elle conserve le
+HUD visible. Les sons de réponse, de points et de vie supplémentaire sont
+superposés dans le moteur audio commun, avec des bonus à volume réduit.
+
+La carte des statistiques réutilise le composant du manche des progrès. Les
+moyennes sont calculées par emplacement sur les réponses correctes. Le dégradé
+va de vert intense pour 500 ms ou moins à rouge pour 4 000 ms ou plus ; gris
+signifie qu'aucun temps n'est disponible. Les records antérieurs sans total
+chronométré par emplacement restent lisibles et ne reçoivent pas une moyenne
+inventée.

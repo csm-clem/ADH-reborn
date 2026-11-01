@@ -6,7 +6,7 @@ BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 out=Path('work/arcade');out.mkdir(parents=True,exist_ok=True)
 seed='''async()=>{const {makeProfile}=await import('./core.js');const {initialState}=await import('./state.js');const {STATE_KEY}=await import('./release.js');localStorage.setItem(STATE_KEY,JSON.stringify({...initialState(),profile:makeProfile('guitar6'),notation:'latin',sound:false,beginnerGuide:true}));}'''
 # Read only the visible SVG coordinates, using the same shared geometry as the UI.
-target='''async()=>{const {neckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg');const g=neckGeometry(6,+svg.dataset.neckEnd,648,{startFret:+svg.dataset.neckStart});const p=svg.querySelector('.neck-point');const closest=(xs,x)=>xs.reduce((best,v,i)=>Math.abs(v-x)<Math.abs(xs[best]-x)?i:best,0);const s=closest(g.ys,+p.getAttribute('cy'));const f=closest(g.centers,+p.getAttribute('cx'));return [40,45,50,55,59,64][s]%12+f;}'''
+target='''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg');const g=scrollingNeckGeometry(6,+svg.dataset.neckEnd,{startFret:+svg.dataset.neckStart,height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth});const p=svg.querySelector('.neck-point');const closest=(xs,x)=>xs.reduce((best,v,i)=>Math.abs(v-x)<Math.abs(xs[best]-x)?i:best,0);const s=closest(g.ys,+p.getAttribute('cy'));const f=closest(g.centers,+p.getAttribute('cx'));return [40,45,50,55,59,64][s]%12+f;}'''
 checks=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
@@ -16,7 +16,7 @@ with sync_playwright() as p:
  assert q.locator('[data-arcade-action=start]').count()==4
  for w,h in [(390,844),(844,390),(320,568),(1920,1080)]:
   q.set_viewport_size({'width':w,'height':h})
-  q.locator('[data-mode=zones-chromatic]').click();q.clock.run_for(100)
+  q.locator('[data-mode=zones-chromatic]').click();assert q.locator('.arcade-ready').count()==1;q.clock.run_for(1100)
   assert q.locator('[data-arcade-answer]').count()==12
   metrics=q.evaluate('''()=>{const box=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};return {wheel:box(document.querySelector('.answer-wheel')),buttons:[...document.querySelectorAll('[data-arcade-answer]')].map(box),width:document.documentElement.scrollWidth}}''')
   assert metrics['width']<=w+1,(w,metrics)
@@ -29,7 +29,7 @@ with sync_playwright() as p:
   checks.append({'viewport':[w,h],'layout':metrics})
   q.locator('[data-arcade-action=menu]').click()
  q.set_viewport_size({'width':390,'height':844})
- q.locator('[data-mode=zones-natural]').click()
+ q.locator('[data-mode=zones-natural]').click();q.clock.run_for(1000)
  for i in range(100):
   q.clock.run_for(100)
   note=q.evaluate(target)%12
@@ -61,7 +61,7 @@ with sync_playwright() as p:
  for name in ['arcade-ui.js','arcade-rules.js','arcade.css','answer-wheel.js']:
   assert any(path.endswith('/'+name) for path in cached),name
  q.context.set_offline(True);q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click()
- q.locator('[data-mode=strings-chromatic]').click();q.clock.run_for(100)
+ q.locator('[data-mode=strings-chromatic]').click();q.clock.run_for(1100)
  assert q.locator('[data-arcade-answer]').count()==12
  assert not errors,errors
  (out/'verification.json').write_text(json.dumps({'checks':checks,'record':record,'errors':errors,'physical_devices':False,'offline_arcade':True},indent=2))

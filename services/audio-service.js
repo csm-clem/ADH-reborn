@@ -306,14 +306,13 @@ export function createAudioService({
     const epoch = sequenceEpoch;
     await unlockAudio();
     if (epoch !== sequenceEpoch || !getState().sound || !foreground || !audio || audio.state !== 'running') return;
-    const pitches = lives ? [76, 83, 88, 86, 91, 95] : [79, 86, 91];
-    const step = lives ? .065 : .045;
-    for (const [i, midi] of pitches.entries()) {
+    const cues = [{pitches:[79,86,91],step:.045,level:.04},...(lives?[{pitches:[76,83,88,86,91,95],step:.065,level:.045}]:[])];
+    for(const {pitches,step,level} of cues) for (const [i, midi] of pitches.entries()) {
       const source = audio.createOscillator(), gain = audio.createGain();
-      const at = audio.currentTime + .01 + i * step;
+      const at = Math.max(audio.currentTime + .005, readyAt) + i * step;
       source.type = 'triangle'; source.frequency.value = frequency(midi);
       gain.gain.setValueAtTime(0, at);
-      gain.gain.linearRampToValueAtTime(.085, at + .006);
+      gain.gain.linearRampToValueAtTime(level, at + .006);
       gain.gain.exponentialRampToValueAtTime(.0001, at + step * 1.8);
       source.connect(gain); gain.connect(audio.destination); activeSounds.add(source);
       source.onended = () => { activeSounds.delete(source); source.disconnect(); gain.disconnect(); };

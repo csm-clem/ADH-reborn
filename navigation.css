@@ -47,3 +47,5 @@
 .page-swipe-track{will-change:transform;touch-action:pan-y}
 .page-swipe-settle{transition:transform 200ms cubic-bezier(.2,.8,.2,1)}
 @media(prefers-reduced-motion:reduce){.page-swipe-settle{transition:none}}
+
+@media(max-width:700px){.mobile-nav button{min-width:0;flex:1}}

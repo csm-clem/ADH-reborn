@@ -56,7 +56,19 @@ test('Arcade cues use the shared audio context, reward lives distinctly and resp
  let sound=true,contexts=0;
  const engine=createAudioService({getState:()=>({sound,profile:null}),createContext:()=>{contexts++;return context;}});
  await engine.playArcadeBonus(0);assert.equal(sources.filter(s=>s.frequency.value>24).length,3);
- await engine.playArcadeBonus(1);assert.equal(sources.filter(s=>s.frequency.value>24).length,9);assert.equal(contexts,1);
+ await engine.playArcadeBonus(1);assert.equal(sources.filter(s=>s.frequency.value>24).length,12);assert.equal(contexts,1);
  sound=false;const before=sources.length;await engine.playArcadeBonus(2);assert.equal(sources.length,before);
  engine.stopAudio();assert.ok(sources.filter(s=>s.frequency.value>24).every(s=>s.stopped));await engine.dispose();
+});
+
+test('A correct answer, point cue and life cue overlap without cancelling the answer tail',async()=>{
+ const f=audioFixture(),oscillators=[];
+ f.context.createGain=()=>({connect(){},disconnect(){},gain:{value:0,setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}}});
+ f.context.createOscillator=()=>{const o={frequency:{value:0},connect(){},disconnect(){},start(at){this.at=at;},stop(at){this.end=at;}};oscillators.push(o);return o;};
+ await Promise.all([f.engine.playNote(40),f.engine.playArcadeBonus(1)]);
+ assert.equal(f.sources.length,1);assert.equal(f.sources[0].stopped,undefined);
+ const cues=oscillators.filter(o=>o.frequency.value>24);assert.equal(cues.length,9);
+ assert.ok(Math.abs(cues[0].at-f.sources[0].when)<.02);
+ assert.equal(cues[3].at,cues[0].at);
+ await f.engine.dispose();
 });

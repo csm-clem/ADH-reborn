@@ -20,6 +20,8 @@ with sync_playwright() as p:
  q.locator('[data-action=home]:visible').first.click();q.locator('[data-pilot-action=beta-branch][data-id=guided]').click();q.locator('.route-card[data-id=guided]').click()
  stage=q.locator('.guided-stage').last
  if stage.get_attribute('open') is None:stage.locator('summary').click()
+ # Wait for the newly requested disclosure animation before recording a stable scroll position.
+ q.wait_for_function("[...document.querySelectorAll('details')].every(d=>d.getAnimations().every(a=>a.playState!=='running'))")
  stage.locator('.lesson-row').first.scroll_into_view_if_needed();stage.locator('.lesson-row').first.focus();q.wait_for_timeout(160);scroll=q.evaluate('scrollY');stage.locator('.lesson-row').first.click();q.go_back();q.wait_for_selector('.guided-stage');q.wait_for_timeout(180);assert q.locator('.guided-stage').last.get_attribute('open') is not None;assert abs(q.evaluate('scrollY')-scroll)<5;checks.append('guided accordion and scroll restored')
  q.locator('[data-action=stats]:visible').first.click();assert q.locator('.study-card').count()==1;assert q.locator('h1').count()==1;assert q.locator('.study-card').bounding_box()['y']<q.locator('.progress-overview').bounding_box()['y'];checks.append('progress begins with next useful step after title')
  q.locator('[data-action=settings]:visible').first.click();assert q.locator('.content > .panel').first.get_attribute('class')=='panel debug-panel'

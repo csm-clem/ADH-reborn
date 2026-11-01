@@ -50,6 +50,7 @@ jobs:
           python tools/qa/neck-settings-v039.py
           python tools/qa/round-wheel-v039.py
           python tools/qa/arcade.py
+          python tools/qa/ux-fixes.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py
@@ -85,5 +86,6 @@ jobs:
             work/ux-next
             work/neck-settings-v039
             work/arcade
+            work/ux-fixes
             work/navigation-ux
             work/scroll-neck

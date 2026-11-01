@@ -91,6 +91,26 @@
       "id": "arcade-four-modes-combos-qte-20261101",
       "type": "feature",
       "text": "Quatre modes Arcade par zones ou cordes, naturels ou chromatiques : trois vies, timer progressif, bonus de combo et vies supplémentaires, résultats et statistiques détaillées."
+    },
+    {
+      "id": "arcade-menu-ready-scroll-20261101",
+      "type": "improvement",
+      "text": "Arcade rejoint la navigation ; préparation avant le départ, manche complet à défilement rapide, HUD conservé en pause et bonus sonores superposés aux réponses."
+    },
+    {
+      "id": "arcade-response-time-map-20261101",
+      "type": "improvement",
+      "text": "Les statistiques Arcade utilisent la carte du manche et une couleur rouge à vert selon le temps moyen par emplacement."
+    },
+    {
+      "id": "instrument-reset-details-motion-20261101",
+      "type": "feature",
+      "text": "Réinitialisation de la progression par instrument avec confirmation explicite ; rubriques de sauvegarde organisées et panneaux dépliables animés."
+    },
+    {
+      "id": "immigrant-six-bars-update-copy-20261101",
+      "type": "bug",
+      "text": "Immigrant Song reprend les six mesures demandées et les appels vocaux corrigés ; retrait de la phrase superflue avant le téléchargement d’une mise à jour."
     }
   ]
 }

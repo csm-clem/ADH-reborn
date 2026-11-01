@@ -80,7 +80,7 @@ export function resolveArcade(run, target, outcome, ms) {
   run.questions++;
   let bonus = { points: 0, lives: 0 };
   if (correct) {
-    position.correct++; run.correct++; run.streak++;
+    position.correct++; position.timeSum = (position.timeSum || 0) + ms; run.correct++; run.streak++;
     run.longest = Math.max(run.longest, run.streak);
     bonus = arcadeBonus(run.streak);
     if (bonus.points) run.combos++;
@@ -114,6 +114,7 @@ export function validateArcadeRecords(value, profile) {
     let total = 0, correct = 0;
     for (const [key, p] of Object.entries(r.positions)) {
       const [s, f] = key.split(':').map(Number);
+      if (p?.timeSum !== undefined && (!Number.isFinite(p.timeSum) || p.timeSum < 0)) throw new Error('Temps Arcade invalide.');
       if (!/^\d:\d{1,2}$/.test(key) || s >= profile.tuning.length || f > 24 || !p || !Number.isSafeInteger(p.total) || !Number.isSafeInteger(p.correct) || p.correct < 0 || p.total < p.correct) throw new Error('Position Arcade invalide.');
       total += p.total; correct += p.correct;
     }

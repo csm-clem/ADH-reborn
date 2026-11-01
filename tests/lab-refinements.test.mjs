@@ -29,9 +29,9 @@ test('Feel Good Inc. keeps the score rests, tie and staccato in its original rec
 });
 test('Immigrant Song is assignable again and its vocal comes after a guitar exposition',()=>{
  const r=rewardFor(melodyById('immigrant-song'));
- assert.ok(r.hasHarmony);assert.equal(r.totalBeats,32);
+ assert.ok(r.hasHarmony);assert.equal(r.totalBeats,24);
  const voice=r.events.filter(e=>e.voice==='guitar-clean'),riff=r.events.filter(e=>e.voice==='guitar-driven');
- assert.equal(voice[0].start,15);assert.equal(voice[0].midi,73);assert.ok(riff.some(e=>e.start===16));
+ assert.equal(voice[0].start,7);assert.equal(voice[0].midi,66);assert.ok(riff.some(e=>e.start===16));
  assert.deepEqual([...new Set(riff.map(e=>e.midi))],[42,54]);
  const assigned=[...catalogMelodies(betaCatalog(makeProfile('guitar6'))).values()];
  assert.ok(assigned.some(m=>m.id==='immigrant-song'));

@@ -29,7 +29,7 @@ export class UpdateController{
   return this.preparation;
  }
  async installVersion(version){const worker=await this.prepareVersion(version);if(await this.workerVersion(this.registration?.active)===version){location.reload();return;}worker.postMessage({type:'ACTIVATE_UPDATE'});}
- paintProgress(){const p=this.dialog?.querySelector('.update-progress');if(!p)return;const v=this.progress;p.textContent=this.workerPending?'Téléchargement terminé. Prête à installer.':v?`Préparation : ${Math.round(v.loaded/v.total*100)} %`:'Le téléchargement démarrera avec votre accord.';}
+ paintProgress(){const p=this.dialog?.querySelector('.update-progress');if(!p)return;const v=this.progress;p.hidden=!this.workerPending&&!v;p.textContent=this.workerPending?'Téléchargement terminé. Prête à installer.':v?`Préparation : ${Math.round(v.loaded/v.total*100)} %`:'';}
  offerWorker(){this.workerPending=true;this.paintProgress();this.offer();}
  offer(){if(this.accepted||this.deferred||this.dialog||!this.canPrompt()||!(this.pending||this.workerPending))return;
   const d=this.dialog=document.createElement('dialog');d.className='guide-dialog update-dialog';d.innerHTML='<h1>Une mise à jour est disponible</h1><p>Vos progrès et vos réglages seront conservés sur cet appareil.</p><p class="update-progress" role="status"></p><div class="guide-navigation"><button class="button secondary" data-update="later">Plus tard</button><button class="button primary" data-update="now">Mettre à jour</button></div><p class="update-error" role="alert"></p>';
