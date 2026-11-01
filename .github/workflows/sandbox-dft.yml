@@ -52,6 +52,8 @@ jobs:
           python tools/qa/arcade.py
           python tools/qa/ux-fixes.py
           python tools/qa/arcade-polish.py
+          python tools/qa/neck-navigation.py
+          python tools/qa/result-motion.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py
