@@ -61,3 +61,9 @@ test('String mini-lessons use an intrinsic compact width rather than the window 
   assert.ok(svg.includes('data-neck-available="0"'));
  }
 });
+
+test('The compact first-use layout does not shrink preparatory course necks',()=>{
+ const svg=miniatureNeck(makeProfile('guitar6'),{lesson:true,lastFret:24,scrollable:true,scrollFrame:false});
+ assert.ok(Number(svg.match(/viewBox="0 0 ([\d.]+)/)[1])>1000);
+ assert.ok(svg.includes('data-neck-height="240"'));
+});
