@@ -301,6 +301,26 @@ export function createAudioService({
     };
   }
 
+  /** Original short arcade cues, synthesized in the shared audio context. */
+  async function playArcadeBonus(lives = 0) {
+    const epoch = sequenceEpoch;
+    await unlockAudio();
+    if (epoch !== sequenceEpoch || !getState().sound || !foreground || !audio || audio.state !== 'running') return;
+    const pitches = lives ? [76, 83, 88, 86, 91, 95] : [79, 86, 91];
+    const step = lives ? .065 : .045;
+    for (const [i, midi] of pitches.entries()) {
+      const source = audio.createOscillator(), gain = audio.createGain();
+      const at = audio.currentTime + .01 + i * step;
+      source.type = 'triangle'; source.frequency.value = frequency(midi);
+      gain.gain.setValueAtTime(0, at);
+      gain.gain.linearRampToValueAtTime(.085, at + .006);
+      gain.gain.exponentialRampToValueAtTime(.0001, at + step * 1.8);
+      source.connect(gain); gain.connect(audio.destination); activeSounds.add(source);
+      source.onended = () => { activeSounds.delete(source); source.disconnect(); gain.disconnect(); };
+      source.start(at); source.stop(at + step * 1.8 + .01);
+    }
+  }
+
   return Object.freeze({
     configure(options) {
       getState = options.getState;
@@ -310,6 +330,7 @@ export function createAudioService({
     playNote,
     playSequence,
     playArrangement,
+    playArcadeBonus,
     preferencesChanged(next, previous) {
       if (
         !next.sound ||

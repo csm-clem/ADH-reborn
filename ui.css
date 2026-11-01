@@ -22,3 +22,5 @@
 @import url("./beta.css") layer(pages);
 
 @import url('./navigation.css') layer(pages);
+
+@import url('./arcade.css') layer(pages);

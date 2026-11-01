@@ -86,6 +86,11 @@
       "id": "sunrise-achievement-celebration",
       "type": "improvement",
       "text": "La célébration des succès adopte des accents orange et corail sunrise, avec des surfaces de lecture adaptées au thème."
+    },
+    {
+      "id": "arcade-four-modes-combos-qte-20261101",
+      "type": "feature",
+      "text": "Quatre modes Arcade par zones ou cordes, naturels ou chromatiques : trois vies, timer progressif, bonus de combo et vies supplémentaires, résultats et statistiques détaillées."
     }
   ]
 }

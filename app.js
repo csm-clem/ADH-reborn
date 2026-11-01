@@ -1,3 +1,4 @@
+import {ArcadeController} from './arcade-ui.js';
 import {NavigationController} from './services/navigation-service.js';
 import {navigationTrail,branchLabel,routeLabel} from './beta-home.js';
 import {bindParentSwipe,parentNavigation} from './navigation-rules.js';
@@ -32,7 +33,7 @@ const icons={replay:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"/>',share:'<circle cx=
 const icon=(name)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.play}</svg>`;
 
 function toast(message){document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.role='status';el.textContent=message;document.body.append(el);setTimeout(()=>el.remove(),5000);}
-function setScreen(value){if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});}
+function setScreen(value){if(screen==='arcade')arcade.leave();if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});}
 function fullscreenContent(active=!!document.fullscreenElement){return `${icon(active?'fullscreen-exit':'fullscreen')}<span>${active?'Quitter le plein écran':'Plein écran'}</span>`;}
 function syncFullscreen(active){for(const b of document.querySelectorAll('[data-action="fullscreen"],[data-pilot-action="fullscreen"]')){b.innerHTML=b.dataset.action?fullscreenContent(active):icon(active?'fullscreen-exit':'fullscreen');b.setAttribute('aria-label',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('title',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('aria-pressed',String(active));}}
 function debugPanel(){if(!debugAvailable(RELEASE))return '';return `<section class="panel debug-panel"><h2>Mode débug <small>· réservé à la v0</small></h2><p>${pilot.debugActive?'Simulation active : tous les exercices sont réussis à 100 % et tous les succès disponibles sont débloqués.':'Testez un parcours terminé et sa collection complète, pour cet instrument.'} Vos vrais résultats restent conservés. La simulation disparaît aussi au rechargement.</p><button class="button ${pilot.debugActive?'secondary':'quiet-button'}" data-action="debug" aria-pressed="${!!pilot.debugActive}">${pilot.debugActive?'Retrouver mes vrais résultats':'Simuler un parcours à 100 %'}</button></section>`;}
@@ -45,7 +46,7 @@ function shell(body){
 }
 function navigationHeader(){
  const version=CHANNEL==='sandbox'?`<strong class="sandbox-label">Lab ${esc(DISPLAY_VERSION)}</strong>`:'';
- if(screen!=='home')return `${version}<span class="current-section">${({stats:'Progrès',achievements:'Succès',settings:'Réglages',changelog:'Journal des modifications'})[screen]||'Parcours'}</span>`;
+ if(screen!=='home')return `${version}<span class="current-section">${({stats:'Progrès',achievements:'Succès',settings:'Réglages',changelog:'Journal des modifications',arcade:'Arcade'})[screen]||'Parcours'}</span>`;
  const trail=navigationTrail(pilot),parent=trail.at(-2);
  return `${version}<nav class="breadcrumbs" aria-label="Fil d’Ariane"><ol>${trail.map((item,i)=>`<li>${i===trail.length-1?`<span aria-current="page">${esc(item.label)}</span>`:`<button class="text-button" data-pilot-action="${item.action}" data-id="${esc(item.id||'')}">${esc(item.label)}</button>`}</li>`).join('')}</ol></nav><span class="mobile-location">${parent?`<button class="text-button" data-pilot-action="${parent.action}" data-id="${esc(parent.id||'')}">← ${esc(parent.label)}</button>`:'Parcours'}</span>`;
 }
@@ -57,10 +58,11 @@ function settings(){
 function setSound(sound){appStore.update({sound});if(sound)unlockAudio();}
 
 function render(){navigation?.beforeRender();try{renderPage();}finally{navigation?.afterRender();}}
-function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
+function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='arcade'){renderView(ROOT,arcade.phase==='menu'?shell(arcade.menu()):arcade.render(),'arcade-'+arcade.phase.replace(/transition|question|correction|resolved/,'play'));requestAnimationFrame(()=>arcade.layout());return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()+(!pilot.data.navigation?.branch?'<section class="panel arcade-entry"><h2>Arcade</h2><p>Trois vies, des combos et un manche qui s’agrandit.</p><button class="button primary" data-action="arcade">Jouer en Arcade</button></section>':'')),screen);}
 ROOT.addEventListener('click',e=>{
  const state=appStore.getState(),button=e.target.closest('[data-action]');if(!button)return;e.preventDefault();
  switch(button.dataset.action){
+ case 'arcade':if(pilot.debugActive)pilot.setDebug(false);stopAudio();setScreen('arcade');arcade.open();break;
  case 'mute-global':setSound(!state.sound);render();document.querySelector('#setting-sound')?.focus({preventScroll:true});break;
  case 'debug':if(debugAvailable(RELEASE)){pilot.setDebug(!pilot.debugActive);render();}break;
  case 'home':stopAudio();if(screen==='home'){pilot.data.navigation={branch:null,route:null,chapter:null};pilot.save();}setScreen('home');break;
@@ -90,6 +92,7 @@ ROOT.addEventListener('change',async e=>{
 });
 
 const pilot=new PilotController({storage:storageService,setAccidentals:accidentals=>appStore.update({accidentals}),setPositionButtons:value=>appStore.update({positionButtons:value}),getState:appStore.getState,showPilot:()=>{screen='pilot';render();},openCourse:id=>{screen='course';courses.open(id);},onActivityStart:()=>{},home:()=>setScreen('home'),stats:()=>setScreen('stats'),achievements:id=>{if(id)achievements.reveal(id);setScreen('achievements');if(id)requestAnimationFrame(()=>achievements.focusRevealed(ROOT));},icon,playNote,playSequence,playArrangement,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const arcade=new ArcadeController({root:ROOT,getState:appStore.getState,getData:()=>pilot.data,save:()=>pilot.save(),storageError:()=>pilot.storageError||!!pilot.unreadableRaw,render:()=>{screen='arcade';render();},home:()=>setScreen('home'),active:()=>screen==='arcade',icon,playNote,playBonus:lives=>audioService.playArcadeBonus(lives),stopAudio,mute:()=>setSound(!appStore.getState().sound),fullscreen:toggleFullscreen});
 const courses=new CourseController({pilot,getState:appStore.getState,render:()=>{screen='course';render();},home:()=>setScreen('home'),playSequence,icon});
 const bugReports=new BugReportController({getConfiguration:()=>bugConfiguration({release:RELEASE,profile:appStore.getState().profile,theme:document.documentElement.dataset.theme,viewport:[innerWidth,innerHeight],standalone:matchMedia('(display-mode: standalone)').matches})});
 const stateProfileKey=()=>appStore.getState().profile?.key;
@@ -99,20 +102,20 @@ document.fonts?.ready.then(()=>{if(!appStore.getState().profile)onboarding.layou
 appStore.subscribe((next,previous)=>{audioService.preferencesChanged(next,previous);platformService.setTheme(next.theme);});
 platformService.setTheme(appStore.getState().theme);
 platformService.connect({
- onHidden(){audioService.setForeground(false);if(screen==='pilot')pilot.pause({keepAudio:true});},
+ onHidden(){if(screen==='arcade')arcade.pause();audioService.setForeground(false);if(screen==='pilot')pilot.pause({keepAudio:true});},
  onVisible(){audioService.setForeground(true);},
  onResize(){if(!appStore.getState().profile)requestAnimationFrame(()=>onboarding.layout());else if(screen==='pilot'){pilot.clock.stop('layout');cancelAnimationFrame(resizeLayoutFrame);resizeLayoutFrame=requestAnimationFrame(()=>{if(screen==='pilot')pilot.layout();});}},
- onResizeSettled(){if(screen==='pilot'){pilot.layout();pilot.clock.resume('layout');}if(screen==='course')courses.layout();},
+ onResizeSettled(){if(screen==='pilot'){pilot.layout();pilot.clock.resume('layout');}if(screen==='course')courses.layout();if(screen==='arcade')arcade.layout();},
  onFullscreen:syncFullscreen,
  onInstallPrompt(event){installPrompt=event;if(screen==='settings')render();}
 });
 navigation=new NavigationController({root:ROOT,read:()=>appStore.getState().profile?({profile:appStore.getState().profile.key,screen,nav:structuredClone(pilot.data.navigation||{}),course:screen==='course'?courses.active:null,activity:screen==='pilot'?pilot.session?.activity:null}):({profile:null,screen:'setup'}),restore:s=>{
- stopAudio();if(screen==='pilot')pilot.leave();if(screen==='course'){courses.save();courses.active=null;}if(screen==='achievements')achievements.stop();
+ stopAudio();if(screen==='arcade')arcade.leave();if(screen==='pilot')pilot.leave();if(screen==='course'){courses.save();courses.active=null;}if(screen==='achievements')achievements.stop();
  if(s.profile!==appStore.getState().profile?.key){setScreen('home');return;}
  pilot.data.navigation=structuredClone(s.nav||{});pilot.save();
  if(s.screen==='course'&&s.course){screen='course';courses.open(s.course);return;}
  if(s.screen==='pilot'&&pilot.data.session?.activity===s.activity&&!pilot.data.session.completed){pilot.start(s.activity,true);return;}
- screen=s.screen==='pilot'?'home':['home','stats','achievements','settings','changelog'].includes(s.screen)?s.screen:'home';render();
+ screen=s.screen==='pilot'?'home':['home','stats','achievements','settings','changelog','arcade'].includes(s.screen)?s.screen:'home';render();
 }});
 bindParentSwipe(ROOT,{enabled:()=>['home','course','pilot'].includes(screen)&&!!appStore.getState().profile,forward:()=>navigation.forward(),back:()=>{
  if(navigation.back())return true;
@@ -128,10 +131,10 @@ ROOT.addEventListener('keydown',e=>{
 document.documentElement.dataset.keyboard='false';
 document.addEventListener('keydown',e=>{if(e.key==='Tab')document.documentElement.dataset.keyboard='true';},true);
 document.addEventListener('pointerdown',()=>{document.documentElement.dataset.keyboard='false';},true);
-bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
+arcade.bind(ROOT);bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
 
 const beginner=new BeginnerGuide({getState:appStore.getState,onDone:()=>{appStore.update({beginnerGuide:true});updates.offer();}});
-updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'&&screen!=='course'});
+updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'&&screen!=='course'&&!(screen==='arcade'&&arcade.playing)});
 // Unlock on an explicit tap/keyboard action, never after a delayed transition.
 for(const event of ['pointerdown','keydown'])document.addEventListener(event,e=>{if(e.isTrusted)unlockAudio();},{capture:true});
 updates.start();

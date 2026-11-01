@@ -48,3 +48,15 @@ test('Mute cancels notes waiting for audio unlock, not only already sounding not
 test('Timed sequences retain rhythm and changing voice cancels previous playback',async()=>{
  const f=audioFixture();await f.engine.playSequence([{midi:40,beats:2},{midi:47,beats:1}],{step:.25});assert.equal(f.sources[1].when-f.sources[0].when,.5);const previous={...initialState(),profile:makeProfile('guitar6')},next={...previous,voice:'bass-electric'};f.engine.preferencesChanged(next,previous);assert.ok(f.sources.every(s=>s.stopped));
 });
+
+test('Arcade cues use the shared audio context, reward lives distinctly and respect mute', async () => {
+ const sources=[];
+ const param=()=>({value:0,setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}});
+ const context={state:'running',currentTime:1,destination:{},resume:async()=>{},close:async()=>{},createGain:()=>({gain:param(),connect(){},disconnect(){}}),createOscillator:()=>{const s={frequency:param(),connect(){},disconnect(){},start(){},stop(){this.stopped=true;}};sources.push(s);return s;}};
+ let sound=true,contexts=0;
+ const engine=createAudioService({getState:()=>({sound,profile:null}),createContext:()=>{contexts++;return context;}});
+ await engine.playArcadeBonus(0);assert.equal(sources.filter(s=>s.frequency.value>24).length,3);
+ await engine.playArcadeBonus(1);assert.equal(sources.filter(s=>s.frequency.value>24).length,9);assert.equal(contexts,1);
+ sound=false;const before=sources.length;await engine.playArcadeBonus(2);assert.equal(sources.length,before);
+ engine.stopAudio();assert.ok(sources.filter(s=>s.frequency.value>24).every(s=>s.stopped));await engine.dispose();
+});
