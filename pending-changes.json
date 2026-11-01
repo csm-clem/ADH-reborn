@@ -126,6 +126,21 @@
       "id": "immigrant-four-bars-tuning-reset-20261101",
       "type": "improvement",
       "text": "Immigrant Song est limité à quatre mesures et un appel vocal, avec moins de sauts d’octave dans le riff. La remise à zéro peut cibler un accordage précis."
+    },
+    {
+      "id": "neck-proportions-mini-lessons-left-fade-20261101",
+      "type": "bug",
+      "text": "Les découvertes par zone retrouvent les proportions habituelles du manche. Les mini-leçons par corde sont dézoomées, avec défilement seulement si nécessaire ; un fondu à gauche signale un manche qui commence après le sillet."
+    },
+    {
+      "id": "navigation-outline-launch-gradients-20261101",
+      "type": "improvement",
+      "text": "Icônes de navigation arrondies au trait : chemin à jalons, envahisseur pixelisé et cartes à collectionner. Transitions de lancement orange en Arcade et bleues dans Parcours."
+    },
+    {
+      "id": "tuning-reset-scope-motion-boards-20261101",
+      "type": "improvement",
+      "text": "Le périmètre de réinitialisation par accordage est explicite. Les résultats proposent le retour aux Arcades ; trois planches animées permettent de comparer les futures animations."
     }
   ]
 }

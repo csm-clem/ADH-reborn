@@ -37,8 +37,13 @@ with sync_playwright() as p:
  for activity in ['cs1-note-9-discover','c24s1-note-9-discover']:
   h['seed'](q,'guitar6',activity);q.evaluate('''()=>{const k='fretboard-trainer:pilot:stable',s=JSON.parse(localStorage.getItem(k));Object.values(s.profiles)[0].seenInstructions=[];localStorage.setItem(k,JSON.stringify(s));}''');q.reload();q.locator('.chapter-options summary').click();q.locator(f'[data-module="{activity}"]').click();q.wait_for_timeout(150)
   svg=q.locator('svg[data-neck-scroll=true]');content=q.locator('.instruction-content')
-  assert svg.bounding_box()['height']>=239
-  assert content.bounding_box()['width']>=2400,content.bounding_box()
+  assert 179<=svg.bounding_box()['height']<=181
+  frame=q.locator('.lesson-neck-scroll')
+  assert frame.evaluate('e=>e.scrollWidth<=e.clientWidth+1'),(activity,frame.bounding_box(),svg.bounding_box())
+  q.set_viewport_size({'width':390,'height':844});q.wait_for_timeout(200)
+  assert frame.evaluate('e=>e.scrollWidth>e.clientWidth+1'),activity
+  assert q.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
+  q.set_viewport_size({'width':2560,'height':1080});q.wait_for_timeout(200)
   for selector in ['.new-exercise-label','.discovery-direction']:
    box=q.locator(selector).bounding_box();assert abs(box['x']+box['width']/2-1280)<2,(selector,box)
   reason=q.locator('.lesson-actions .disabled-reason').bounding_box();action=q.locator('[data-pilot-action=help-next]').bounding_box()

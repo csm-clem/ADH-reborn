@@ -1263,17 +1263,17 @@
 #main-content.pilot-game.is-practice .game-body>.answer-workspace{max-width:700px;justify-self:center}
 @media(max-height:650px){#main-content.pilot-game{--neck-slot:clamp(104px,23.15dvh,150px)}#main-content.pilot-game .game-body{gap:4px}}
 @media(max-height:430px){#main-content.pilot-game{overflow:auto;max-height:none;height:auto;min-height:100dvh}#main-content.pilot-game .game-body{overflow:visible;grid-template-rows:auto minmax(104px,23.15dvh) minmax(200px,1fr)}#main-content.pilot-game.is-touch .game-body{grid-template-rows:auto minmax(104px,23.15dvh) auto}#main-content.pilot-game .answer-workspace{overflow:visible}}
-/* Long first-use necks retain a readable physical height and scroll horizontally. */
+/* Compact first-use string necks scroll only when their intrinsic width needs it. */
 .instruction-page:has(svg[data-neck-scroll=true]){width:100%;max-width:none;grid-template-columns:minmax(0,1fr);padding-inline:clamp(12px,2vw,32px)}
 .instruction-page:has(svg[data-neck-scroll=true]) .instruction-content{max-width:none;min-width:0;grid-template-columns:minmax(0,1fr)}
-.instruction-page:has(svg[data-neck-scroll=true]) .instruction-graphic{min-width:0;width:100%;max-width:none;height:auto;min-height:240px;max-height:none}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-graphic{min-width:0;width:100%;max-width:none;height:auto;min-height:180px;max-height:none}
 .instruction-page:has(svg[data-neck-scroll=true]) .instruction-heading,.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual,.instruction-page:has(svg[data-neck-scroll=true]) .instruction-summary{grid-column:1;grid-row:auto}
 .instruction-page:has(svg[data-neck-scroll=true]) .instruction-heading,.instruction-page:has(svg[data-neck-scroll=true]) .instruction-summary{text-align:center}
 .instruction-page:has(svg[data-neck-scroll=true]) .new-exercise-label,.instruction-page:has(svg[data-neck-scroll=true]) .discovery-direction{width:100%;max-width:none;margin-inline:0;text-align:center}
 .instruction-page:has(svg[data-neck-scroll=true]) .instruction-summary{max-width:62ch;justify-self:center}
 .instruction-page:has(svg[data-neck-scroll=true]) .discovery-direction{text-align:center}
-.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual{overflow-x:auto;overflow-y:hidden;max-width:100%;min-height:240px;cursor:grab;touch-action:pan-x pan-y;scrollbar-width:auto}
-.instruction-page:has(svg[data-neck-scroll=true]) .shared-neck{height:240px!important;min-height:240px!important;max-height:none!important;max-width:none!important;touch-action:pan-x pan-y}
+.instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual{overflow-x:auto;overflow-y:hidden;max-width:100%;min-height:180px;cursor:grab;touch-action:pan-x pan-y;scrollbar-width:auto}
+.instruction-page:has(svg[data-neck-scroll=true]) .shared-neck{height:180px!important;min-height:180px!important;max-height:none!important;max-width:none!important;touch-action:pan-x pan-y}
 .instruction-page:has(svg[data-neck-scroll=true]) .lesson-actions{width:min(100%,560px);justify-self:center;justify-content:center;flex-wrap:wrap}
 .instruction-page:has(svg[data-neck-scroll=true]) .lesson-actions .disabled-reason{order:3;flex:0 0 100%;max-width:none;text-align:center}
 #main-content.pilot-game .neck-panel .neck-viewport{justify-self:center}
@@ -1283,7 +1283,7 @@
 #main-content.pilot-game.is-name .game-body>.answer-workspace{max-height:460px;align-self:start}
 .instruction-page:has(svg[data-neck-scroll=true]) .instruction-visual{overflow:visible;cursor:default}
 .lesson-neck-frame{width:100%;min-width:0;position:relative}
-.lesson-neck-scroll{overflow-x:auto;overflow-y:hidden;width:100%;min-width:0;min-height:240px;touch-action:pan-x pan-y;cursor:grab;scrollbar-width:auto}
+.lesson-neck-scroll{overflow-x:auto;overflow-y:hidden;width:100%;min-width:0;min-height:180px;touch-action:pan-x pan-y;cursor:grab;scrollbar-width:auto}
 .lesson-neck-frame{min-width:0;width:100%}
 .lesson-neck-scroll>.shared-neck{margin-inline:auto}
 .lesson-neck-frame:has(.lesson-neck-scroll:not([data-scroll-end=true]))::after{content:'';position:absolute;right:0;top:0;bottom:16px;width:20px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--bg))}

@@ -52,3 +52,6 @@
 :root[data-theme=dark]{--wood:#594330;--neck-grain-opacity:.11;--neck-highlight:.08;--neck-shadow:.24}
 
 :root,:root[data-theme=dark]{--neck-inlay:#645035}
+
+/* Shared launch gradients follow the action palette. */
+:root{--launch-arcade-fill:linear-gradient(90deg,var(--button_gradient_top_color),var(--button_gradient_bottom_color));--launch-course-fill:linear-gradient(90deg,var(--button-hover-top),var(--button-hover-bottom))}

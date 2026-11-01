@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {neckGeometry,scrollingNeckGeometry,makeProfile,fretDistance} from '../core.js';
-import {neckBase} from '../neck-view.js';
+import {neckBase,miniatureNeck} from '../neck-view.js';
 import {arcadeZoneWindow,arcadeBonus,newArcadeRun,resolveArcade} from '../arcade-rules.js';
 import {resetInstrumentProgress} from '../reset-progress.js';
 import {initialPilotStore} from '../pilot.js';
@@ -43,4 +43,21 @@ test('Resetting one tuning preserves the other tuning of the same instrument',()
  assert.ok(next.profiles[standard.key]);assert.equal(next.profiles[drop.key],undefined);
  assert.deepEqual(store,before);
  assert.throws(()=>resetInstrumentProgress(store,'guitar6',makeProfile('bass4').key));
+});
+
+test('A neck starting beyond the nut fades in at the first visible fret',()=>{
+ const g=neckGeometry(6,8,648,{lesson:true,startFret:4});
+ const svg=neckBase(makeProfile('guitar6'),{g,id:'zone'});
+ assert.ok(svg.includes(`gradientUnits="userSpaceOnUse" x1="${g.nut}"`));
+ assert.ok(svg.includes('mask="url(#zone-left-mask)"'));
+ assert.ok(!svg.includes('neck-fret neck-nut'));
+});
+test('String mini-lessons use an intrinsic compact width rather than the window width',()=>{
+ for(const end of [12,24]){
+  const svg=miniatureNeck(makeProfile('guitar6'),{lesson:true,lastFret:end});
+  const width=Number(svg.match(/viewBox="0 0 ([\d.]+)/)[1]);
+  assert.ok(width>300&&width<620);
+  assert.ok(svg.includes('data-neck-height="180"'));
+  assert.ok(svg.includes('data-neck-available="0"'));
+ }
 });

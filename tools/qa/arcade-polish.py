@@ -24,6 +24,10 @@ with sync_playwright() as p:
  q.set_viewport_size({'width':390,'height':844});q.clock.run_for(100)
  stable=q.evaluate('''()=>{const c=qaController,el=c.host.root.querySelector('.arcade-neck'),g=c.neckGeometryFor(qaSvg);c.target={string:0,fret:0,midi:40};c.serial++;c.layout();el.scrollLeft=0;const before=el.scrollLeft;c.target={string:0,fret:4,midi:44};qaSvg.querySelector('.neck-point').setAttribute('cx',g.centers[4]);c.serial++;c.layout();return {before,after:el.scrollLeft};}''')
  q.clock.run_for(120);assert q.evaluate('qaController.host.root.querySelector(".arcade-neck").scrollLeft')==stable['before']
+ # Crossing to zone 4–8 then returning to shared fret 4 must retain that second zone.
+ q.evaluate('''()=>{const c=qaController;c.target.fret=5;c.serial++;c.layout();}''');q.clock.run_for(120)
+ shared=q.evaluate('''()=>{const c=qaController,el=c.host.root.querySelector('.arcade-neck'),before=el.scrollLeft;c.target.fret=4;c.serial++;c.layout();return {before,zone:c.neckZone};}''');q.clock.run_for(120)
+ assert shared['zone']=='4:8' and q.evaluate('qaController.host.root.querySelector(".arcade-neck").scrollLeft')==shared['before'],shared
  q.evaluate('''()=>{qaController.leave();qaController.host.root.remove();}''')
  # Render an actual result with useful per-position facts and check number-first rows.
  q.evaluate('''async()=>{const {responseTimeMap}=await import('./progress.js'),{makeProfile}=await import('./core.js');const c=new (await import('./arcade-ui.js')).ArcadeController({getState:()=>({profile:makeProfile('guitar6')}),storageError:()=>false});c.run=(await import('./arcade-rules.js')).newArcadeRun('zones-natural');c.run.questions=3;c.run.timeouts=3;c.phase='result';const root=document.createElement('div');root.id='qa-result';root.innerHTML=c.result();document.querySelector('main').append(root);const map=document.createElement('div');map.innerHTML=responseTimeMap(makeProfile('guitar6'),{'0:0':{total:3,correct:2,timeSum:1000,timeMin:400,timeMax:600,errors:1,timeouts:0},'0:1':{total:1,correct:1,timeSum:2250},'0:2':{total:1,correct:1,timeSum:4000}},'latin',{meanMs:1500});root.append(map);}''')
