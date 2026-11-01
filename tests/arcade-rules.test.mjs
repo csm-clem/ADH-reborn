@@ -20,8 +20,8 @@ test('Arcade timer decreases in exact 10ms steps and stops at 500ms', () => {
 test('Bonus points advance difficulty, while timer counts every resolved question', () => {
   const r = newArcadeRun('zones-natural');
   for (let i = 0; i < 100; i++) resolveArcade(r, target, 'correct', 200);
-  assert.equal(r.score, 14500); assert.equal(r.stage, 14);
-  assert.equal(r.lives, 6); assert.equal(r.combos, 10); assert.equal(r.longest, 100);
+  assert.equal(r.score, 14550); assert.equal(r.stage, 14);
+  assert.equal(r.lives, 6); assert.equal(r.combos, 11); assert.equal(r.longest, 100);
   resolveArcade(r, target, 'wrong', 100);
   assert.equal(r.streak, 0); assert.equal(r.lives, 5);
   resolveArcade(r, target, 'correct', 200);
@@ -37,7 +37,7 @@ test('A failed combo can be earned again, with lives beyond the initial three', 
     for (let i = 0; i < 50; i++) resolveArcade(r, target, 'correct', 100);
     assert.equal(r.lives, 4); resolveArcade(r, target, 'wrong', 100);
   }
-  assert.equal(r.combos, 15); assert.equal(r.earnedLives, 3); assert.equal(r.longest, 50);
+  assert.equal(r.combos, 18); assert.equal(r.earnedLives, 3); assert.equal(r.longest, 50);
 });
 
 test('Completed records survive backup validation without changing learning evidence', () => {
@@ -95,6 +95,7 @@ test('All requested combo milestones award their exact points and lives', () => 
     points: value, lives: i === 4 ? 1 : i === 9 ? 2 : 0,
   }));
   for (const streak of [0, 1, 9, 11, 99, 101, 119]) assert.deepEqual(arcadeBonus(streak), { points: 0, lives: 0 });
+  assert.deepEqual(arcadeBonus(5), {points:50,lives:0});
   assert.deepEqual(arcadeBonus(200), { points: 1000, lives: 0 });
 });
 

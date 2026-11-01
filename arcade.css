@@ -12,8 +12,8 @@
 .arcade-playfield.is-paused{visibility:hidden}
 .arcade-neck-frame{position:relative;width:100%;height:clamp(85px,19dvh,180px)}
 .arcade-neck{width:100%;height:100%;overflow:hidden;scrollbar-width:none}
-.arcade-neck svg{display:block;max-width:none;flex:none}
-.arcade-neck-fade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--bg),transparent 6%,transparent 94%,var(--bg))}
+.arcade-neck svg{display:block;max-width:none;flex:none;margin-inline:auto}
+.arcade-neck-fade{position:absolute;inset:0;pointer-events:none}.arcade-neck-fade::before,.arcade-neck-fade::after{content:"";position:absolute;top:0;bottom:0;width:6%}.arcade-neck-fade::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}.arcade-neck-fade::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}.arcade-neck-frame[data-at-start=true] .arcade-neck-fade::before,.arcade-neck-frame[data-at-end=true] .arcade-neck-fade::after{opacity:0}
 .arcade-feedback{margin:0;min-height:24px;font-size:.9rem;text-align:center}
 .arcade-response{width:100%;display:flex;justify-content:center;flex:1;align-items:center;--wheel-size:clamp(218px,37dvh,360px)}
 .arcade-response .answer-wheel{width:min(100%,var(--wheel-size));height:auto;aspect-ratio:1}
@@ -21,12 +21,14 @@
 .arcade-bonus span{font-size:.65em;white-space:nowrap}.arcade-record{color:var(--success);font-weight:700}
 @keyframes arcade-bonus-rise{0%{transform:translate(-50%,15px) scale(.8);opacity:0}15%{opacity:1;transform:translate(-50%,0) scale(1.1)}65%{opacity:1}100%{transform:translate(-50%,-65px) scale(1);opacity:0}}
 .arcade-pause{position:absolute;inset:170px 0 0;z-index:20;display:grid;place-items:center;padding:20px;pointer-events:none}.arcade-pause .panel{display:grid;gap:12px;max-width:420px;width:100%;pointer-events:auto}
-.arcade-ready{min-height:100dvh;display:grid;place-items:center;text-align:center;padding:24px}.arcade-ready h1{animation:launch-opacity 1s ease-in-out both}
+
 .response-time-map .progress-cell>summary{background:var(--response-color,var(--surface-soft));color:var(--response-color-ink,var(--ink))}
-.response-time-map .progress-cell[style]>summary{--response-color-ink:#fff}
+.response-time-map .progress-cell[style]>summary{--response-color-ink:#12202b}
 .response-time-map .progress-cell>summary strong,.response-time-map .progress-cell>summary span{color:inherit}
 @media(prefers-reduced-motion:reduce){.arcade-ready h1{animation:none}}
-.arcade-results{max-width:780px;margin:0 auto;padding:24px 16px}.arcade-results h1{font-size:clamp(40px,9vw,76px);margin-block:12px}.arcade-results h1 small{font-size:.35em}.arcade-stats{display:grid;grid-template-columns:1fr auto;gap:10px 20px}.arcade-stats dd{margin:0;font-weight:700;text-align:right}.arcade-results .button-row{flex-wrap:wrap}
+.arcade-results{max-width:780px;margin:0 auto;padding:24px 16px}.arcade-results h1{font-size:clamp(40px,9vw,76px);margin-block:12px}.arcade-results h1 small{font-size:.35em}.arcade-stats{display:grid;gap:10px}.arcade-stats>div{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:16px;align-items:baseline}.arcade-stats dt{grid-column:2;grid-row:1}.arcade-stats dd{grid-column:1;grid-row:1;margin:0;font-weight:700;text-align:right}.arcade-results .button-row{flex-wrap:wrap}
 @media(orientation:landscape) and (max-height:550px){.arcade-game{gap:3px;padding:4px 16px}.arcade-game .game-header{min-height:44px}.arcade-hud strong{font-size:1.1rem}.arcade-neck-frame{height:70px}.arcade-feedback{font-size:.8rem;min-height:20px}.arcade-response{--wheel-size:218px}.arcade-scope{font-size:.7rem}.arcade-pause{inset:125px 0 0}}
 @media(max-width:400px){.arcade-game{padding:8px}.arcade-game .game-header>strong{font-size:.8rem}.arcade-hud{gap:2px 8px;font-size:.75rem}}
 @media(prefers-reduced-motion:reduce){.arcade-bonus{animation:arcade-bonus-still 1400ms linear both}@keyframes arcade-bonus-still{0%,85%{transform:translateX(-50%);opacity:1}100%{transform:translateX(-50%);opacity:0}}}
+
+.response-time-map .progress-selection[hidden]{display:none}

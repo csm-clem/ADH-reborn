@@ -111,6 +111,21 @@
       "id": "immigrant-six-bars-update-copy-20261101",
       "type": "bug",
       "text": "Immigrant Song reprend les six mesures demandées et les appels vocaux corrigés ; retrait de la phrase superflue avant le téléchargement d’une mise à jour."
+    },
+    {
+      "id": "arcade-realistic-frets-fixed-zones-20261101",
+      "type": "bug",
+      "text": "Le manche Arcade respecte les proportions du frettage, sans étirement sur laptop, et conserve son cadrage au sein d’une même zone ; la case à vide est réduite et les cordes commencent au sillet dans les deux modes."
+    },
+    {
+      "id": "arcade-launch-five-combo-results-20261101",
+      "type": "improvement",
+      "text": "Préparation identique au Parcours, bonus de 50 points à cinq notes, résultats avec valeurs en premier et carte du manche plus vive, avec détails utiles par emplacement."
+    },
+    {
+      "id": "immigrant-four-bars-tuning-reset-20261101",
+      "type": "improvement",
+      "text": "Immigrant Song est limité à quatre mesures et un appel vocal, avec moins de sauts d’octave dans le riff. La remise à zéro peut cibler un accordage précis."
     }
   ]
 }

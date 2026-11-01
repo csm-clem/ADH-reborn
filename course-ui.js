@@ -248,7 +248,7 @@ export class CourseController {
             : feature === "cell"
               ? `<rect x="${g.frets[exampleFret - 1]}" y="2" width="${g.frets[exampleFret] - g.frets[exampleFret - 1]}" height="${g.height - 10}"/>`
               : feature === "string"
-                ? `<path d="M${g.openStart} ${g.ys[page.variant % 2 ? this.profile.tuning.length - 1 : 0]}H${g.width}"/>`
+                ? `<path d="M${g.nut} ${g.ys[page.variant % 2 ? this.profile.tuning.length - 1 : 0]}H${g.width}"/>`
                 : `<path d="M${feature === "nut" ? g.nut : g.frets[exampleFret]} 2V${g.height - 8}"/>`;
         return (
           photo +

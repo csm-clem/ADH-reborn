@@ -23,18 +23,20 @@ export function pitchLabel(midi, notation='international') {
 }
 export function frequency(midi) { return 440 * 2 ** ((midi - 69)/12); }
 export function fretDistance(fret,scale=648){return scale*(1-2**(-fret/12));}
-export const NECK_STYLE={openWidth:18,margin:16,fadeFraction:.5,endCap:6,inlayRadius:2.8,nutWidth:3.1,fretWidth:1.1};
+export const NECK_STYLE={openWidth:6,margin:16,fadeFraction:.5,endCap:6,inlayRadius:2.8,nutWidth:3.1,fretWidth:1.1};
 export function neckGeometry(strings,lastFret=4,scale=648,{gameplay=false,lesson=false,startFret=0,stringIndices=null,availableWidth=0,availableHeight=0,minTarget=44}={}){
   const visibleStrings=stringIndices||Array.from({length:strings},(_,i)=>i),visibleFrets=Array.from({length:lastFret-startFret+1},(_,i)=>i+startFret);
-  const openWidth=lesson?38*2/3:NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
+  const openWidth=NECK_STYLE.openWidth,margin=lesson?15:NECK_STYLE.margin;
   let neckWidth=visibleStrings.length===1?72:(52+(visibleStrings.length-6)*7)*(gameplay?1.65:1),height=neckWidth+14;const nut=margin+(startFret===0?openWidth:0);
   const offset=startFret?fretDistance(startFret-1,scale):0;
   let frets=Array.from({length:lastFret+2},(_,i)=>nut+fretDistance(i,scale)-offset),actualOpenWidth=openWidth;
   // Continuous long strings soften proportions only when necessary for non-overlapping targets.
   if(availableWidth>0&&visibleStrings.length===1){
-   const room=Math.max(1,availableWidth-margin-8),base=visibleFrets.map(f=>f===0?openWidth:frets[f]-frets[f-1]),floor=room>=base.length*minTarget?minTarget:0;
-   let widths=base.map(v=>v/base.reduce((a,b)=>a+b,0)*room);
-   if(floor){const fixed=new Set();for(let pass=0;pass<base.length;pass++){widths.forEach((v,i)=>{if(v<floor)fixed.add(i);});const remainder=room-fixed.size*floor,total=base.reduce((sum,v,i)=>sum+(fixed.has(i)?0:v),0);widths=base.map((v,i)=>fixed.has(i)?floor:total?v/total*remainder:floor);}}
+   const room=Math.max(1,availableWidth-margin-8),hasOpen=visibleFrets[0]===0,fretted=visibleFrets.filter(f=>f>0),remaining=Math.max(1,room-(hasOpen?openWidth:0));
+   const base=fretted.map(f=>frets[f]-frets[f-1]),floor=remaining>=base.length*minTarget?minTarget:0;
+   let fitted=base.map(v=>v/base.reduce((a,b)=>a+b,0)*remaining);
+   if(floor){const fixed=new Set();for(let pass=0;pass<base.length;pass++){fitted.forEach((v,i)=>{if(v<floor)fixed.add(i);});const rest=remaining-fixed.size*floor,total=base.reduce((sum,v,i)=>sum+(fixed.has(i)?0:v),0);fitted=base.map((v,i)=>fixed.has(i)?floor:total?v/total*rest:floor);}}
+   const widths=hasOpen?[openWidth,...fitted]:fitted;
    let x=margin;frets=Array.from({length:lastFret+2},()=>0);
    for(const [i,f]of visibleFrets.entries()){if(f===0){actualOpenWidth=widths[i];frets[0]=x+widths[i];}else{frets[f-1]=x;frets[f]=x+widths[i];}x+=widths[i];}frets[lastFret+1]=x+8;
   }
@@ -82,15 +84,16 @@ export function score(answers) {
 export function fitNeck(g,width,height){const scale=Math.max(.01,Math.min((width-2)/g.width,(height-2)/g.height));return {scale,width:g.width*scale,height:g.height*scale};}
 
 /** Screen-space fret geometry shared by continuous full-length exercises and courses. */
-export function scrollingNeckGeometry(strings,lastFret=24,{startFret=0,height=220,minFretWidth=40,availableWidth=0}={}){
+export function scrollingNeckGeometry(strings,lastFret=24,{startFret=0,height=220,minFretWidth=40,availableWidth=0,realistic=false}={}){
  const g=neckGeometry(strings,lastFret,648,{gameplay:true,startFret}),scale=Math.max(1,height)/g.height;
- const widths=g.visibleFrets.map(f=>Math.max(minFretWidth,(availableWidth-20-NECK_STYLE.endCap)/g.visibleFrets.length));
- let x=20;const frets=[...g.frets];
+ const openWidth=18,margin=realistic?20:26,physicalScale=1200;
+ const widths=g.visibleFrets.map(f=>f===0?openWidth:realistic?fretDistance(f,physicalScale)-fretDistance(f-1,physicalScale):Math.max(minFretWidth,(availableWidth-margin-openWidth-NECK_STYLE.endCap)/Math.max(1,g.visibleFrets.filter(f=>f>0).length)));
+ let x=margin;const frets=[...g.frets];
  for(const [i,f]of g.visibleFrets.entries()){if(f===0)frets[0]=x+widths[i];else{frets[f-1]=x;frets[f]=x+widths[i];}x+=widths[i];}
- frets[lastFret+1]=x+minFretWidth;
- const nut=startFret?20:frets[0],bounds=f=>f===0?[20,nut]:[frets[f-1],frets[f]],centers=[...g.centers],labelXs=[...g.labelXs];
+ const lastWidth=widths.at(-1);frets[lastFret+1]=x+lastWidth;
+ const nut=startFret?margin:frets[0],bounds=f=>f===0?[margin,nut]:[frets[f-1],frets[f]],centers=[...g.centers],labelXs=[...g.labelXs];
  for(const f of g.visibleFrets){const [a,b]=bounds(f);centers[f]=a+(b-a)*2/3;labelXs[f]=a+(b-a)/3;}
- return {...g,visualScale:scale,height,frets,nut,openStart:20,openWidth:widths[0],bounds,centers,labelXs,ys:g.ys.map(y=>y*scale),width:x+(g.terminal?NECK_STYLE.endCap:minFretWidth*.5),fadeStart:g.terminal?x+NECK_STYLE.endCap:x,inlays:g.inlays.filter(p=>p.fret<=lastFret).map(p=>({...p,x:(frets[p.fret-1]+frets[p.fret])/2,y:p.y*scale}))};
+ return {...g,realistic,visualScale:scale,height,frets,nut,openStart:margin,openWidth:openWidth,bounds,centers,labelXs,ys:g.ys.map(y=>y*scale),width:x+(g.terminal?NECK_STYLE.endCap:lastWidth*.5),fadeStart:g.terminal?x+NECK_STYLE.endCap:x,inlays:g.inlays.filter(p=>p.fret<=lastFret).map(p=>({...p,x:(frets[p.fret-1]+frets[p.fret])/2,y:p.y*scale}))};
 }
 
 /** Hit regions use the same scale and outer margins as the drawing. */

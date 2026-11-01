@@ -101,7 +101,7 @@ export function progressView(
 }
 
 /** Shared position map for learning progress and Arcade response-time results. */
-export function positionMap(profile,cells,notation,{frets,strings,label={},symbol={}}){
+export function positionMap(profile,cells,notation,{frets,strings,label={},symbol={},selectionPrompt='Choisissez une note sur la carte.'}){
  return `<div class="progress-map-frame"><div class="progress-map" role="region" aria-label="Carte du manche, défilement horizontal" tabindex="0"><table><caption class="visually-hidden">Toutes les notes, corde 1 en haut, à vide jusqu’à la case 24.</caption><thead><tr><th scope="col">Corde</th>${frets.map((f) => `<th scope="col">${f || "À vide"}</th>`).join("")}</tr></thead><tbody>${strings
     .slice()
     .reverse()
@@ -116,20 +116,20 @@ export function positionMap(profile,cells,notation,{frets,strings,label={},symbo
     )
     .join(
       "",
-    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite">Choisissez une note sur la carte.</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script>`;
+    )}</tbody></table></div><span class="progress-edge-fade" aria-hidden="true"></span></div><label class="visually-hidden" for="progress-scroll">Faire défiler le manche</label><input id="progress-scroll" class="progress-scrollbar" type="range" min="0" max="1000" step="1" value="0" aria-label="Faire défiler le manche de l’à-vide à la case 24"><div class="progress-selection" role="status" aria-live="polite" ${selectionPrompt?'':'hidden'}>${selectionPrompt}</div><script type="application/json" class="progress-cell-data">${JSON.stringify(cells.map((p) => ({ ...p, label: pitchLabel(p.midi, notation) }))).replace(/</g, "\\u003c")}</script>`;
 }
 export function responseTimeColor(ms){
  if(ms===null)return null;
  const t=Math.max(0,Math.min(1,(ms-500)/3500));
- return `hsl(${Math.round(120*(1-t))} 72% 26%)`;
+ return `hsl(${Math.round(120*(1-t))} 90% 64%)`;
 }
-export function responseTimeMap(profile,positions,notation='international'){
+export function responseTimeMap(profile,positions,notation='international',{meanMs:runMean=null}={}){
  const frets=Array.from({length:25},(_,i)=>i),strings=profile.tuning.map((_,i)=>i);
  const cells=strings.flatMap(string=>frets.map(fret=>{
   const p=positions[`${string}:${fret}`],meanMs=p?.correct&&Number.isFinite(p.timeSum)?p.timeSum/p.correct:null;
-  return {string,fret,midi:profile.tuning[string]+fret,status:'new',total:p?.total||0,correct:p?.correct||0,meanMs,label:pitchLabel(profile.tuning[string]+fret,notation)};
+  return {string,fret,midi:profile.tuning[string]+fret,status:'new',total:p?.total||0,correct:p?.correct||0,meanMs,timeMin:p?.timeMin??null,timeMax:p?.timeMax??null,errors:p?.errors??null,timeouts:p?.timeouts??null,delta:meanMs!==null&&runMean!==null?meanMs-runMean:null,label:pitchLabel(profile.tuning[string]+fret,notation)};
  }));
- return `<section class="progress-overview response-time-map"><h3>Temps de réponse sur le manche</h3><p>Moyenne des bonnes réponses : vert intense à 0,5 s ou moins, rouge à 4 s. Gris : aucun temps disponible. Touchez une note pour voir son détail.</p>${positionMap(profile,cells,notation,{frets,strings})}</section>`;
+ return `<section class="progress-overview response-time-map"><h3>Temps moyen sur le manche</h3>${positionMap(profile,cells,notation,{frets,strings,selectionPrompt:''})}</section>`;
 }
 
 export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){
@@ -198,7 +198,9 @@ export function bindProgress(root) {
         );
       if (!p) return;
       if(p.meanMs!==undefined){
-       panel.querySelector('.progress-selection').innerHTML=`<strong>${esc(p.label)} · corde ${data.reduce((n,v)=>Math.max(n,v.string+1),0)-p.string} · ${p.fret?'case '+p.fret:'à vide'}</strong><span>Temps moyen : ${p.meanMs===null?'aucun temps disponible':(p.meanMs/1000).toLocaleString('fr-FR',{maximumFractionDigits:3})+' s'}</span><span>${p.correct} bonnes réponses sur ${p.total}</span>`;
+       const selected=panel.querySelector('.progress-selection');selected.hidden=false;
+       const time=v=>v===null?'—':(v/1000).toLocaleString('fr-FR',{maximumFractionDigits:3})+' s';
+       selected.innerHTML=`<strong>${esc(p.label)} · corde ${data.reduce((n,v)=>Math.max(n,v.string+1),0)-p.string} · ${p.fret?'case '+p.fret:'à vide'}</strong><span>Précision : ${p.total?Math.round(p.correct/p.total*100)+' % ('+p.correct+'/'+p.total+')':'pas encore essayé'}</span><span>${p.errors===null||p.timeouts===null?'Erreurs ou délais : '+(p.total-p.correct):'Erreurs : '+esc(p.errors)+' · Délais dépassés : '+esc(p.timeouts)}</span><span>Plus rapide : ${time(p.timeMin)} · Plus lent : ${time(p.timeMax)}</span>${p.delta!==null?`<span>${Math.abs(p.delta)<1?'Même rythme que la moyenne de la partie':time(Math.abs(p.delta))+' '+(p.delta<0?'plus rapide':'plus lent')+' que la moyenne de la partie'}</span>`:''}`;
        return;
       }
       panel.querySelector(".progress-selection").innerHTML =

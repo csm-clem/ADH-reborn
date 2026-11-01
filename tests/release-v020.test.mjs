@@ -13,8 +13,8 @@ test('Cumulative capstone titles follow natural completion for each actual tunin
   assert.ok(plan.natural.every(p=>acts.find(m=>m.id==='mix-'+naturalEnd).pool.some(q=>q.midi===p.midi&&q.string===p.string&&q.fret===p.fret)));
  }
 });
-test('Only new-exercise diagrams shorten the open-string slot by a third',()=>{
- for(const n of [4,5,6,7,8]){assert.equal(neckGeometry(n,4,648,{lesson:true}).openWidth,38*2/3);assert.equal(neckGeometry(n,4).openWidth,18);assert.equal(neckGeometry(n,4,648,{gameplay:true}).openWidth,18);}
+test('Open-string slots remain narrow in every short shared view',()=>{
+ for(const n of [4,5,6,7,8]){assert.equal(neckGeometry(n,4,648,{lesson:true}).openWidth,6);assert.equal(neckGeometry(n,4).openWidth,6);assert.equal(neckGeometry(n,4,648,{gameplay:true}).openWidth,6);}
 });
 test('Bug configuration excludes destination, history and browser fingerprint',()=>{
  const c=bugConfiguration({release:'0.22.0',profile:makeProfile('guitar6'),theme:'dark',viewport:[375,812],standalone:true});assert.equal(c.release,'0.22.0');assert.equal(c.viewport,'375 × 812');assert.equal(c.standalone,'oui');assert.deepEqual(Object.keys(c).sort(),['instrument','release','standalone','theme','tuning','viewport']);

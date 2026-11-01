@@ -92,3 +92,29 @@ va de vert intense pour 500 ms ou moins à rouge pour 4 000 ms ou plus ; gris
 signifie qu'aucun temps n'est disponible. Les records antérieurs sans total
 chronométré par emplacement restent lisibles et ne reçoivent pas une moyenne
 inventée.
+
+
+## Ajustements suivants — 1er novembre 2026
+
+La préparation réutilise maintenant les classes launch-screen/launch-message du
+Parcours : même fond uni, grand texte et zoom arrière. La caméra conserve une
+fenêtre par zone (0–4 puis 4–8, etc.), avec les frontières rattachées à la zone
+inférieure. La géométrie Arcade utilise la distance au sillet L × (1 − 2^(−n/12)),
+sans agrandir les cases pour occuper la largeur du laptop. Les cibles à vide
+restent à gauche du sillet ; les cordes dessinées partent du sillet.
+
+Un bonus supplémentaire de 50 points est accordé à cinq réponses consécutives.
+Il s'ajoute aux bonus existants : 100 succès donnent désormais 14 550 points et
+11 combos. Les anciens records restent conservés. Le résultat affiche les
+valeurs avant les intitulés, et « Notes d’affilée (record) » remplace le libellé
+ambigu du plus long combo.
+
+La carte temporelle utilise des fonds saturés clairs et une encre sombre.
+Le détail d'une position montre précision, erreurs et délais, temps le plus
+rapide/le plus lent et écart à la moyenne de la partie. Les phrases explicatives
+retirées à la demande du joueur ne sont plus affichées.
+
+La remise à zéro permet de sélectionner un accordage précis ; l'option Tous
+les accordages reste disponible. La confirmation nomme la portée sélectionnée.
+Immigrant Song passe à quatre mesures : moins de sauts à l'octave dans le riff,
+une seule exposition de l'appel vocal, dont les hauteurs restent inchangées.

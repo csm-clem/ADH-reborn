@@ -23,18 +23,19 @@ with sync_playwright() as p:
  q.screenshot(path=str(out/'pause-hud.png'),full_page=True)
  q.locator('[data-arcade-action=resume]').click()
  q.wait_for_timeout(100)
- note=q.evaluate('''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg'),g=scrollingNeckGeometry(6,24,{height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth}),p=svg.querySelector('.neck-point');const nearest=(a,n)=>a.reduce((best,v,i)=>Math.abs(v-n)<Math.abs(a[best]-n)?i:best,0);return ([40,45,50,55,59,64][nearest(g.ys,+p.getAttribute('cy'))]+nearest(g.centers,+p.getAttribute('cx')))%12;}''')
+ note=q.evaluate('''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg'),g=scrollingNeckGeometry(6,24,{height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth,realistic:svg.dataset.neckRealistic==='true'}),p=svg.querySelector('.neck-point');const nearest=(a,n)=>a.reduce((best,v,i)=>Math.abs(v-n)<Math.abs(a[best]-n)?i:best,0);return ([40,45,50,55,59,64][nearest(g.ys,+p.getAttribute('cy'))]+nearest(g.centers,+p.getAttribute('cx')))%12;}''')
  q.locator(f'[data-arcade-answer="{note}"]').click()
  assert q.evaluate('qaNeck===document.querySelector(".arcade-neck svg")')
  # Force a distant target only in a separately instantiated test controller, then verify intermediate scroll.
- scroll=q.evaluate('''async()=>{const {ArcadeController}=await import('./arcade-ui.js');const root=document.createElement('div');document.body.append(root);let c;const host={root,getState:()=>({profile:{tuning:[40,45,50,55,59,64]},sound:false}),render:()=>{root.innerHTML=c.render();},getData:()=>({}),icon:()=>'',playNote(){},playBonus(){}};c=new ArcadeController(host);c.run=(await import('./arcade-rules.js')).newArcadeRun('strings-natural');c.phase='question';c.target={string:0,fret:0,midi:40};c.serial=1;host.render();c.layout();const el=root.querySelector('.arcade-neck');const point=el.querySelector('.neck-point'),g=(await import('./core.js')).scrollingNeckGeometry(6,24,{height:+el.querySelector('svg').dataset.neckHeight,minFretWidth:+el.querySelector('svg').dataset.neckMinWidth});point.setAttribute('cx',g.centers[22]);c.target={string:0,fret:22,midi:62};c.serial++;c.layout();await new Promise(r=>setTimeout(r,35));const mid=el.scrollLeft;await new Promise(r=>setTimeout(r,90));const end=el.scrollLeft;c.leave();root.remove();return {mid,end};}''')
+ scroll=q.evaluate('''async()=>{const {ArcadeController}=await import('./arcade-ui.js');const root=document.createElement('div');document.body.append(root);let c;const host={root,getState:()=>({profile:{tuning:[40,45,50,55,59,64]},sound:false}),render:()=>{root.innerHTML=c.render();},getData:()=>({}),icon:()=>'',playNote(){},playBonus(){}};c=new ArcadeController(host);c.run=(await import('./arcade-rules.js')).newArcadeRun('strings-natural');c.phase='question';c.target={string:0,fret:0,midi:40};c.serial=1;host.render();c.layout();const el=root.querySelector('.arcade-neck');const point=el.querySelector('.neck-point'),g=(await import('./core.js')).scrollingNeckGeometry(6,24,{height:+el.querySelector('svg').dataset.neckHeight,minFretWidth:+el.querySelector('svg').dataset.neckMinWidth,realistic:true});point.setAttribute('cx',g.centers[22]);c.target={string:0,fret:22,midi:62};c.serial++;c.layout();await new Promise(r=>setTimeout(r,35));const mid=el.scrollLeft;await new Promise(r=>setTimeout(r,90));const end=el.scrollLeft;c.leave();root.remove();return {mid,end};}''')
  assert 0<scroll['mid']<scroll['end'],scroll
  q.locator('[data-arcade-action=menu]').click()
  q.locator('.mobile-nav [data-action=settings]').click()
  assert q.locator('#reset-instrument').count()==1
+ q.locator('#reset-tuning').select_option('all')
  q.locator('[data-action=reset-instrument]').click()
  dialog=q.locator('.reset-progress-dialog');assert dialog.locator('[data-reset-confirm]').is_disabled()
- assert 'irréversible' in dialog.inner_text() and 'tous les accordages' in dialog.inner_text()
+ assert 'irréversible' in dialog.inner_text() and 'tous les accordages' in dialog.inner_text().lower()
  dialog.locator('[data-reset-cancel]').click()
  current=q.evaluate('''async()=>JSON.parse(localStorage.getItem((await import('./release.js')).PILOT_KEY))''')
  assert len(current['profiles'])==3

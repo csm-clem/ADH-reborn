@@ -35,8 +35,8 @@ export function rewardFor(melody){
 
  const hasHarmony=melody.id==='immigrant-song';if(hasHarmony){
   const riff=events.slice();
-  for(let repeat=1;repeat<3;repeat++)events.push(...riff.map(e=>({...e,start:e.start+repeat*8})));
-  events.push(...IMMIGRANT_VOCAL);events.sort((a,b)=>a.start-b.start);beat=24;
+  for(let repeat=1;repeat<2;repeat++)events.push(...riff.map(e=>({...e,start:e.start+repeat*8})));
+  events.push(...IMMIGRANT_VOCAL.filter(e=>e.start<15));events.sort((a,b)=>a.start-b.start);beat=16;
  }
- return {title:melody.title,section:hasHarmony?'Six mesures : riff et deux appels vocaux, sans la note de « We »':p.section,events,totalBeats:beat,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony,completePhrase:isCompletePhrase(melody.id)};
+ return {title:melody.title,section:hasHarmony?'Quatre mesures : riff et un seul appel vocal':p.section,events,totalBeats:beat,step:p.step,durationMs:Math.ceil((beat*p.step+1)*1000),registerShift:shift,hasHarmony,completePhrase:isCompletePhrase(melody.id)};
 }

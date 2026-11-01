@@ -15,6 +15,7 @@ export function arcadeDuration(steps) {
 /** A reward is emitted once on reaching an exact streak milestone. */
 export function arcadeBonus(streak) {
   if (!Number.isSafeInteger(streak) || streak < 0) throw new RangeError('Invalid streak');
+  if (streak === 5) return { points: 50, lives: 0 };
   if (!streak || streak % 10) return { points: 0, lives: 0 };
   if (streak < 50) return { points: streak * 10, lives: 0 };
   if (streak === 50) return { points: 500, lives: 1 };
@@ -75,12 +76,12 @@ export function resolveArcade(run, target, outcome, ms) {
   if (!['correct', 'wrong', 'timeout'].includes(outcome) || !Number.isFinite(ms) || ms < 0) throw new RangeError('Invalid resolution');
   const correct = outcome === 'correct';
   const key = `${target.string}:${target.fret}`;
-  const position = run.positions[key] ||= { total: 0, correct: 0 };
+  const position = run.positions[key] ||= { total: 0, correct: 0, errors: 0, timeouts: 0, timeSum: 0 };
   position.total++;
   run.questions++;
   let bonus = { points: 0, lives: 0 };
   if (correct) {
-    position.correct++; position.timeSum = (position.timeSum || 0) + ms; run.correct++; run.streak++;
+    position.correct++; position.timeMin = position.timeMin===undefined?ms:Math.min(position.timeMin,ms); position.timeMax = position.timeMax===undefined?ms:Math.max(position.timeMax,ms); position.timeSum = (position.timeSum || 0) + ms; run.correct++; run.streak++;
     run.longest = Math.max(run.longest, run.streak);
     bonus = arcadeBonus(run.streak);
     if (bonus.points) run.combos++;
@@ -91,6 +92,7 @@ export function resolveArcade(run, target, outcome, ms) {
     run.timeMin = run.timeMin === null ? ms : Math.min(run.timeMin, ms);
     run.timeMax = run.timeMax === null ? ms : Math.max(run.timeMax, ms);
   } else {
+    position[outcome === 'timeout' ? 'timeouts' : 'errors']=(position[outcome === 'timeout' ? 'timeouts' : 'errors']||0)+1;
     run[outcome === 'timeout' ? 'timeouts' : 'errors']++;
     run.lives--; run.streak = 0;
   }
@@ -107,13 +109,16 @@ export function validateArcadeRecords(value, profile) {
     if (!ARCADE_MODES.includes(mode) || !r || r.rules !== ARCADE_RULESET || r.mode !== mode || r.finished !== true ||
       !['questions','correct','errors','timeouts','score','bonusPoints','lives','earnedLives','streak','longest','combos','stage','at'].every(integer) ||
       r.questions !== r.correct + r.errors + r.timeouts || r.score !== r.correct * 100 + r.bonusPoints ||
-      r.lives !== 0 || r.errors + r.timeouts !== 3 + r.earnedLives || r.longest > r.correct || r.combos > Math.floor(r.correct / 10) ||
+      r.lives !== 0 || r.errors + r.timeouts !== 3 + r.earnedLives || r.longest > r.correct || r.combos > Math.floor(r.correct / 5) ||
       r.stage !== Math.floor(r.score / 1000) || !Number.isFinite(r.timeSum) || r.timeSum < 0 ||
       ![r.timeMin, r.timeMax].every(n => n === null || Number.isFinite(n) && n >= 0) ||
       !r.positions || typeof r.positions !== 'object' || Array.isArray(r.positions) || Object.keys(r.positions).length > profile.tuning.length * 25) throw new Error('Record Arcade invalide.');
     let total = 0, correct = 0;
     for (const [key, p] of Object.entries(r.positions)) {
       const [s, f] = key.split(':').map(Number);
+      for(const field of ['errors','timeouts'])if(p?.[field]!==undefined&&(!Number.isSafeInteger(p[field])||p[field]<0||p[field]>p.total-p.correct))throw new Error('Erreur Arcade invalide.');
+      for(const field of ['timeMin','timeMax'])if(p?.[field]!==undefined&&(!Number.isFinite(p[field])||p[field]<0))throw new Error('Temps Arcade invalide.');
+      if(p?.timeMin!==undefined&&p?.timeMax!==undefined&&p.timeMin>p.timeMax)throw new Error('Temps Arcade incohérents.');
       if (p?.timeSum !== undefined && (!Number.isFinite(p.timeSum) || p.timeSum < 0)) throw new Error('Temps Arcade invalide.');
       if (!/^\d:\d{1,2}$/.test(key) || s >= profile.tuning.length || f > 24 || !p || !Number.isSafeInteger(p.total) || !Number.isSafeInteger(p.correct) || p.correct < 0 || p.total < p.correct) throw new Error('Position Arcade invalide.');
       total += p.total; correct += p.correct;
@@ -121,4 +126,10 @@ export function validateArcadeRecords(value, profile) {
     if (total !== r.questions || correct !== r.correct) throw new Error('Statistiques Arcade invalides.');
   }
   return value;
+}
+
+/** Shared boundaries belong to the lower zone: 0 and 4 share the first frame. */
+export function arcadeZoneWindow(fret,current=null){
+ if(current&&fret>=current[0]&&fret<=current[1])return current;
+ const i=Math.min(5,Math.max(0,Math.ceil(fret/4)-1));return ARCADE_ZONES[i];
 }

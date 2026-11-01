@@ -187,7 +187,7 @@ test("The new zone diagrams have their actual fret numbers, no false nut, and a 
   });
   assert.deepEqual(g.visibleStrings, [0]);
   assert.ok(
-    g.visibleFrets.every((f) => g.bounds(f)[1] - g.bounds(f)[0] >= 44 - 1e-9),
+    g.visibleFrets.filter(f=>f>0).every((f) => g.bounds(f)[1] - g.bounds(f)[0] >= 44 - 1e-9),
   );
   for (let f = 1; f <= 12; f++)
     assert.ok(g.bounds(f)[0] >= g.bounds(f - 1)[1] - 1e-9);

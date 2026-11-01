@@ -57,6 +57,7 @@ jobs:
           python tools/qa/round-wheel-v039.py
           python tools/qa/arcade.py
           python tools/qa/ux-fixes.py
+          python tools/qa/arcade-polish.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production
@@ -77,5 +78,6 @@ jobs:
             work/neck-settings-v039
             work/arcade
             work/ux-fixes
+            work/arcade-polish
             work/sandbox
             /tmp/dft-server.log

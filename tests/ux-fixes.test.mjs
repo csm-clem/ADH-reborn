@@ -32,13 +32,13 @@ test('Response-time heatmap uses per-position means and leaves legacy/unknown me
  assert.equal((html.match(/data-progress-fret=/g)||[]).length,150);
  assert.equal((html.match(/style="--response-color:/g)||[]).length,1);
 });
-test('Immigrant Song follows the six supplied measures, ties and rests, without the final We vocal',()=>{
+test('Immigrant Song uses four bars, fewer octave jumps and one vocal call',()=>{
  const melody=melodyById('immigrant-song'),r=rewardFor(melody),v=r.events.filter(e=>e.voice==='guitar-clean'),g=r.events.filter(e=>e.velocity===1);
- assert.equal(r.totalBeats,24);assert.equal(g.length,72);
- assert.deepEqual(v.map(e=>[e.midi,e.start,e.beats]),[[66,7,.5],[73,7.5,.5],[72,8,4],[73,12,1.5],[66,15,.5],[73,15.5,.5],[72,16,4],[73,20,1.5]]);
- assert.deepEqual(g.slice(0,6).map(e=>[e.midi,e.start,e.beats]),[[42,0,.5],[42,.5,.25],[42,.75,.25],[54,1,.25],[42,1.25,.5],[54,1.75,.25]]);
- assert.equal(Math.max(...g.map(e=>e.start+e.beats)),24);
+ assert.equal(r.totalBeats,16);assert.equal(g.length,48);
+ assert.deepEqual(v.map(e=>[e.midi,e.start,e.beats]),[[66,7,.5],[73,7.5,.5],[72,8,4],[73,12,1.5]]);
+ assert.deepEqual(g.slice(0,6).map(e=>[e.midi,e.start,e.beats]),[[42,0,.5],[42,.5,.25],[42,.75,.25],[54,1,.25],[42,1.25,.5],[42,1.75,.25]]);
+ assert.equal(Math.max(...g.map(e=>e.start+e.beats)),16);
  assert.ok(v.every(e=>e.start<23.75));
- const svg=achievementArtwork({music:melody});assert.equal((svg.match(/class="midi-event"/g)||[]).length,80);
- assert.ok(r.events.every(e=>e.start+e.beats<=24));
+ const svg=achievementArtwork({music:melody});assert.equal((svg.match(/class="midi-event"/g)||[]).length,52);
+ assert.ok(r.events.every(e=>e.start+e.beats<=16));
 });

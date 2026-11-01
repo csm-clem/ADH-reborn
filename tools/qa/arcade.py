@@ -6,7 +6,7 @@ BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 out=Path('work/arcade');out.mkdir(parents=True,exist_ok=True)
 seed='''async()=>{const {makeProfile}=await import('./core.js');const {initialState}=await import('./state.js');const {STATE_KEY}=await import('./release.js');localStorage.setItem(STATE_KEY,JSON.stringify({...initialState(),profile:makeProfile('guitar6'),notation:'latin',sound:false,beginnerGuide:true}));}'''
 # Read only the visible SVG coordinates, using the same shared geometry as the UI.
-target='''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg');const g=scrollingNeckGeometry(6,+svg.dataset.neckEnd,{startFret:+svg.dataset.neckStart,height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth});const p=svg.querySelector('.neck-point');const closest=(xs,x)=>xs.reduce((best,v,i)=>Math.abs(v-x)<Math.abs(xs[best]-x)?i:best,0);const s=closest(g.ys,+p.getAttribute('cy'));const f=closest(g.centers,+p.getAttribute('cx'));return [40,45,50,55,59,64][s]%12+f;}'''
+target='''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg');const g=scrollingNeckGeometry(6,+svg.dataset.neckEnd,{startFret:+svg.dataset.neckStart,height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth,realistic:svg.dataset.neckRealistic==='true'});const p=svg.querySelector('.neck-point');const closest=(xs,x)=>xs.reduce((best,v,i)=>Math.abs(v-x)<Math.abs(xs[best]-x)?i:best,0);const s=closest(g.ys,+p.getAttribute('cy'));const f=closest(g.centers,+p.getAttribute('cx'));return [40,45,50,55,59,64][s]%12+f;}'''
 checks=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
@@ -35,7 +35,7 @@ with sync_playwright() as p:
   note=q.evaluate(target)%12
   q.locator(f'[data-arcade-answer="{note}"]').click()
  assert '14' in q.locator('.arcade-scope').inner_text() or '15' in q.locator('.arcade-scope').inner_text()
- assert '14\u202f500' in q.locator('.arcade-hud').inner_text() or '14 500' in q.locator('.arcade-hud').inner_text()
+ assert '14\u202f550' in q.locator('.arcade-hud').inner_text() or '14 550' in q.locator('.arcade-hud').inner_text()
  assert '+2 UP' in q.locator('.arcade-bonus').inner_text()
  q.screenshot(path=str(out/'combo-100.png'),full_page=True)
  q.locator('[data-arcade-action=pause]').click()
@@ -47,15 +47,15 @@ with sync_playwright() as p:
  q.clock.run_for(25000)
  q.get_by_role('button',name='Voir les statistiques',exact=True).wait_for()
  result=q.locator('.arcade-results').inner_text()
- assert '100' in result and '10' in result and '14\u202f500' in result,result
+ assert '100' in result and '10' in result and '14\u202f550' in result,result
  assert q.locator('#arcade-statistics').count()==0
  q.get_by_role('button',name='Voir les statistiques',exact=True).click()
  assert 'Temps écoulés' in q.locator('#arcade-statistics').inner_text()
  q.screenshot(path=str(out/'result.png'),full_page=True)
  record=q.evaluate('''async()=>{const {PILOT_KEY}=await import('./release.js');const {validatePilotStore}=await import('./pilot.js');const saved=validatePilotStore(JSON.parse(localStorage.getItem(PILOT_KEY)));const p=Object.values(saved.profiles)[0];return {arcade:p.arcade,attempts:p.attempts.length,evidence:p.evidence||null};}''')
- r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14500 and r['combos']==10 and r['longest']==100 and r['earnedLives']==3 and r['timeouts']==6,r
+ r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14550 and r['combos']==11 and r['longest']==100 and r['earnedLives']==3 and r['timeouts']==6,r
  assert record['attempts']==0 and record['evidence'] is None
- q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click();assert '14\u202f500' in q.locator('main').inner_text()
+ q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click();assert '14\u202f550' in q.locator('main').inner_text()
  q.wait_for_function('navigator.serviceWorker.controller !== null')
  cached=q.evaluate("async()=>{const c=await caches.open((await caches.keys()).find(k=>k.includes('0.39')));return (await c.keys()).map(r=>new URL(r.url).pathname);}")
  for name in ['arcade-ui.js','arcade-rules.js','arcade.css','answer-wheel.js']:
