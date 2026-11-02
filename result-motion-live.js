@@ -13,3 +13,10 @@ export function animateArcadeResult(root,total){
  shimmer.style.opacity=Math.sin(Math.PI*clamp((p-.25)/.65))*.4;shimmer.style.transform=`translateX(${-100+p*220}%) rotate(-18deg)`;if(p<1)frame=requestAnimationFrame(tick);else finish();}
  tick(begin);
 }
+
+/** Same restrained arrival for the learning summary; all controls remain immediately usable. */
+export function animateLearningResult(card){
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ card.animate([{opacity:0,transform:'translateY(14px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:600,easing:'cubic-bezier(.2,.8,.2,1)'});
+ card.querySelectorAll('.result-stat-grid>div').forEach((row,i)=>row.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:360,delay:140+i*90,fill:'backwards',easing:'ease-out'}));
+}

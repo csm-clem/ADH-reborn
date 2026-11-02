@@ -30,8 +30,9 @@ export function arcadeScope(mode, stringCount, stage) {
   if (!Number.isSafeInteger(stage) || stage < 0) throw new RangeError('Invalid stage');
   const zones = mode.startsWith('zones-');
   const strings = Math.min(stringCount, (zones ? 2 : 1) + stage);
-  const zoneCount = zones ? Math.min(6, 1 + Math.max(0, stage - (stringCount - 2))) : null;
+  const expansion=Math.max(0,stage-(stringCount-2)),zoneCount=zones?Math.min(6,1+Math.ceil(expansion/3)):null,zonePhase=zones&&expansion>0&&expansion<=15?['discover','bridge','mix'][(expansion-1)%3]:'mix';
   return {
+    zonePhase,focusZone:zones&&zonePhase!=='mix'?ARCADE_ZONES[zoneCount-1]:null,
     strings: Array.from({ length: strings }, (_, i) => i),
     start: 0,
     end: zones ? ARCADE_ZONES[zoneCount - 1][1] : stage >= stringCount ? 24 : 12,
@@ -58,6 +59,7 @@ export function arcadeTarget(profile, mode, stage, index, previous, random = Mat
   const old = stage ? arcadePool(profile, mode, stage - 1) : pool;
   const keys = new Set(old.map(p => `${p.string}:${p.fret}`));
   const added = pool.filter(p => !keys.has(`${p.string}:${p.fret}`));
+  if(mode.startsWith('zones-')&&stage>=profile.tuning.length-1){const scope=arcadeScope(mode,profile.tuning.length,stage),zone=scope.focusZone;let p=pool;if(zone&&scope.zonePhase==='discover')p=pool.filter(p=>p.fret>=zone[0]&&p.fret<=zone[1]);else if(zone&&scope.zonePhase==='bridge')p=pool.filter(p=>Math.floor(index/3)%2===0?p.fret>=zone[0]:p.fret>=zone[0]-4&&p.fret<zone[0]);if(p.length>1)p=p.filter(p=>p.string!==previous?.string||p.fret!==previous?.fret);return p[Math.min(p.length-1,Math.floor(random()*p.length))];}
   let candidates = stage && added.length ? (index % 5 === 0 ? added : old) : pool;
   if (candidates.length > 1) candidates = candidates.filter(p => p.string !== previous?.string || p.fret !== previous?.fret);
   return candidates[Math.min(candidates.length - 1, Math.floor(random() * candidates.length))];
@@ -103,6 +105,7 @@ export function resolveArcade(run, target, outcome, ms) {
 
 /** Bounded durable records; Arcade never writes learning evidence or unlocks activities. */
 export function validateArcadeRecords(value, profile) {
+  if(value?.longest!==undefined&&(!Number.isSafeInteger(value.longest)||value.longest<0))throw new Error('Record de série invalide.');
   if (!value || value.version !== 1 || !value.records || typeof value.records !== 'object' || Array.isArray(value.records) || Object.keys(value.records).length > 4) throw new Error('Records Arcade invalides.');
   for (const [mode, r] of Object.entries(value.records)) {
     const integer = key => Number.isSafeInteger(r?.[key]) && r[key] >= 0;

@@ -113,3 +113,9 @@ body:has(.collection-dialog[open]){overflow:hidden}
 .album-thumbnail{border:2px solid transparent;background-image:var(--card-decoration),var(--card-sheen),var(--card-body),var(--card-frame);background-origin:padding-box,padding-box,padding-box,border-box;background-clip:padding-box,padding-box,padding-box,border-box;background-size:100% 100%;background-repeat:no-repeat;color:var(--card-ink,var(--ink))}
 .album-percent{color:var(--card-muted,var(--muted))}
 :root[data-theme=accessible] .album-thumbnail{border-color:var(--ink)}
+
+@media(orientation:landscape){.achievement-grid.is-album{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(orientation:portrait){.achievement-grid.is-album{grid-template-columns:repeat(3,minmax(0,1fr))}}
+:is(.achievement-card,.album-thumbnail).is-musical{--card-frame:linear-gradient(135deg,#4a7092,#c7e8e4,#6a83a9);--card-body:linear-gradient(150deg,#edf8f6,#e5edf7);--card-ink:#203d55;--card-muted:#405e74}
+.is-musical .achievement-signature::after{content:' · ÉDITION MUSICALE';font-size:.62rem;letter-spacing:.08em}
+.is-musical .achievement-art{border-radius:50% 50% 8px 8px}

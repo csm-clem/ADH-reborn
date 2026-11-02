@@ -6,6 +6,26 @@
       "id": "record-lumineux-results-20261102",
       "type": "improvement",
       "text": "Les résultats Arcade affichent un score progressif, des statistiques enchaînées sans rupture et un record jaune pastel célébré par de discrets éclats autour du chiffre."
+    },
+    {
+      "id": "neck-playable-fades-real-lessons-20261102",
+      "type": "bug",
+      "text": "Les fondus restent hors des cases jouables ; la fin du manche est plus réaliste. Les mini-leçons de 12 cases occupent leur cadre, celles de 24 cases gardent un frettage proportionnel et des cibles larges."
+    },
+    {
+      "id": "rapid-input-true-streak-zone-steps-20261102",
+      "type": "bug",
+      "text": "Protection contre les appuis répétés et les réponses périmées. Les records de série sont propres à chaque instrument et accordage ; les nouvelles zones Arcade se découvrent avant les alternances et le mélange."
+    },
+    {
+      "id": "mixed-spelling-settings-album-20261102",
+      "type": "feature",
+      "text": "Affichage mixte des dièses et bémols, article explicatif, réglages de réinitialisation simplifiés, import illustré et album de succès plus dense avec une édition musicale distincte."
+    },
+    {
+      "id": "shared-results-launch-boards-20261102",
+      "type": "improvement",
+      "text": "Résultats Parcours et Arcade harmonisés en conservant leurs fonctions et animations. Trois planches de transitions permettent de comparer de nouvelles entrées en jeu."
     }
   ]
 }

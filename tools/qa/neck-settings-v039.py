@@ -36,12 +36,17 @@ with sync_playwright() as p:
  q.screenshot(path=str(out/'settings.png'));checks.append({'shared_button_palette':colors})
  for activity in ['cs1-note-9-discover','c24s1-note-9-discover']:
   h['seed'](q,'guitar6',activity);q.evaluate('''()=>{const k='fretboard-trainer:pilot:stable',s=JSON.parse(localStorage.getItem(k));Object.values(s.profiles)[0].seenInstructions=[];localStorage.setItem(k,JSON.stringify(s));}''');q.reload();q.locator('.chapter-options summary').click();q.locator(f'[data-module="{activity}"]').click();q.wait_for_timeout(150)
-  svg=q.locator('svg[data-neck-scroll=true]');content=q.locator('.instruction-content')
-  assert 179<=svg.bounding_box()['height']<=181
-  frame=q.locator('.lesson-neck-scroll')
-  assert frame.evaluate('e=>e.scrollWidth<=e.clientWidth+1'),(activity,frame.bounding_box(),svg.bounding_box())
+  svg=q.locator('svg[data-neck-model=true]');content=q.locator('.instruction-content')
+  assert svg.bounding_box()['height']>=239
+  if activity.startswith('c24'):
+   frame=q.locator('.lesson-neck-scroll');assert frame.evaluate('e=>Math.abs(e.scrollWidth-Math.max(e.clientWidth,e.querySelector("svg").getBoundingClientRect().width))<2')
+   last=svg.locator('[data-lesson-fret="24"] rect').first;assert last.bounding_box()['width']>=43.9
+  else:
+   assert q.locator('.lesson-neck-scroll').count()==0
+   assert svg.bounding_box()['width']>=content.bounding_box()['width']*.85
   q.set_viewport_size({'width':390,'height':844});q.wait_for_timeout(200)
-  assert frame.evaluate('e=>e.scrollWidth>e.clientWidth+1'),activity
+  if activity.startswith('c24'):assert q.locator('.lesson-neck-scroll').evaluate('e=>e.scrollWidth>e.clientWidth+1')
+  else:assert svg.bounding_box()['width']<=390
   assert q.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
   q.set_viewport_size({'width':2560,'height':1080});q.wait_for_timeout(200)
   for selector in ['.new-exercise-label','.discovery-direction']:

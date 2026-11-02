@@ -45,19 +45,21 @@ test('Resetting one tuning preserves the other tuning of the same instrument',()
  assert.throws(()=>resetInstrumentProgress(store,'guitar6',makeProfile('bass4').key));
 });
 
-test('A neck starting beyond the nut fades in at the first visible fret',()=>{
+test('A neck starting beyond the nut fades only on the lower, unplayable fragment',()=>{
  const g=neckGeometry(6,8,648,{lesson:true,startFret:4});
  const svg=neckBase(makeProfile('guitar6'),{g,id:'zone'});
- assert.ok(svg.includes(`gradientUnits="userSpaceOnUse" x1="${g.nut}"`));
+ assert.ok(svg.includes(`gradientUnits="userSpaceOnUse" x1="${g.boardStart}" x2="${g.nut}"`));
  assert.ok(svg.includes('mask="url(#zone-left-mask)"'));
  assert.ok(!svg.includes('neck-fret neck-nut'));
 });
-test('String mini-lessons use an intrinsic compact width rather than the window width',()=>{
+test('String mini-lessons fit twelve frets or keep touch-sized twenty-four fret widths',()=>{
  for(const end of [12,24]){
   const svg=miniatureNeck(makeProfile('guitar6'),{lesson:true,lastFret:end});
   const width=Number(svg.match(/viewBox="0 0 ([\d.]+)/)[1]);
-  assert.ok(width>300&&width<620);
-  assert.ok(svg.includes('data-neck-height="180"'));
+  assert.ok(end===12?width>300&&width<700:width>2000);
+  assert.ok(svg.includes('data-neck-realistic="true"'));
+  assert.ok(svg.includes(end===12?'data-neck-fit="true"':'data-neck-scroll="true"'));
+  assert.ok(Number(svg.match(/data-neck-height="([\d.]+)/)[1])>=(end===12?240:320));
   assert.ok(svg.includes('data-neck-available="0"'));
  }
 });

@@ -67,3 +67,14 @@
 .achievement-celebration .unlock-halo{border-color:#f8a744;box-shadow:0 0 18px #e9464733}
 .achievement-celebration::after{background:linear-gradient(110deg,transparent 20%,#f8a74430 42%,#e9464720 55%,transparent 75%)}
 :root[data-theme=accessible] .achievement-celebration,:root[data-theme=paper] .achievement-celebration{background:var(--surface);border-color:var(--ink)}
+
+/* Shared result family: the same panel, proportions, rhythm and action hierarchy. */
+:is(.redesigned-result,.arcade-results){max-width:1100px}
+:is(.redesigned-result,.arcade-results) .result-summary-panel{border:1px solid var(--line);border-radius:22px;background:var(--surface-soft);box-shadow:0 12px 32px rgb(40 57 80 / .035)}
+.arcade-results{min-height:100dvh;max-height:100dvh;overflow:auto;display:grid;align-content:center;gap:20px;width:100%}
+.arcade-results .result-layout{max-width:560px}
+.arcade-results .result-status h2{font-size:23px}.arcade-results h1{font-size:84px;line-height:1.1;margin:8px 0;text-align:center}
+.arcade-results .result-action-panel .button-row{display:grid;gap:12px;margin:0}.arcade-results .button-row>.primary{min-height:52px;width:100%}
+.arcade-results .arcade-stats{margin:0;text-align:left}
+@media(min-width:960px){:is(.redesigned-result,.arcade-results) .result-layout{max-width:none;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;gap:26px}}
+@media(max-width:480px){.arcade-results{padding:18px 12px;align-content:start}.arcade-results h1{font-size:64px}.arcade-results .result-summary-panel{padding:18px}}

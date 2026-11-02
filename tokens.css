@@ -48,8 +48,8 @@
 :root[data-theme=accessible]{--bg:#eff1f3;--surface:#fff;--surface-soft:#e5efff;--nav-surface:#e1e8ef;--ink:#111827;--muted:#344256;--line:#64748b;--brand:#003e8a;--purple:#003e8a;--secondary-fill:#111827}
 :root[data-theme=paper]{--bg:#ededed;--surface:#fff;--surface-soft:#e5e5e5;--nav-surface:#e1e1e1;--ink:#222;--muted:#505050;--line:#858585;--brand:#222;--purple:#2b2b2b;--secondary-fill:#555}
 /* Realistic wood is shaded independently from the interface's light/dark mode. */
-:root{--neck-grain-opacity:.09;--neck-highlight:.16;--neck-shadow:.12}
-:root[data-theme=dark]{--wood:#594330;--neck-grain-opacity:.11;--neck-highlight:.08;--neck-shadow:.24}
+:root{--neck-grain-opacity:.15;--neck-highlight:.16;--neck-shadow:.12}
+:root[data-theme=dark]{--wood:#594330;--neck-grain-opacity:.15;--neck-highlight:.08;--neck-shadow:.24}
 
 :root,:root[data-theme=dark]{--neck-inlay:#645035}
 

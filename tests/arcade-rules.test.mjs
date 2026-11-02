@@ -103,7 +103,7 @@ test('Zone expansion adds individual strings then the six cumulative zones', () 
   assert.deepEqual(arcadeScope('zones-natural', 6, 0).strings, [0, 1]);
   assert.equal(arcadeScope('zones-natural', 6, 4).end, 4);
   assert.equal(arcadeScope('zones-natural', 6, 5).end, 8);
-  assert.equal(arcadeScope('zones-natural', 6, 9).end, 24);
+  assert.equal(arcadeScope('zones-natural', 6, 19).end, 24);
 });
 
 test('String expansion finishes 12 frets before extending to 24 on every instrument', () => {
