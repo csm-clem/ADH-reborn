@@ -71,3 +71,9 @@ select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
 :root:not([data-keyboard=true]) :focus,:root:not([data-keyboard=true]) :focus-visible{outline:none!important}
 :root:not([data-keyboard=true]) .keyboard-hint{display:none!important}
 :root:not([data-keyboard=true]) .fret-hit:focus-visible rect,:root:not([data-keyboard=true]) .lesson-neck [role=button]:focus-visible rect{stroke:none!important}
+
+/* Shared card actions on approved light and obsidian print surfaces. */
+.achievement-actions .button{font-size:clamp(11px,3.4cqw,15px);min-height:40px;padding:9px 11px;white-space:normal;line-height:1.2}
+.achievement-actions .button{padding-inline:7px}
+.achievement-actions .quiet-button,.achievement-back-actions .quiet-button{color:var(--card-ink);border:1px solid currentColor;background:#ffffff45}
+.rarity-legendary .achievement-actions .quiet-button,.rarity-legendary .achievement-back-actions .quiet-button{background:#080d14c9}

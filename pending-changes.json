@@ -31,6 +31,11 @@
       "id": "arcade-whole-screen-transition-boards-20261102",
       "type": "improvement",
       "text": "Les planches Arcade comparent l’arrivée et la sortie de l’écran entier entre menu et jeu, avec texte blanc et comparaison des zooms du titre."
+    },
+    {
+      "id": "success-raster-skins-artworks-20261102",
+      "type": "improvement",
+      "text": "Les cartes Succès adoptent les cinq fonds de collection et 59 nouvelles illustrations, avec reflets sur toute la carte, critères au verso et commandes interactives conservées."
     }
   ]
 }

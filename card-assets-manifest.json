@@ -1,0 +1,631 @@
+{
+  "backgrounds": [
+    {
+      "rarity": "common",
+      "source": "commune.webp",
+      "path": "achievement-finishes/common.webp",
+      "bytes": 125642,
+      "sha256": "76665d0742db80ba743f1f8efb6f5117080d9920f8f3bb2b9b5eecc5f9bd8912"
+    },
+    {
+      "rarity": "uncommon",
+      "source": "inhabituelle.webp",
+      "path": "achievement-finishes/uncommon.webp",
+      "bytes": 127756,
+      "sha256": "058ffde97f720c21b94b7f88269982c0851f526723cff6231eb2db804d69c028"
+    },
+    {
+      "rarity": "rare",
+      "source": "rare.webp",
+      "path": "achievement-finishes/rare.webp",
+      "bytes": 80708,
+      "sha256": "0bdb64df5e5534bf26ace1426f0cd3513f98cbf7c8ea2ae1dc227432a3e44a0f"
+    },
+    {
+      "rarity": "epic",
+      "source": "epique.webp",
+      "path": "achievement-finishes/epic.webp",
+      "bytes": 163124,
+      "sha256": "e9d5fb272a9a50c474476fd935c810dc301ed83d3ba63e42f1e4c2d36717f033"
+    },
+    {
+      "rarity": "legendary",
+      "source": "legendaire.webp",
+      "path": "achievement-finishes/legendary.webp",
+      "bytes": 146744,
+      "sha256": "070f8ffaf22cbca91c0b1006cc031b9fce0b74e75f53b7f8b414997f2cf5289e"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "first-session",
+      "source": "001-la-premiere-fait-le-jack.png",
+      "sourceSHA256": "588e30706b746a50d0dfe8d87a7e37cf08636e511c8120a40cd27ff44b157513",
+      "path": "achievement-art/raster/first-session.webp",
+      "bytes": 206260,
+      "sha256": "1e31e5a7d370dee29d4d3dde585767945bbb1553c0bd9084cd0712172349d963",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "opens-named",
+      "source": "002-enchante.png",
+      "sourceSHA256": "f066e27950cd403c1681c26c9b8b94787b1d7a40c3c52927a04bd723c7c3f678",
+      "path": "achievement-art/raster/opens-named.webp",
+      "bytes": 143744,
+      "sha256": "d41140e71c48210552c497cbf3e118cebb8acf0a8540c9b355ec00f4eec2a9f4",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "open-strings",
+      "source": "uncommon/003-open-strings.png",
+      "sourceSHA256": "be13d20a1cc673db2302d0d01baedb89b895d9431624755888cc0930a9716a2f",
+      "path": "achievement-art/raster/open-strings.webp",
+      "bytes": 204896,
+      "sha256": "3673f8ce5e487bba35a03b039c51c0f25b69ecc1e49ca076f5903ca3cf8217bf",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "diagram-check",
+      "source": "004-le-manche-a-un-sens.png",
+      "sourceSHA256": "c5806faa3163775c29672d8e39a72ce5b5bc8af5c430b1c59c65cf2bd0664ec7",
+      "path": "achievement-art/raster/diagram-check.webp",
+      "bytes": 177090,
+      "sha256": "dde6a4aa948039400dbbdce3c6043c5e0c692c99dc87b0f5e27dab4cd8d9887f",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "beginner-route",
+      "source": "uncommon/005-beginner-route.png",
+      "sourceSHA256": "e75b2905047c20d4955d624e81f9b23f3132fe3804a165eb505d406e96ba8773",
+      "path": "achievement-art/raster/beginner-route.webp",
+      "bytes": 245276,
+      "sha256": "f2dc2d56ce824c93292984e159d2bdf4a706ac1a32ba7198fbb500ee48aa5112",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-discovery",
+      "source": "006-du-monde-sous-les-doigts.png",
+      "sourceSHA256": "7ddec2b7bd7532a8d6254a2b94ef766af4c63da6fd0d59dfb4b7ebc4a8cf191b",
+      "path": "achievement-art/raster/first-discovery.webp",
+      "bytes": 196548,
+      "sha256": "a60a73559be078392ee0b9fd41cd33c60035a88e9dcbb31b070971614c6f7b46",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-family",
+      "source": "uncommon/007-first-family.png",
+      "sourceSHA256": "1520927435352febafae67c5530258e32223123a3415476f5fcb8fd534fa2527",
+      "path": "achievement-art/raster/first-family.webp",
+      "bytes": 176382,
+      "sha256": "516a33f1009123442dca01c9543f7f178ddca42e5915b250589807dcb0ed2454",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-cumulative",
+      "source": "uncommon/008-first-cumulative.png",
+      "sourceSHA256": "5acb942e483d6b57209bc225f75c08379190c9547f922c04bdad2b4cf67fbfdd",
+      "path": "achievement-art/raster/first-cumulative.webp",
+      "bytes": 220252,
+      "sha256": "5e3659db8ce5431dbdec46ad1e5d5e008be88c5a37fc8dc062e76103995df87e",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "natural-map",
+      "source": "rare/009-natural-map.png",
+      "sourceSHA256": "6fd7f9938e1741b114112c0d1960a9a0b64711642be5628c37bb37acfa2946b3",
+      "path": "achievement-art/raster/natural-map.webp",
+      "bytes": 199074,
+      "sha256": "907efe428d8956f74671717d8e17708a6e750c3cfec5ba25a414e9dca1360dec",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "full-map",
+      "source": "epic/010-full-map.png",
+      "sourceSHA256": "0eef045bff2cf856642730de3a141540136998b6804793e891f2853142f035dd",
+      "path": "achievement-art/raster/full-map.webp",
+      "bytes": 218254,
+      "sha256": "f5c47d6296b9f9052bb5d4d2f5117a9482bee5ab1c337b9f6011dc20b2250822",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "z2-natural",
+      "source": "rare/011-z2-natural.png",
+      "sourceSHA256": "595acb61d2404ada751c50db0d62e39de5ac0c13b42d9422de0250601a41d97d",
+      "path": "achievement-art/raster/z2-natural.webp",
+      "bytes": 184198,
+      "sha256": "ab577962a67c189c1280ec23b5d1a131a30f18afa168d97a7014960d7e584701",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "z2-full",
+      "source": "epic/012-z2-full.png",
+      "sourceSHA256": "c93af6389496ef205735623abd04b66a90881b86eff8d91d262faf1944ddd571",
+      "path": "achievement-art/raster/z2-full.webp",
+      "bytes": 183656,
+      "sha256": "54d5caa3bd377f27e113cbfb7381f2ec715b6d8317788a64771f580c9d77026e",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "z3-natural",
+      "source": "rare/013-z3-natural.png",
+      "sourceSHA256": "594eb5e075195036db0a1942258998e8c06a380dc4a698859278a40b6b0939c7",
+      "path": "achievement-art/raster/z3-natural.webp",
+      "bytes": 210396,
+      "sha256": "200234a35e280afb4fc133c21c2269da08dff3c74fdc00031b405e629982e13d",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "z3-full",
+      "source": "epic/014-z3-full.png",
+      "sourceSHA256": "c35a50834822b18852023d5f2b87d64050b5d1c191464cd4af3fee2b3658135e",
+      "path": "achievement-art/raster/z3-full.webp",
+      "bytes": 191306,
+      "sha256": "35b18152d5d00f92e0ed6b3f4bd73b7902163d2269a85267dc5a24fdb31d63c0",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-string-full",
+      "source": "rare/015-first-string-full.png",
+      "sourceSHA256": "702fa327bfd8072d81c9ed84fee964e3f9b80e982d8286d5baf4e97d04a225b9",
+      "path": "achievement-art/raster/first-string-full.webp",
+      "bytes": 183676,
+      "sha256": "e7b22f85a502ff4a93d83402cb16b53cdbf76e78cf8d29d7dffbc76f5669999f",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "second-string-full",
+      "source": "rare/016-second-string-full.png",
+      "sourceSHA256": "098f6cf1d727e822af1d3898281bb4f2a2bb39105b1597d5ad967754cf5ec6e6",
+      "path": "achievement-art/raster/second-string-full.webp",
+      "bytes": 183512,
+      "sha256": "c84691b978bf23a9ffa784c8167b053972970599e41ab7cb0f0548cdf92cc42d",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "third-string-full",
+      "source": "rare/017-third-string-full.png",
+      "sourceSHA256": "88d601b8a5973f7fdcd74bd71d029cec7c7579dee3c749d2d5dc9505c7a8fc19",
+      "path": "achievement-art/raster/third-string-full.webp",
+      "bytes": 172134,
+      "sha256": "6bb49706d4e43ec11f608e2928096f946e5a4123b857a8d1f11c9f65115cc866",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "octave-family",
+      "source": "uncommon/019-octave-family.png",
+      "sourceSHA256": "1f11bed2b320fb17b4b26fe525dd22daa55894944a2bfc44f7e9a21599030c1f",
+      "path": "achievement-art/raster/octave-family.webp",
+      "bytes": 185476,
+      "sha256": "a4d0e43df79636617fa4917f75ed781f2a03546f16f1a0e6464c973fb15139a2",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "boundary-four",
+      "source": "rare/020-boundary-four.png",
+      "sourceSHA256": "0711a49153878e7841d9d5129ad5357918554745018f1cfc9d1e287300da5ec5",
+      "path": "achievement-art/raster/boundary-four.webp",
+      "bytes": 241916,
+      "sha256": "95fa025749d96852111145c4c1902c8e49a0c032efcefb9f3af011a8311c61a2",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "boundary-eight",
+      "source": "rare/021-boundary-eight.png",
+      "sourceSHA256": "6fa9a0cac75d5e3ca6a9432a2d92a29d5691c9e3fe4b5011425c2f9f6a4f2a2a",
+      "path": "achievement-art/raster/boundary-eight.webp",
+      "bytes": 209204,
+      "sha256": "714c8e11eff0626e7b00875cda0fb7e5c914e674d52f8d278cb59e54119c6cae",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "guided-level-one",
+      "source": "epic/022-guided-level-one.png",
+      "sourceSHA256": "264ee1d65c7adba3cac132022ebc0c0fb20a4e7a448efb6397f78f35831e92cc",
+      "path": "achievement-art/raster/guided-level-one.webp",
+      "bytes": 205706,
+      "sha256": "dfb87cb84d95cfe0175deee92792a32857604a0a1b7dcd2db97834ef81fa6504",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "three-natural-zones",
+      "source": "epic/023-three-natural-zones.png",
+      "sourceSHA256": "576a5ca51b584a429dd264b96b4c211f27fdd473cd0afeb1a9da46f4f3869f86",
+      "path": "achievement-art/raster/three-natural-zones.webp",
+      "bytes": 214702,
+      "sha256": "6246d8953307d6fe7d2831021be4ad280da7e31854efa4e55c45895afdb06fb1",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "clean-session",
+      "source": "uncommon/024-clean-session.png",
+      "sourceSHA256": "cb3eb53b69ca6e5ddc53668f5880880bae61c42b15aedd58394efb8c2ed0f687",
+      "path": "achievement-art/raster/clean-session.webp",
+      "bytes": 197724,
+      "sha256": "caf29b0229f2200309c2a0a8174a397eab590d6537d6e13027485765505eabc0",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-name",
+      "source": "uncommon/025-perfect-name.png",
+      "sourceSHA256": "32bb8e87b68290ee24e5306061179f0a93879e4bda8f90a585a556cdfd4b6119",
+      "path": "achievement-art/raster/perfect-name.webp",
+      "bytes": 212368,
+      "sha256": "6f7a284d1e880c800ab52f7ea0d117fc3ea2af710f2065597c3a7b0c40cf3efc",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-find",
+      "source": "uncommon/026-perfect-find.png",
+      "sourceSHA256": "7aa4f6b188237f24d1b80844fd1cb767aebfed36503b953038616bf4f24070ef",
+      "path": "achievement-art/raster/perfect-find.webp",
+      "bytes": 132360,
+      "sha256": "afe7e3faab68ac3357258abc9508905b395b86fcfa1f9ed5788020176094b54d",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-natural",
+      "source": "rare/027-I-perfect-natural.png",
+      "sourceSHA256": "efc16d9c8981f436d2e55dc9588108da49d8be324cc03d6c95296c2e441144f3",
+      "path": "achievement-art/raster/perfect-natural.webp",
+      "bytes": 184206,
+      "sha256": "a6cd311143a81568fd5c564353fcca9b3acec1a936188d4f0c6fe083a48011f7",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-natural-z2",
+      "source": "rare/027-II-perfect-natural-z2.png",
+      "sourceSHA256": "9de5e5cadc6bc25b2acac7272515a768d5cbbccfcfbb7d991e59ab6df712bfae",
+      "path": "achievement-art/raster/perfect-natural-z2.webp",
+      "bytes": 161670,
+      "sha256": "7ebbdb0d5ebd35581a1509d79a747079b4e5971f78c745b16a385fd51dc9f8dc",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-natural-z3",
+      "source": "rare/027-III-perfect-natural-z3.png",
+      "sourceSHA256": "2f79ce5736ffbc278a97eaff914b527d3c74201e67d7f90d34f49670c639165c",
+      "path": "achievement-art/raster/perfect-natural-z3.webp",
+      "bytes": 208892,
+      "sha256": "aaaec81a23d30822b04241e04039d52dc6c53181610271fdc4650bef5e1d0c39",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-chromatic",
+      "source": "epic/028-I-perfect-chromatic.png",
+      "sourceSHA256": "71830aeff499985535c3b99cdd8bcea08264fa6ddfae76aa53a7fdb36e2ac9e5",
+      "path": "achievement-art/raster/perfect-chromatic.webp",
+      "bytes": 217498,
+      "sha256": "cd1bff20fdfbe1db8e785ed028cc39f8e1572dacfd1e03e476680197cad0a61f",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-chromatic-z2",
+      "source": "epic/028-II-perfect-chromatic-z2.png",
+      "sourceSHA256": "d6650adf5cf810b5ad8f9ee81bdd13480fd50f92d7fffa6aa60f2bfe8a33cdb4",
+      "path": "achievement-art/raster/perfect-chromatic-z2.webp",
+      "bytes": 174670,
+      "sha256": "b991524e31f79f2b3fe7356b38de20339cf5c05ab93be0edc32318034e916fb8",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "perfect-chromatic-z3",
+      "source": "epic/028-III-perfect-chromatic-z3.png",
+      "sourceSHA256": "6f26664f745cb1ba4c0d07c53eb740c4e0d290942e96c3dbc5b4e70efc3517ab",
+      "path": "achievement-art/raster/perfect-chromatic-z3.webp",
+      "bytes": 236740,
+      "sha256": "cf4d013cc57e56fc64d5f07167a0faefd410f63055f2abf48bc78d83071ce6c0",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "repeat-proof",
+      "source": "rare/029-repeat-proof.png",
+      "sourceSHA256": "199567cb78e647424d1d1406da9bd035ef861988dbb0e6438d803655c3740197",
+      "path": "achievement-art/raster/repeat-proof.webp",
+      "bytes": 180110,
+      "sha256": "67e48564c529f6e36137db5c481dfaaa747f2214e21b6c88f9646797b63ca43a",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "personal-fluidity",
+      "source": "uncommon/030-personal-fluidity.png",
+      "sourceSHA256": "1a05ea63bce267b5716d5f5dd31db24193da2cb50404afa7a6581e8eaf652da2",
+      "path": "achievement-art/raster/personal-fluidity.webp",
+      "bytes": 214622,
+      "sha256": "0030fe70f03bad9be1f2e476c900d39d2d383d3c69343ad685ba70ef7facbdd4",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "two-second",
+      "source": "rare/031-two-second.png",
+      "sourceSHA256": "41a3eda65fc6fc2fd8ea4270f8f01c054194ce12977d13714f5050e40b43ed26",
+      "path": "achievement-art/raster/two-second.webp",
+      "bytes": 178580,
+      "sha256": "233597d56e3919bdc85386215e17885832afc0d6f40386485226c14241c47e58",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "one-second",
+      "source": "epic/032-one-second.png",
+      "sourceSHA256": "a875aa60906ee702896f4f2732203b1d69a0fd6823cbed47022c24e62b51b5a1",
+      "path": "achievement-art/raster/one-second.webp",
+      "bytes": 211640,
+      "sha256": "c60eaa29ffcda2273cda8e28e9ca180f48b80f37152272b45d3b30987deea26f",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "three-flashes",
+      "source": "epic/033-three-flashes.png",
+      "sourceSHA256": "b2fcf5bb66bfc9c8577d6b1ca13c905d9f54e05b3365755084bf2f5b0f604f5c",
+      "path": "achievement-art/raster/three-flashes.webp",
+      "bytes": 198886,
+      "sha256": "ea33c5b55afdaf481420ffbc71f453246c2585a637d3686079d00e76cb9b4fc7",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "fluent-zones",
+      "source": "legendary/034-fluent-zones.png",
+      "sourceSHA256": "9fe69029af411ff738c8e9a24122f4faa2494808aa2512819c93551604c4fe5d",
+      "path": "achievement-art/raster/fluent-zones.webp",
+      "bytes": 204618,
+      "sha256": "d39be9d3ade126a6c913dd3bf1afb88a1efd103752df0bb17d80719234858d25",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-chain",
+      "source": "035-le-fil-du-riff.png",
+      "sourceSHA256": "a52c35efcb91e72413784efb23515b8f379d9fdf80680a7ec5a9e74bb584c6f9",
+      "path": "achievement-art/raster/first-chain.webp",
+      "bytes": 176760,
+      "sha256": "8153f6a5150eee1b3e00a8408e583338ff4fc1a535dc95d6326aa5f7acc5792e",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "first-sleeve",
+      "source": "uncommon/036-first-sleeve.png",
+      "sourceSHA256": "5dce2ac4a7edae4f791ab05e0f19fa8d09ffcbf2810530ec3d464addefbda0ad",
+      "path": "achievement-art/raster/first-sleeve.webp",
+      "bytes": 190926,
+      "sha256": "5d98f0a6acad69f06c755ec73e50c3891b5bf2539ecabbc646b97129aa21fcb1",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "three-sleeves",
+      "source": "rare/037-three-sleeves.png",
+      "sourceSHA256": "be483e1e6fed4158f5ed0c7a0ea33a46762c43261aa67a7429b4a68331204760",
+      "path": "achievement-art/raster/three-sleeves.webp",
+      "bytes": 180408,
+      "sha256": "ca3f4b4ddbc7d7ba3051934775c3b75fcd7012b0065ed7238c1577dbc4d6f3eb",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "seven-sleeves",
+      "source": "epic/038-seven-sleeves.png",
+      "sourceSHA256": "4fc5bf7a17cd2678cd64e62517b2a2f6158c168344991d56c0ae2b0a459e2372",
+      "path": "achievement-art/raster/seven-sleeves.webp",
+      "bytes": 189856,
+      "sha256": "0b2a14e6b2c38eb4065873571e7ce4ecacdcf4b04c4c5bc6fce562b0ad31a5a4",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "three-clean-phrases",
+      "source": "rare/039-three-clean-phrases.png",
+      "sourceSHA256": "a7ec25b83f8ed44cf019502b4493cc94e61c5fc45d41d15410e6f3fb8c422711",
+      "path": "achievement-art/raster/three-clean-phrases.webp",
+      "bytes": 215524,
+      "sha256": "85bb5f92a87b7c9164e2c8a47fbf8771447a99e8f2e71fbceefacbbd67b51d25",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "three-strings",
+      "source": "epic/040-three-strings.png",
+      "sourceSHA256": "e645c92d1cf922cc094185546a47a78af3476382619b508d9965b0ed66e9bd34",
+      "path": "achievement-art/raster/three-strings.webp",
+      "bytes": 147028,
+      "sha256": "e065af5e56b6569905227bd566b9d9df727df35acd63deb04a12fce280b6f1f6",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "beta-atlas",
+      "source": "legendary/041-beta-atlas.png",
+      "sourceSHA256": "5caa7c18f5fcc755ef6ce851076a5cc81aa1b4e512402cf83bfa83d540ce2a81",
+      "path": "achievement-art/raster/beta-atlas.webp",
+      "bytes": 221230,
+      "sha256": "ab3375f451df0feac121733b847e9ea942a91af04c206cd4de8237c0301d29ed",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "beta-encore",
+      "source": "legendary/042-beta-encore.png",
+      "sourceSHA256": "36b37ae7d069a34b5e44ce7976f16260a559009b8f86a6b5db9c881d6930b3c5",
+      "path": "achievement-art/raster/beta-encore.webp",
+      "bytes": 196220,
+      "sha256": "a21166ca71ae86dd3dfb5ee161589a561e4ea503b70605a4dfaa351820e2f661",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-higher-ground",
+      "source": "rare/M001-music-higher-ground.png",
+      "sourceSHA256": "cb8fa2b0c91642df7f0304d75ab0ea7e5054b75d282af11558b0d1c3710fcaf8",
+      "path": "achievement-art/raster/music-higher-ground.webp",
+      "bytes": 202346,
+      "sha256": "adc847b61b38dea3e7e9ba2e6114680c95e4687fefa0895eacbc1120a85a681f",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-around-world",
+      "source": "rare/M011-music-around-world.png",
+      "sourceSHA256": "a6a3f9e73cd988b1cd75a4d3676bdb535a45b9a327c0940ab841fce19b1c6dbe",
+      "path": "achievement-art/raster/music-around-world.webp",
+      "bytes": 208340,
+      "sha256": "dde59bf435e7a73c14456ae3041323e680b1a9557000cda83946d8b8d6e0d2a7",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-singing-rain",
+      "source": "rare/M008-music-singing-rain.png",
+      "sourceSHA256": "e4cdef1d6a0ba07a24ddd9d6ac4b670f6eb72ae73087dbb86f151b32fffea351",
+      "path": "achievement-art/raster/music-singing-rain.webp",
+      "bytes": 201898,
+      "sha256": "3bec10d0a0a19be7b8c7f09e85ed9dd31bf5a613c69f28d653638c50511e8fc7",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-my-sharona",
+      "source": "rare/M002-music-my-sharona.png",
+      "sourceSHA256": "625d4a8310094672fe88a09f7646cb0c82a5b71e00a35e5aab50ef0ce3389143",
+      "path": "achievement-art/raster/music-my-sharona.webp",
+      "bytes": 214862,
+      "sha256": "e3c4ff35a2388efc692ff6ecd0a5965cad8807f2bcc11b608ab79a100e1f6568",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-iron-man",
+      "source": "rare/M016-music-iron-man.png",
+      "sourceSHA256": "2b4a03466a49b2187feca0a3ead413508ced7ca3fd08229512110f73783c72db",
+      "path": "achievement-art/raster/music-iron-man.webp",
+      "bytes": 201530,
+      "sha256": "78beb8b4c7af32d09f8f9058100115509e6ecaa6efe3b5ab1ab5033365666b19",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-trek",
+      "source": "rare/M023-music-trek.png",
+      "sourceSHA256": "101d359b87c53d70317549dc2e1ecaaff531f5326758510528b25a695090cbe2",
+      "path": "achievement-art/raster/music-trek.webp",
+      "bytes": 189912,
+      "sha256": "b7f0763356580b6a2907bd2b9776a01781d46e4023b28c47435821495a86ecc3",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-seven-nation",
+      "source": "rare/M017-music-seven-nation.png",
+      "sourceSHA256": "43d5d06da53fb4cbcf6c414eeb7f88e43f667a7b83248af2e3db0fd7a7718b90",
+      "path": "achievement-art/raster/music-seven-nation.webp",
+      "bytes": 207078,
+      "sha256": "8a8bd7f81691ffbfd8cae3e205ab6c7022cee1fd43070068f862e915b0aec651",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-immigrant-song",
+      "source": "rare/M007-music-immigrant-song.png",
+      "sourceSHA256": "a90fda422dd436091d0514d14817d5ea0169b4a236fbb9f4e8f16fde07f99af8",
+      "path": "achievement-art/raster/music-immigrant-song.webp",
+      "bytes": 195208,
+      "sha256": "2b425790a19ff6d9a1b57d07a925c1da8cf38fa1f15af3eadf0b6848ec132061",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-billie-jean",
+      "source": "rare/M013-music-billie-jean.png",
+      "sourceSHA256": "766cdc38e8dc0df158b4df1f7168ff705a0fde9715898bb5bf5619fe7e2c0929",
+      "path": "achievement-art/raster/music-billie-jean.webp",
+      "bytes": 188946,
+      "sha256": "c6b0859890aaa5bbe8ee3620980b00e576e6c12365b0b7006426a1a5483adda1",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-bites-dust",
+      "source": "rare/M014-music-bites-dust.png",
+      "sourceSHA256": "2d706f1aefb619492f319171c4b77a440d3431029daa6bf81dc3b7d39f74c331",
+      "path": "achievement-art/raster/music-bites-dust.webp",
+      "bytes": 210736,
+      "sha256": "4be9bb6a787d0a7a1bb7c47d4da8db68fc826f4b811028546575fb399973a7f9",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-feel-good-inc",
+      "source": "rare/M028-music-feel-good-inc.png",
+      "sourceSHA256": "e7d7f4d991f7cd8ce0ded6f9c1a40c192fc74f69e8b795b08ae5e867ea400e2f",
+      "path": "achievement-art/raster/music-feel-good-inc.webp",
+      "bytes": 212378,
+      "sha256": "9ac027513255aedec2553f45e31e44d8f8b16422146a3bc4fb2b66b05b7e0f10",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-smoke-water",
+      "source": "rare/M015-music-smoke-water.png",
+      "sourceSHA256": "1f6679331af9b673230debf847175b2ad407118efb80e3353522ffcfd653891e",
+      "path": "achievement-art/raster/music-smoke-water.webp",
+      "bytes": 213412,
+      "sha256": "7a8fa5036cbd5131a1e9e669dbe0e9d1af733a7da080da0d607910a7d9b3510a",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "music-entertainer",
+      "source": "rare/M020-music-entertainer.png",
+      "sourceSHA256": "95a7993d3c9a35aaf97cd5297922c1def7632fccd2b4bd823780cd2c280e2411",
+      "path": "achievement-art/raster/music-entertainer.webp",
+      "bytes": 183244,
+      "sha256": "fbd0400064c4b4fced3038f13cd13dfd7c18cc9e9ddde60db30bcd6f25aa78f3",
+      "width": 1024,
+      "height": 683
+    },
+    {
+      "id": "same-pitch-bridges",
+      "source": "uncommon/018-same-pitch-bridges.png",
+      "sourceSHA256": "9ece2fdd1417bc881f61cb8f511cd6676ef2c427a6ad35c0327ef720763a6923",
+      "path": "achievement-art/raster/same-pitch-bridges.webp",
+      "bytes": 184452,
+      "sha256": "02ea3f6c3e424ed326be96739b4b150ba414caa9dd5bb3b85cdbccbeb14e9911",
+      "width": 1024,
+      "height": 683
+    }
+  ]
+}

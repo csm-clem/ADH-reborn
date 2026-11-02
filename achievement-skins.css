@@ -1,0 +1,58 @@
+/* Shared layout; each approved skin is loaded once per rarity. Controls stay HTML. */
+:root :is(.achievement-card,.album-thumbnail){--card-skin:url('./achievement-finishes/common.webp');--card-ink:#172b35;--card-muted:#465560;--card-accent:#a74024;--foil-strength:.055;container-type:inline-size}
+:root :is(.achievement-card,.album-thumbnail).rarity-uncommon{--card-skin:url('./achievement-finishes/uncommon.webp');--card-accent:#155362}
+:root :is(.achievement-card,.album-thumbnail).rarity-rare{--card-skin:url('./achievement-finishes/rare.webp');--card-accent:#254fa7;--foil-strength:.075}
+:root :is(.achievement-card,.album-thumbnail).rarity-epic{--card-skin:url('./achievement-finishes/epic.webp');--card-accent:#563b87;--foil-strength:.12}
+:root :is(.achievement-card,.album-thumbnail).rarity-legendary{--card-skin:url('./achievement-finishes/legendary.webp');--card-accent:#f0ce82;--foil-strength:.14}
+:root[data-theme] :is(.achievement-card,.album-thumbnail){--card-ink:#172b35;--card-muted:#465560}
+:root[data-theme] :is(.achievement-card,.album-thumbnail).rarity-legendary,:root :is(.achievement-card,.album-thumbnail).rarity-legendary{--card-ink:#fff2d5;--card-muted:#e4d2b1}
+.achievement-card{aspect-ratio:2/3;min-block-size:480px}
+.achievement-front,.achievement-back{position:relative;isolation:isolate;background:none;border:0;border-radius:4cqw;color:var(--card-ink);box-shadow:0 8px 20px #101a2520;min-height:100%}
+.achievement-front{height:100%;padding:6.4% 6.4% 5%;overflow:hidden}
+.achievement-back{position:absolute;padding:8%;overflow:hidden}
+.achievement-front::before,.achievement-back::before,.album-thumbnail::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--card-skin) center/100% 100% no-repeat;border-radius:inherit}
+.is-missing .achievement-front::before,.is-missing .achievement-back::before,.album-thumbnail.is-missing::before{filter:grayscale(1)}
+.achievement-card-header{padding:2px 0 12px;min-height:38px;gap:7px;flex-wrap:nowrap}
+.achievement-rarity{font-size:clamp(10px,3.4cqw,14px);gap:5px}
+.rarity-stars{font-size:inherit;letter-spacing:0;color:var(--card-accent)}
+.achievement-signature{font-size:clamp(11px,3.8cqw,15px)}
+.is-musical .achievement-signature::after{content:none}
+.achievement-seal{width:25px;height:25px;min-width:25px;border:0;background:var(--brand);color:var(--on-brand)}
+.achievement-art,.is-musical .achievement-art{margin:0;aspect-ratio:3/2;border-radius:9px;border:1px solid #233b4a44;box-shadow:none;flex:none}
+.achievement-art>img+.music-sleeve{position:absolute;inset:0;pointer-events:none}
+.rarity-rare .achievement-art::after{display:none}
+.achievement-copy{padding:14px 0 0;flex:1;min-height:0}
+.achievement-copy h2{font-size:clamp(21px,6.8cqw,30px);line-height:1.1;margin-bottom:12px;letter-spacing:-.025em;text-wrap:pretty;color:var(--card-ink)}
+.achievement-progress{color:var(--card-ink);margin-top:auto;padding:6px 0}
+.achievement-progress small,.achievement-number,.achievement-stamp{color:var(--card-muted)}
+.achievement-progress progress{height:8px;background:#d7d9dc;border:1px solid #172b3520}
+.achievement-progress progress::-webkit-progress-bar{background:#d7d9dc}
+.achievement-progress progress::-webkit-progress-value{background:linear-gradient(90deg,#f8a744,#e94647)}
+.achievement-progress progress::-moz-progress-bar{background:linear-gradient(90deg,#f8a744,#e94647)}
+.achievement-actions{gap:10px 6px;margin-top:10px;grid-template-columns:minmax(0,1fr) auto auto}
+
+
+
+.achievement-stamp{font-size:clamp(9px,2.8cqw,12px)}
+.achievement-actions.has-music{grid-template-columns:minmax(0,1fr) auto}
+.achievement-number{font-size:10px;margin-top:12px}
+.achievement-front>.card-reflection,.achievement-front>.card-foil{z-index:3;border-radius:inherit;opacity:0}
+.is-tilting .achievement-front>.card-reflection{opacity:.12}
+.is-tilting .achievement-front>.card-foil{opacity:calc(var(--foil-strength) * var(--card-finish,.55))}
+.card-reflection{background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,30%),#fff9,transparent 60%);mix-blend-mode:screen}
+.achievement-back h2{font-size:clamp(22px,7cqw,30px);color:var(--card-ink)}
+.achievement-criteria li,.achievement-criteria .is-complete{color:var(--card-ink)}
+.rarity-legendary .criterion-marker{color:#f0ce82}
+.album-thumbnail{position:relative;isolation:isolate;aspect-ratio:2/3;padding:9%;border:0;border-radius:4cqw;background:none;color:var(--card-ink)}
+.album-thumbnail .achievement-art{border-radius:5px;aspect-ratio:3/2}
+.album-thumbnail .album-title{font-size:clamp(10px,10cqw,17px);color:var(--card-ink)}
+.album-thumbnail .album-percent{color:var(--card-muted)}
+:root[data-theme=dark] .achievement-front,:root[data-theme=dark] .achievement-back{box-shadow:0 8px 20px #0005}
+:root[data-theme=accessible] .achievement-copy,:root[data-theme=accessible] .achievement-back{--card-ink:#172b35;--card-muted:#24343f;color:var(--card-ink)}
+:root[data-theme=accessible] .achievement-copy{background:#fdfbf7f5;border-radius:8px;padding:10px;margin-top:10px}
+:root[data-theme=accessible] .achievement-back::before{background:#fdfbf7;border:2px solid #333638}
+:root[data-theme=accessible] .card-reflection,:root[data-theme=accessible] .card-foil{display:none}
+@media(max-width:360px){.achievement-card-header{gap:4px}.achievement-copy{padding-top:10px}.achievement-copy h2{font-size:22px}.achievement-seal{width:22px;height:22px;min-width:22px}}
+@media(prefers-reduced-motion:reduce){.achievement-front>.card-reflection,.achievement-front>.card-foil{display:none}}
+
+.collection-stage{overflow:clip;overflow-clip-margin:12px}

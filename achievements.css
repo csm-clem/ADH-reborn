@@ -1,3 +1,6 @@
+@layer legacy, skins;
+@import url('./achievement-skins.css') layer(skins);
+@layer legacy {
 /* One album stage. Card geometry, art and interactions share this component. */
 .collection-heading{margin-bottom:24px}.collection-heading h1{margin-bottom:10px}.collection-heading p{max-width:58ch}
 .collection-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.collection-tabs .button{gap:9px}
@@ -119,3 +122,5 @@ body:has(.collection-dialog[open]){overflow:hidden}
 :is(.achievement-card,.album-thumbnail).is-musical{--card-frame:linear-gradient(135deg,#4a7092,#c7e8e4,#6a83a9);--card-body:linear-gradient(150deg,#edf8f6,#e5edf7);--card-ink:#203d55;--card-muted:#405e74}
 .is-musical .achievement-signature::after{content:' · ÉDITION MUSICALE';font-size:.62rem;letter-spacing:.08em}
 .is-musical .achievement-art{border-radius:50% 50% 8px 8px}
+
+}
