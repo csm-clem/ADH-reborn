@@ -77,3 +77,5 @@ select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
 .achievement-actions .button{padding-inline:7px}
 .achievement-actions .quiet-button,.achievement-back-actions .quiet-button{color:var(--card-ink);border:1px solid currentColor;background:#ffffff45}
 .rarity-legendary .achievement-actions .quiet-button,.rarity-legendary .achievement-back-actions .quiet-button{background:#080d14c9}
+/* High-contrast cards use a light information panel, including on obsidian. */
+:root[data-theme=accessible] .achievement-card .quiet-button{background:#fdfbf7;color:#333638;border:1px solid #333638}

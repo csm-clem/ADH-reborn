@@ -56,3 +56,4 @@
 @media(prefers-reduced-motion:reduce){.achievement-front>.card-reflection,.achievement-front>.card-foil{display:none}}
 
 .collection-stage{overflow:clip;overflow-clip-margin:12px}
+:root[data-theme=accessible] .achievement-card{min-block-size:540px}

@@ -16,3 +16,5 @@ Les reflets réagissent à la souris et au glissement tactile sur toute la carte
 - Scripts reproductibles : `tools/qa/card-skins.py`, `card-skins-touch.py`, `card-skins-offline.py` ; tests d’intégrité et de fidélité des événements musicaux dans `tests/card-skins.test.mjs`.
 
 Les tests tactiles sont émulés dans Chromium ; une validation sur téléphone physique, notamment Safari iOS, reste à faire. Aucun seuil de succès ni donnée d’apprentissage n’est modifié. Aucun déploiement live n’est autorisé par ce lot.
+
+Revue complémentaire des quatre thèmes : correction des commandes de cartes obsidiennes dans le thème accessible (panneau clair, texte sombre, contraste mesuré ≥ 7:1), hauteur minimale augmentée pour conserver le numéro et les commandes à l’intérieur du cadre. Recette reproductible : `tools/qa/card-skins-themes.py`.

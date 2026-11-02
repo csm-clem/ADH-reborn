@@ -36,6 +36,11 @@
       "id": "success-raster-skins-artworks-20261102",
       "type": "improvement",
       "text": "Les cartes Succès adoptent les cinq fonds de collection et 59 nouvelles illustrations, avec reflets sur toute la carte, critères au verso et commandes interactives conservées."
+    },
+    {
+      "id": "success-obsidian-accessible-controls-20261102",
+      "type": "bug",
+      "text": "Les cartes Succès gardent des commandes contrastées et tout leur contenu lisible dans le thème accessible, y compris les cartes Légendaires."
     }
   ]
 }
