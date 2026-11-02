@@ -44,7 +44,10 @@ with sync_playwright() as p:
   else:
    assert q.locator('.lesson-neck-scroll').count()==0
    assert svg.bounding_box()['width']>=content.bounding_box()['width']*.85
+  q.evaluate('window.qaLessonSVG=document.querySelector("svg[data-neck-model=true]");[...qaLessonSVG.querySelectorAll("[data-lesson-string]")].find(e=>Number(e.dataset.lessonString)===0&&Number(e.dataset.lessonFret)===5).focus()')
   q.set_viewport_size({'width':390,'height':844});q.wait_for_timeout(200)
+  assert q.evaluate('qaLessonSVG.isConnected'),activity
+  assert q.evaluate('document.activeElement.dataset.lessonFret==="5"'),activity
   if activity.startswith('c24'):assert q.locator('.lesson-neck-scroll').evaluate('e=>e.scrollWidth>e.clientWidth+1')
   else:assert svg.bounding_box()['width']<=390
   assert q.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
