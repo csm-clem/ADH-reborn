@@ -1,11 +1,17 @@
-# DFT — cinq SVG vectoriels, revue du 2 novembre 2026
+# DFT — cinq fonds de cartes Succès
 
-Choix utilisateur : Commune 02, Inhabituelle 01, Rare 01, Épique 02, Légendaire 04.
+Fonds et cadres seuls, sans artwork, titre, badge, étoiles, progression, bouton ou numéro. Créés à partir des cinq designs choisis par Clément. Livrable graphique indépendant de l’application.
 
-Ouvrir index.html après extraction. CODES_COMPLETS.md contient les cinq codes SVG complets et index.html dans des blocs de code. Les SVG sont sans image, base64 ou raster ; les artworks sont omis. Les PNG sources sont uniquement des fichiers séparés pour comparaison.
+| PNG | Design source |
+|---|---|
+| `commune.png` | `commune/02-commune.png` — Tranche terracotta |
+| `inhabituelle.png` | `inhabituelle/01-inhabituelle.png` — Argent guilloché |
+| `rare.png` | `rare/01-rare.png` — Cristal glacier |
+| `epique.png` | `epique/02-epique.png` — Nacre boréale |
+| `legendaire.png` | `legendaire/04-legendaire.png` — Laque volcanique |
 
-Limite : reconstruction approchée des matières et de la typographie, pas une copie pixel parfaite. Les résultats de superposition et les contrôles sont dans verification.json. Cette livraison ne vaut pas validation de fidélité ou intégration de production. Les contrôles autonomes émettent les actions DFT ; le jeu et l'audio réel restent gérés par l'application. Aucun déploiement applicatif.
+Ouvrir `index.html` pour comparer les fonds et tester leur superposition. Les dimensions, empreintes et contrôles de transparence figurent dans `manifest.json`.
 
-## Retrouver le dossier
+Dimensions natives communes : **1024 × 1536 px**, ratio **2:3**. Les contours restent ceux de la génération et présentent de petits écarts ; la normalisation par masque géométrique commun est en attente de la réponse de Clément. La superposition exacte au pixel près n’est donc pas encore garantie.
 
-Cette branche conserve le ZIP en fragments et son manifeste, sans workflow ni permission automatisée. Après téléchargement des fichiers de cette branche, exécuter `python assemble.py` pour retrouver DFT-cinq-cartes-vectorielles.zip. Le ZIP local contient les SVG individuels, index.html et CODES_COMPLETS.md. Il s’agit d’une revue approchée ; aucune intégration applicative.
+Les PNG sont conservés à leur résolution native de génération. Aucune conversion WebP ni intégration applicative. Les matières et microtextures sont régénérées depuis les références ; ce n’est pas une suppression pixel par pixel du contenu des anciennes cartes.

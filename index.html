@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DFT — Fonds de cartes Succès</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f1eb;color:#252c31;font:16px/1.5 system-ui,sans-serif}main{max-width:1400px;margin:auto;padding:24px}h1{font-size:clamp(24px,4vw,36px);margin:0 0 8px}p{max-width:78ch}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:24px}figure{margin:0}img{display:block;max-width:100%;height:auto}figcaption{margin:12px 0 6px;font-weight:650}a{color:#893c29}section{margin:32px 0}label{display:inline-flex;align-items:center;gap:8px;margin:6px 16px 6px 0}select{font:inherit;padding:6px}.overlay{position:relative;width:min(380px,100%);background:repeating-conic-gradient(#ddd 0% 25%,#fff 0% 50%) 0 0/20px 20px;isolation:isolate}.overlay img{width:100%;display:block}.overlay img+img{position:absolute;inset:0}input[type=range]{max-width:45vw}footer{margin-top:32px;font-size:14px}
+</style>
+<main>
+<h1>Fonds de cartes Succès</h1>
+<p>Les cinq matières choisies, sans contenu. Chaque lien PNG ouvre le fichier natif.</p>
+<div class="cards" id="cards"></div>
+<section aria-labelledby="overlay-title">
+<h2 id="overlay-title">Vérifier la superposition</h2>
+<label>Fond A <select id="a"></select></label>
+<label>Fond B <select id="b"></select></label>
+<label>Opacité B <input id="opacity" type="range" min="0" max="100" value="50"></label>
+<div class="overlay"><img id="base" alt="Fond A"><img id="top" alt="Fond B" style="opacity:.5"></div>
+</section>
+<footer>Fonds graphiques indépendants. Aucune modification de DFT.</footer>
+</main>
+<script>
+const styles=[['commune','Commune · Tranche terracotta'],['inhabituelle','Inhabituelle · Argent guilloché'],['rare','Rare · Cristal glacier'],['epique','Épique · Nacre boréale'],['legendaire','Légendaire · Laque volcanique']];
+for(const [id,label] of styles){const f=document.createElement('figure'),im=document.createElement('img'),c=document.createElement('figcaption'),a=document.createElement('a');im.src=id+'.png';im.alt=label;im.loading='lazy';c.textContent=label;a.href=id+'.png';a.download=id+'.png';a.textContent='Télécharger le PNG';f.append(im,c,a);document.querySelector('#cards').append(f);for(const s of document.querySelectorAll('select'))s.add(new Option(label,id));}
+const a=document.querySelector('#a'),b=document.querySelector('#b'),base=document.querySelector('#base'),topImg=document.querySelector('#top');b.value='legendaire';function update(){base.src=a.value+'.png';topImg.src=b.value+'.png'}a.addEventListener('change',update);b.addEventListener('change',update);document.querySelector('#opacity').addEventListener('input',e=>topImg.style.opacity=e.target.value/100);update();
+</script>
+</html>
