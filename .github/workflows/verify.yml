@@ -62,6 +62,7 @@ jobs:
           python tools/qa/result-motion.py
           python tools/qa/result-motion-arcade.py
           python tools/qa/uxlot.py
+          python tools/qa/launch-screen-motion.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production

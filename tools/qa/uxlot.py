@@ -31,8 +31,8 @@ with sync_playwright() as p:
  q.locator('.sidebar [data-action=achievements]').click();q.locator('[data-success-action=layout]').click();assert q.locator('.is-album').evaluate('e=>getComputedStyle(e).gridTemplateColumns.split(" ").length')==5
  assert q.locator('.is-album .is-musical').count()>0;q.screenshot(path=str(out/'album-landscape.png'),full_page=True)
  q.set_viewport_size({'width':390,'height':844});assert q.locator('.is-album').evaluate('e=>getComputedStyle(e).gridTemplateColumns.split(" ").length')==3
- q.goto('http://localhost:4173/launch-motion.html');assert q.locator('.launch-board').count()==3;q.locator('#launch-replay-all').click();q.wait_for_timeout(200);assert q.locator('.launch-board').evaluate_all('es=>es.every(e=>e.getAnimations({subtree:true}).length>0)')
- q.locator('[value=course]').check();assert q.locator('.launch-preview[data-palette=course]').count()==3
+ q.goto('http://localhost:4173/launch-motion.html');assert q.locator('.launch-board').count()==3;q.locator('#launch-replay-all').click();q.wait_for_timeout(200);assert q.locator('.launch-board').evaluate_all('es=>es.every(e=>Number(e.dataset.progress)>0)')
+ q.locator('[name=text-zoom][value=in]').check();assert q.locator('.launch-preview-text').evaluate_all('es=>es.every(e=>getComputedStyle(e).color==="rgb(255, 255, 255)")')
  q.screenshot(path=str(out/'launch-boards.png'),full_page=True)
  q.set_viewport_size({'width':320,'height':844})
  q.evaluate('''async()=>{const {ArcadeController}=await import('./arcade-ui.js'),{makeProfile}=await import('./core.js'),{newArcadeRun}=await import('./arcade-rules.js');const root=document.createElement('div');document.body.replaceChildren(root);let c;const host={root,getState:()=>({profile:makeProfile('guitar6'),sound:false}),getData:()=>({}),icon:()=>'',render:()=>{root.innerHTML=c.render();}};c=new ArcadeController(host);c.run=newArcadeRun('zones-natural');c.run.stage=5;c.run.score=5000;c.targetStage=5;c.target={string:0,fret:4,midi:44};c.phase='question';host.render();c.layout();window.qaArcade=c;}''')

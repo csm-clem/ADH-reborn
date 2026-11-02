@@ -26,6 +26,11 @@
       "id": "shared-results-launch-boards-20261102",
       "type": "improvement",
       "text": "Résultats Parcours et Arcade harmonisés en conservant leurs fonctions et animations. Trois planches de transitions permettent de comparer de nouvelles entrées en jeu."
+    },
+    {
+      "id": "arcade-whole-screen-transition-boards-20261102",
+      "type": "improvement",
+      "text": "Les planches Arcade comparent l’arrivée et la sortie de l’écran entier entre menu et jeu, avec texte blanc et comparaison des zooms du titre."
     }
   ]
 }
