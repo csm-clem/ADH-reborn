@@ -32,3 +32,13 @@
 @media(prefers-reduced-motion:reduce){.arcade-bonus{animation:arcade-bonus-still 1400ms linear both}@keyframes arcade-bonus-still{0%,85%{transform:translateX(-50%);opacity:1}100%{transform:translateX(-50%);opacity:0}}}
 
 .response-time-map .progress-selection[hidden]{display:none}
+
+.arcade-result-card{position:relative;overflow:hidden;transform-origin:center}
+.arcade-result-card>:not(.result-shimmer){position:relative}
+.arcade-result-card>.result-shimmer{position:absolute;inset:-50%;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent 30%,#fff9 50%,transparent 70%)}
+.arcade-result-card .arcade-stats>div{align-items:center;padding:5px 9px;border-radius:9px}
+.arcade-result-card .result-record{background:#fff3bd;color:#51441f;box-shadow:0 4px 14px rgb(193 158 65 / .16)}
+.arcade-result-card .result-record dd{position:relative;color:#66501a}
+.result-sparks{position:absolute;inset:0;pointer-events:none}
+.result-sparks i{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:1px;background:#b28c34;opacity:0}
+.result-sparks i:nth-child(even){width:3px;height:3px;border-radius:50%;background:#d4b765}

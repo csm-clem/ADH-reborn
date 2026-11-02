@@ -4,7 +4,7 @@ Le frettage Arcade utilise la formule `L × (1 − 2^(−n/12))`, avec une éche
 
 La découverte Parcours par zone utilise la même géométrie que les autres activités, sans multiplicateur horizontal. Un masque SVG progressif commence au bord réel du manche lorsqu’il débute après la case zéro. Les mini-leçons par corde disposent d’une hauteur intrinsèque de 180 px, avec des cases de 28 px (12 cases) ou 22 px (24 cases) : le défilement natif ne s’active que si le cadre est trop étroit.
 
-`result-motion.html` présente trois propositions rejouables et comparables : Élan arcade, Score en cascade, Record lumineux. Le curseur permet d’examiner chaque instant ; le mouvement réduit suit le réglage système et peut être activé manuellement. Les exemples sont fictifs et n’écrivent aucune donnée de progression. Ces propositions ne changent pas encore l’animation de la vraie result-card.
+`result-motion.html` présente trois propositions rejouables et comparables : Élan arcade, Score en cascade, Record lumineux. Le curseur permet d’examiner chaque instant ; le mouvement réduit suit le réglage système et peut être activé manuellement. Les exemples sont fictifs et n’écrivent aucune donnée de progression. La direction C, validée par Clément, anime désormais la vraie result-card Arcade : score sur 2,6 secondes, statistiques espacées régulièrement, fond jaune pastel sans bordure et éclats autour du chiffre. Le mouvement réduit affiche directement le résultat final.
 
 Les écrans de lancement partagent les dégradés des boutons via les mêmes variables de couleurs : orange pour Arcade, bleu pour Parcours. Les icônes de navigation restent dessinées au trait et utilisent les jointures arrondies du composant SVG commun.
 

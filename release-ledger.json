@@ -1,228 +1,346 @@
 {
   "schema": 1,
-  "live_version": "0.38.0",
+  "live_version": "0.39.0",
   "history": [
+    {
+      "version": "0.39",
+      "title": "Arcade, confort du manche et r\u00e9glages",
+      "items": [
+        [
+          "bug",
+          "Les sections Aide et Sauvegardes s\u00e9parent chaque r\u00e9glage par un trait discret, sans trait ajout\u00e9 sous leur titre."
+        ],
+        [
+          "bug",
+          "Le manche est centr\u00e9 lorsqu\u2019il tient \u00e0 l\u2019\u00e9cran ; sa scrollbar appara\u00eet seulement en cas de d\u00e9bordement. En tournant l\u2019\u00e9cran, la pastille \u00e0 nommer reste visible."
+        ],
+        [
+          "improvement",
+          "Les introductions aux manches de 12 et 24 cases utilisent la largeur disponible et conservent une hauteur lisible de 240 pixels."
+        ],
+        [
+          "improvement",
+          "Les boutons retrouvent le d\u00e9grad\u00e9 orange\u2013rouge demand\u00e9, puis orange\u2013bleu au survol."
+        ],
+        [
+          "bug",
+          "Le manche s\u2019arr\u00eate apr\u00e8s la 24e frette, sans fausse case ni fondu, avec une terminaison l\u00e9g\u00e8rement arrondie."
+        ],
+        [
+          "improvement",
+          "Les manches longs utilisent des cases de 40 pixels ; le d\u00e9filement dispara\u00eet lorsque toutes les positions tiennent dans la fen\u00eatre."
+        ],
+        [
+          "improvement",
+          "Le manche \u00e9quilibre les marges des cordes extr\u00eames, espace les num\u00e9ros des cibles \u00e0 vide et ajoute un fondu \u00e0 gauche aux zones recadr\u00e9es."
+        ],
+        [
+          "improvement",
+          "Cordes graves plus marqu\u00e9es, rep\u00e8res de touche brun fonc\u00e9, surlignage de corde \u00e0 \u00e9paisseur constante et d\u00e9couverte \u00e9largie sur ordinateur."
+        ],
+        [
+          "improvement",
+          "Les roues restent rondes et concentriques dans les deux orientations ; en paysage, leurs boutons mesurent 40 pixels et les consignes sont plus compactes."
+        ],
+        [
+          "improvement",
+          "Les chapitres ne contenant qu\u2019une seule activit\u00e9 ouvrent directement le cours ou l\u2019exercice."
+        ],
+        [
+          "improvement",
+          "La collection des succ\u00e8s s\u2019ouvre par d\u00e9faut en vue d\u00e9taill\u00e9e ; la vue Album reste disponible."
+        ],
+        [
+          "improvement",
+          "Le survol des boutons utilise le d\u00e9grad\u00e9 bleu demand\u00e9 et les titres des fen\u00eatres de dialogue sont plus discrets."
+        ],
+        [
+          "improvement",
+          "Les boutons Tout, Rep\u00e8res, Fluidit\u00e9 et Musiques affichent uniquement leur titre, sans compteur de cartes."
+        ],
+        [
+          "improvement",
+          "Les cinq cartes communes adoptent leurs illustrations valid\u00e9es : gravures musicales, cuivre mat, papier chaud et encre p\u00e9trole, en SVG l\u00e9gers et disponibles hors ligne."
+        ],
+        [
+          "improvement",
+          "Les cartes Succ\u00e8s retirent les mentions de mati\u00e8re et de contexte pour mettre en avant leur titre, leur progression et leurs actions."
+        ],
+        [
+          "bug",
+          "Sur ordinateur, le partage du r\u00e9sultat t\u00e9l\u00e9charge une image PNG ; sur mobile, un \u00e9chec du partage natif propose le t\u00e9l\u00e9chargement."
+        ],
+        [
+          "improvement",
+          "La c\u00e9l\u00e9bration des succ\u00e8s adopte des accents orange et corail sunrise, avec des surfaces de lecture adapt\u00e9es au th\u00e8me."
+        ],
+        [
+          "feature",
+          "Quatre modes Arcade par zones ou cordes, naturels ou chromatiques : trois vies, timer progressif, bonus de combo et vies suppl\u00e9mentaires, r\u00e9sultats et statistiques d\u00e9taill\u00e9es."
+        ],
+        [
+          "improvement",
+          "Arcade rejoint la navigation ; pr\u00e9paration avant le d\u00e9part, manche complet \u00e0 d\u00e9filement rapide, HUD conserv\u00e9 en pause et bonus sonores superpos\u00e9s aux r\u00e9ponses."
+        ],
+        [
+          "improvement",
+          "Les statistiques Arcade utilisent la carte du manche et une couleur rouge \u00e0 vert selon le temps moyen par emplacement."
+        ],
+        [
+          "feature",
+          "R\u00e9initialisation de la progression par instrument avec confirmation explicite ; rubriques de sauvegarde organis\u00e9es et panneaux d\u00e9pliables anim\u00e9s."
+        ],
+        [
+          "bug",
+          "Immigrant Song reprend les six mesures demand\u00e9es et les appels vocaux corrig\u00e9s ; retrait de la phrase superflue avant le t\u00e9l\u00e9chargement d\u2019une mise \u00e0 jour."
+        ],
+        [
+          "bug",
+          "Le manche Arcade respecte les proportions du frettage, sans \u00e9tirement sur laptop, et conserve son cadrage au sein d\u2019une m\u00eame zone ; la case \u00e0 vide est r\u00e9duite et les cordes commencent au sillet dans les deux modes."
+        ],
+        [
+          "improvement",
+          "Pr\u00e9paration identique au Parcours, bonus de 50 points \u00e0 cinq notes, r\u00e9sultats avec valeurs en premier et carte du manche plus vive, avec d\u00e9tails utiles par emplacement."
+        ],
+        [
+          "improvement",
+          "Immigrant Song est limit\u00e9 \u00e0 quatre mesures et un appel vocal, avec moins de sauts d\u2019octave dans le riff. La remise \u00e0 z\u00e9ro peut cibler un accordage pr\u00e9cis."
+        ],
+        [
+          "bug",
+          "Les d\u00e9couvertes par zone retrouvent les proportions habituelles du manche. Les mini-le\u00e7ons par corde sont d\u00e9zoom\u00e9es, avec d\u00e9filement seulement si n\u00e9cessaire ; un fondu \u00e0 gauche signale un manche qui commence apr\u00e8s le sillet."
+        ],
+        [
+          "improvement",
+          "Ic\u00f4nes de navigation arrondies au trait : chemin \u00e0 jalons, envahisseur pixelis\u00e9 et cartes \u00e0 collectionner. Transitions de lancement orange en Arcade et bleues dans Parcours."
+        ],
+        [
+          "improvement",
+          "Le p\u00e9rim\u00e8tre de r\u00e9initialisation par accordage est explicite. Les r\u00e9sultats proposent le retour aux Arcades ; trois planches anim\u00e9es permettent de comparer les futures animations."
+        ]
+      ]
+    },
     {
       "version": "0.38",
       "title": "Un jeu plus fluide et un parcours plus direct",
       "items": [
         [
           "feature",
-          "Tous les parcours implémentés sont accessibles dès l’ouverture : zones jusqu’à la case 24, chaque corde, duos voisins et cordes mélangées."
+          "Tous les parcours impl\u00e9ment\u00e9s sont accessibles d\u00e8s l\u2019ouverture : zones jusqu\u2019\u00e0 la case 24, chaque corde, duos voisins et cordes m\u00e9lang\u00e9es."
         ],
         [
           "improvement",
-          "Le catalogue ne dépend plus d’un lien de prévisualisation ; les résultats existants restent conservés."
+          "Le catalogue ne d\u00e9pend plus d\u2019un lien de pr\u00e9visualisation ; les r\u00e9sultats existants restent conserv\u00e9s."
         ],
         [
           "feature",
-          "Le journal permet de filtrer les nouveautés, améliorations, corrections et événements."
+          "Le journal permet de filtrer les nouveaut\u00e9s, am\u00e9liorations, corrections et \u00e9v\u00e9nements."
         ],
         [
           "improvement",
-          "Dépliez ou repliez toutes les versions du journal en un geste."
+          "D\u00e9pliez ou repliez toutes les versions du journal en un geste."
         ],
         [
           "improvement",
-          "Les releases sont nommées v0.x et leurs essais v0.x.y, avec un compteur indépendant pour chaque prochaine release."
+          "Les releases sont nomm\u00e9es v0.x et leurs essais v0.x.y, avec un compteur ind\u00e9pendant pour chaque prochaine release."
         ],
         [
           "bug",
-          "La mise à jour du bac à sable retélécharge les fichiers cohérents sans effacer les progrès ; une page de réparation récupère les anciennes installations bloquées."
+          "La mise \u00e0 jour du bac \u00e0 sable ret\u00e9l\u00e9charge les fichiers coh\u00e9rents sans effacer les progr\u00e8s ; une page de r\u00e9paration r\u00e9cup\u00e8re les anciennes installations bloqu\u00e9es."
         ],
         [
           "improvement",
-          "La version v0.x.y reste visible dans le lab et le mode débug apparaît en premier dans les paramètres."
+          "La version v0.x.y reste visible dans le lab et le mode d\u00e9bug appara\u00eet en premier dans les param\u00e8tres."
         ],
         [
           "feature",
-          "Un balayage vers la gauche remonte d’un niveau dans Parcours, sans détourner les gestes sur le manche."
+          "Un balayage vers la gauche remonte d\u2019un niveau dans Parcours, sans d\u00e9tourner les gestes sur le manche."
         ],
         [
           "bug",
-          "Corrections rythmiques de Seven Nation Army et Feel Good Inc., montée d’Around the World et retour d’Immigrant Song avec son appel vocal sur le riff saturé."
+          "Corrections rythmiques de Seven Nation Army et Feel Good Inc., mont\u00e9e d\u2019Around the World et retour d\u2019Immigrant Song avec son appel vocal sur le riff satur\u00e9."
         ],
         [
           "bug",
-          "Les mises à jour ne se bloquent plus pendant le téléchargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progrès."
+          "Les mises \u00e0 jour ne se bloquent plus pendant le t\u00e9l\u00e9chargement des fichiers volumineux ; la migration depuis les anciennes versions conserve les progr\u00e8s."
         ],
         [
           "improvement",
-          "Les fonds, cartes et surfaces de navigation se distinguent dans les quatre thèmes."
+          "Les fonds, cartes et surfaces de navigation se distinguent dans les quatre th\u00e8mes."
         ],
         [
           "improvement",
-          "Les textes secondaires et les libellés blancs sur les dégradés gagnent en contraste."
+          "Les textes secondaires et les libell\u00e9s blancs sur les d\u00e9grad\u00e9s gagnent en contraste."
         ],
         [
           "improvement",
-          "Les titres de page, de section et de chapitre suivent une hiérarchie commune."
+          "Les titres de page, de section et de chapitre suivent une hi\u00e9rarchie commune."
         ],
         [
           "feature",
-          "Un fil d’Ariane réel sur ordinateur et un retour parent explicite sur mobile indiquent votre position."
+          "Un fil d\u2019Ariane r\u00e9el sur ordinateur et un retour parent explicite sur mobile indiquent votre position."
         ],
         [
           "feature",
-          "Le retour et l’avance du navigateur suivent les pages visitées dans l’application."
+          "Le retour et l\u2019avance du navigateur suivent les pages visit\u00e9es dans l\u2019application."
         ],
         [
           "feature",
-          "L’accueil propose un accès direct à la séance à reprendre ou à la prochaine activité."
+          "L\u2019accueil propose un acc\u00e8s direct \u00e0 la s\u00e9ance \u00e0 reprendre ou \u00e0 la prochaine activit\u00e9."
         ],
         [
           "improvement",
-          "Parcours, Progrès, Succès et Réglages portent les mêmes noms sur chaque appareil ; l’onglet actif se repère aussi par sa forme."
+          "Parcours, Progr\u00e8s, Succ\u00e8s et R\u00e9glages portent les m\u00eames noms sur chaque appareil ; l\u2019onglet actif se rep\u00e8re aussi par sa forme."
         ],
         [
           "feature",
-          "La pratique ciblée se parcourt par Zones, Cordes, Duos et Mélanges."
+          "La pratique cibl\u00e9e se parcourt par Zones, Cordes, Duos et M\u00e9langes."
         ],
         [
           "improvement",
-          "Les retours restaurent le défilement et les sections ouvertes du parcours."
+          "Les retours restaurent le d\u00e9filement et les sections ouvertes du parcours."
         ],
         [
           "improvement",
-          "Les choix et réglages utilisent des grilles adaptées aux ordinateurs, avec une lecture confortable."
+          "Les choix et r\u00e9glages utilisent des grilles adapt\u00e9es aux ordinateurs, avec une lecture confortable."
         ],
         [
           "feature",
-          "La page Progrès présente la prochaine étape et la dernière activité réussie avant la carte du manche."
+          "La page Progr\u00e8s pr\u00e9sente la prochaine \u00e9tape et la derni\u00e8re activit\u00e9 r\u00e9ussie avant la carte du manche."
         ],
         [
           "improvement",
-          "Les réglages sont regroupés par instrument, jeu et son, apparence, sauvegardes et aide."
+          "Les r\u00e9glages sont regroup\u00e9s par instrument, jeu et son, apparence, sauvegardes et aide."
         ],
         [
           "feature",
-          "Les chapitres affichent À commencer, En cours ou Terminé, avec texte et symbole, et signalent la prochaine séance."
+          "Les chapitres affichent \u00c0 commencer, En cours ou Termin\u00e9, avec texte et symbole, et signalent la prochaine s\u00e9ance."
         ],
         [
           "bug",
-          "Le raccourci de révision affiche le nom de l’activité qu’il lance réellement."
+          "Le raccourci de r\u00e9vision affiche le nom de l\u2019activit\u00e9 qu\u2019il lance r\u00e9ellement."
         ],
         [
           "bug",
-          "Après réouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l’historique."
+          "Apr\u00e8s r\u00e9ouverture sur un chapitre, le Retour du navigateur remonte vers ses parents ; un rechargement ne duplique pas l\u2019historique."
         ],
         [
           "improvement",
-          "La consigne reste au-dessus du manche et des réponses, visible pendant l’appui ; les écrans étroits et peu hauts conservent les commandes utiles."
+          "La consigne reste au-dessus du manche et des r\u00e9ponses, visible pendant l\u2019appui ; les \u00e9crans \u00e9troits et peu hauts conservent les commandes utiles."
         ],
         [
           "improvement",
-          "Les activités Nommer et Retrouver expliquent le geste attendu avant le lancement, sans étape obligatoire supplémentaire."
+          "Les activit\u00e9s Nommer et Retrouver expliquent le geste attendu avant le lancement, sans \u00e9tape obligatoire suppl\u00e9mentaire."
         ],
         [
           "improvement",
-          "La découverte explique le nombre d’emplacements restant à trouver avant de poursuivre ; l’écoute coupée indique comment la réactiver."
+          "La d\u00e9couverte explique le nombre d\u2019emplacements restant \u00e0 trouver avant de poursuivre ; l\u2019\u00e9coute coup\u00e9e indique comment la r\u00e9activer."
         ],
         [
           "improvement",
-          "Les introductions montrent graphiquement où regarder et où répondre, sans indiquer la réponse évaluée."
+          "Les introductions montrent graphiquement o\u00f9 regarder et o\u00f9 r\u00e9pondre, sans indiquer la r\u00e9ponse \u00e9valu\u00e9e."
         ],
         [
           "improvement",
-          "Le clavier permet de naviguer sur le manche et dans Progrès, de mettre en pause avec Échap et de retrouver le focus après une fenêtre ; les touches sont documentées."
+          "Le clavier permet de naviguer sur le manche et dans Progr\u00e8s, de mettre en pause avec \u00c9chap et de retrouver le focus apr\u00e8s une fen\u00eatre ; les touches sont document\u00e9es."
         ],
         [
           "improvement",
-          "Un balayage vers la droite revient à la page précédente ; vers la gauche, il retrouve une page déjà visitée. Le manche et les cartes gardent leurs gestes propres."
+          "Un balayage vers la droite revient \u00e0 la page pr\u00e9c\u00e9dente ; vers la gauche, il retrouve une page d\u00e9j\u00e0 visit\u00e9e. Le manche et les cartes gardent leurs gestes propres."
         ],
         [
           "bug",
-          "Les manches longs partagent les proportions graphiques du manche court : cordes, frettes, inlays, marges et fondus de défilement."
+          "Les manches longs partagent les proportions graphiques du manche court : cordes, frettes, inlays, marges et fondus de d\u00e9filement."
         ],
         [
           "improvement",
-          "Les fibres de l’Érable miel et de Studio nuit sont légèrement renforcées ; Studio nuit retrouve un bois brun et un relief plus naturel."
+          "Les fibres de l\u2019\u00c9rable miel et de Studio nuit sont l\u00e9g\u00e8rement renforc\u00e9es ; Studio nuit retrouve un bois brun et un relief plus naturel."
         ],
         [
           "improvement",
-          "Le catalogue affiche à nouveau simultanément Zones, Cordes, Duos et Mélanges, sans onglets filtrants."
+          "Le catalogue affiche \u00e0 nouveau simultan\u00e9ment Zones, Cordes, Duos et M\u00e9langes, sans onglets filtrants."
         ],
         [
           "improvement",
-          "Les chapitres se distinguent par ＋ À commencer, ▶ En cours et ✓ Terminé, avec leur libellé."
+          "Les chapitres se distinguent par \uff0b \u00c0 commencer, \u25b6 En cours et \u2713 Termin\u00e9, avec leur libell\u00e9."
         ],
         [
           "improvement",
-          "La destination active adopte la même surface contrastée sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre."
+          "La destination active adopte la m\u00eame surface contrast\u00e9e sur ordinateur et mobile ; les boutons mobiles occupent toute la hauteur de la barre."
         ],
         [
           "improvement",
-          "Les mises à jour réutilisent les fichiers inchangés à partir de leurs empreintes vérifiées ; elles évitent une seconde installation de réparation et affichent la préparation."
+          "Les mises \u00e0 jour r\u00e9utilisent les fichiers inchang\u00e9s \u00e0 partir de leurs empreintes v\u00e9rifi\u00e9es ; elles \u00e9vitent une seconde installation de r\u00e9paration et affichent la pr\u00e9paration."
         ],
         [
           "bug",
-          "Le téléchargement du nouveau service worker attend l’accord du joueur ; refuser garde la version courante et la proposition revient au prochain démarrage."
+          "Le t\u00e9l\u00e9chargement du nouveau service worker attend l\u2019accord du joueur ; refuser garde la version courante et la proposition revient au prochain d\u00e9marrage."
         ],
         [
           "improvement",
-          "Aide et Sauvegardes et mises à jour utilisent les mêmes séparations fines que les autres réglages."
+          "Aide et Sauvegardes et mises \u00e0 jour utilisent les m\u00eames s\u00e9parations fines que les autres r\u00e9glages."
         ],
         [
           "improvement",
-          "Le manche se place au-dessus des réponses sur tous les écrans, avec une hauteur proportionnelle d’environ 250 px sur un écran FHD."
+          "Le manche se place au-dessus des r\u00e9ponses sur tous les \u00e9crans, avec une hauteur proportionnelle d\u2019environ 250 px sur un \u00e9cran FHD."
         ],
         [
           "improvement",
-          "Le contenu suit le balayage de la page et la transition de retour ou d’avance se termine par un mouvement court, désactivé si les animations sont réduites."
+          "Le contenu suit le balayage de la page et la transition de retour ou d\u2019avance se termine par un mouvement court, d\u00e9sactiv\u00e9 si les animations sont r\u00e9duites."
         ],
         [
           "improvement",
-          "Le mouvement tactile des cartes utilise un amortissement régulier et une translation plus mesurée pour des reflets fluides."
+          "Le mouvement tactile des cartes utilise un amortissement r\u00e9gulier et une translation plus mesur\u00e9e pour des reflets fluides."
         ],
         [
           "bug",
-          "Les manches longs des introductions et leçons conservent une hauteur lisible et défilent horizontalement sans déplacer les consignes."
+          "Les manches longs des introductions et le\u00e7ons conservent une hauteur lisible et d\u00e9filent horizontalement sans d\u00e9placer les consignes."
         ],
         [
           "feature",
-          "Les pourcentages du manche reflètent les vingt dernières réponses à chaque emplacement ; les validations et succès restent conservés."
+          "Les pourcentages du manche refl\u00e8tent les vingt derni\u00e8res r\u00e9ponses \u00e0 chaque emplacement ; les validations et succ\u00e8s restent conserv\u00e9s."
         ],
         [
           "improvement",
-          "Chaque famille de notes enchaîne Découvrir, Nommer les notes et Retrouver les notes, avec les notes précédemment apprises."
+          "Chaque famille de notes encha\u00eene D\u00e9couvrir, Nommer les notes et Retrouver les notes, avec les notes pr\u00e9c\u00e9demment apprises."
         ],
         [
           "improvement",
-          "Les présentations d’activités retirent les mentions du nombre de questions et le mot mélangées."
+          "Les pr\u00e9sentations d\u2019activit\u00e9s retirent les mentions du nombre de questions et le mot m\u00e9lang\u00e9es."
         ],
         [
           "improvement",
-          "Le logo reprend le dégradé sunrise ; le lab utilise sa variante bleue, y compris pour ses icônes PWA."
+          "Le logo reprend le d\u00e9grad\u00e9 sunrise ; le lab utilise sa variante bleue, y compris pour ses ic\u00f4nes PWA."
         ],
         [
           "improvement",
-          "Les repères de focus ne s’affichent qu’après utilisation de Tab, tout en conservant les commandes accessibles au clavier."
+          "Les rep\u00e8res de focus ne s\u2019affichent qu\u2019apr\u00e8s utilisation de Tab, tout en conservant les commandes accessibles au clavier."
         ],
         [
           "bug",
-          "La découverte conserve son bouton de poursuite visible sur les petits écrans, avec des espacements adaptés."
+          "La d\u00e9couverte conserve son bouton de poursuite visible sur les petits \u00e9crans, avec des espacements adapt\u00e9s."
         ],
         [
           "bug",
-          "Toutes les cordes des manches réduits conservent une zone tactile valide ; les schémas longs utilisent une seule zone de défilement."
+          "Toutes les cordes des manches r\u00e9duits conservent une zone tactile valide ; les sch\u00e9mas longs utilisent une seule zone de d\u00e9filement."
         ]
       ]
     },
     {
       "version": "0.37",
-      "title": "Des cours plus courts et mieux cadrés",
+      "title": "Des cours plus courts et mieux cadr\u00e9s",
       "items": [
         [
           "bug",
-          "Les exemples et les nouveaux essais restent sur les cordes du duo ou de l’activité choisie."
+          "Les exemples et les nouveaux essais restent sur les cordes du duo ou de l\u2019activit\u00e9 choisie."
         ],
         [
           "improvement",
-          "Les cours jusqu’à la case 24 proposent un manche continu défilable, avec les boutons de réponse en option."
+          "Les cours jusqu\u2019\u00e0 la case 24 proposent un manche continu d\u00e9filable, avec les boutons de r\u00e9ponse en option."
         ],
         [
           "improvement",
-          "Les cours de correspondances présentent chaque relation utile une fois, sans enchaîner des dizaines d’exemples identiques."
+          "Les cours de correspondances pr\u00e9sentent chaque relation utile une fois, sans encha\u00eener des dizaines d\u2019exemples identiques."
         ]
       ]
     },
@@ -232,37 +350,37 @@
       "items": [
         [
           "improvement",
-          "Le guide du manche dispose de sa propre section, distincte des réglages de confort et du plein écran."
+          "Le guide du manche dispose de sa propre section, distincte des r\u00e9glages de confort et du plein \u00e9cran."
         ],
         [
           "feature",
-          "Les activités 0–24 de la prévisualisation utilisent un manche défilable au doigt et par glisser à la souris."
+          "Les activit\u00e9s 0\u201324 de la pr\u00e9visualisation utilisent un manche d\u00e9filable au doigt et par glisser \u00e0 la souris."
         ],
         [
           "improvement",
-          "Chaque case garde au moins 44 pixels de largeur. Barre de défilement et fondu indiquent la suite du manche."
+          "Chaque case garde au moins 44 pixels de largeur. Barre de d\u00e9filement et fondu indiquent la suite du manche."
         ],
         [
           "bug",
-          "Faire glisser le manche ne valide aucune réponse. Les boutons restent en option et les activités 0–12 conservent leur affichage."
+          "Faire glisser le manche ne valide aucune r\u00e9ponse. Les boutons restent en option et les activit\u00e9s 0\u201312 conservent leur affichage."
         ]
       ]
     },
     {
       "version": "0.34",
-      "title": "Des sauvegardes mieux protégées",
+      "title": "Des sauvegardes mieux prot\u00e9g\u00e9es",
       "items": [
         [
           "bug",
-          "Les préférences illisibles ou issues d’un format futur sont conservées, sans remplacement silencieux. Une restauration valide rétablit la sauvegarde."
+          "Les pr\u00e9f\u00e9rences illisibles ou issues d\u2019un format futur sont conserv\u00e9es, sans remplacement silencieux. Une restauration valide r\u00e9tablit la sauvegarde."
         ],
         [
           "improvement",
-          "Vérification automatique des nouveaux modules JavaScript et de toutes les ressources nécessaires au mode hors ligne."
+          "V\u00e9rification automatique des nouveaux modules JavaScript et de toutes les ressources n\u00e9cessaires au mode hors ligne."
         ],
         [
           "improvement",
-          "Préparation technique du parcours étendu ; le parcours courant reste inchangé en attendant la recette de l’affichage 0–24."
+          "Pr\u00e9paration technique du parcours \u00e9tendu ; le parcours courant reste inchang\u00e9 en attendant la recette de l\u2019affichage 0\u201324."
         ]
       ]
     },
@@ -272,55 +390,55 @@
       "items": [
         [
           "feature",
-          "Vue Album à trois cartes par ligne, avec ouverture interactive en grand."
+          "Vue Album \u00e0 trois cartes par ligne, avec ouverture interactive en grand."
         ],
         [
           "improvement",
-          "Les cinq finitions de la v0.32 habillent aussi les couvertures de l’Album."
+          "Les cinq finitions de la v0.32 habillent aussi les couvertures de l\u2019Album."
         ],
         [
           "bug",
-          "Glissement horizontal des cartes distinct du défilement vertical ; filtres À faire et En cours séparés."
+          "Glissement horizontal des cartes distinct du d\u00e9filement vertical ; filtres \u00c0 faire et En cours s\u00e9par\u00e9s."
         ],
         [
           "improvement",
-          "Parcours reprend votre dernière page ; un second appui ramène aux branches. Doubles coches plus compactes."
+          "Parcours reprend votre derni\u00e8re page ; un second appui ram\u00e8ne aux branches. Doubles coches plus compactes."
         ],
         [
           "improvement",
-          "Rythme de Seven Nation Army corrigé, descente d’Around the World détachée et nouveau défi Feel Good Inc."
+          "Rythme de Seven Nation Army corrig\u00e9, descente d\u2019Around the World d\u00e9tach\u00e9e et nouveau d\u00e9fi Feel Good Inc."
         ]
       ]
     },
     {
       "version": "0.32",
-      "title": "Cinq matières à collectionner",
+      "title": "Cinq mati\u00e8res \u00e0 collectionner",
       "items": [
         [
           "improvement",
-          "Papier d’atelier, aluminium brossé, opale bleue, argent nacré et or gravé : finitions distinctes selon la rareté."
+          "Papier d\u2019atelier, aluminium bross\u00e9, opale bleue, argent nacr\u00e9 et or grav\u00e9 : finitions distinctes selon la raret\u00e9."
         ],
         [
           "improvement",
-          "Matières adaptées aux thèmes Studio Nuit, Inclusif-contrasté et Papier, avec textures dans les marges."
+          "Mati\u00e8res adapt\u00e9es aux th\u00e8mes Studio Nuit, Inclusif-contrast\u00e9 et Papier, avec textures dans les marges."
         ]
       ]
     },
     {
       "version": "0.31",
-      "title": "Des boutons plus nets et un journal intégré",
+      "title": "Des boutons plus nets et un journal int\u00e9gr\u00e9",
       "items": [
         [
           "feature",
-          "Consultez le journal des modifications depuis les Paramètres, même hors ligne."
+          "Consultez le journal des modifications depuis les Param\u00e8tres, m\u00eame hors ligne."
         ],
         [
           "improvement",
-          "Boutons principaux : dégradé horizontal orange vers rouge, puis bleu clair vers indigo au survol. Boutons secondaires : gris vers bleu ardoise."
+          "Boutons principaux : d\u00e9grad\u00e9 horizontal orange vers rouge, puis bleu clair vers indigo au survol. Boutons secondaires : gris vers bleu ardoise."
         ],
         [
           "bug",
-          "Suppression de l’ombre du texte et du contour visible des boutons."
+          "Suppression de l\u2019ombre du texte et du contour visible des boutons."
         ]
       ]
     },
@@ -330,69 +448,69 @@
       "items": [
         [
           "feature",
-          "Déplacez-vous sur le manche au clavier avec les flèches et les touches Début et Fin."
+          "D\u00e9placez-vous sur le manche au clavier avec les fl\u00e8ches et les touches D\u00e9but et Fin."
         ],
         [
           "improvement",
-          "Sauvegardes exportées avec un format identifié ; les anciens exports restent compatibles."
+          "Sauvegardes export\u00e9es avec un format identifi\u00e9 ; les anciens exports restent compatibles."
         ],
         [
           "improvement",
-          "Préparation et vérification des mises à jour automatisées."
+          "Pr\u00e9paration et v\u00e9rification des mises \u00e0 jour automatis\u00e9es."
         ]
       ]
     },
     {
       "version": "0.29",
-      "title": "Tout l’instrument en vue",
+      "title": "Tout l\u2019instrument en vue",
       "items": [
         [
           "improvement",
-          "Les exercices sur une corde montrent toutes les cordes de l’instrument. Les boutons de réponse restent facultatifs en portrait."
+          "Les exercices sur une corde montrent toutes les cordes de l\u2019instrument. Les boutons de r\u00e9ponse restent facultatifs en portrait."
         ],
         [
           "feature",
-          "Sur ordinateur, saisissez et faites glisser la carte des progrès."
+          "Sur ordinateur, saisissez et faites glisser la carte des progr\u00e8s."
         ],
         [
           "improvement",
-          "Reflets des cartes de succès plus discrets et contrastes renforcés."
+          "Reflets des cartes de succ\u00e8s plus discrets et contrastes renforc\u00e9s."
         ]
       ]
     },
     {
       "version": "0.28",
-      "title": "Vos succès prennent vie",
+      "title": "Vos succ\u00e8s prennent vie",
       "items": [
         [
           "feature",
-          "Une animation annonce les succès débloqués et permet de retrouver leur carte dans la collection."
+          "Une animation annonce les succ\u00e8s d\u00e9bloqu\u00e9s et permet de retrouver leur carte dans la collection."
         ],
         [
           "bug",
-          "Reflets des cartes activés dès le contact tactile."
+          "Reflets des cartes activ\u00e9s d\u00e8s le contact tactile."
         ],
         [
           "improvement",
-          "Proportions du manche rétablies et texture de bois vectorielle légère."
+          "Proportions du manche r\u00e9tablies et texture de bois vectorielle l\u00e9g\u00e8re."
         ]
       ]
     },
     {
       "version": "0.27",
-      "title": "Des repères plus lisibles",
+      "title": "Des rep\u00e8res plus lisibles",
       "items": [
         [
           "bug",
-          "Les roues de réponse proposent toutes les notes naturelles ou chromatiques nécessaires."
+          "Les roues de r\u00e9ponse proposent toutes les notes naturelles ou chromatiques n\u00e9cessaires."
         ],
         [
           "feature",
-          "Un niveau « Parfait » complète la carte des progrès, avec une double coche."
+          "Un niveau \u00ab Parfait \u00bb compl\u00e8te la carte des progr\u00e8s, avec une double coche."
         ],
         [
           "improvement",
-          "Cartes non acquises désaturées, filtre Tout et barre de défilement proportionnelle."
+          "Cartes non acquises d\u00e9satur\u00e9es, filtre Tout et barre de d\u00e9filement proportionnelle."
         ]
       ]
     },
@@ -402,29 +520,29 @@
       "items": [
         [
           "feature",
-          "Cartes de succès interactives, cinq niveaux de rareté et reflets suivant la souris ou le doigt."
+          "Cartes de succ\u00e8s interactives, cinq niveaux de raret\u00e9 et reflets suivant la souris ou le doigt."
         ],
         [
           "improvement",
-          "Critères au verso, progression visible et commandes de défi et d’écoute accessibles sur les cartes."
+          "Crit\u00e8res au verso, progression visible et commandes de d\u00e9fi et d\u2019\u00e9coute accessibles sur les cartes."
         ]
       ]
     },
     {
       "version": "0.25",
-      "title": "Un parcours mieux guidé",
+      "title": "Un parcours mieux guid\u00e9",
       "items": [
         [
           "improvement",
-          "Le parcours s’organise en trois branches : Grand Débutant, Progression guidée et Pratique ciblée."
+          "Le parcours s\u2019organise en trois branches : Grand D\u00e9butant, Progression guid\u00e9e et Pratique cibl\u00e9e."
         ],
         [
           "feature",
-          "Carte unique des progrès, de la corde à vide à la case 24."
+          "Carte unique des progr\u00e8s, de la corde \u00e0 vide \u00e0 la case 24."
         ],
         [
           "bug",
-          "Reprise de séance et conservation des acquis renforcées."
+          "Reprise de s\u00e9ance et conservation des acquis renforc\u00e9es."
         ]
       ]
     },
@@ -434,61 +552,61 @@
       "items": [
         [
           "event",
-          "Arrivée de la bêta des Premiers Parcours."
+          "Arriv\u00e9e de la b\u00eata des Premiers Parcours."
         ],
         [
           "feature",
-          "Quatre chapitres Grand Débutant, trois zones du manche, les trois premières cordes ciblées jusqu’à 12 et un premier niveau guidé."
+          "Quatre chapitres Grand D\u00e9butant, trois zones du manche, les trois premi\u00e8res cordes cibl\u00e9es jusqu\u2019\u00e0 12 et un premier niveau guid\u00e9."
         ],
         [
           "improvement",
-          "Cours visuels et bilans adaptés à l’instrument."
+          "Cours visuels et bilans adapt\u00e9s \u00e0 l\u2019instrument."
         ]
       ]
     },
     {
       "version": "0.23",
-      "title": "Bien débuter, garder ses progrès",
+      "title": "Bien d\u00e9buter, garder ses progr\u00e8s",
       "items": [
         [
           "feature",
-          "Configuration guidée en trois écrans et tutoriel facultatif du manche."
+          "Configuration guid\u00e9e en trois \u00e9crans et tutoriel facultatif du manche."
         ],
         [
           "feature",
-          "Mises à jour proposées à l’utilisateur et conservation des progrès entre versions bêta."
+          "Mises \u00e0 jour propos\u00e9es \u00e0 l\u2019utilisateur et conservation des progr\u00e8s entre versions b\u00eata."
         ],
         [
           "improvement",
-          "Aide à l’installation sur iPhone et préparation de l’audio améliorées."
+          "Aide \u00e0 l\u2019installation sur iPhone et pr\u00e9paration de l\u2019audio am\u00e9lior\u00e9es."
         ]
       ]
     },
     {
       "version": "0.22",
-      "title": "Un problème à signaler ?",
+      "title": "Un probl\u00e8me \u00e0 signaler ?",
       "items": [
         [
           "feature",
-          "Formulaire de signalement de bug dans l’application."
+          "Formulaire de signalement de bug dans l\u2019application."
         ],
         [
           "improvement",
-          "Récompenses musicales et lisibilité des succès améliorées."
+          "R\u00e9compenses musicales et lisibilit\u00e9 des succ\u00e8s am\u00e9lior\u00e9es."
         ]
       ]
     },
     {
       "version": "0.21",
-      "title": "Des défis qui avancent",
+      "title": "Des d\u00e9fis qui avancent",
       "items": [
         [
           "improvement",
-          "Noms des succès plus joueurs et progression d’accomplissement visible."
+          "Noms des succ\u00e8s plus joueurs et progression d\u2019accomplissement visible."
         ],
         [
           "bug",
-          "Retour au parcours et commandes des paramètres clarifiés."
+          "Retour au parcours et commandes des param\u00e8tres clarifi\u00e9s."
         ]
       ]
     },
@@ -498,25 +616,25 @@
       "items": [
         [
           "improvement",
-          "Contrastes, carte des progrès et présentation de la collection améliorés."
+          "Contrastes, carte des progr\u00e8s et pr\u00e9sentation de la collection am\u00e9lior\u00e9s."
         ],
         [
           "bug",
-          "Correction du retour visuel des mauvaises réponses sur le manche."
+          "Correction du retour visuel des mauvaises r\u00e9ponses sur le manche."
         ]
       ]
     },
     {
       "version": "0.19",
-      "title": "Votre collection de succès",
+      "title": "Votre collection de succ\u00e8s",
       "items": [
         [
           "feature",
-          "Première collection de succès, critères et progression sauvegardée."
+          "Premi\u00e8re collection de succ\u00e8s, crit\u00e8res et progression sauvegard\u00e9e."
         ],
         [
           "feature",
-          "Quatre palettes coordonnées : Atelier, Studio Nuit, Inclusif-contrasté et Papier."
+          "Quatre palettes coordonn\u00e9es : Atelier, Studio Nuit, Inclusif-contrast\u00e9 et Papier."
         ]
       ]
     },
@@ -526,15 +644,15 @@
       "items": [
         [
           "feature",
-          "Nouveau parcours par familles : découverte des emplacements, puis mélanges avec les notes déjà apprises."
+          "Nouveau parcours par familles : d\u00e9couverte des emplacements, puis m\u00e9langes avec les notes d\u00e9j\u00e0 apprises."
         ],
         [
           "feature",
-          "Choix entre dièses et bémols dans les paramètres et les exercices."
+          "Choix entre di\u00e8ses et b\u00e9mols dans les param\u00e8tres et les exercices."
         ],
         [
           "improvement",
-          "Micro-leçons et enchaînement des récompenses musicales revus."
+          "Micro-le\u00e7ons et encha\u00eenement des r\u00e9compenses musicales revus."
         ]
       ]
     },
@@ -544,11 +662,11 @@
       "items": [
         [
           "improvement",
-          "Services partagés pour le son, les données et le fonctionnement de l’application."
+          "Services partag\u00e9s pour le son, les donn\u00e9es et le fonctionnement de l\u2019application."
         ],
         [
           "bug",
-          "Sauvegardes et restauration renforcées."
+          "Sauvegardes et restauration renforc\u00e9es."
         ]
       ]
     },
@@ -562,45 +680,45 @@
         ],
         [
           "improvement",
-          "Démonstrations revues et passage au temps moyen pour mesurer la fluidité."
+          "D\u00e9monstrations revues et passage au temps moyen pour mesurer la fluidit\u00e9."
         ]
       ]
     },
     {
       "version": "0.15",
-      "title": "Un jeu qui s’enchaîne",
+      "title": "Un jeu qui s\u2019encha\u00eene",
       "items": [
         [
           "feature",
-          "Entraînement cumulatif et indice affichant les noms au départ du manche."
+          "Entra\u00eenement cumulatif et indice affichant les noms au d\u00e9part du manche."
         ],
         [
           "improvement",
-          "Réponses enchaînées immédiatement et schémas de manche partagés."
+          "R\u00e9ponses encha\u00een\u00e9es imm\u00e9diatement et sch\u00e9mas de manche partag\u00e9s."
         ]
       ]
     },
     {
       "version": "0.14",
-      "title": "Plus de réactivité",
+      "title": "Plus de r\u00e9activit\u00e9",
       "items": [
         [
           "improvement",
-          "Styles des commandes centralisés et visualisation des progrès revue."
+          "Styles des commandes centralis\u00e9s et visualisation des progr\u00e8s revue."
         ],
         [
           "bug",
-          "Notes jouables à la suite sans attendre la fin du son précédent."
+          "Notes jouables \u00e0 la suite sans attendre la fin du son pr\u00e9c\u00e9dent."
         ]
       ]
     },
     {
       "version": "0.13",
-      "title": "Des résultats plus clairs",
+      "title": "Des r\u00e9sultats plus clairs",
       "items": [
         [
           "improvement",
-          "Fiche de résultat reconstruite, écoute et timbres améliorés."
+          "Fiche de r\u00e9sultat reconstruite, \u00e9coute et timbres am\u00e9lior\u00e9s."
         ],
         [
           "feature",
@@ -614,25 +732,25 @@
       "items": [
         [
           "feature",
-          "Résultats enrichis et records personnels comparés au même exercice."
+          "R\u00e9sultats enrichis et records personnels compar\u00e9s au m\u00eame exercice."
         ],
         [
           "feature",
-          "Bouton pour écouter le son choisi dans les paramètres."
+          "Bouton pour \u00e9couter le son choisi dans les param\u00e8tres."
         ],
         [
           "improvement",
-          "Transitions et démarrage du chronométrage revus."
+          "Transitions et d\u00e9marrage du chronom\u00e9trage revus."
         ]
       ]
     },
     {
       "version": "0.11",
-      "title": "Des exercices mieux nommés",
+      "title": "Des exercices mieux nomm\u00e9s",
       "items": [
         [
           "improvement",
-          "Titres par sujet d’étude, sous-titres par activité et choix des timbres dans les paramètres."
+          "Titres par sujet d\u2019\u00e9tude, sous-titres par activit\u00e9 et choix des timbres dans les param\u00e8tres."
         ]
       ]
     },
@@ -642,11 +760,11 @@
       "items": [
         [
           "improvement",
-          "Nommer et retrouver sont séparés en activités distinctes, avec des séries plus courtes."
+          "Nommer et retrouver sont s\u00e9par\u00e9s en activit\u00e9s distinctes, avec des s\u00e9ries plus courtes."
         ],
         [
           "improvement",
-          "Retours visuels et fiche de résultat simplifiés."
+          "Retours visuels et fiche de r\u00e9sultat simplifi\u00e9s."
         ]
       ]
     },
@@ -656,15 +774,15 @@
       "items": [
         [
           "feature",
-          "Illustrations d’instruments fournies pour la configuration."
+          "Illustrations d\u2019instruments fournies pour la configuration."
         ],
         [
           "bug",
-          "Corrections vertes associées à la hauteur demandée."
+          "Corrections vertes associ\u00e9es \u00e0 la hauteur demand\u00e9e."
         ],
         [
           "improvement",
-          "Explications à la première rencontre d’un type d’exercice."
+          "Explications \u00e0 la premi\u00e8re rencontre d\u2019un type d\u2019exercice."
         ]
       ]
     },
@@ -674,21 +792,21 @@
       "items": [
         [
           "event",
-          "L’application prend le nom Daily Fretboard Trainer."
+          "L\u2019application prend le nom Daily Fretboard Trainer."
         ],
         [
           "improvement",
-          "Manche visible, résultats et configuration des instruments améliorés."
+          "Manche visible, r\u00e9sultats et configuration des instruments am\u00e9lior\u00e9s."
         ]
       ]
     },
     {
       "version": "0.7",
-      "title": "Votre accordage à vous",
+      "title": "Votre accordage \u00e0 vous",
       "items": [
         [
           "feature",
-          "Accordages courants et éditeur personnalisé avec écoute des cordes."
+          "Accordages courants et \u00e9diteur personnalis\u00e9 avec \u00e9coute des cordes."
         ]
       ]
     },
@@ -698,55 +816,55 @@
       "items": [
         [
           "improvement",
-          "Manche agrandi, confort tactile et ordre des cordes harmonisés."
+          "Manche agrandi, confort tactile et ordre des cordes harmonis\u00e9s."
         ]
       ]
     },
     {
       "version": "0.5",
-      "title": "Premier pilote pédagogique",
+      "title": "Premier pilote p\u00e9dagogique",
       "items": [
         [
           "feature",
-          "Parcours adapté au profil instrumental et premières activités pédagogiques du pilote."
+          "Parcours adapt\u00e9 au profil instrumental et premi\u00e8res activit\u00e9s p\u00e9dagogiques du pilote."
         ]
       ]
     },
     {
       "version": "0.4",
-      "title": "Prêt à jouer",
+      "title": "Pr\u00eat \u00e0 jouer",
       "items": [
         [
           "feature",
-          "Préparation visuelle avant les questions et disposition adaptée au portrait et au paysage."
+          "Pr\u00e9paration visuelle avant les questions et disposition adapt\u00e9e au portrait et au paysage."
         ],
         [
           "improvement",
-          "Manche clair et repères plus lisibles."
+          "Manche clair et rep\u00e8res plus lisibles."
         ]
       ]
     },
     {
       "version": "0.3",
-      "title": "Comprendre et répondre",
+      "title": "Comprendre et r\u00e9pondre",
       "items": [
         [
           "improvement",
-          "Micro-leçons, consignes, réponses tactiles et présentation des résultats améliorées."
+          "Micro-le\u00e7ons, consignes, r\u00e9ponses tactiles et pr\u00e9sentation des r\u00e9sultats am\u00e9lior\u00e9es."
         ]
       ]
     },
     {
       "version": "0.2",
-      "title": "Premiers retours intégrés",
+      "title": "Premiers retours int\u00e9gr\u00e9s",
       "items": [
         [
           "bug",
-          "Pause et chronométrage corrigés lors des changements d’orientation."
+          "Pause et chronom\u00e9trage corrig\u00e9s lors des changements d\u2019orientation."
         ],
         [
           "improvement",
-          "Proportions du manche, timbre de guitare et confort de lecture améliorés."
+          "Proportions du manche, timbre de guitare et confort de lecture am\u00e9lior\u00e9s."
         ]
       ]
     }
@@ -801,6 +919,34 @@
     "sunrise-logo-and-blue-lab",
     "focus-only-after-tab",
     "small-discovery-action-fit",
-    "scaled-neck-hit-regions"
+    "scaled-neck-hit-regions",
+    "settings-item-separators",
+    "neck-center-overflow-resize",
+    "long-intro-width-height",
+    "sunrise-orange-red-blue-buttons",
+    "physical-neck-end-at-24",
+    "neck-40px-targets",
+    "neck-balanced-edges-and-left-fade",
+    "neck-strings-inlays-discovery",
+    "round-wheel-compact-task-band",
+    "single-activity-direct-entry",
+    "collection-detail-default",
+    "hover-blue-and-smaller-dialog-headings",
+    "success-category-title-only",
+    "approved-common-engravings",
+    "success-remove-material-context",
+    "desktop-result-share-download",
+    "sunrise-achievement-celebration",
+    "arcade-four-modes-combos-qte-20261101",
+    "arcade-menu-ready-scroll-20261101",
+    "arcade-response-time-map-20261101",
+    "instrument-reset-details-motion-20261101",
+    "immigrant-six-bars-update-copy-20261101",
+    "arcade-realistic-frets-fixed-zones-20261101",
+    "arcade-launch-five-combo-results-20261101",
+    "immigrant-four-bars-tuning-reset-20261101",
+    "neck-proportions-mini-lessons-left-fade-20261101",
+    "navigation-outline-launch-gradients-20261101",
+    "tuning-reset-scope-motion-boards-20261101"
   ]
 }
