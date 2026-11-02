@@ -12,6 +12,6 @@ Fonds et cadres seuls, sans artwork, titre, badge, étoiles, progression, bouton
 
 Ouvrir `index.html` pour comparer les fonds et tester leur superposition. Les dimensions, empreintes et contrôles de transparence figurent dans `manifest.json`.
 
-Dimensions natives communes : **1024 × 1536 px**, ratio **2:3**. Les contours restent ceux de la génération et présentent de petits écarts ; la normalisation par masque géométrique commun est en attente de la réponse de Clément. La superposition exacte au pixel près n’est donc pas encore garantie.
+Dimensions natives communes : **1024 × 1536 px**, ratio **2:3**. Décision de Clément : conserver uniquement les images générées, sans masque géométrique commun. Les contours restent donc natifs et peuvent présenter de petits écarts ; la superposition exacte au pixel près n’est pas garantie.
 
 Les PNG sont conservés à leur résolution native de génération. Aucune conversion WebP ni intégration applicative. Les matières et microtextures sont régénérées depuis les références ; ce n’est pas une suppression pixel par pixel du contenu des anciennes cartes.

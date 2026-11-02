@@ -5,7 +5,7 @@
   "height": 1536,
   "resolution": "native, no upscaling",
   "common_geometry_mask_applied": false,
-  "contour_status": "Mêmes dimensions. Petits écarts de silhouette générée possibles ; masque commun en attente de la réponse de Clément.",
+  "contour_status": "Décision de Clément : garder uniquement les images générées, sans masque commun. Dimensions identiques ; contours natifs avec de petits écarts possibles.",
   "files": [
     {
       "file": "commune.png",
@@ -57,5 +57,6 @@
       ],
       "alpha_identical_to_commune": false
     }
-  ]
+  ],
+  "user_decision": "Garde uniquement les images générées"
 }
