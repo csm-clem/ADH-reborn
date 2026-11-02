@@ -41,6 +41,11 @@
       "id": "success-obsidian-accessible-controls-20261102",
       "type": "bug",
       "text": "Les cartes Succès gardent des commandes contrastées et tout leur contenu lisible dans le thème accessible, y compris les cartes Légendaires."
+    },
+    {
+      "id": "success-card-small-screen-number-20261102",
+      "type": "bug",
+      "text": "Les cartes musicales gardent leurs commandes et leur numéro entièrement visibles sur les petits écrans et dans le thème accessible."
     }
   ]
 }

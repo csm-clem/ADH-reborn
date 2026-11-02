@@ -6,7 +6,7 @@
 :root :is(.achievement-card,.album-thumbnail).rarity-legendary{--card-skin:url('./achievement-finishes/legendary.webp');--card-accent:#f0ce82;--foil-strength:.14}
 :root[data-theme] :is(.achievement-card,.album-thumbnail){--card-ink:#172b35;--card-muted:#465560}
 :root[data-theme] :is(.achievement-card,.album-thumbnail).rarity-legendary,:root :is(.achievement-card,.album-thumbnail).rarity-legendary{--card-ink:#fff2d5;--card-muted:#e4d2b1}
-.achievement-card{aspect-ratio:2/3;min-block-size:480px}
+.achievement-card{aspect-ratio:2/3;min-block-size:520px}
 .achievement-front,.achievement-back{position:relative;isolation:isolate;background:none;border:0;border-radius:4cqw;color:var(--card-ink);box-shadow:0 8px 20px #101a2520;min-height:100%}
 .achievement-front{height:100%;padding:6.4% 6.4% 5%;overflow:hidden}
 .achievement-back{position:absolute;padding:8%;overflow:hidden}
@@ -56,4 +56,4 @@
 @media(prefers-reduced-motion:reduce){.achievement-front>.card-reflection,.achievement-front>.card-foil{display:none}}
 
 .collection-stage{overflow:clip;overflow-clip-margin:12px}
-:root[data-theme=accessible] .achievement-card{min-block-size:540px}
+:root[data-theme=accessible] .achievement-card{min-block-size:600px}
