@@ -57,7 +57,7 @@ with sync_playwright() as p:
  assert record['attempts']==0 and record['evidence'] is None
  q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click();assert '14\u202f550' in q.locator('main').inner_text()
  q.wait_for_function('navigator.serviceWorker.controller !== null')
- cached=q.evaluate("async()=>{const c=await caches.open((await caches.keys()).find(k=>k.includes('0.39')));return (await c.keys()).map(r=>new URL(r.url).pathname);}")
+ cached=q.evaluate("async()=>{const {UPDATE_VERSION}=await import('./release.js');const c=await caches.open((await caches.keys()).find(k=>k.includes('-v'+UPDATE_VERSION+':')&&k.endsWith(new URL('./',location.href).href)));return (await c.keys()).map(r=>new URL(r.url).pathname);}")
  for name in ['arcade-ui.js','arcade-rules.js','arcade.css','answer-wheel.js']:
   assert any(path.endswith('/'+name) for path in cached),name
  q.context.set_offline(True);q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click()
