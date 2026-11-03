@@ -3,16 +3,17 @@ Use --update explicitly to generate candidate baselines for human review.
 """
 from pathlib import Path
 import os,json,sys
-from PIL import Image,ImageChops
+from PIL import Image,ImageChops,ImageFilter
 from playwright.sync_api import sync_playwright
 BASE=os.environ.get('ADH_BASE_URL','http://localhost:4173/')
 OUT=Path('work/ui-consistency');OUT.mkdir(parents=True,exist_ok=True)
 REF=Path('tests/visual/ui-consistency');REF.mkdir(parents=True,exist_ok=True)
 update='--update' in sys.argv
 
-def changed_ratio(a,b):
+def changed_ratio(a,b,soften=True):
  a=Image.open(a).convert('RGB');b=Image.open(b).convert('RGB')
  if a.size!=b.size:return 1
+ if soften:a=a.filter(ImageFilter.GaussianBlur(.7));b=b.filter(ImageFilter.GaussianBlur(.7))
  diff=ImageChops.difference(a,b);pixels=diff.get_flattened_data() if hasattr(diff,'get_flattened_data') else diff.getdata()
  return sum(max(p)>45 for p in pixels)/(a.width*a.height)
 
@@ -24,7 +25,7 @@ for theme in ['light','dark']:
    cases.append(('result',mode,'record',theme,width,height,label))
   if label!='landscape':
    for specimen in ['actions','neck']:cases.append((specimen,'course','normal',theme,width,height,label))
-report=[]
+report=[];differences=[];failures=[]
 with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
  c=b.new_context(service_workers='block',reduced_motion='reduce',device_scale_factor=1);q=c.new_page();errors=[];q.on('pageerror',lambda e:errors.append(str(e)))
@@ -48,7 +49,8 @@ with sync_playwright() as p:
   if update:(REF/name).write_bytes(actual.read_bytes())
   else:
    assert (REF/name).exists(),f'Missing baseline {name}; use --update for review'
-   ratio=changed_ratio(REF/name,actual);assert ratio<.025,(name,ratio)
+   ratio=changed_ratio(REF/name,actual);raw=changed_ratio(REF/name,actual,False);differences.append({'name':name,'ratio':ratio,'raw_ratio':raw});print(f'{name}: raw={raw:.4%}, softened={ratio:.4%}',flush=True)
+   if ratio>=.025:failures.append((name,ratio))
   report.append(name)
  # The comparator must detect a meaningful visual regression.
  q.goto(BASE+'component-gallery.html?specimen=hud&mode=arcade&theme=light&state=long');q.evaluate('document.fonts.ready');q.locator('.shared-game-hud').screenshot(path=str(OUT/'before.png'));q.add_style_tag(content='.shared-game-hud{opacity:.15}');q.locator('.shared-game-hud').screenshot(path=str(OUT/'broken.png'));assert changed_ratio(OUT/'before.png',OUT/'broken.png')>.025
@@ -56,6 +58,7 @@ with sync_playwright() as p:
  q.goto(BASE+'component-gallery.html?specimen=actions');q.keyboard.press('Tab');assert q.evaluate('document.documentElement.dataset.keyboard')=='true';assert q.locator(':focus').count()==1;assert q.locator(':focus').evaluate('e=>parseFloat(getComputedStyle(e).outlineWidth)')>=3
  q.screenshot(path=str(OUT/'keyboard-focus.png'))
  assert not errors,errors
- (OUT/'report.json').write_text(json.dumps({'references':report,'candidate_generation':update,'pixel_threshold':45,'max_changed_ratio':.025,'errors':errors},indent=2))
+ (OUT/'report.json').write_text(json.dumps({'references':report,'candidate_generation':update,'pixel_threshold':45,'max_changed_ratio':.025,'errors':errors,'differences':differences,'failures':failures,'antialias_blur_radius':.7},indent=2))
  b.close()
+ assert not failures,failures
 print(f'UI consistency: {len(report)} visual cases, shared controls, touch sizes, overflow and storage isolation passed.')

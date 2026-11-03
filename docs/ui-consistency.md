@@ -47,3 +47,5 @@ Sélecteurs : composant, mode, quatre thèmes, état et largeur. États proposé
 Références : `tests/visual/ui-consistency/`. Captures courantes et rapport : `work/ui-consistency/`. La comparaison tolère les petites variations de rendu (écart de canal >45 sur moins de 2,5 % des pixels). Un test injecte une régression visuelle pour vérifier que le comparateur la détecte. Les premières références sont générées techniquement ; leur examen humain reste distinct d’une approbation du design.
 
 Les deux workflows GitHub exécutent les comparaisons et les contrats de commandes, avec Pillow épinglé. Leurs artefacts conservent les captures courantes. Une différence volontaire doit être revue puis accompagnée de nouvelles références dans le même changement.
+
+Compatibilité de rendu : la comparaison conserve les dimensions et le seuil de 2,5 %, mais applique un flou de 0,7 pixel avant mesure pour atténuer les différences d’anticrénelage entre versions de Chromium. Le rapport conserve aussi le taux brut. Le scénario de régression injectée reste obligatoire. Un job visuel indépendant fournit les 32 captures et les deux mesures dans un petit artefact, avant la recette longue.
