@@ -50,6 +50,15 @@ with sync_playwright() as p:
    else:h['tap'](q,s['queue'][0]['target']['string'],s['queue'][0]['target']['fret'])
    event=h['snap'](q)['session']['events'][0];assert event['ms']<1000,event
   checks.append({'mode':mode,'palette':f['bg'],'pause_and_input_guards':True});q.close()
+ # A deterministic far first question must survive replacement of the launch underlay.
+ q=b.new_page(viewport={'width':844,'height':390},service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)))
+ h['seed'](q,'guitar6','c24s1-mix-4')
+ q.evaluate("""async()=>{const {PILOT_KEY}=await import('./release.js'),{questionsFor}=await import('./pilot.js'),{betaCatalog}=await import('./beta-catalog.js'),store=JSON.parse(localStorage.getItem(PILOT_KEY)),d=Object.values(store.profiles)[0],m=betaCatalog(d.profile,{full:true}).activities.find(m=>m.id==='c24s1-mix-4'),queue=questionsFor(m,{random:()=>.37});const first=queue.findIndex(q=>q.mode==='name'&&q.target.fret>=18);if(first<0)throw Error('Missing far naming question');[queue[0],queue[first]]=[queue[first],queue[0]];d.session={id:'far-first-launch',activity:m.id,stage:'practice',queue,index:0,events:[],startedAt:1,motifIndex:0,motifErrors:0};localStorage.setItem(PILOT_KEY,JSON.stringify(store));}""")
+ q.reload();q.locator('[data-pilot-action=beta-begin]').click();q.wait_for_selector('.pilot-count',state='detached');q.wait_for_timeout(100)
+ assert q.locator('#pilot-neck').evaluate('e=>e.scrollLeft>0')
+ v=q.locator('#pilot-neck').bounding_box();dot=q.locator('.pilot-marker.tone-neutral').bounding_box()
+ assert dot and dot['x']>=v['x']-1 and dot['x']+dot['width']<=v['x']+v['width']+1,(v,dot)
+ q.close()
  # Same real launch also respects reduced motion and desktop sizing.
  q=b.new_page(viewport={'width':1440,'height':900},reduced_motion='reduce',service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)));h['seed'](q);q.clock.install();q.clock.pause_at(q.evaluate('new Date().toISOString()'));q.locator('.sidebar [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click();q.clock.run_for(2100)
  f=q.evaluate(read);assert f['scale']=='scale(1)' and f['y']=='translateY(0%)' and 0<f['panel']<1,f

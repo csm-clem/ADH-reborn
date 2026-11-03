@@ -56,6 +56,11 @@
       "id": "approved-shared-launch-transition-20261103",
       "type": "improvement",
       "text": "Le lancement adopte la transition validée : zoom énergique, texte blanc en zoom continu et sortie descendante, orange en Arcade et bleue en Parcours. Les pauses et le mouvement réduit sont respectés."
+    },
+    {
+      "id": "launch-first-question-neck-reframe-20261103",
+      "type": "bug",
+      "text": "Après le lancement Parcours, la première note reste visible sur le manche à 24 cases, même si elle se trouve près des dernières frettes."
     }
   ]
 }
