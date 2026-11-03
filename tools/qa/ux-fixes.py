@@ -21,7 +21,7 @@ with sync_playwright() as p:
  assert q.locator('.arcade-hud').evaluate('e=>getComputedStyle(e).visibility')=='visible'
  assert q.locator('.arcade-pause').evaluate('e=>getComputedStyle(e).backgroundColor')=='rgba(0, 0, 0, 0)'
  q.screenshot(path=str(out/'pause-hud.png'),full_page=True)
- q.locator('[data-arcade-action=resume]').click()
+ q.locator('.arcade-pause [data-arcade-action=resume]').click()
  q.wait_for_timeout(100)
  note=q.evaluate('''async()=>{const {scrollingNeckGeometry}=await import('./core.js');const svg=document.querySelector('.arcade-neck svg'),g=scrollingNeckGeometry(6,24,{height:+svg.dataset.neckHeight,minFretWidth:+svg.dataset.neckMinWidth,realistic:svg.dataset.neckRealistic==='true'}),p=svg.querySelector('.neck-point');const nearest=(a,n)=>a.reduce((best,v,i)=>Math.abs(v-n)<Math.abs(a[best]-n)?i:best,0);return ([40,45,50,55,59,64][nearest(g.ys,+p.getAttribute('cy'))]+nearest(g.centers,+p.getAttribute('cx')))%12;}''')
  q.locator(f'[data-arcade-answer="{note}"]').click()

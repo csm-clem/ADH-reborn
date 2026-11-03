@@ -42,7 +42,7 @@ with sync_playwright() as p:
  before=q.locator('.arcade-hud').inner_text();q.clock.run_for(20000)
  assert q.locator('.arcade-hud').inner_text()==before
  assert q.locator('.arcade-playfield').get_attribute('inert') is not None
- q.locator('[data-arcade-action=resume]').click()
+ q.locator('.arcade-pause [data-arcade-action=resume]').click()
  # Six lives after the two life awards; expire each one without answering.
  q.clock.run_for(25000)
  q.get_by_role('button',name='Voir les stats',exact=True).wait_for()
