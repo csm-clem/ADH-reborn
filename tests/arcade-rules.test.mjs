@@ -74,12 +74,12 @@ test('Question identity, expiry races, corrections, transitions and pauses use a
   globalThis.requestAnimationFrame = () => 1; globalThis.cancelAnimationFrame = () => {};
   try {
     const c = new ArcadeController({getState: () => ({profile}),root: {querySelector:()=>null,querySelectorAll:()=>[]},render(){},playNote(){},playBonus(){},stopAudio(){}}, {now:()=>now, random:()=>0});
-    c.start('zones-natural');assert.equal(c.phase,'ready');now=1000;c.tick(); const first = c.serial;
-    now = 1070; c.answer(c.target.midi % 12, first); assert.equal(c.run.questions, 0);
-    now = 1090; c.tick(); c.answer(c.target.midi % 12, first);
+    c.start('zones-natural');assert.equal(c.phase,'ready');now=2350;c.tick(); const first = c.serial;
+    now = 2420; c.answer(c.target.midi % 12, first); assert.equal(c.run.questions, 0);
+    now = 2440; c.tick(); c.answer(c.target.midi % 12, first);
     assert.equal(c.run.correct, 1); assert.equal(c.run.timeMin, 90);
     c.answer(c.target.midi % 12, first); assert.equal(c.run.questions,1);
-    now = 6000; c.answer(c.target.midi % 12, c.serial);
+    now = 7000; c.answer(c.target.midi % 12, c.serial);
     assert.equal(c.run.timeouts,1); assert.equal(c.run.streak,0); assert.equal(c.run.lives,2);
     assert.equal(c.phase,'correction'); assert.equal(c.duration,3980);
     now += 599; c.tick(); assert.equal(c.phase,'correction');

@@ -16,7 +16,7 @@ def dismiss_help(page):
   if not page.locator('[data-pilot-action="help-next"]').count():break
   page.locator('[data-pilot-action="help-next"]').click();tick(page)
  if page.locator('.pilot-count').count():
-  if getattr(page,'fast_clock',False):tick(page,1600)
+  if getattr(page,'fast_clock',False):tick(page,2500)
   page.wait_for_selector('.pilot-count',state='detached')
  tick(page,160)
 def tap(page,s,f):
@@ -35,11 +35,11 @@ def complete(page,wrong=False,hint=False):
   focus=page.evaluate('''async k=>{const {pilotPlan,practiceActivities}=await import('./pilot.js'),d=Object.values(JSON.parse(localStorage.getItem(k)).profiles)[0],m=practiceActivities(pilotPlan(d.profile)).find(m=>m.id===d.session.activity);return m.focus.find(p=>!(d.session.explored||[]).includes(p.string+':'+p.fret))}''',KEY)
   tap(page,focus['string'],focus['fret']);s=snap(page)['session']
  if page.locator('[data-pilot-action="practice"]').count():page.locator('[data-pilot-action="practice"]').click();dismiss_help(page)
- if page.locator('.pilot-count').count():tick(page,1600)
+ if page.locator('.pilot-count').count():tick(page,2500)
  page.wait_for_selector('.pilot-count',state='detached');failed=False
  while snap(page)['session'] and snap(page)['session']['stage']=='practice':
   dismiss_help(page)
-  if page.locator('.pilot-count').count():tick(page,1600)
+  if page.locator('.pilot-count').count():tick(page,2500)
   s=snap(page)['session'];q=s['queue'][s['index']]
   if s.get('feedback'):wait_advance(page,s['index']);continue
   if q['mode']=='name':

@@ -15,10 +15,10 @@ with sync_playwright() as p:
  q.screenshot(path=str(out/'zone-discover.png'))
  h['seed'](q,'guitar6','z2-mix-4');q.locator('.chapter-options summary').click();q.locator('[data-pilot-action=start][data-module=z2-mix-4]').click()
  q.wait_for_selector('.launch-screen.pilot-count')
- bg=q.locator('.launch-screen').evaluate('e=>getComputedStyle(e).backgroundImage');assert '87, 171, 207' in bg and '32, 41, 128' in bg,bg
+ bg=q.locator('.launch-panel').evaluate('e=>getComputedStyle(e).backgroundImage');assert '87, 171, 207' in bg and '32, 41, 128' in bg,bg
  q.screenshot(path=str(out/'course-launch.png'))
  q.wait_for_selector('.pilot-count',state='detached');q.locator('[data-pilot-action=exit]').click();q.locator('.sidebar [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click()
- bg=q.locator('.launch-screen').evaluate('e=>getComputedStyle(e).backgroundImage');assert '248, 167, 68' in bg and '233, 70, 71' in bg,bg
+ bg=q.locator('.launch-panel').evaluate('e=>getComputedStyle(e).backgroundImage');assert '248, 167, 68' in bg and '233, 70, 71' in bg,bg
  q.screenshot(path=str(out/'arcade-launch.png'))
  assert not errors,errors;b.close()
 print('Navigation, unscaled zone discovery, left fade and both launch gradients passed.')

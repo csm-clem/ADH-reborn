@@ -12,7 +12,7 @@ with sync_playwright() as p:
  q.locator('.mobile-nav [data-action=arcade]').click()
  assert q.get_by_text('Bonus de combo',exact=True).count()==0
  q.locator('[data-mode=strings-chromatic]').click();assert q.locator('.arcade-ready').count()==1
- q.wait_for_timeout(1200)
+ q.wait_for_selector('.arcade-ready',state='detached')
  assert q.locator('.arcade-neck svg').get_attribute('data-neck-end')=='24'
  assert q.locator('.arcade-neck svg').get_attribute('data-neck-start')=='0'
  q.evaluate('window.qaNeck=document.querySelector(".arcade-neck svg")')

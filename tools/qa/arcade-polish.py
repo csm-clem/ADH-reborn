@@ -12,8 +12,8 @@ with sync_playwright() as p:
  q.clock.install();q.goto('http://localhost:4173/');keys=q.evaluate(seed);q.reload();q.locator('.sidebar [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click()
  assert q.locator('.launch-screen .launch-message').inner_text()=='À vous de jouer !'
  launch=q.locator('.launch-message').evaluate('e=>({animation:getComputedStyle(e).animationName,size:getComputedStyle(e).fontSize,bg:getComputedStyle(e.parentElement).backgroundColor})')
- assert 'launch-zoom' in launch['animation'] and float(launch['size'][:-2])>=60
- q.screenshot(path=str(out/'launch.png'));q.clock.run_for(1100)
+ assert launch['animation']=='none' and float(launch['size'][:-2])>=60
+ q.screenshot(path=str(out/'launch.png'));q.clock.run_for(2500)
  actual=q.locator('.arcade-neck svg').evaluate('e=>({width:e.getBoundingClientRect().width,model:e.viewBox.baseVal.width})');assert abs(actual['width']-actual['model'])<1,actual
  q.screenshot(path=str(out/'laptop-neck.png'),full_page=True)
  # Mount an independent test controller to control targets and inspect actual geometry/camera.

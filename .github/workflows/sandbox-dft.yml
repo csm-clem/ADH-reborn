@@ -58,6 +58,7 @@ jobs:
           python tools/qa/result-motion-arcade.py
           python tools/qa/uxlot.py
           python tools/qa/launch-screen-motion.py
+          python tools/qa/launch-integrated.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py

@@ -1,3 +1,4 @@
+import {LAUNCH_DURATION,captureLaunchPage,launchMarkup,paintLaunch} from './launch-transition.js';
 import { ARCADE_MODES, arcadeZoneWindow, arcadeScope, arcadeDuration, arcadeTarget, newArcadeRun, resolveArcade } from './arcade-rules.js';
 import { wheelChoices } from './answer-wheel.js';
 import { noteName, notationFor, scrollingNeckGeometry } from './core.js';
@@ -28,15 +29,19 @@ export class ArcadeController {
   open() { this.leave(); this.run = null; this.phase = 'menu'; this.show(); }
   start(mode) {
     if (!ARCADE_MODES.includes(mode)) return;
-    this.leave(); this.resultMotionPlayed=false;this.lastZoneCount=0;this.zoneIntroRemaining=0;this.targetStage=null; this.run = newArcadeRun(mode); this.record = false; this.details = false; this.popup = null;
-    this.phase = 'ready'; this.clock.reset(); this.show(); this.schedule();
+    const previous=captureLaunchPage(this.host.root);
+    this.leave();this.launchPrevious=previous; this.resultMotionPlayed=false;this.lastZoneCount=0;this.zoneIntroRemaining=0;this.targetStage=null; this.run = newArcadeRun(mode); this.record = false; this.details = false; this.popup = null;
+    this.prepareTarget();this.phase = 'ready'; this.clock.reset(); this.show(); this.schedule();
   }
-  next() {
+  prepareTarget() {
     const scope=arcadeScope(this.run.mode,this.profile.tuning.length,this.run.stage);
     if(scope.zoneCount>1&&scope.zoneCount!==this.lastZoneCount)this.zoneIntroRemaining=4;
     this.lastZoneCount=scope.zoneCount;this.targetStage=this.zoneIntroRemaining>0?this.profile.tuning.length-2+(scope.zoneCount-2)*3+1:this.run.stage;
     if(this.zoneIntroRemaining>0)this.zoneIntroRemaining--;
     this.serial++; this.target = arcadeTarget(this.profile, this.run.mode, this.targetStage, this.run.questions, this.target, this.random);
+  }
+  next() {
+    if(this.phase!=='ready')this.prepareTarget();
     this.phase = 'transition'; this.clock.reset(); this.show();
     // Rendering, layout and the entrance transition are part of the new question's time.
   }
@@ -47,7 +52,7 @@ export class ArcadeController {
   tick() {
     if (!this.playing || this.paused) return;
     const elapsed = this.clock.elapsed();
-    if (this.phase === 'ready') { if (elapsed >= 1000) this.next(); return; }
+    if (this.phase === 'ready') { if (elapsed >= LAUNCH_DURATION) this.next(); else paintLaunch(this.host.root,elapsed); return; }
     if (this.phase === 'correction') {
       if (elapsed >= 600) { if (this.run.finished) this.finish(); else this.next(); }
       return;
@@ -129,7 +134,7 @@ export class ArcadeController {
       if (!this.host.active()) return;
       if (e.key === 'Escape' && this.playing) { e.preventDefault(); this.paused ? this.resume() : this.pause(); }
       if (e.key === 'Tab' && this.paused) {
-        const buttons = [...root.querySelectorAll('.arcade-pause button')];
+        const buttons = [...root.querySelectorAll(this.phase==='ready'?'.approved-launch > .pilot-pause-layer button':'.arcade-pause button')];
         if (e.shiftKey && document.activeElement === buttons[0]) { e.preventDefault(); buttons.at(-1).focus(); }
         else if (!e.shiftKey && document.activeElement === buttons.at(-1)) { e.preventDefault(); buttons[0].focus(); }
       }
@@ -140,7 +145,10 @@ export class ArcadeController {
   }
   render() {
     if (this.phase === 'result') return this.result();
-    if (this.phase === 'ready') return `<main id="main-content" tabindex="-1" class="launch-screen arcade-ready ${this.paused?'is-paused':''}" aria-label="Préparation de l’Arcade"><header class="launch-tools"><button class="icon-button on-dark" data-arcade-action="menu" aria-label="Retour aux Arcades">${this.host.icon('back')}</button><span></span><button class="icon-button on-dark" data-arcade-action="${this.paused?'resume':'pause'}" aria-label="${this.paused?'Reprendre':'Pause'}">${this.host.icon('pause')}</button><button class="icon-button on-dark" data-arcade-action="mute" aria-label="${this.state.sound?'Couper':'Activer'} le son">${this.host.icon(this.state.sound?'sound':'mute')}</button></header><p class="launch-message" role="status" style="animation-delay:-${Math.min(1000,this.clock.elapsed())}ms;animation-play-state:${this.paused?'paused':'running'}">À vous de jouer !</p>${this.paused?'<div class="pilot-pause-layer"><section class="pause-card"><h2>Pause</h2><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="menu">Retour aux Arcades</button></section></div>':''}</main>`;
+    if (this.phase === 'ready') return launchMarkup({mode:'arcade',previous:this.launchPrevious,next:this.game(),controls:`<button class="icon-button on-dark" data-arcade-action="menu" aria-label="Retour aux Arcades">${this.host.icon('back')}</button><span></span><button class="icon-button on-dark" data-arcade-action="${this.paused?'resume':'pause'}" aria-label="${this.paused?'Reprendre':'Pause'}">${this.host.icon('pause')}</button><button class="icon-button on-dark" data-arcade-action="mute" aria-label="${this.state.sound?'Couper':'Activer'} le son">${this.host.icon(this.state.sound?'sound':'mute')}</button>`,pause:this.paused?'<div class="pilot-pause-layer"><section class="pause-card"><h2>Pause</h2><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="menu">Retour aux Arcades</button></section></div>':''});
+    return this.game();
+  }
+  game() {
     const r = this.run, scope = arcadeScope(r.mode, this.profile.tuning.length, this.targetStage??r.stage);
     const correcting = this.phase === 'correction';
     const rings = [[0,2,4,5,7,9,11], ...(scope.chromatic ? [[1,3,6,8,10]] : [])];
@@ -149,9 +157,10 @@ export class ArcadeController {
     const height=globalThis.innerWidth>globalThis.innerHeight&&globalThis.innerHeight<=550?70:Math.min(180,Math.max(85,(globalThis.innerHeight||844)*.19));
     const minFretWidth=40;
     const neck = miniatureNeck(this.profile, { height,minFretWidth,realistic:true,id: 'arcade-neck', points: [{...this.target, color: correcting?'var(--note-correct)':'var(--brand)'}], startFret: 0, lastFret: 24, scrollable: true, scrollFrame: false, label: 'Note à nommer', showNames: correcting, notation: this.notation });
-    return `<main id="main-content" tabindex="-1" class="arcade-game"><header class="game-header"><button class="icon-button" data-arcade-action="menu" aria-label="Retour aux Arcades">${this.host.icon('back')}</button><strong>${labels[r.mode]}</strong><div class="arcade-tools">${controls}</div></header><div class="arcade-hud"><div><strong>${r.correct}</strong><span> bonnes réponses</span></div><div><strong>${r.score.toLocaleString('fr-FR')}</strong> points</div><div aria-label="${r.lives} vies">${r.lives <= 5 ? '♥'.repeat(r.lives) : `♥ × ${r.lives}`}</div><div>Série <strong>${r.streak}</strong></div></div><div data-arcade-timer class="arcade-timer" role="progressbar" aria-label="Temps restant" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div data-arcade-fill data-animation-owned style="transform:scaleX(1)"></div></div><p class="arcade-scope">Palier ${r.stage + 1} · ${scope.zoneCount ? `Zones I${scope.zoneCount > 1 ? ' à '+['I','II','III','IV','V','VI'][scope.zoneCount-1] : ''}` : `Cases 0–${scope.end}`} · ${scope.strings.length} corde${scope.strings.length>1?'s':''}${scope.focusZone?` · Zone ${['I','II','III','IV','V','VI'][scope.zoneCount-1]} : ${scope.zonePhase==='discover'?'découverte':'passerelles par groupes de trois'}`:''}</p><div class="arcade-playfield ${this.paused?'is-paused':''}" ${this.paused?'inert':''}><div class="arcade-neck-frame"><div class="arcade-neck" data-view-key="arcade-neck" data-layout-owned>${neck}</div><span class="arcade-neck-fade" aria-hidden="true"></span></div><p class="arcade-feedback" role="status">${correcting ? `${this.feedback} · ${esc(noteName(this.target.midi, this.notation))}` : 'Quelle est cette note ?'}</p><div class="arcade-response"><div class="answer-wheel ${scope.chromatic?'dual-wheel':''}" role="group" aria-label="Choisir le nom de la note"><div class="wheel-orbit" aria-hidden="true"></div>${scope.chromatic?'<div class="wheel-orbit outer" aria-hidden="true"></div>':''}${wheelChoices(rings, {dual: scope.chromatic}).map(({n,x,y}) => `<button data-arcade-answer="${n}" data-note="${n}" data-question="${this.serial}" style="left:${x}%;top:${y}%" ${correcting||this.paused||this.phase==='transition'?'disabled':''}>${esc(noteName(n,this.notation))}</button>`).join('')}</div></div></div>${this.popup && !this.paused ? `<div data-view-key="bonus-${this.popup.id}" class="arcade-bonus" role="status"><strong>+${this.popup.points.toLocaleString('fr-FR')}</strong>${this.popup.lives ? `<span>+${this.popup.lives} UP</span>` : '<span>COMBO !</span>'}</div>` : ''}${this.paused ? `<div class="arcade-pause" role="dialog" aria-modal="true" aria-label="Partie en pause"><div class="panel"><h1>Pause</h1><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="mute">${this.state.sound?'Couper':'Activer'} le son</button><button class="button quiet-button" data-arcade-action="menu">Quitter la partie</button></div></div>` : ''}</main>`;
+    return `<main id="main-content" tabindex="-1" class="arcade-game"><header class="game-header"><button class="icon-button" data-arcade-action="menu" aria-label="Retour aux Arcades">${this.host.icon('back')}</button><strong>${labels[r.mode]}</strong><div class="arcade-tools">${controls}</div></header><div class="arcade-hud"><div><strong>${r.correct}</strong><span> bonnes réponses</span></div><div><strong>${r.score.toLocaleString('fr-FR')}</strong> points</div><div aria-label="${r.lives} vies">${r.lives <= 5 ? '♥'.repeat(r.lives) : `♥ × ${r.lives}`}</div><div>Série <strong>${r.streak}</strong></div></div><div data-arcade-timer class="arcade-timer" role="progressbar" aria-label="Temps restant" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div data-arcade-fill data-animation-owned style="transform:scaleX(1)"></div></div><p class="arcade-scope">Palier ${r.stage + 1} · ${scope.zoneCount ? `Zones I${scope.zoneCount > 1 ? ' à '+['I','II','III','IV','V','VI'][scope.zoneCount-1] : ''}` : `Cases 0–${scope.end}`} · ${scope.strings.length} corde${scope.strings.length>1?'s':''}${scope.focusZone?` · Zone ${['I','II','III','IV','V','VI'][scope.zoneCount-1]} : ${scope.zonePhase==='discover'?'découverte':'passerelles par groupes de trois'}`:''}</p><div class="arcade-playfield ${this.paused?'is-paused':''}" ${this.paused?'inert':''}><div class="arcade-neck-frame"><div class="arcade-neck" data-view-key="arcade-neck" data-layout-owned>${neck}</div><span class="arcade-neck-fade" aria-hidden="true"></span></div><p class="arcade-feedback" role="status">${correcting ? `${this.feedback} · ${esc(noteName(this.target.midi, this.notation))}` : 'Quelle est cette note ?'}</p><div class="arcade-response"><div class="answer-wheel ${scope.chromatic?'dual-wheel':''}" role="group" aria-label="Choisir le nom de la note"><div class="wheel-orbit" aria-hidden="true"></div>${scope.chromatic?'<div class="wheel-orbit outer" aria-hidden="true"></div>':''}${wheelChoices(rings, {dual: scope.chromatic}).map(({n,x,y}) => `<button data-arcade-answer="${n}" data-note="${n}" data-question="${this.serial}" style="left:${x}%;top:${y}%" ${correcting||this.paused||['ready','transition'].includes(this.phase)?'disabled':''}>${esc(noteName(n,this.notation))}</button>`).join('')}</div></div></div>${this.popup && !this.paused ? `<div data-view-key="bonus-${this.popup.id}" class="arcade-bonus" role="status"><strong>+${this.popup.points.toLocaleString('fr-FR')}</strong>${this.popup.lives ? `<span>+${this.popup.lives} UP</span>` : '<span>COMBO !</span>'}</div>` : ''}${this.paused ? `<div class="arcade-pause" role="dialog" aria-modal="true" aria-label="Partie en pause"><div class="panel"><h1>Pause</h1><button class="button primary" data-arcade-action="resume">Reprendre</button><button class="button secondary" data-arcade-action="mute">${this.state.sound?'Couper':'Activer'} le son</button><button class="button quiet-button" data-arcade-action="menu">Quitter la partie</button></div></div>` : ''}</main>`;
   }
   layout() {
+    if(this.phase==='ready')paintLaunch(this.host.root,this.clock.elapsed());
     if(this.phase==='result'){if(!this.resultMotionPlayed){this.resultMotionPlayed=true;animateArcadeResult(this.host.root,this.run.score);}return;}
     const viewport=this.host.root.querySelector('.arcade-neck');
     if(!viewport||!this.target||!this.run)return;

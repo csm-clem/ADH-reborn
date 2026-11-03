@@ -24,3 +24,5 @@
 @import url('./navigation.css') layer(pages);
 
 @import url('./arcade.css') layer(pages);
+
+@import url('./launch-transition.css') layer(pages);
