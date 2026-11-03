@@ -37,7 +37,7 @@ jobs:
           python -c 'import json,os; p=json.load(open("work/sandbox-build.json")); open(os.environ["GITHUB_ENV"],"a").write("DFT_ARCHIVE="+p["archive"]+"\nDFT_BUILD="+p["build_id"]+"\nDFT_LAB_VERSION="+p["lab_version"]+"\nDFT_LIVE_BEFORE="+json.load(open(p["metadata"]))["base_live_version"]+"\n")'
       - name: Préparer la recette navigateur
         run: |
-          pip install playwright==1.56.0
+          pip install playwright==1.56.0 pillow==12.0.0
           playwright install --with-deps chromium
           sudo ln -sf "$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')" /usr/bin/chromium
       - name: Vérifier les données, le journal et le mode hors ligne
@@ -59,6 +59,8 @@ jobs:
           python tools/qa/uxlot.py
           python tools/qa/launch-screen-motion.py
           python tools/qa/launch-integrated.py
+          python tools/qa/ui-consistency.py
+          python tools/qa/game-controls.py
           python tools/qa/navigation-ux.py
           python tools/qa/scroll-neck.py
           python tools/qa/lab-refinements.py
@@ -92,6 +94,7 @@ jobs:
             downloads/sandbox
             work/sandbox-build.json
             work/sandbox
+            work/ui-consistency
             work/gameplay-ux
             work/ux-next
             work/neck-settings-v039

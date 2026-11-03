@@ -4,9 +4,9 @@ const clamp = x => Math.max(0, Math.min(1, x));
 const easeOut = x => 1 - (1 - clamp(x)) ** 3;
 const smooth = x => { x = clamp(x); return x * x * (3 - 2 * x); };
 export function launchFrame(ms, reduced = false) {
-  const leave = clamp(ms / 150), arrival = easeOut((ms - 150) / 150), exit = smooth((ms - 1900) / 450);
+  const leave = easeOut(ms / 300), arrival = easeOut((ms - 150) / 150), exit = smooth((ms - 1900) / 450);
   return {
-    previousOpacity: ms < 300 ? 1 : 0,
+    previousOpacity: 1 - smooth(ms / 300),
     previousScale: reduced ? 1 : 1 + leave * .65,
     rotation: reduced ? 0 : -5 * leave,
     warp: reduced ? 0 : leave * 120,

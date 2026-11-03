@@ -1,0 +1,23 @@
+/* Shared game chrome owns its layout in both modes. */
+:is(.arcade-game,.pilot-game,.gallery-specimen) .game-header.shared-game-hud{display:flex;align-items:center;gap:var(--action-gap);flex-wrap:wrap;min-width:0}
+.shared-game-hud .hud-heading{flex:1;min-width:90px;line-height:1.25}.hud-heading small{display:flex;gap:10px}
+.shared-game-hud .hud-tools{display:flex;align-items:center;gap:var(--control-gap);flex-wrap:wrap;margin-left:auto}
+
+
+@media(max-width:600px){.shared-game-hud .hud-tools{gap:6px}.shared-game-hud .hud-heading{font-size:.85rem}.shared-game-hud .hud-tools .icon-button{min-width:44px;width:44px;min-height:44px;height:44px}}
+:is(.arcade-game,.pilot-game,.gallery-specimen) .game-header.shared-game-hud>.hud-tools{flex:0 0 auto}
+:is(.arcade-game,.pilot-game,.gallery-specimen) .game-header.shared-game-hud>.hud-heading{flex:1;min-width:90px}
+@media(max-width:600px){
+ :is(.arcade-game,.pilot-game,.gallery-specimen) .game-header.shared-game-hud{display:grid;grid-template-columns:var(--touch-size) minmax(0,1fr);gap:var(--space-1)}
+ .game-header.shared-game-hud>.hud-heading{grid-column:1 / -1;grid-row:1}
+ .game-header.shared-game-hud>.icon-button{grid-column:1;grid-row:2}
+ .game-header.shared-game-hud>.hud-tools{grid-column:2;grid-row:2;justify-content:flex-end;gap:var(--space-1);flex-wrap:nowrap}
+ .shared-game-hud .hud-heading strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .shared-game-hud .hud-heading small{font-size:10px;line-height:1.2}
+}
+/* A compact naming stimulus leaves room for the answer wheel and its action. */
+@media(orientation:portrait) and (max-height:650px){
+ #main-content.pilot-game.is-name{--neck-target:104px;--neck-slot:158px}
+ #main-content.pilot-game.is-name .answer-area{padding-block:0}
+ #main-content.pilot-game.is-name .pilot-response-stage{min-height:192px}
+}

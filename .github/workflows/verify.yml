@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install playwright==1.56.0
+      - run: pip install playwright==1.56.0 pillow==12.0.0
       - run: playwright install --with-deps chromium
       - name: Exécutable commun aux recettes existantes
         run: sudo ln -sf "$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')" /usr/bin/chromium
@@ -64,6 +64,8 @@ jobs:
           python tools/qa/uxlot.py
           python tools/qa/launch-screen-motion.py
           python tools/qa/launch-integrated.py
+          python tools/qa/ui-consistency.py
+          python tools/qa/game-controls.py
           python tools/qa/update-current.py
           ADH_BASE_URL=http://localhost:4173/dist/ ADH_QA_OUTPUT=work/ci python tools/qa/beta-offline.py
       - run: npm run release:production
@@ -76,6 +78,7 @@ jobs:
             downloads/*.zip
             downloads/*.json
             work/ci
+            work/ui-consistency
             work/roadmap
             work/scroll-neck
             work/navigation-ux
@@ -86,4 +89,5 @@ jobs:
             work/ux-fixes
             work/arcade-polish
             work/sandbox
+            work/ui-consistency
             /tmp/dft-server.log

@@ -105,6 +105,7 @@ export function resolveArcade(run, target, outcome, ms) {
 
 /** Bounded durable records; Arcade never writes learning evidence or unlocks activities. */
 export function validateArcadeRecords(value, profile) {
+  if(value?.bests!==undefined){if(!value.bests||typeof value.bests!=='object'||Array.isArray(value.bests)||Object.keys(value.bests).some(k=>!ARCADE_MODES.includes(k)))throw Error('Records invalides');for(const best of Object.values(value.bests))for(const key of ['correct','combos','longest'])if(!Number.isSafeInteger(best?.[key])||best[key]<0)throw Error('Record invalide');}
   if(value?.longest!==undefined&&(!Number.isSafeInteger(value.longest)||value.longest<0))throw new Error('Record de série invalide.');
   if (!value || value.version !== 1 || !value.records || typeof value.records !== 'object' || Array.isArray(value.records) || Object.keys(value.records).length > 4) throw new Error('Records Arcade invalides.');
   for (const [mode, r] of Object.entries(value.records)) {

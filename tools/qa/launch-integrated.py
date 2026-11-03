@@ -9,7 +9,7 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);errors=[];checks=[]
  for mode in ['arcade','course']:
   q=b.new_page(viewport={'width':390,'height':844},service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)))
-  h['seed'](q,'guitar6','mix-4');q.clock.install();q.clock.pause_at(q.evaluate('new Date().toISOString()'))
+  h['seed'](q,'guitar6','mix-4');q.clock.install();q.clock.pause_at(q.evaluate('new Date(Date.now()+1000).toISOString()'))
   if mode=='arcade':
    q.locator('.mobile-nav [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click()
   else:
@@ -60,7 +60,7 @@ with sync_playwright() as p:
  assert dot and dot['x']>=v['x']-1 and dot['x']+dot['width']<=v['x']+v['width']+1,(v,dot)
  q.close()
  # Same real launch also respects reduced motion and desktop sizing.
- q=b.new_page(viewport={'width':1440,'height':900},reduced_motion='reduce',service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)));h['seed'](q);q.clock.install();q.clock.pause_at(q.evaluate('new Date().toISOString()'));q.locator('.sidebar [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click();q.clock.run_for(2100)
+ q=b.new_page(viewport={'width':1440,'height':900},reduced_motion='reduce',service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)));h['seed'](q);q.clock.install();q.clock.pause_at(q.evaluate('new Date(Date.now()+1000).toISOString()'));q.locator('.sidebar [data-action=arcade]').click();q.locator('[data-mode=zones-natural]').click();q.clock.run_for(2100)
  f=q.evaluate(read);assert f['scale']=='scale(1)' and f['y']=='translateY(0%)' and 0<f['panel']<1,f
  assert q.locator('.launch-before').evaluate('e=>e.style.filter')=='none'
  assert q.evaluate('document.documentElement.scrollWidth<=innerWidth+1')

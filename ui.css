@@ -26,3 +26,5 @@
 @import url('./arcade.css') layer(pages);
 
 @import url('./launch-transition.css') layer(pages);
+
+@import url('./hud-layout.css') layer(pages);

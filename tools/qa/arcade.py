@@ -12,7 +12,7 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox'])
  q=b.new_page();errors=[];q.on('pageerror',lambda e:errors.append(str(e)))
  q.clock.install();q.goto(BASE);q.evaluate(seed);q.reload();q.clock.run_for(150)
- q.get_by_role('button',name='Jouer en Arcade',exact=True).click()
+ q.locator('[data-action=arcade]:visible').first.click()
  assert q.locator('[data-arcade-action=start]').count()==4
  for w,h in [(390,844),(844,390),(320,568),(1920,1080)]:
   q.set_viewport_size({'width':w,'height':h})
@@ -45,22 +45,22 @@ with sync_playwright() as p:
  q.locator('[data-arcade-action=resume]').click()
  # Six lives after the two life awards; expire each one without answering.
  q.clock.run_for(25000)
- q.get_by_role('button',name='Voir les statistiques',exact=True).wait_for()
+ q.get_by_role('button',name='Voir les stats',exact=True).wait_for()
  result=q.locator('.arcade-results').inner_text()
  assert '100' in result and '10' in result and '14\u202f550' in result,result
  assert q.locator('#arcade-statistics').count()==0
- q.get_by_role('button',name='Voir les statistiques',exact=True).click()
+ q.get_by_role('button',name='Voir les stats',exact=True).click()
  assert 'Temps écoulés' in q.locator('#arcade-statistics').inner_text()
  q.screenshot(path=str(out/'result.png'),full_page=True)
  record=q.evaluate('''async()=>{const {PILOT_KEY}=await import('./release.js');const {validatePilotStore}=await import('./pilot.js');const saved=validatePilotStore(JSON.parse(localStorage.getItem(PILOT_KEY)));const p=Object.values(saved.profiles)[0];return {arcade:p.arcade,attempts:p.attempts.length,evidence:p.evidence||null};}''')
  r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14550 and r['combos']==11 and r['longest']==100 and r['earnedLives']==3 and r['timeouts']==6,r
  assert record['attempts']==0 and record['evidence'] is None
- q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click();assert '14\u202f550' in q.locator('main').inner_text()
+ q.reload();q.locator('[data-action=arcade]:visible').first.click();assert '14\u202f550' in q.locator('main').inner_text()
  q.wait_for_function('navigator.serviceWorker.controller !== null')
  cached=q.evaluate("async()=>{const {UPDATE_VERSION}=await import('./release.js');const c=await caches.open((await caches.keys()).find(k=>k.includes('-v'+UPDATE_VERSION+':')&&k.endsWith(new URL('./',location.href).href)));return (await c.keys()).map(r=>new URL(r.url).pathname);}")
  for name in ['arcade-ui.js','arcade-rules.js','arcade.css','answer-wheel.js']:
   assert any(path.endswith('/'+name) for path in cached),name
- q.context.set_offline(True);q.reload();q.get_by_role('button',name='Jouer en Arcade',exact=True).click()
+ q.context.set_offline(True);q.reload();q.locator('[data-action=arcade]:visible').first.click()
  q.locator('[data-mode=strings-chromatic]').click();q.clock.run_for(2500)
  assert q.locator('[data-arcade-answer]').count()==12
  assert not errors,errors

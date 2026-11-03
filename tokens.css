@@ -55,3 +55,7 @@
 
 /* Shared launch gradients follow the action palette. */
 :root{--launch-arcade-fill:linear-gradient(90deg,var(--button_gradient_top_color),var(--button_gradient_bottom_color));--launch-course-fill:linear-gradient(90deg,var(--button-hover-top),var(--button-hover-bottom))}
+
+/* Semantic rhythm: use these roles rather than page-specific pixel values. */
+:root{--control-gap:var(--space-2);--action-gap:var(--space-3);--field-action-gap:var(--space-4);--section-gap:var(--space-5);--panel-padding:var(--space-5);--game-gap:var(--space-2);--result-gap:var(--space-5);--motion-result:600ms;--motion-row:360ms;--motion-row-step:90ms}
+@media(orientation:landscape) and (max-height:550px){:root{--game-gap:var(--space-1);--panel-padding:var(--space-4);--result-gap:var(--space-3)}}

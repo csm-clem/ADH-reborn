@@ -42,3 +42,9 @@
 .result-sparks{position:absolute;inset:0;pointer-events:none}
 .result-sparks i{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:1px;background:#b28c34;opacity:0}
 .result-sparks i:nth-child(even){width:3px;height:3px;border-radius:50%;background:#d4b765}
+/* Shared controls and stable results when the detailed map expands. */
+.arcade-results.has-details{display:block;max-height:none;min-height:100dvh;overflow:visible}
+.arcade-results .result-layout,.arcade-results .result-layout>*{min-width:0}
+.arcade-results #arcade-statistics{margin-top:24px;min-width:0;max-width:100%;overflow-x:auto}
+.arcade-results #arcade-statistics .arcade-stats{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}
+.arcade-results .result-record dd{overflow:visible}.arcade-result-card{overflow:visible}.arcade-result-card>.result-shimmer{display:none}

@@ -1,0 +1,8 @@
+.gallery-page{max-width:1200px;margin:auto;padding:var(--section-gap);display:grid;gap:var(--section-gap)}
+.gallery-toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:var(--action-gap)}
+.gallery-toolbar label{display:grid;gap:var(--space-2)}
+.gallery-frame{width:100%;height:850px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--bg)}
+.gallery-heading{margin:0}.gallery-specimen{padding:var(--space-4)}
+.gallery-specimen .approved-launch{position:fixed}
+.gallery-example{padding:var(--panel-padding);display:grid;gap:var(--section-gap)}
+.gallery-example .button-row{flex-wrap:wrap}.gallery-specimen .arcade-results{margin:auto}

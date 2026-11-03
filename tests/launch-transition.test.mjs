@@ -5,7 +5,7 @@ test('Approved timing: fade from zero, original page zoom, continuous title grow
  assert.equal(LAUNCH_DURATION,2350);
  assert.equal(launchFrame(0).panelOpacity,0);
  assert.ok(launchFrame(100).panelOpacity>0);
- assert.equal(launchFrame(150).previousScale,1.65);
+ assert.equal(launchFrame(300).previousScale,1.65);
  assert.equal(launchFrame(300).previousOpacity,0);
  assert.equal(launchFrame(300).titleScale,.85);
  assert.equal(launchFrame(1100).titleOpacity,1);

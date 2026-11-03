@@ -1,3 +1,5 @@
+import {gameKeyboard,bindInputModality} from './ui-actions.js';
+import {icon} from './ui-icons.js';
 import {accidentalsArticle} from './spelling-guide.js';
 import {bindDetailsMotion} from './details-motion.js';
 import {resetInstrumentProgress,showResetInstrumentDialog} from './reset-progress.js';
@@ -32,19 +34,11 @@ audioService.configure({getState:appStore.getState});
 const {unlockAudio,stopAudio,playNote,playSequence,playArrangement}=audioService;
 let screen='home',installPrompt=null,updates=null,navigation=null,resizeLayoutFrame=0;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const icons={replay:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.5 10.5 7-4m-7 7 7 4"/>','fullscreen-exit':'<path d="M3 3l5 5M3 8h5V3m13 0-5 5m0-5v5h5M3 21l5-5m-5 0h5v5m13 0-5-5m0 5v-5h5"/>',fullscreen:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',chart:'<path d="M4 19h17M7 15V9m6 6V5m6 10v-8"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',back:'<path d="m14 6-6 6 6 6"/>',play:'<path d="m9 5 11 7-11 7z"/>',check:'<path d="m5 12 4 4L19 6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',mute:'<path d="m11 5-6 4H2v6h3l6 4zM16 9l6 6m0-6-6 6"/>',tap:'<path d="M9 12V5a2 2 0 0 1 4 0v7l2-1 5 4-2 6H9l-5-7a2 2 0 0 1 3-2l2 2"/>',sound:'<path d="m11 5-6 4H2v6h3l6 4zM15 8a5 5 0 0 1 0 8m3-11a9 9 0 0 1 0 14"/>',pause:'<path d="M8 5v14M16 5v14"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>'};
-Object.assign(icons,{
- route:'<circle cx="5" cy="4" r="2"/><circle cx="18" cy="12" r="2"/><circle cx="6" cy="20" r="2"/><path d="M7 4h6a4 4 0 0 1 0 8h-2a4 4 0 0 0 0 8H8"/>',
- invader:'<path d="M7 5V2m10 3V2M7 5h10v2h3v3h2v8h-4v-3H6v3H2v-8h2V7h3Z"/><path d="M8 10v2m8-2v2M8 19v2h3m5-2v2h-3"/>',
- cards:'<path d="M6 19H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2"/><rect x="7" y="6" width="14" height="16" rx="2.5"/><rect x="10" y="9" width="8" height="6" rx="1.5"/><path d="M11 18h6"/>'
-});
-icons.upload='<path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/>';
-const icon=(name)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||icons.play}</svg>`;
 
 function toast(message){document.querySelector('.toast')?.remove();const el=document.createElement('div');el.className='toast';el.role='status';el.textContent=message;document.body.append(el);setTimeout(()=>el.remove(),5000);}
 function setScreen(value){if(screen==='arcade')arcade.leave();if(screen==='pilot')pilot.leave();if(screen==='achievements')achievements.stop();screen=value;render();document.querySelector('#main-content')?.focus({preventScroll:true});}
 function fullscreenContent(active=!!document.fullscreenElement){return `${icon(active?'fullscreen-exit':'fullscreen')}<span>${active?'Quitter le plein écran':'Plein écran'}</span>`;}
-function syncFullscreen(active){for(const b of document.querySelectorAll('[data-action="fullscreen"],[data-pilot-action="fullscreen"]')){b.innerHTML=b.dataset.action?fullscreenContent(active):icon(active?'fullscreen-exit':'fullscreen');b.setAttribute('aria-label',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('title',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('aria-pressed',String(active));}}
+function syncFullscreen(active){for(const b of document.querySelectorAll('[data-action="fullscreen"],[data-pilot-action="fullscreen"],[data-arcade-action="fullscreen"]')){b.innerHTML=b.dataset.action?fullscreenContent(active):icon(active?'fullscreen-exit':'fullscreen');b.setAttribute('aria-label',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('title',active?'Quitter le plein écran':'Passer en plein écran');b.setAttribute('aria-pressed',String(active));}}
 function debugPanel(){if(!debugAvailable(RELEASE))return '';return `<section class="panel debug-panel"><h2>Mode débug <small>· réservé à la v0</small></h2><p>${pilot.debugActive?'Simulation active : tous les exercices sont réussis à 100 % et tous les succès disponibles sont débloqués.':'Testez un parcours terminé et sa collection complète, pour cet instrument.'} Vos vrais résultats restent conservés. La simulation disparaît aussi au rechargement.</p><button class="button ${pilot.debugActive?'secondary':'quiet-button'}" data-action="debug" aria-pressed="${!!pilot.debugActive}">${pilot.debugActive?'Retrouver mes vrais résultats':'Simuler un parcours à 100 %'}</button></section>`;}
 async function toggleFullscreen(){try{if(!await platformService.toggleFullscreen())toast('Ce navigateur ne propose pas le plein écran. Vous pouvez installer la PWA sur votre écran d’accueil.');}catch{toast('Le plein écran n’est pas disponible dans ce navigateur.');}}
 function logo(){return `<a class="brand" href="#" data-action="home"><img src="./icons/icon.svg" alt=""><span>${esc(APP_NAME)}</span></a>`;}
@@ -72,7 +66,7 @@ function settings(){
 function setSound(sound){appStore.update({sound});if(sound)unlockAudio();}
 
 function render(){navigation?.beforeRender();try{renderPage();}finally{navigation?.afterRender();}}
-function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='arcade'){renderView(ROOT,arcade.phase==='menu'?shell(arcade.menu()):arcade.render(),'arcade-'+arcade.phase.replace(/transition|question|correction|resolved/,'play'));requestAnimationFrame(()=>arcade.layout());return;}if(screen==='accidentals-help'){renderView(ROOT,shell(accidentalsArticle()),screen);return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()+(!pilot.data.navigation?.branch?'<section class="panel arcade-entry"><h2>Arcade</h2><p>Trois vies, des combos et un manche qui s’agrandit.</p><button class="button primary" data-action="arcade">Jouer en Arcade</button></section>':'')),screen);}
+function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='arcade'){renderView(ROOT,arcade.phase==='menu'?shell(arcade.menu()):arcade.render(),'arcade-'+arcade.phase.replace(/transition|question|correction|resolved/,'play'));requestAnimationFrame(()=>arcade.layout());return;}if(screen==='accidentals-help'){renderView(ROOT,shell(accidentalsArticle()),screen);return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
 ROOT.addEventListener('click',e=>{
  const state=appStore.getState(),button=e.target.closest('[data-action]');if(!button)return;e.preventDefault();
  switch(button.dataset.action){
@@ -151,14 +145,8 @@ bindParentSwipe(ROOT,{enabled:()=>['home','course','pilot'].includes(screen)&&!!
  if(screen==='pilot'){pilot.action('exit');return true;}
  const parent=parentNavigation(pilot.data.navigation);if(!parent)return false;pilot.data.navigation=parent;pilot.save();setScreen('home');return true;
 }});
-ROOT.addEventListener('keydown',e=>{
- if(e.key==='Tab'&&screen==='pilot'&&pilot.paused){const items=[...ROOT.querySelectorAll('.game-header button,.launch-tools button,.pause-card button')].filter(b=>!b.disabled&&b.getClientRects().length);const i=items.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();items.at(-1)?.focus();}else if(!e.shiftKey&&i===items.length-1){e.preventDefault();items[0]?.focus();}}
- if(e.key!=='Escape'||e.target.closest('input,textarea,select')||document.querySelector('dialog[open]'))return;
- if(screen==='pilot'&&pilot.session&&!pilot.introduction&&pilot.session.stage!=='result'){e.preventDefault();pilot.action(pilot.paused?'resume-pause':'pause');}
-});
-document.documentElement.dataset.keyboard='false';
-document.addEventListener('keydown',e=>{if(e.key==='Tab')document.documentElement.dataset.keyboard='true';},true);
-document.addEventListener('pointerdown',()=>{document.documentElement.dataset.keyboard='false';},true);
+document.addEventListener('keydown',e=>gameKeyboard(e,{root:ROOT,active:screen==='pilot'&&!!pilot.session&&!pilot.introduction&&pilot.session.stage!=='result',paused:pilot.paused,pause:()=>pilot.action('pause'),resume:()=>pilot.action('resume-pause')}));
+bindInputModality(document);
 bindDetailsMotion(document.body);arcade.bind(ROOT);bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
 
 const beginner=new BeginnerGuide({getState:appStore.getState,onDone:()=>{appStore.update({beginnerGuide:true});updates.offer();}});

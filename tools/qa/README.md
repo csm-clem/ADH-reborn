@@ -110,3 +110,9 @@ Rapports et captures dans `docs/v0.28/`. Ces tests ne remplacent pas une manipul
 - `accessibility-v029.py` : audit axe-core 4.14.0. L’outil d’audit n’est pas une dépendance de l’application : fournir `work/v029/axe.min.js` pour cette recette. Rapport automatique, pas certification.
 
 Les recettes `beta-browser.py` et `beta-offline.py` restent utiles ; pour la règle tactile v0.29, l’ancienne assertion « largeur des cases supérieure à 44 px à 844 × 390 » sur une seule corde ne s’applique plus au manche complet proportionné. La recette de reprise utilisée est archivée sous `v0.29/beta/`. Les boutons restent une alternative à 44 px.
+
+## Cohérence des composants
+
+Après `npm start` : `npm run qa:ui` compare les 32 références de `tests/visual/ui-consistency/` ; `python3 tools/qa/game-controls.py` vérifie les commandes sur les deux vrais modes. Playwright et Pillow 12 sont nécessaires. `npm run qa:ui:update` régénère explicitement des références candidates à examiner ; ne pas l’utiliser pour masquer une divergence.
+
+La galerie est à `/component-gallery.html`. Les commandes, scénarios et règles de contribution sont détaillés dans `docs/ui-consistency.md`. Elle utilise les vrais composants avec des données isolées en mémoire et est retirée du paquet de production.

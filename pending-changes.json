@@ -61,6 +61,21 @@
       "id": "launch-first-question-neck-reframe-20261103",
       "type": "bug",
       "text": "Après le lancement Parcours, la première note reste visible sur le manche à 24 cases, même si elle se trouve près des dernières frettes."
+    },
+    {
+      "id": "shared-hud-records-spacing-20261103",
+      "type": "improvement",
+      "text": "HUD partagé avec relance directe, résultats Arcade et records distincts fiabilisés, espacements et transition communs améliorés."
+    },
+    {
+      "id": "shared-ui-contracts-gallery-20261103",
+      "type": "improvement",
+      "text": "Composants et comportements communs pour les HUD, actions et résultats ; espacements centralisés et galerie interne interactive des composants réels."
+    },
+    {
+      "id": "ui-consistency-visual-contracts-20261103",
+      "type": "improvement",
+      "text": "Contrôles automatisés des commandes partagées, thèmes, formats et captures de référence pour prévenir les divergences visuelles."
     }
   ]
 }

@@ -10,7 +10,9 @@
     "package": "node tools/package.mjs",
     "verify:release": "node tools/verify-release.mjs",
     "release": "node tools/release.mjs",
-    "release:production": "node tools/release.mjs --production"
+    "release:production": "node tools/release.mjs --production",
+    "qa:ui": "python3 tools/qa/ui-consistency.py",
+    "qa:ui:update": "python3 tools/qa/ui-consistency.py --update"
   },
   "engines": {
     "node": ">=20"
