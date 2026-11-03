@@ -24,6 +24,7 @@ jobs:
       - name: Vérifier et préparer le candidat
         run: |
           python3 tests/environments_test.py
+          python3 tests/deploy_economy_test.py
           npm run release
       - name: Construire un essai indépendant et déterministe
         env:
@@ -65,7 +66,9 @@ jobs:
           DFT_FTP_HOST: ${{ secrets.DFT_FTP_HOST }}
           DFT_FTP_USERNAME: ${{ secrets.DFT_FTP_USERNAME }}
           DFT_FTP_PASSWORD: ${{ secrets.DFT_FTP_PASSWORD }}
-        run: python tools/deploy/ftps.py --channel sandbox --archive "$DFT_ARCHIVE"
+        run: |
+          python tools/deploy/ftps.py --channel sandbox --archive "$DFT_ARCHIVE"
+          python tools/deploy/ftps.py --channel sandbox --archive "$DFT_ARCHIVE" --verify-reuse
       - name: Vérifier les deux copies et le live inchangé
         run: |
           python - <<'PY'

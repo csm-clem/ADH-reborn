@@ -46,6 +46,11 @@
       "id": "success-card-small-screen-number-20261102",
       "type": "bug",
       "text": "Les cartes musicales gardent leurs commandes et leur numéro entièrement visibles sur les petits écrans et dans le thème accessible."
+    },
+    {
+      "id": "economical-ftps-deployment-20261103",
+      "type": "improvement",
+      "text": "La publication des essais réutilise les fichiers inchangés du lab et réduit les commandes FTPS, avec vérification et reprise après interruption."
     }
   ]
 }
