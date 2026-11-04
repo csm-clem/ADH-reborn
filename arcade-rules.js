@@ -1,3 +1,4 @@
+import {validateHistory} from './trajectory.js';
 /** Arcade primitives. Session policy is owned by the controller, not this module. */
 export const ARCADE_MODES = Object.freeze([
   'zones-natural', 'zones-chromatic', 'strings-natural', 'strings-chromatic',
@@ -106,6 +107,7 @@ export function resolveArcade(run, target, outcome, ms) {
 
 /** Bounded durable records; Arcade never writes learning evidence or unlocks activities. */
 export function validateArcadeRecords(value, profile) {
+  if(value?.history!==undefined)validateHistory(value.history);
   if(value?.bests!==undefined){if(!value.bests||typeof value.bests!=='object'||Array.isArray(value.bests)||Object.keys(value.bests).some(k=>!ARCADE_MODES.includes(k)))throw Error('Records invalides');for(const best of Object.values(value.bests))for(const key of ['correct','combos','longest'])if(!Number.isSafeInteger(best?.[key])||best[key]<0)throw Error('Record invalide');}
   if(value?.longest!==undefined&&(!Number.isSafeInteger(value.longest)||value.longest<0))throw new Error('Record de série invalide.');
   if (!value || value.version !== 1 || !value.records || typeof value.records !== 'object' || Array.isArray(value.records) || Object.keys(value.records).length > 4) throw new Error('Records Arcade invalides.');

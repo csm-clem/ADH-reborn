@@ -1,3 +1,5 @@
+import {RATING_HELP} from './rating.js';
+import {ExplorerController} from './explorer.js';
 import {gameKeyboard,bindInputModality} from './ui-actions.js';
 import {icon} from './ui-icons.js';
 import {accidentalsArticle} from './spelling-guide.js';
@@ -8,7 +10,7 @@ import {NavigationController} from './services/navigation-service.js';
 import {navigationTrail,branchLabel,routeLabel} from './beta-home.js';
 import {bindParentSwipe,parentNavigation} from './navigation-rules.js';
 import {renderChangelog,bindChangelog} from './changelog.js';
-import {bindNeckKeyboard} from './neck-view.js';
+import {layoutMiniature,bindNeckKeyboard} from './neck-view.js';
 import {bindProgress} from "./progress.js";
 import {CourseController} from './course-ui.js';
 import {BeginnerGuide,installGuide} from './beginner-guide.js';
@@ -66,11 +68,12 @@ function settings(){
 function setSound(sound){appStore.update({sound});if(sound)unlockAudio();}
 
 function render(){navigation?.beforeRender();try{renderPage();}finally{navigation?.afterRender();}}
-function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='arcade'){renderView(ROOT,arcade.phase==='menu'?shell(arcade.menu()):arcade.render(),'arcade-'+arcade.phase.replace(/transition|question|correction|resolved/,'play'));requestAnimationFrame(()=>arcade.layout());return;}if(screen==='accidentals-help'){renderView(ROOT,shell(accidentalsArticle()),screen);return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
+function renderPage(){ROOT.dataset.view=screen;queueMicrotask(()=>updates?.offer());const state=appStore.getState();if(!state.profile){renderView(ROOT,onboarding.render(),'setup-'+onboarding.step);requestAnimationFrame(()=>onboarding.layout());return;}if(screen==='explorer'){renderView(ROOT,shell(explorer.render()),'explorer');requestAnimationFrame(()=>{const svg=ROOT.querySelector('.explorer-neck svg');if(svg)layoutMiniature(svg,state.profile);});return;}if(screen==='arcade'){renderView(ROOT,arcade.phase==='menu'?shell(arcade.menu()):arcade.render(),'arcade-'+arcade.phase.replace(/transition|question|correction|resolved/,'play'));requestAnimationFrame(()=>arcade.layout());return;}if(screen==='accidentals-help'){renderView(ROOT,shell(accidentalsArticle()),screen);return;}if(screen==='course'){renderView(ROOT,courses.render(),'course-'+courses.active+'-'+courses.record.index);requestAnimationFrame(()=>courses.layout());return;}if(screen==='pilot'){renderView(ROOT,pilot.render(),'pilot-'+pilot.session?.activity+'-'+(pilot.count?'count':pilot.introduction?'intro-'+pilot.introduction.key:pilot.session?.stage)+'-'+(pilot.resultView||''));requestAnimationFrame(()=>pilot.layout());return;}renderView(ROOT,screen==='changelog'?shell(renderChangelog(CHANNEL==='sandbox'?`Bac à sable ${DISPLAY_VERSION} · prochaine release ${releaseLabel(RELEASE)}`:releaseLabel(RELEASE))):screen==='stats'?shell(pilot.stats()):screen==='settings'?settings():screen==='achievements'?shell(achievements.render()):shell(pilot.home()),screen);}
 ROOT.addEventListener('click',e=>{
  const state=appStore.getState(),button=e.target.closest('[data-action]');if(!button)return;e.preventDefault();
  switch(button.dataset.action){
  case 'accidentals-help':setScreen('accidentals-help');break;
+ case 'explorer':stopAudio();explorer.point=null;setScreen('explorer');break;
  case 'arcade':if(pilot.debugActive)pilot.setDebug(false);stopAudio();setScreen('arcade');arcade.open();break;
  case 'mute-global':setSound(!state.sound);render();document.querySelector('#setting-sound')?.focus({preventScroll:true});break;
  case 'debug':if(debugAvailable(RELEASE)){pilot.setDebug(!pilot.debugActive);render();}break;
@@ -114,6 +117,7 @@ ROOT.addEventListener('change',async e=>{
 });
 
 const pilot=new PilotController({root:ROOT,storage:storageService,setAccidentals:accidentals=>appStore.update({accidentals}),setPositionButtons:value=>appStore.update({positionButtons:value}),getState:appStore.getState,showPilot:()=>{screen='pilot';render();},openCourse:id=>{screen='course';courses.open(id);},onActivityStart:()=>{},home:()=>setScreen('home'),stats:()=>setScreen('stats'),achievements:id=>{if(id)achievements.reveal(id);setScreen('achievements');if(id)requestAnimationFrame(()=>achievements.focusRevealed(ROOT));},icon,playNote,playSequence,playArrangement,stopAudio,unlockAudio,setSound,toggleFullscreen});
+const explorer=new ExplorerController({root:ROOT,state:appStore.getState,play:playNote,render,active:()=>screen==='explorer'});
 const arcade=new ArcadeController({root:ROOT,getState:appStore.getState,getData:()=>pilot.data,save:()=>pilot.save(),storageError:()=>pilot.storageError||!!pilot.unreadableRaw,render:()=>{screen='arcade';render();},home:()=>setScreen('home'),active:()=>screen==='arcade',icon,playNote,playBonus:lives=>audioService.playArcadeBonus(lives),stopAudio,mute:()=>setSound(!appStore.getState().sound),fullscreen:toggleFullscreen});
 const courses=new CourseController({pilot,getState:appStore.getState,render:()=>{screen='course';render();},home:()=>setScreen('home'),playSequence,icon});
 const bugReports=new BugReportController({getConfiguration:()=>bugConfiguration({release:RELEASE,profile:appStore.getState().profile,theme:document.documentElement.dataset.theme,viewport:[innerWidth,innerHeight],standalone:matchMedia('(display-mode: standalone)').matches})});
@@ -147,7 +151,7 @@ bindParentSwipe(ROOT,{enabled:()=>['home','course','pilot'].includes(screen)&&!!
 }});
 document.addEventListener('keydown',e=>gameKeyboard(e,{root:ROOT,active:screen==='pilot'&&!!pilot.session&&!pilot.introduction&&pilot.session.stage!=='result',paused:pilot.paused,pause:()=>pilot.action('pause'),resume:()=>pilot.action('resume-pause')}));
 bindInputModality(document);
-bindDetailsMotion(document.body);arcade.bind(ROOT);bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
+bindDetailsMotion(document.body);arcade.bind(ROOT);explorer.bind();bindNeckKeyboard(ROOT);bindProgress(ROOT);onboarding.bind(ROOT);pilot.bind(ROOT);courses.bind(ROOT);achievements.bind(ROOT);render();
 
 const beginner=new BeginnerGuide({getState:appStore.getState,onDone:()=>{appStore.update({beginnerGuide:true});updates.offer();}});
 updates=new UpdateController({beforeUpdate:()=>{if(pilot.session)pilot.save();return storageService.saveSettings(appStore.getState()).ok&&storageService.savePilot(pilot.exportData()).ok;},canPrompt:()=>!document.querySelector('dialog[open]')&&screen!=='pilot'&&screen!=='course'&&!(screen==='arcade'&&arcade.playing)});
@@ -161,7 +165,8 @@ ROOT.addEventListener('click',e=>{
  const help=trigger.dataset.resultHelp;
  if(help){
   const title=help==='stars'?'Vos étoiles ont un sens.':'Votre résultat de référence';
-  const body=help==='stars'?'<p>Apprendre, puis automatiser</p><ul><li><strong>3 étoiles</strong> : au moins 90 % de réponses correctes. Vous pouvez avancer.</li><li><strong>4 étoiles</strong> : au moins 95 %, avec un temps moyen de 2,5 secondes ou moins.</li><li><strong>5 étoiles</strong> : aucune erreur, sans aide, avec un temps moyen de 1 seconde ou moins.</li></ul><p>Chaque petit progrès compte : continuez à votre rythme !</p>':'<p>Votre premier résultat sert de point de départ pour cet exercice et cet accordage.</p><p>Un record de fluidité signifie un temps moyen plus court à précision égale. Seules les bonnes réponses sans aide sont chronométrées pour cette comparaison.</p>';
+  const body=help==='stars'?RATING_HELP:'<p>Un nouveau record de précision signifie une proportion de bonnes premières réponses supérieure à votre meilleur résultat du même exercice et de ce même accordage.</p><p>À précision égale, une moyenne plus courte peut donner un record de fluidité. Seules les bonnes réponses sans aide et aux temps valides contribuent à cette moyenne.</p>';
+
   openCompactDialog(title,body);return;
  }
  const controller=screen==='arcade'?arcade:pilot,wasPaused=controller.paused;

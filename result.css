@@ -82,3 +82,5 @@
 [data-component=result] .result-layout{gap:var(--result-gap)}
 [data-component=result] .result-action-panel{display:flex;flex-direction:column;gap:var(--action-gap);min-width:0}
 [data-component=result] .result-secondary-actions{gap:var(--action-gap)}
+
+.result-card .stars{font-size:2rem}.info-circle{display:inline-flex;align-items:center;justify-content:center;width:1.1em;height:1.1em;border:1px solid currentColor;border-radius:50%;font-size:.6em;margin-left:.35em;vertical-align:super}.trajectory svg{width:100%;max-height:260px}.trajectory details{margin:1rem 0}.trajectory td,.trajectory th{padding:.5rem}

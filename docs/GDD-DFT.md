@@ -1,6 +1,6 @@
 # Daily Fretboard Trainer — Game Design Document
 
-**Version du document : 1.0 — 4 novembre 2026 (Europe/Paris)**
+**Version du document : 1.1 locale — 4 novembre 2026 (Europe/Paris)**
 
 **Référence étudiée :** branche `sandbox/dft`, commit [`7e018e6`](https://github.com/csm-clem/ADH-reborn/commit/7e018e6c474d6dcf36589b4eba6de54aa7f86ab1).
 **Statut :** description de conception et audit de l’existant ; recommandations soumises à arbitrage. Ce document n’atteste ni une sortie V1 ni une validation pédagogique ou utilisateur exhaustive.
@@ -28,9 +28,9 @@
 19. [Données, sauvegarde et hors ligne](#19-données-sauvegarde-et-hors-ligne)
 20. [Économie et relation commerciale](#20-économie-et-relation-commerciale)
 21. [Périmètre actuel et extensions](#21-périmètre-actuel-et-extensions)
-22. [Audit critique et options de conception](#22-audit-critique-et-options-de-conception)
+22. [Décisions du 4 novembre 2026](#22-décisions-du-4-novembre-2026)
 23. [Plan de playtest et mesures](#23-plan-de-playtest-et-mesures)
-24. [Registre des recommandations et risques](#24-registre-des-recommandations-et-risques)
+24. [Registre courant](#24-registre-courant)
 25. [Recette et entretien du GDD](#25-recette-et-entretien-du-gdd)
 26. [Sources et glossaire](#26-sources-et-glossaire)
 
@@ -315,18 +315,20 @@ Les introductions, la préparation et les pauses ne consomment pas le temps de r
 
 ### 11.3 Barème des étoiles
 
-Les règles sont appliquées dans cet ordre, les critères supérieurs remplaçant le nombre d’étoiles précédent :
+Barème local demandé le 4 novembre 2026, après clarification des intervalles :
 
-| Étoiles | Critères actuels |
+| Étoiles | Critères |
 | --- | --- |
-| 0 | Précision <50 %, ou aucune réponse. |
-| 1 | Précision ≥50 % et <75 %. |
-| 2 | Précision ≥75 % et <90 %. |
-| 3 | Précision ≥90 %. Aucune vitesse exigée. |
-| 4 | Précision ≥95 % et moyenne admissible ≤2 500 ms. |
-| 5 | 100 % et moyenne ≤1 000 ms ; toutes les réponses doivent fournir un temps admissible, donc être sans aide. |
+| 0 | Plus de 10 erreurs, ou aucune réponse. |
+| 1 | De 6 à 10 erreurs incluses. |
+| 2 | De 3 à 5 erreurs incluses. |
+| 3 | Au maximum 2 erreurs ; aucune vitesse exigée. |
+| 4 | Au maximum 1 erreur et moyenne admissible ≤2 500 ms ; toutes les premières réponses disposent d’un temps admissible, sans aide. |
+| 5 | Aucune erreur et moyenne admissible ≤1 000 ms ; toutes les premières réponses disposent d’un temps admissible, sans aide. |
 
-Le critère de quatre étoiles n’exige pas actuellement que toutes les réponses aient un temps admissible. Les étoiles affichées ne remplacent donc pas le contrôle autonome du chapitre. Les étoiles de rareté des cartes Succès représentent un autre système, décrit en section 16.
+La moyenne porte sur les bonnes premières réponses sans aide, aux temps interprétables, finis et positifs ou nuls. Pour quatre étoiles, le temps d’une réponse incorrecte doit aussi être admissible, bien qu’il n’entre pas dans cette moyenne. Les reprises sont exclues. Les erreurs sont comptées en nombre absolu, indépendamment de la taille de l’exercice. Les critères de quatre et cinq étoiles remplacent les trois étoiles quand ils sont satisfaits. Le seuil de séance réussie à 90 % reste distinct.
+
+Une phrase courte indique les conditions manquantes pour cinq étoiles ; le popup détaille tous les niveaux. Les étoiles et l’information de record disposent d’un i cerclé en exposant. Les étoiles de rareté de collection restent un système distinct.
 
 ### 11.4 Résultats et records
 
@@ -648,100 +650,13 @@ Les points Arcade et les vies n’ont pas de valeur monétaire. Le système actu
 
 Une fonctionnalité expérimentée plus tôt que sa place dans une roadmap ne déplace pas automatiquement les autres engagements de cette roadmap. La présence de code ne vaut ni acceptation finale ni disponibilité commerciale.
 
-## 22. Audit critique et options de conception
+## 22. Décisions du 4 novembre 2026
 
-Les points suivants sont des **recommandations**, à distinguer des règles existantes. Chaque point part du problème utilisateur et propose un test réversible. Effort et risque sont des appréciations qualitatives, pas des estimations de charge mesurées.
+Les propositions initiales 1 à 5 ont été refusées : elles ne sont pas à implémenter. Les anciennes recommandations GD-01 à GD-07 de cette édition initiale ne constituent plus le plan de travail. Les nouveaux IDs demandés par l’utilisateur ont une autre portée.
 
-### GD-01 — Rendre les records Arcade comparables
+Le lot local accepté comprend Trajectoire dans Progrès, les mauvaises notes nommées en découverte, l’exploration contextuelle et indépendante, les leçons grave/aigu et Si3, les nouvelles étoiles, les informations de résultat et la présentation Arcade. La refonte mélodique est spécifiée avec gabarits, progressivité et critères avant intégration de nouvelles phrases.
 
-**Objectif utilisateur :** comprendre si sa performance progresse dans un défi comparable.
-
-**Fait :** le bonus à cinq et le séquençage des zones ont évolué tandis que la version de règles stockée reste 1. **Risque :** un nouveau record peut refléter une règle plus favorable, sans progrès du joueur. Confiance élevée sur le constat de version, moyenne sur l’ampleur de l’effet utilisateur.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Versionner les futurs changements de barème / tirage ; afficher les records anciens comme historiques | Comparaisons honnêtes et migration explicite | Plus de catégories ; origine exacte de certains anciens records inconnue. |
-| B. Garder un seul record et signaler que les règles ont évolué | Interface simple, conservation immédiate | Ne rétablit pas la comparabilité du classement personnel. |
-
-**Recommandation : A**, sans supprimer les records anciens ni inventer leur version. Test : simulation d’import avant / après changement, puis demander à un joueur d’expliquer quels résultats sont comparables. Priorité haute, effort moyen, risque de migration moyen.
-
-### GD-02 — Distinguer « réussi avec aide » et « validé sans aide »
-
-**Objectif utilisateur :** savoir quoi faire quand un bon résultat ne termine pas son chapitre.
-
-**Fait :** la réussite affichée se fonde sur la précision, la preuve durable exige l’autonomie ; la carte récente peut inclure des réponses aidées. **Risque :** impression de bug ou surestimation des acquis. Confiance élevée.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Garder le score et afficher le statut d’autonomie avec l’action manquante | Respecte les progrès déjà faits et explique la suite | Un indicateur de plus, à hiérarchiser. |
-| B. Ne compter que les réponses autonomes dans un score principal unique | Un score plus directement relié à la validation | Décourage potentiellement le recours utile à l’aide ; changement de signification et migration. |
-
-**Recommandation : A**, avec un texte bref tel que « Repères réussis avec aide — à confirmer seul ». Montrer aussi le nombre d’emplacements restant à vérifier dans chaque sens. Test : cinq scénarios de résultat, dont 100 % aidé ; vérifier si l’utilisateur prévoit correctement la prochaine étape. Priorité haute, effort faible à moyen, risque faible.
-
-### GD-03 — Séparer accélération et nouveaux repères en Arcade
-
-**Objectif utilisateur :** attribuer une erreur à une difficulté compréhensible et ressentir un défi juste.
-
-**Fait :** le délai baisse à chaque résolution, y compris les échecs ; le score élargit le périmètre. Les bonus accélèrent l’extension, et la transition consomme jusqu’à 16 % du délai minimal. **Hypothèse :** la difficulté ressentie peut augmenter plus vite que la compétence musicale, surtout sur téléphone lent. Confiance moyenne sans playtest.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Conserver le défi actuel et l’expliquer clairement | Préserve les records et la tension voulue | N’élimine pas la double montée ni la part du rendu. |
-| B. Essayer un bref plateau de délai à chaque nouvelle zone, ou un départ du délai après affichage jouable | Isole mieux l’introduction ; réduit l’effet matériel | Change la difficulté et impose une nouvelle version de records. |
-
-**Recommandation : tester B dans un essai identifié**, sans remplacement immédiat du mode actuel. Comparer précision et expirations autour des transitions de zone, à appareil constant, puis entre appareils. Priorité haute de test, effort moyen, risque moyen. Une variante sans pression serait un mode distinct avec records séparés, pas un réglage caché du défi classé.
-
-### GD-04 — Préserver l’utilité de la finale musicale
-
-**Objectif utilisateur :** appliquer ses repères à une phrase et terminer avec un sentiment de progression.
-
-**Fait :** une erreur remet la chaîne à zéro ; les reprises peuvent prolonger la séance au-delà du bilan court annoncé. **Hypothèse :** une boucle de reprise imposée peut convertir la récompense en obstacle. Confiance moyenne.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Garder la chaîne entière obligatoire | Contrat simple, fin sans erreur identifiable | Allongement imprévisible pour un débutant. |
-| B. Autoriser « reprendre la musique plus tard », en gardant les preuves des questions et en laissant la pochette non obtenue | Respecte le temps et distingue apprentissage / bonus musical | Demande un état de séance et une reprise clairs. |
-
-**Recommandation : tester B** après observation de joueurs qui échouent plusieurs fois, sans distribuer la récompense de chaîne non terminée. Mesurer durée et abandon de la finale, puis rappel des notes le lendemain. Priorité moyenne, effort moyen, risque faible à moyen.
-
-### GD-05 — Réduire l’incertitude devant le catalogue
-
-**Objectif utilisateur :** choisir une pratique utile sans analyser tout le contenu.
-
-**Fait :** le catalogue complet comporte de nombreux contextes, mais l’accès libre et une prochaine séance existent déjà. **Hypothèse :** ajouter des pages de choix ou masquer des activités pourrait réduire l’autonomie sans mieux guider. Confiance moyenne.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Renforcer la carte de prochaine séance avec objectif et raison de la recommandation | Peu de changement, conserve le catalogue | Demande de bons libellés et une raison fiable. |
-| B. Ajouter un diagnostic d’entrée et une recommandation de zone | Peut mieux orienter les utilisateurs avancés | Temps initial, erreurs de diagnostic et complexité. |
-
-**Recommandation : A d’abord**, puis B seulement si les choix restent problématiques en playtest. Tester si un débutant et un utilisateur avancé lancent une activité appropriée et peuvent dire pourquoi. Priorité moyenne, effort faible, risque faible.
-
-### GD-06 — Vérifier la mémoire et le transfert
-
-**Objectif utilisateur :** disposer réellement des notes en situation musicale après la séance.
-
-**Fait :** couverture et états récents ne mesurent pas une rétention différée ; le jeu évalue d’abord l’écran. **Risque :** confondre maîtrise de la roue et repérage instrumental. Confiance élevée sur la limite, bénéfice des variantes encore à tester.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Playtests différés et exercices sur instrument observés, sans ajouter de système | Mesure vite la portée réelle des acquis | Coût de recrutement / observation ; pas de retour automatique dans l’app. |
-| B. Concevoir plus tard un bilan différé et une preuve instrumentale distincte | Rend la consolidation plus visible | Nouveau contrat de preuve, accessibilité et éventuellement détection à fiabiliser. |
-
-**Recommandation : A avant B.** Le microphone ne constitue pas à lui seul une solution au transfert : détecter une hauteur ne prouve pas la position physique choisie lorsqu’il existe des unissons. Priorité haute de recherche, effort faible pour un pilote, risque faible.
-
-### GD-07 — Rendre la carte récente plus informative
-
-**Objectif utilisateur :** identifier les positions qui demandent du travail sans fausse certitude.
-
-**Fait :** un seul essai correct peut donner Travaillée ; le pourcentage réunit les deux sens. **Risque :** une case verte peut masquer un petit échantillon ou une faiblesse en Retrouver. Confiance élevée.
-
-| Option | Avantage | Compromis |
-| --- | --- | --- |
-| A. Afficher l’effectif et le détail des deux sens, avec un libellé prudent pour peu d’essais | Explique les données sans changer l’historique | Un peu plus d’information dans le détail. |
-| B. Exiger un minimum d’essais autonomes par sens pour chaque état positif | Statut plus exigeant | Change les couleurs et peut donner une impression de régression. |
-
-**Recommandation : A**, tester le vocabulaire « premiers repères » avant de changer les seuils. Si B est retenu, conserver les acquis historiques et expliquer la nouvelle lecture. Priorité moyenne, effort faible, risque faible pour A.
+Voir la [spécification et liste de validation du lot](DESIGN-LOT-2026-11-04.md), qui distingue implémentations et propositions mélodiques. Aucune publication n’est autorisée par ce document.
 
 ## 23. Plan de playtest et mesures
 
@@ -785,35 +700,17 @@ Les critères suivants sont des **portes de décision proposées**, non des rés
 
 Un pilote réduit ne permet pas de déclarer l’absence générale de problème. Conserver les cas d’échec et leurs conditions pour le test suivant.
 
-## 24. Registre des recommandations et risques
+## 24. Registre courant
 
-### 24.1 Prochaines décisions proposées
-
-| ID | Priorité | Recommandation | Impact attendu | Effort / risque | Preuve attendue avant adoption |
-| --- | --- | --- | --- | --- | --- |
-| GD-01 | Haute | Versionner la comparabilité Arcade | Confiance dans les records | Moyen / moyen | Migration simulée et lecture utilisateur correcte. |
-| GD-02 | Haute | Montrer autonomie et couverture manquante | Compréhension de la progression | Faible à moyen / faible | Scénarios aidé / autonome compris. |
-| GD-03 | Haute, test | Essayer une introduction Arcade moins liée au coût d’affichage | Justice et lisibilité du défi | Moyen / moyen | Mesure aux transitions sur plusieurs appareils. |
-| GD-06 | Haute, recherche | Observer rappel différé et transfert réel | Vérification de la promesse | Faible pour pilote / faible | Réponses par position et par sens à délai connu. |
-| GD-04 | Moyenne | Tester le report d’une finale difficile | Maîtrise de la durée | Moyen / faible à moyen | Moins d’abandons, apprentissage préservé. |
-| GD-05 | Moyenne | Expliquer la prochaine séance | Orientation | Faible / faible | Choix pertinent sans aide extérieure. |
-| GD-07 | Moyenne | Contextualiser les petits échantillons | Lecture honnête des progrès | Faible / faible | Carte correctement interprétée. |
-
-Les décisions finales appartiennent au responsable du produit. Aucun de ces IDs ne vaut autorisation d’implémenter ou de publier un changement de règle.
-
-### 24.2 Registre des risques et hypothèses
-
-| ID | Nature | Signal à surveiller | Réponse proposée |
-| --- | --- | --- | --- |
-| R-01 | Dette documentaire constatée | Divergence entre `docs/ARCADE.md`, notes de lot et règles effectives | Utiliser ce GDD daté ; réviser la documentation lors de chaque changement de règle. |
-| R-02 | Risque pédagogique | Bonne performance visuelle sans rappel différé / instrumental | Tests différés et transfert séparé ; ne pas surpromettre. |
-| R-03 | Risque UX | « Réussi » sans chapitre terminé | GD-02, explication de la preuve manquante. |
-| R-04 | Risque d’équilibrage | Expirations concentrées aux nouvelles zones ou sur certains appareils | GD-03, isoler difficulté musicale et affichage. |
-| R-05 | Risque de fatigue | Longues reprises d’une finale censée récompenser | GD-04 et observation des abandons. |
-| R-06 | Risque de confiance | Perte locale ou migration incomprise | Sauvegarde claire, import vérifié, preuves conservées. |
-| R-07 | Risque musical / commercial | Extrait reconnu incorrectement ou provenance insuffisante | Recette auditive et validation des droits, indépendantes des tests logiciels. |
-| H-01 | Hypothèse de motivation | La collection soutient une pratique utile | Observer quelle carte conduit réellement à travailler un repère pertinent. |
-| H-02 | Hypothèse de rythme | Séries de 20–24 questions adaptées à tous les débuts | Mesurer fatigue et évolution au sein de séance avant de fixer un nouveau format. |
+| Sujet | Décision |
+| --- | --- |
+| Propositions précédentes 1 à 5 | Refusées ; aucune mise en œuvre. |
+| Historique | Trajectoire : chaque partie Arcade terminée, isolée par mode et profil ; aucune partie ancienne inventée. |
+| GD-01 / GD-02 | Nom sélectionné en découverte et exploration libre ; règles évaluées conservées. |
+| GD-03 | Spécification pédagogique et exemples originaux à recetter avant remplacement du catalogue musical. |
+| GD-04 / GD-05 | Leçons conditionnelles à l’accordage, relation Sol–Si exacte et comparaison d’unissons. |
+| GD-07 | Barème absolu confirmé : 6–10 erreurs pour une étoile, 3–5 pour deux ; popup et bilan de maîtrise. |
+| GD-08 | Recommandations d’entrée Arcade, sans verrou. |
 
 ## 25. Recette et entretien du GDD
 
@@ -839,7 +736,7 @@ Les décisions finales appartiennent au responsable du produit. Aucun de ces IDs
 | Playtest pédagogique | Compréhension, rappel et transfert observés | Efficacité universelle sur la base d’un petit panel. |
 | Validation musicale | Conformité des hauteurs, rythme, registre et écoute aux références | Autorisation commerciale, à vérifier séparément. |
 
-Cette livraison est documentaire. Elle n’a modifié ni règles, code, images, versions, droits commerciaux ni journal live. Les contrôles réalisés et le commit documentaire sont à rapporter avec le livrable, sans lancer une release applicative pour donner l’apparence d’une validation.
+L’édition 1.0 était documentaire. Le lot 1.1 décrit des changements de code locaux, sans publication et sans changement de droits commerciaux ni de journal live. Les contrôles réalisés et le commit documentaire sont à rapporter avec le livrable, sans lancer une release applicative pour donner l’apparence d’une validation.
 
 ### 25.3 Règle de maintenance
 
@@ -890,3 +787,4 @@ Les liens ci-dessous pointent vers le commit étudié afin de conserver la prove
 | Version | Date | Objet |
 | --- | --- | --- |
 | 1.0 | 4 novembre 2026 | GDD initial : vision, boucles, contrats, barèmes, progression, musique, Arcade, collection, accessibilité, données, audit et protocoles de test. |
+| 1.1 locale | 4 novembre 2026 | Décisions utilisateur : propositions initiales refusées, nouveau barème et lot de conception approuvé. |

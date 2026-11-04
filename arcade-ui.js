@@ -1,3 +1,4 @@
+import {historyEntry,HISTORY_LIMIT} from './trajectory.js';
 import {dispatchGameControl,focusGameControl,gameKeyboard} from './ui-actions.js';
 import {resultFrame} from './result-frame.js';
 import {gameHud} from './game-hud.js';
@@ -95,6 +96,7 @@ export class ArcadeController {
     this.phase = 'result'; cancelAnimationFrame(this.frame);
     this.run.at = Date.now();
     const data=this.host.getData();data.arcade ||= {version:1,records:{}};
+    data.arcade.history=[...(data.arcade.history||[]),historyEntry(this.run)].slice(-HISTORY_LIMIT);
     data.arcade.bests ||= {};
     const prior=this.records[this.run.mode];
     const previous=data.arcade.bests[this.run.mode]||{correct:prior?.correct||0,combos:prior?.combos||0,longest:prior?.longest||0};
@@ -142,7 +144,7 @@ export class ArcadeController {
     (root.ownerDocument||root).addEventListener('keydown', e => gameKeyboard(e,{root,active:this.host.active?.()??this.playing,paused:this.paused,pause:()=>this.pause(),resume:()=>{this.resume();focusGameControl(root,'data-arcade-action','pause');}}));
   }
   menu() {
-    return `<div class="page-heading"><div><h1>Arcade</h1><p>Un manche, trois vies. Jusqu’où irez-vous ?</p></div></div><p>Choisissez le nom de la note indiquée. Chaque bonne réponse vaut 100 points ; les séries sans erreur rapportent des bonus et des vies. Une erreur ou un temps écoulé retire une vie et remet la série à zéro.</p><div class="arcade-modes">${ARCADE_MODES.map(mode => `<section class="panel"><h2>${labels[mode]}</h2><p>${mode.startsWith('zones') ? 'Deux cordes en zone I, puis toutes les cordes et les six zones cumulées.' : 'Une corde grave jusqu’à la case 12, puis les autres cordes et enfin les 24 cases.'}</p><p>${mode.endsWith('chromatic') ? 'Naturelles et altérées dès le départ.' : 'Notes naturelles uniquement.'}</p><p>Record : <strong>${this.records[mode]?.score?.toLocaleString('fr-FR') || '—'}</strong></p><button class="button primary" data-arcade-action="start" data-mode="${mode}">Jouer</button></section>`).join('')}</div>`;
+    return `<div class="page-heading"><div><h1>Arcade</h1><p>Un manche, trois vies. Vos repères passent au défi !</p></div></div><p>Déjà à l’aise pour nommer les notes sur les premières cordes en zone I ? Venez tester vos réflexes : les cordes et les zones s’ajoutent, le délai se raccourcit. Tout est accessible dès maintenant. Pour préparer vos repères sans compte à rebours, faites un tour dans le Parcours, puis revenez relever le défi !</p><p>Choisissez le nom de la note indiquée. Chaque bonne réponse vaut 100 points ; les séries sans erreur rapportent des bonus et des vies. Une erreur ou un temps écoulé retire une vie et remet la série à zéro.</p><div class="arcade-modes">${ARCADE_MODES.map(mode => `<section class="panel"><h2>${labels[mode]}</h2><p>${mode.startsWith('zones') ? 'Deux cordes en zone I, puis toutes les cordes et les six zones cumulées.' : 'Une corde grave jusqu’à la case 12, puis les autres cordes et enfin les 24 cases.'}</p><p>${mode.endsWith('chromatic') ? 'Naturelles et altérées dès le départ.' : 'Notes naturelles uniquement.'}</p><p>Record : <strong>${this.records[mode]?.score?.toLocaleString('fr-FR') || '—'}</strong></p><button class="button primary" data-arcade-action="start" data-mode="${mode}">Jouer</button></section>`).join('')}</div>`;
   }
   render() {
     if (this.phase === 'result') return this.result();

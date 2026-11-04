@@ -43,7 +43,7 @@ export function bindNeckKeyboard(root){
  root.addEventListener('focusin',e=>{if(!e.target.matches(selector))return;const svg=e.target.closest('svg');svg.querySelectorAll(selector).forEach(cell=>{cell.dataset.keyboardCurrent=String(cell===e.target);cell.setAttribute('tabindex',cell===e.target?'0':'-1');});});
  root.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)||!e.target.matches(selector))return;const cells=[...e.target.closest('svg').querySelectorAll(selector)].filter(c=>c.getAttribute('aria-disabled')!=='true'),[s,f]=coordinates(e.target);let target;
  if(e.key==='Home'||e.key==='End'){const row=cells.filter(c=>coordinates(c)[0]===s).sort((a,b)=>coordinates(a)[1]-coordinates(b)[1]);target=e.key==='Home'?row[0]:row.at(-1);}else{const ds=e.key==='ArrowUp'?1:e.key==='ArrowDown'?-1:0,df=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;target=cells.find(c=>{const [a,b]=coordinates(c);return a===s+ds&&b===f+df;});}
- e.preventDefault();target?.focus({preventScroll:true});if(target?.closest('.is-scroll-neck,.course-neck-scroll,.lesson-neck-scroll'))target.scrollIntoView({block:'nearest',inline:'nearest'});});
+ e.preventDefault();target?.focus({preventScroll:true});if(target?.closest('.is-scroll-neck,.course-neck-scroll,.lesson-neck-scroll,.explorer-neck'))target.scrollIntoView({block:'nearest',inline:'nearest'});});
  new MutationObserver(normalize).observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['tabindex','aria-disabled']});normalize();
 }
 

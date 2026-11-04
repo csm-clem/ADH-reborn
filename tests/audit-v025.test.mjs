@@ -311,7 +311,7 @@ test("Older completed beginner courses reopen at the first newly required step w
   const course = betaCourses(profile, c.catalog).get("gd-04"),
     r = c.data.courses["gd-04"];
   assert.equal(r.completed, false);
-  assert.equal(course.pages[r.index].id, "actions-example");
+  assert.equal(course.pages[r.index].id, "height-frets");
   assert.ok(r.correct.includes("same-name"));
 });
 

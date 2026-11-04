@@ -1,4 +1,4 @@
-import { noteName, pitchLabel } from "./core.js";
+import { noteName, pitchLabel, standardGuitar, ascendingTuning } from "./core.js";
 import { isNatural, positionKey } from "./pilot.js";
 
 const NATURALS = [0, 2, 4, 5, 7, 9, 11];
@@ -539,6 +539,14 @@ export function betaCourses(profile, catalog, notation = "international") {
       courses.get(id).pairs = unique;
     }
   }
+  const heightPages=[{
+    id:'height-frets', title:'Grave et aigu sur une corde',
+    text:'Sur une même corde, vers le sillet et les petits numéros de case, la note devient plus grave. Vers les cases élevées, elle devient plus aiguë. Écoutez les cases 0, 2 puis 4.',
+    visual:'neck',points:[0,2,4].map(f=>at(profile,0,f)),showNames:true,listen:[0,2,4].map(f=>profile.tuning[0]+f)
+  }];
+  if(ascendingTuning(profile))heightPages.push({id:'height-strings',title:'Grave et aigu entre les cordes',text:'Dans cet accordage, à case égale, les cordes aux petits numéros sonnent plus aigu. Vers les grands numéros, le son devient plus grave. Comparez ces cordes à vide. Pour deux cases différentes, il faut calculer leur hauteur avec l’accordage.',visual:'neck',points:[0,1,2].map(s=>at(profile,s,0)),showNames:true,listen:profile.tuning.slice(0,3)});
+  if(standardGuitar(profile))heightPages.push({id:'g-b-interval',title:'Sol–Si : le petit décalage',text:'En accordage standard, les cordes voisines sont séparées par cinq demi-tons, sauf Sol (corde 3) vers Si (corde 2) : quatre demi-tons. Sol case 4 donne donc Si3, exactement comme la corde de Si à vide. Deux places, une même hauteur sonore. Cette organisation facilite des doigtés d’accords usuels. Une quarte au-dessus de Sol donnerait Do.',visual:'neck',points:[at(profile,3,4),at(profile,4,0)],showNames:true,listen:[59,59]});
+  courses.get('gd-04').pages.unshift(...heightPages);
   return courses;
 }
 

@@ -86,6 +86,11 @@
       "id": "arcade-landscape-wheel-spacing-20261104",
       "type": "bug",
       "text": "La roue chromatique en paysage conserve des cibles distinctes de 44 px, toutes visibles ; recettes des nouveaux libellés et badges mises à jour."
+    },
+    {
+      "id": "approved-design-learning-trajectory-20261104",
+      "type": "improvement",
+      "text": "Découverte et exploration nommées, leçons grave/aigu et unissons, trajectoire Arcade et résultats avec nouveau barème et bilan de maîtrise."
     }
   ]
 }

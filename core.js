@@ -1,5 +1,8 @@
 /** Musical and learning rules. No browser dependencies; scientific pitch notation. */
 export const VERSION = 1;
+export const standardGuitar = p => p.instrumentId==='guitar6' && p.tuning.join(',')==='40,45,50,55,59,64';
+export const standardTreble = p => p.tuning.at(-3)===55 && p.tuning.at(-2)===59;
+export const ascendingTuning = p => p.tuning.every((m,i)=>!i||m>p.tuning[i-1]);
 export const FIVE_STAR_MEAN_MS = 1000;
 export const PITCHES = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const LATIN = ['Do','Do♯','Ré','Ré♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
@@ -73,15 +76,16 @@ export function positions(profile, strings, frets=[0,1,2,3,4]) {
   return strings.flatMap(string=>frets.map(fret=>({ string, fret, midi:profile.tuning[string]+fret })));
 }
 export function score(answers) {
-  if(!answers.length) return {stars:0,accuracy:0,meanMs:null,correct:0};
-  const correctAnswers=answers.filter(a=>a.correct);
-  const accuracy=correctAnswers.length/answers.length;
-  const times=correctAnswers.filter(a=>!a.aids?.length&&a.timingInterpretable!==false&&Number.isFinite(a.ms)).map(a=>a.ms);
-  const meanMs=times.length ? times.reduce((a,b)=>a+b,0)/times.length : null;
-  let stars=accuracy>=.9?3:accuracy>=.75?2:accuracy>=.5?1:0;
-  if(stars===3&&accuracy>=.95&&meanMs!==null&&meanMs<=2500) stars=4;
-  if(accuracy===1&&times.length===answers.length&&meanMs!==null&&meanMs<=FIVE_STAR_MEAN_MS) stars=5;
-  return {stars,accuracy,meanMs,correct:correctAnswers.length};
+  answers=answers.filter(a=>!a.retry);
+  if(!answers.length)return {stars:0,accuracy:0,meanMs:null,correct:0};
+  const correctAnswers=answers.filter(a=>a.correct),correct=correctAnswers.length,accuracy=correct/answers.length;
+  const admissible=a=>!a.aids?.length&&a.timingInterpretable!==false&&Number.isFinite(a.ms)&&a.ms>=0;
+  const times=correctAnswers.filter(admissible).map(a=>a.ms),meanMs=times.length?times.reduce((a,b)=>a+b,0)/times.length:null;
+  const errors=answers.length-correct,allTimed=answers.every(admissible);
+  let stars=errors>10?0:errors>=6?1:errors>=3?2:3;
+  if(errors<=1&&allTimed&&meanMs!==null&&meanMs<=2500)stars=4;
+  if(errors===0&&allTimed&&meanMs!==null&&meanMs<=1000)stars=5;
+  return {stars,accuracy,meanMs,correct};
 }
 
 export function fitNeck(g,width,height){const scale=Math.max(.01,Math.min((width-2)/g.width,(height-2)/g.height));return {scale,width:g.width*scale,height:g.height*scale};}

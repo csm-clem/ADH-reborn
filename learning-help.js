@@ -11,6 +11,7 @@ export function introductionFor(module,stage,question,seen=[],activity='',melody
    if(module.focus.length===1){const p=module.focus[0];text=`${registers} : corde ${stringCount-p.string}, ${p.fret?'case '+p.fret:'à vide'}. Repérez cette place.`;}
    else if(module.strings?.length===1)text=`Sur cette corde : ${registers}. Le même nom revient à une autre octave.`;
    else if(heights.size===1)text=`${registers} se joue à ${module.focus.length} endroits. Ces positions donnent la même hauteur.`;
+   if(module.pitchClass===11&&module.scopeId==='z1'&&module.focus.some(p=>p.midi===59&&p.fret===4)&&module.focus.some(p=>p.midi===59&&p.fret===0))key+='-unison-v2';
    kind='family';}
  }else if(stage==='practice'){
   key=question?.mode+(question?.answerKind==='pitch'?'-pitch':'')+(question?.evaluation?'-evaluation':'');
