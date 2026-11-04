@@ -1,5 +1,7 @@
 # Daily Fretboard Trainer
 
+[Game Design Document DFT](docs/GDD-DFT.md) — mécaniques, progression, scores, Arcade, récompenses, audit et plan de playtest.
+
 PWA d’apprentissage des notes du manche, adaptée à l’instrument et à l’accordage choisis.
 
 - **Live : v0.37**, https://media.lecompositeur.com/DFT/ — publication uniquement après validation explicite d’un essai.
