@@ -81,6 +81,11 @@
       "id": "hud-settings-results-comfort-20261104",
       "type": "improvement",
       "text": "Commandes de jeu simplifiées, réglages compacts, pause avec relance, résultats expliqués, bonus à 25 notes et confort des manches et du paysage."
+    },
+    {
+      "id": "arcade-landscape-wheel-spacing-20261104",
+      "type": "bug",
+      "text": "La roue chromatique en paysage conserve des cibles distinctes de 44 px, toutes visibles ; recettes des nouveaux libellés et badges mises à jour."
     }
   ]
 }

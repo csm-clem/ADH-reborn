@@ -24,9 +24,13 @@ with sync_playwright() as p:
  q.locator('[data-action=accidentals-help]').click();assert q.locator('.spelling-article h1').count()==1;q.screenshot(path=str(out/'article.png'),full_page=True)
  q.locator('.spelling-article [data-action=settings]').first.click();q.screenshot(path=str(out/'settings.png'),full_page=True)
  h['seed'](q,'guitar6','z2-mix-4');q.locator('.sidebar [data-action=settings]').click();q.locator('#setting-accidentals').select_option('mixed');q.locator('.sidebar .nav-item[data-action=home]').click();q.locator('.chapter-options summary').click();q.locator('[data-pilot-action=start][data-module=z2-mix-4]').click();q.wait_for_selector('.pilot-count',state='detached')
- toggle=q.locator('.accidentals-toggle');assert toggle.inner_text()=='♯♭'
- for expected in ['♯','♭','♯♭']:
-  toggle.click();assert toggle.inner_text()==expected
+ q.locator('[data-pilot-action=game-settings]').click()
+ spelling=q.locator('dialog[open] [data-pref=accidentals]');assert spelling.input_value()=='mixed'
+ for expected in ['sharp','flat','mixed']:
+  spelling.select_option(expected);assert spelling.input_value()==expected
+  assert q.evaluate("async()=>JSON.parse(localStorage.getItem((await import('./release.js')).STATE_KEY)).accidentals")==expected
+ q.locator('dialog[open]').get_by_role('button',name='Fermer').click()
+ assert q.locator('.hud-tools button').count()==3
  q.locator('[data-pilot-action=exit]').click()
  q.locator('.sidebar [data-action=achievements]').click();q.locator('[data-success-action=layout]').click();assert q.locator('.is-album').evaluate('e=>getComputedStyle(e).gridTemplateColumns.split(" ").length')==5
  assert q.locator('.is-album .is-musical').count()>0;q.screenshot(path=str(out/'album-landscape.png'),full_page=True)

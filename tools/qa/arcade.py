@@ -23,6 +23,7 @@ with sync_playwright() as p:
   assert abs(metrics['wheel']['w']-metrics['wheel']['h'])<1
   for i,a in enumerate(metrics['buttons']):
    assert a['w']>=44 and a['h']>=44
+   assert a['x']>=-1 and a['y']>=-1 and a['x']+a['w']<=w+1 and a['y']+a['h']<=h+1,(w,h,a)
    for d in metrics['buttons'][i+1:]:
     assert ((a['x']+a['w']/2-d['x']-d['w']/2)**2+(a['y']+a['h']/2-d['y']-d['h']/2)**2)**.5>=min(a['w'],d['w'])-1,(w,a,d)
   q.screenshot(path=str(out/f'chromatic-{w}.png'),full_page=True)
@@ -43,14 +44,14 @@ with sync_playwright() as p:
  assert q.locator('.arcade-hud').inner_text()==before
  assert q.locator('.arcade-playfield').get_attribute('inert') is not None
  q.locator('.arcade-pause [data-arcade-action=resume]').click()
- # Six lives after the two life awards; expire each one without answering.
+ # Seven lives after the 25, 50 and 100 streak rewards.
  q.clock.run_for(30000)
  q.get_by_role('button',name='Voir les stats',exact=True).wait_for()
  result=q.locator('.arcade-results').inner_text()
  assert '100' in result and '10' in result and '14\u202f550' in result,result
  assert q.locator('#arcade-statistics').count()==0
  q.get_by_role('button',name='Voir les stats',exact=True).click()
- assert 'Temps écoulés' in q.locator('#arcade-statistics').inner_text()
+ assert 'Délais dépassés' in q.locator('#arcade-statistics').inner_text()
  q.screenshot(path=str(out/'result.png'),full_page=True)
  record=q.evaluate('''async()=>{const {PILOT_KEY}=await import('./release.js');const {validatePilotStore}=await import('./pilot.js');const saved=validatePilotStore(JSON.parse(localStorage.getItem(PILOT_KEY)));const p=Object.values(saved.profiles)[0];return {arcade:p.arcade,attempts:p.attempts.length,evidence:p.evidence||null};}''')
  r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14550 and r['combos']==11 and r['longest']==100 and r['earnedLives']==4 and r['timeouts']==7,r
