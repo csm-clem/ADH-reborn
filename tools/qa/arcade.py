@@ -44,7 +44,7 @@ with sync_playwright() as p:
  assert q.locator('.arcade-playfield').get_attribute('inert') is not None
  q.locator('.arcade-pause [data-arcade-action=resume]').click()
  # Six lives after the two life awards; expire each one without answering.
- q.clock.run_for(25000)
+ q.clock.run_for(30000)
  q.get_by_role('button',name='Voir les stats',exact=True).wait_for()
  result=q.locator('.arcade-results').inner_text()
  assert '100' in result and '10' in result and '14\u202f550' in result,result
@@ -53,7 +53,7 @@ with sync_playwright() as p:
  assert 'Temps écoulés' in q.locator('#arcade-statistics').inner_text()
  q.screenshot(path=str(out/'result.png'),full_page=True)
  record=q.evaluate('''async()=>{const {PILOT_KEY}=await import('./release.js');const {validatePilotStore}=await import('./pilot.js');const saved=validatePilotStore(JSON.parse(localStorage.getItem(PILOT_KEY)));const p=Object.values(saved.profiles)[0];return {arcade:p.arcade,attempts:p.attempts.length,evidence:p.evidence||null};}''')
- r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14550 and r['combos']==11 and r['longest']==100 and r['earnedLives']==3 and r['timeouts']==6,r
+ r=record['arcade']['records']['zones-natural'];assert r['correct']==100 and r['score']==14550 and r['combos']==11 and r['longest']==100 and r['earnedLives']==4 and r['timeouts']==7,r
  assert record['attempts']==0 and record['evidence'] is None
  q.reload();q.locator('[data-action=arcade]:visible').first.click();assert '14\u202f550' in q.locator('main').inner_text()
  q.wait_for_function('navigator.serviceWorker.controller !== null')

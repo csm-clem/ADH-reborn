@@ -87,3 +87,16 @@ select:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
 
 .shared-game-hud .sound-toggle{border-radius:50%}
 
+
+
+.hud-tools .icon-button,.icon-button.sound-toggle{color:var(--ink);border-color:transparent;background:var(--surface)}
+
+.hud-tools .sound-toggle[aria-pressed=true],.sound-toggle[aria-pressed=true]{color:var(--purple);border-color:#e3aca1;background:var(--purple-soft)}
+
+.icon-button:hover{border-color:var(--ink)}
+
+.sound-toggle[aria-pressed=true]:hover{border-color:var(--brand)}
+
+.icon-button:not(:hover){border-color:transparent}
+.icon-button.sound-toggle[aria-pressed=true]:not(:hover){border-color:#e3aca1}
+:root[data-theme=paper] .sound-toggle[aria-pressed=true]:not(:hover){border-color:#888}

@@ -7,7 +7,7 @@ test('Commands obey the same pause/introduction contract and invoke a single ada
  const calls=[],actions={pause:'pause',resume:'resume',mute:'mute',replay:'restart'},handlers=Object.fromEntries(Object.keys(actions).map(k=>[k,()=>calls.push(k)]));
  for(const action of ['pause','resume','mute','restart'])assert.equal(dispatchGameControl(action,{actions,handlers}),true);
  assert.deepEqual(calls,['pause','resume','mute','replay']);calls.length=0;
- dispatchGameControl('restart',{actions,handlers,paused:true});dispatchGameControl('pause',{actions,handlers,introduction:true});assert.deepEqual(calls,[]);
+ dispatchGameControl('restart',{actions,handlers,paused:true});dispatchGameControl('pause',{actions,handlers,introduction:true});assert.deepEqual(calls,['replay']);calls.length=0;
  assert.equal(dispatchGameControl('answer',{actions,handlers}),false);
  dispatchGameControl('mute',{actions,handlers,paused:true});assert.deepEqual(calls,['mute']);
 });

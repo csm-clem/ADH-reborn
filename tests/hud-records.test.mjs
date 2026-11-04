@@ -12,5 +12,5 @@ test('A lower score can improve the answer record without losing the previous st
 });
 test('Shared HUD exposes the same accessible sound and replay controls with optional time bar',()=>{
  const options={icon:()=>'',attribute:'data-action',title:'Test',back:'Retour',muted:true,actions:{back:'back',replay:'restart',fullscreen:'full',pause:'pause',resume:'resume',mute:'mute'}};
- const normal=gameHud(options),timed=gameHud({...options,timer:true});assert.ok(normal.includes('aria-label="Recommencer l’activité"'));assert.ok(normal.includes('aria-label="Activer le son" aria-pressed="true"'));assert.ok(!normal.includes('data-arcade-timer'));assert.ok(timed.includes('data-arcade-timer'));
+ const normal=gameHud(options),timed=gameHud({...options,timer:true});assert.ok(normal.includes('aria-label="Réglages"'));assert.ok(!normal.includes('aria-label="Recommencer l’activité"'));assert.ok(normal.includes('aria-label="Activer le son" aria-pressed="true"'));assert.ok(!normal.includes('data-arcade-timer'));assert.ok(timed.includes('data-arcade-timer'));
 });

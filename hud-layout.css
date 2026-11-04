@@ -21,3 +21,27 @@
  #main-content.pilot-game.is-name .answer-area{padding-block:0}
  #main-content.pilot-game.is-name .pilot-response-stage{min-height:192px}
 }
+/* Shared compact controls, pauses and explanations. */
+:where(main,[tabindex],button){caret-color:transparent}
+:where(input,textarea,[contenteditable=true]){caret-color:auto}
+.pause-card,.arcade-pause .panel{display:grid;gap:20px;padding:24px}
+.pause-card .button,.arcade-pause .button{width:100%;min-height:48px;gap:10px}
+.compact-game-dialog{width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink)}
+.compact-game-dialog::backdrop{background:#18202b88;backdrop-filter:blur(4px)}
+.compact-game-dialog header{display:flex;align-items:center;justify-content:space-between;gap:16px}.compact-game-dialog h2{margin:0;font-size:1.3rem}
+.compact-game-dialog li{margin-block:14px}.compact-settings{display:grid;gap:16px;margin-top:20px}.compact-settings label{display:flex;align-items:center;justify-content:space-between;gap:16px}.compact-settings select{max-width:65%}
+.result-details-button{justify-content:center!important;text-align:center!important;gap:12px}
+.result-help{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;padding:4px;border-radius:6px}.result-help:focus-visible{outline:3px solid var(--brand)}
+.arcade-result-card .arcade-stats>div{display:grid;grid-template-columns:max-content 1fr auto;gap:8px;background:transparent;color:var(--ink);box-shadow:none;text-align:left}
+.arcade-result-card .arcade-stats dd{grid-column:1;text-align:left;color:inherit}.arcade-result-card .arcade-stats dt{grid-column:2}.record-badge{grid-column:3;grid-row:1;background:#fff3bd;color:#51441f;padding:4px 8px;border-radius:6px;white-space:nowrap;font-weight:700}
+#arcade-statistics .arcade-stats>div{display:flex;flex-direction:column;gap:4px;align-items:flex-start}#arcade-statistics .arcade-stats dd{text-align:left}
+.previous-record{display:none}
+.guided-setup,.guided-setup-card{background:var(--bg)!important;box-shadow:none}
+.instrument-badge[role=button]{cursor:pointer}.instrument-badge[role=button]:focus-visible{outline:3px solid var(--brand)}
+:is(h2,h3,h4){scroll-margin-top:24px}section> :is(h2,h3,h4):first-child{padding-top:0}
+:root[data-theme=paper] .launch-panel{background:linear-gradient(120deg,#555,#999)!important}:root[data-theme=paper] .record-badge{background:#ddd;color:#222}:root[data-theme=paper] .result-record{background:transparent;color:var(--ink)}
+@media(orientation:landscape) and (max-height:550px){
+ .arcade-playfield{display:grid;grid-template-columns:minmax(0,1fr) 218px;grid-template-rows:auto 1fr;align-items:center;gap:4px 16px}.arcade-neck-frame{grid-column:1;grid-row:1;height:100px}.arcade-feedback{grid-column:1;grid-row:2;align-self:start}.arcade-response{grid-column:2;grid-row:1/3;--wheel-size:200px}.arcade-game{min-height:100dvh}.arcade-response .answer-wheel{width:200px}
+}
+#arcade-statistics .arcade-stats dd{order:-1}
+.panel :is(h2,h3,h4){padding-top:var(--space-2)}.panel>:is(h2,h3,h4):first-child{padding-top:0}

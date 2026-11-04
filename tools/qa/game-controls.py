@@ -17,7 +17,7 @@ with sync_playwright() as p:
   else:assert not h['snap'](q)['session']['events']
   sound=q.locator(f'.shared-game-hud [{attr}=mute]');sound.click();assert sound.evaluate('e=>e===document.activeElement');pressed=sound.get_attribute('aria-pressed');sound.click();assert sound.get_attribute('aria-pressed')!=pressed
   q.keyboard.press('Escape');assert q.locator(f'.shared-game-hud [{attr}=pause]').evaluate('e=>e===document.activeElement')
-  restart='replay' if mode=='arcade' else 'restart';q.locator(f'.shared-game-hud [{attr}={restart}]').click();q.clock.run_for(2500)
+  restart='replay' if mode=='arcade' else 'restart';q.keyboard.press('Escape');q.locator(f'.arcade-pause [{attr}={restart}],.pause-card [{attr}={restart}]').click();q.clock.run_for(2500)
   assert q.locator('.shared-game-hud').count()==1
   if mode=='course':assert h['snap'](q)['session']['index']==0
   else:assert q.locator('.arcade-hud strong').first.inner_text()=='0'

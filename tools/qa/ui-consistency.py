@@ -54,7 +54,7 @@ with sync_playwright() as p:
   report.append(name)
  # The comparator must detect a meaningful visual regression.
  q.goto(BASE+'component-gallery.html?specimen=hud&mode=arcade&theme=light&state=long');q.evaluate('document.fonts.ready');q.locator('.shared-game-hud').screenshot(path=str(OUT/'before.png'));q.add_style_tag(content='.shared-game-hud{opacity:.15}');q.locator('.shared-game-hud').screenshot(path=str(OUT/'broken.png'));assert changed_ratio(OUT/'before.png',OUT/'broken.png')>.025
- q.goto(BASE+'component-gallery.html?specimen=hud&mode=arcade');q.locator('[data-demo=pause]').click();assert 'Pause' in q.locator('[role=status]').inner_text();q.locator('[data-demo=resume]').click();q.locator('[data-demo=mute]').click();assert q.locator('.sound-toggle').get_attribute('aria-pressed')=='true';q.locator('[data-demo=restart]').click();assert 'Relances : 1' in q.locator('[role=status]').inner_text()
+ q.goto(BASE+'component-gallery.html?specimen=hud&mode=arcade');q.locator('[data-demo=pause]').click();assert 'Pause' in q.locator('[role=status]').inner_text();q.locator('[data-demo=resume]').click();q.locator('[data-demo=mute]').click();assert q.locator('.sound-toggle').get_attribute('aria-pressed')=='true';assert q.locator('[data-demo=restart]').count()==0;assert q.locator('.hud-tools button').count()==3
  q.goto(BASE+'component-gallery.html?specimen=actions');q.keyboard.press('Tab');assert q.evaluate('document.documentElement.dataset.keyboard')=='true';assert q.locator(':focus').count()==1;assert q.locator(':focus').evaluate('e=>parseFloat(getComputedStyle(e).outlineWidth)')>=3
  q.screenshot(path=str(OUT/'keyboard-focus.png'))
  assert not errors,errors

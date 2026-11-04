@@ -15,6 +15,7 @@ export function arcadeDuration(steps) {
 /** A reward is emitted once on reaching an exact streak milestone. */
 export function arcadeBonus(streak) {
   if (!Number.isSafeInteger(streak) || streak < 0) throw new RangeError('Invalid streak');
+  if (streak === 25) return { points: 0, lives: 1 };
   if (streak === 5) return { points: 50, lives: 0 };
   if (!streak || streak % 10) return { points: 0, lives: 0 };
   if (streak < 50) return { points: streak * 10, lives: 0 };

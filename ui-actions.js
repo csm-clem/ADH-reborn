@@ -7,7 +7,7 @@ export function actionButton({action,attribute='data-action',label,body,variant=
 /** A single dispatch contract, with adapters for mode-specific state machines. */
 export function dispatchGameControl(action,{actions,paused=false,introduction=false,handlers}){
  const key=Object.keys(actions).find(k=>actions[k]===action);if(!key)return false;
- if((paused&&key==='replay')||(introduction&&['replay','pause','resume'].includes(key)))return true;
+ if((introduction&&['replay','pause','resume'].includes(key)))return true;
  handlers[key]?.();return true;
 }
 export function focusGameControl(root,attribute,action){

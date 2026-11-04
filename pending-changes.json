@@ -76,6 +76,11 @@
       "id": "ui-consistency-visual-contracts-20261103",
       "type": "improvement",
       "text": "Contrôles automatisés des commandes partagées, thèmes, formats et captures de référence pour prévenir les divergences visuelles."
+    },
+    {
+      "id": "hud-settings-results-comfort-20261104",
+      "type": "improvement",
+      "text": "Commandes de jeu simplifiées, réglages compacts, pause avec relance, résultats expliqués, bonus à 25 notes et confort des manches et du paysage."
     }
   ]
 }

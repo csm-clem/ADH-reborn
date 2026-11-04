@@ -129,7 +129,7 @@ export function responseTimeMap(profile,positions,notation='international',{mean
   const p=positions[`${string}:${fret}`],meanMs=p?.correct&&Number.isFinite(p.timeSum)?p.timeSum/p.correct:null;
   return {string,fret,midi:profile.tuning[string]+fret,status:'new',total:p?.total||0,correct:p?.correct||0,meanMs,timeMin:p?.timeMin??null,timeMax:p?.timeMax??null,errors:p?.errors??null,timeouts:p?.timeouts??null,delta:meanMs!==null&&runMean!==null?meanMs-runMean:null,label:pitchLabel(profile.tuning[string]+fret,notation)};
  }));
- return `<section class="progress-overview response-time-map"><h3>Temps moyen sur le manche</h3>${positionMap(profile,cells,notation,{frets,strings,selectionPrompt:''})}</section>`;
+ return `<section class="progress-overview response-time-map"><h2>Temps moyen sur le manche</h2>${positionMap(profile,cells,notation,{frets,strings,selectionPrompt:''})}</section>`;
 }
 
 export function scrollbarThumb(trackWidth,viewportWidth,contentWidth){

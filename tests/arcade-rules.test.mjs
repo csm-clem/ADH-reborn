@@ -21,12 +21,12 @@ test('Bonus points advance difficulty, while timer counts every resolved questio
   const r = newArcadeRun('zones-natural');
   for (let i = 0; i < 100; i++) resolveArcade(r, target, 'correct', 200);
   assert.equal(r.score, 14550); assert.equal(r.stage, 14);
-  assert.equal(r.lives, 6); assert.equal(r.combos, 11); assert.equal(r.longest, 100);
+  assert.equal(r.lives, 7); assert.equal(r.combos, 11); assert.equal(r.longest, 100);
   resolveArcade(r, target, 'wrong', 100);
-  assert.equal(r.streak, 0); assert.equal(r.lives, 5);
+  assert.equal(r.streak, 0); assert.equal(r.lives, 6);
   resolveArcade(r, target, 'correct', 200);
   resolveArcade(r, target, 'timeout', 2980);
-  assert.equal(r.streak, 0); assert.equal(r.lives, 4);
+  assert.equal(r.streak, 0); assert.equal(r.lives, 5);
   assert.equal(arcadeDuration(r.questions), 2970);
   assert.equal(r.timeSum, 20200);
 });
@@ -35,9 +35,9 @@ test('A failed combo can be earned again, with lives beyond the initial three', 
   const r = newArcadeRun('zones-natural');
   for (let round = 0; round < 3; round++) {
     for (let i = 0; i < 50; i++) resolveArcade(r, target, 'correct', 100);
-    assert.equal(r.lives, 4); resolveArcade(r, target, 'wrong', 100);
+    assert.equal(r.lives, 5+round); resolveArcade(r, target, 'wrong', 100);
   }
-  assert.equal(r.combos, 18); assert.equal(r.earnedLives, 3); assert.equal(r.longest, 50);
+  assert.equal(r.combos, 18); assert.equal(r.earnedLives, 6); assert.equal(r.longest, 50);
 });
 
 test('Completed records survive backup validation without changing learning evidence', () => {

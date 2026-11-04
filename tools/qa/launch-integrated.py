@@ -23,19 +23,9 @@ with sync_playwright() as p:
   assert q.locator('.launch-next[inert]').count()==1 and q.locator('.launch-before[inert]').count()==1
   assert q.locator('.launch-before [data-pilot-action],.launch-before [data-arcade-action],.rgb-layer').count()==0
   q.clock.run_for(400);f=q.evaluate(read);assert f['panel']==1 and f['text']==1 and f['old']==0,f
-  if mode=='arcade':
-   marker=q.locator('.launch-next .neck-point').get_attribute('cx')
-   q.locator('.launch-next [data-arcade-answer]').first.evaluate('e=>e.click()')
-   assert q.locator('.arcade-hud strong').first.inner_text()=='0'
-   q.locator('.launch-tools [data-arcade-action=pause]').click()
-  else:
-   identity=h['snap'](q)['session']['queue'][0]['id']
-   q.locator('.launch-next [data-pilot-action=note]').first.evaluate('e=>e.click()')
-   assert not h['snap'](q)['session']['events'] and h['snap'](q)['session']['activeMs']==0
-   q.locator('.launch-tools [data-pilot-action=pause]').click()
-  q.clock.run_for(20);frozen=q.evaluate(read);q.clock.run_for(3000);assert q.evaluate(read)==frozen,(mode,frozen,q.evaluate(read))
-  q.locator('.approved-launch > .pilot-pause-layer .button.primary').click()
-  mute=q.locator('.launch-tools [data-arcade-action=mute],.launch-tools [data-pilot-action=mute]');mute.click();assert q.evaluate(read)==frozen,(mode,frozen,q.evaluate(read))
+  if mode=='arcade':marker=q.locator('.launch-next .neck-point').get_attribute('cx')
+  else:identity=h['snap'](q)['session']['queue'][0]['id']
+  assert q.locator('.launch-tools').count()==0
   q.clock.run_for(1100);f=q.evaluate(read);assert 0<f['text']<1,f
   q.screenshot(path=str(out/f'{mode}-fade.png'))
   q.clock.run_for(400);f=q.evaluate(read);assert f['y']!='translateY(0%)' and f['text']>0,f
@@ -49,7 +39,7 @@ with sync_playwright() as p:
    if s['queue'][0]['mode']=='name':q.locator(f'[data-pilot-action=note][data-note="{target}"]').click()
    else:h['tap'](q,s['queue'][0]['target']['string'],s['queue'][0]['target']['fret'])
    event=h['snap'](q)['session']['events'][0];assert event['ms']<1000,event
-  checks.append({'mode':mode,'palette':f['bg'],'pause_and_input_guards':True});q.close()
+  checks.append({'mode':mode,'palette':f['bg'],'no_launch_controls':True});q.close()
  # A deterministic far first question must survive replacement of the launch underlay.
  q=b.new_page(viewport={'width':844,'height':390},service_workers='block');q.on('pageerror',lambda e:errors.append(str(e)))
  h['seed'](q,'guitar6','c24s1-mix-4')
@@ -67,4 +57,4 @@ with sync_playwright() as p:
  q.clock.run_for(400);assert q.locator('.approved-launch').count()==0
  assert not errors,errors
  (out/'verification.json').write_text(json.dumps({'checks':checks,'reduced_motion':True,'errors':errors},indent=2));b.close()
-print('Integrated launches passed: orange/blue, white text, full-page motion, long fade, pause/resume/mute, inert next game, timer exclusion, reduced motion.')
+print('Integrated launches passed: orange/blue, white text, full-page motion, long fade, no launch controls, inert next game, timer exclusion, reduced motion.')
