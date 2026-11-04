@@ -91,6 +91,11 @@
       "id": "approved-design-learning-trajectory-20261104",
       "type": "improvement",
       "text": "Découverte et exploration nommées, leçons grave/aigu et unissons, trajectoire Arcade et résultats avec nouveau barème et bilan de maîtrise."
+    },
+    {
+      "id": "result-landscape-accessibility-20261104",
+      "type": "bug",
+      "text": "La carte de résultat enrichie reste entièrement accessible en mode paysage sur les écrans de faible hauteur."
     }
   ]
 }

@@ -30,6 +30,10 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Retour au parcours',exact=True).click()
  # Real controller result rendering and interaction, with a separate synthetic profile store.
  page.evaluate('''async()=>{const {PilotController}=await import('./pilot-ui.js');const {initialPilotStore}=await import('./pilot.js');const {makeProfile}=await import('./core.js');const {icon}=await import('./ui-icons.js');const state={profile:makeProfile('guitar6'),notation:'international',sound:false};const root=document.createElement('div');root.id='qa-results';document.body.replaceChildren(root);let c;const host={root,getState:()=>state,storage:{readPilot:()=>({value:initialPilotStore(),ok:true}),savePilot:()=>({ok:true})},icon,render:()=>{root.innerHTML=c.render();},playNote(){},stopAudio(){}};c=new PilotController(host);window.designQA=c;const m=c.catalog.activities.find(x=>x.mode==='name');const events=Array.from({length:24},(_,i)=>({target:m.pool[i%m.pool.length],correct:true,mode:'name',ms:800+i*10,aids:[],retry:false}));c.session={id:'qa',activity:m.id,stage:'result',queue:events.map(e=>({target:e.target})),events};c.resultView='summary';c.bind(root);host.showPilot=host.render;host.render();}''')
+ page.set_viewport_size({'width':844,'height':390})
+ assert page.locator('.result-record').evaluate('(e)=>{const r=e.getBoundingClientRect();return r.bottom<=document.documentElement.scrollHeight}')
+ assert page.locator('.result-record').evaluate('(e)=>{e.scrollIntoView();const r=e.getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight}')
+ page.set_viewport_size({'width':1280,'height':900})
  page.get_by_role('button',name='Mon bilan de maîtrise').click();assert page.get_by_role('heading',name='Vos repères, en détail').count()==1
  assert not errors,errors
  page.screenshot(path=str(out/'mastery-desktop.png'))
